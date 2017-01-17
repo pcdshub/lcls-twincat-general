@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LogMessage
+VAR_INPUT	
+	i_sMsg	:	STRING;
+	i_eSevr	:	E_MesgSevr;
+	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
+END_VAR
+VAR
+	i_sPID	:	STRING := cNILVALUE;	//Not currently used
+	i_sMSGID	:	STRING := cNILVALUE; //Not currently used
+	i_sSD	:	STRING := cNILVALUE; //Not currently used
+	fbFormatString		:	FB_FormatString;
+	sPRIVAL				: 	T_MaxString := cNILVALUE;
+	sPID				: 	T_MaxString := cNILVALUE;
+	sSubsystem			: 	T_MaxString := cNILVALUE;
+	wSyslogVer			: 	WORD := cwSyslogVer;
+	sSD					: 	T_MaxString := cNILVALUE;
+	sMsg				: 	T_MaxString := cNILVALUE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[gfbBuffer.putValue := '';
+gfbBuffer.pBuffer := ADR(gMesgBuffer);
+gfbBuffer.cbBuffer := SIZEOF(gMesgBuffer);
+
+fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
+
+sPRIVAL := LEFT( WORD_TO_STRING(cwFacility * 8 + i_eSevr), 5);
+sPID := cNILVALUE;
+sSubsystem := acsSubsystems[i_eSubsystem];
+wSyslogVer := cwSyslogVer;
+sSD := i_sSD;
+sMsg := i_sMsg;
+//bad language ahead, sorry
+fbFormatString.arg1 := F_STRING(sPRIVAL);
+fbFormatString.arg2 := F_WORD(wSyslogVer);
+fbFormatString.arg3 := F_STRING(gsCurrentTime);
+fbFormatString.arg4 := F_STRING(sSubsystem);
+fbFormatString.arg5 := F_STRING(sPID);
+fbFormatString.arg6 := F_STRING(sSD);
+fbFormatString.arg7 := F_STRING(sMsg);
+fbFormatString( sOut=>gfbBuffer.putValue);
+gfbBuffer.A_AddTail();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

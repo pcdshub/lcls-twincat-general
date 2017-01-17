@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="SYSTEM_TIME_TO_RFC3339" Id="{8224a586-2295-4f0e-ba2f-710d1a2cbe6b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING
+VAR_INPUT
+	tCurrentTime	:	TIMESTRUCT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SYSTEM_TIME_TO_RFC3339 := CONCAT(REPLACE(SYSTEMTIME_TO_STRING(tCurrentTime), 'T', 1, 11), 'Z');]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <DUT Name="System_Struct" Id="{46c55fa2-8b62-4ecc-a249-db692ccf428f}">
+    <Declaration><![CDATA[TYPE System_Struct :
+STRUCT
+
+	xswAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+	xAtVacuum 	    : BOOL;(* System At Vacuum *)
+	xFirstScan	    : BOOL; (* Bit set for one scan only during startup. Used for initialization. *)
+	xOverrideMode	: BOOL; //This bit is set when using the override features of the system
+	xIOState        : BOOL; (* ECat Bus Health *)
+
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
