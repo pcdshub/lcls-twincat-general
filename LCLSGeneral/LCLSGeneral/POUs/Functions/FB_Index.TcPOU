@@ -3,7 +3,7 @@
   <POU Name="FB_Index" Id="{ca8a34e3-bd4f-442e-9caf-17285b4f6fa2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Index
 VAR_INPUT
-	LowerLimit : INT := 0;
+	LowerLimit : INT := 1;
 	ValInc : INT := 1;
 	UpperLimit	:	INT := 1;
 END_VAR
@@ -23,23 +23,6 @@ Why doesn't beckhoff have this as a builtin type?
 
 ;]]></ST>
     </Implementation>
-    <Method Name="IncVal" Id="{6f28d89a-7191-4dad-8824-c5fe9fb32dd9}">
-      <Declaration><![CDATA[METHOD PUBLIC IncVal : INT
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[Inc();
-IncVal := Val;]]></ST>
-      </Implementation>
-    </Method>
-    <Action Name="Inc" Id="{a11e830b-c881-456f-af74-5a750bccfd58}">
-      <Implementation>
-        <ST><![CDATA[// Dont use this, use ValInc
-Val := Val + ValInc;
-IF Val >  UpperLimit THEN Val := LowerLimit; END_IF]]></ST>
-      </Implementation>
-    </Action>
     <Action Name="Dec" Id="{b1b81818-0c2b-42cc-90f3-55cd7cad3e87}">
       <Implementation>
         <ST><![CDATA[Val := Val - ValInc;
@@ -54,6 +37,23 @@ END_VAR
       <Implementation>
         <ST><![CDATA[Dec();
 DecVal := Val;]]></ST>
+      </Implementation>
+    </Method>
+    <Action Name="Inc" Id="{a11e830b-c881-456f-af74-5a750bccfd58}">
+      <Implementation>
+        <ST><![CDATA[// Dont use this, use ValInc
+Val := Val + ValInc;
+IF Val >  UpperLimit THEN Val := LowerLimit; END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="IncVal" Id="{6f28d89a-7191-4dad-8824-c5fe9fb32dd9}">
+      <Declaration><![CDATA[METHOD PUBLIC IncVal : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Inc();
+IncVal := Val;]]></ST>
       </Implementation>
     </Method>
   </POU>

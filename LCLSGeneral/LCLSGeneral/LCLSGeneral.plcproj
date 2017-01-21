@@ -34,6 +34,7 @@
     <Folder Include="POUs" />
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
+    <Folder Include="Version" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\Logger\E_MesgSevr.TcDUT">
@@ -65,6 +66,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Logger\SYSTEM_TIME_TO_RFC3339.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Version\Global_Version.TcGVL">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
