@@ -22,7 +22,7 @@
     <Description>Generally useful POUs:
 - Logger
 - FB diagnostics
-- EtherCAT diagnostics</Description>
+- EtherCAT diagnostic</Description>
     <ProjectVersion>0.1.1</ProjectVersion>
     <!--    <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
