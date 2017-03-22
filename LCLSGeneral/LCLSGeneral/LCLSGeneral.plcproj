@@ -18,11 +18,12 @@
     <Company>SLAC</Company>
     <Released>true</Released>
     <Title>LCLS General</Title>
-    <ProjectVersion>0.1.0</ProjectVersion>
     <Author>Alex Wallace</Author>
     <Description>Generally useful POUs:
 - Logger
-- FB diagnostics</Description>
+- FB diagnostics
+- EtherCAT diagnostics</Description>
+    <ProjectVersion>0.1.1</ProjectVersion>
     <!--    <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>-->
@@ -56,6 +57,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Functions\FB_Index.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -73,6 +77,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="Tc2_EtherCAT">
+      <DefaultResolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_EtherCAT</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -93,8 +101,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -121,13 +129,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
   <!-- 

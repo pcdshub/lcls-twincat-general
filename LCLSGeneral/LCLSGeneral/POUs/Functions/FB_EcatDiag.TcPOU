@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="FB_EcatDiag" Id="{88d39412-3c5d-46f9-9207-5cb5ea2cabda}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
+VAR_INPUT
+	///Connect this to an AMSNETID structure as a PLC input. Then link the input to the AMSNETID name in the master info.
+	i_AMSNetId: AMSNETID; 
+	i_xFirstPass: BOOL;
+END_VAR
+VAR_OUTPUT
+	q_xAllStatesGood: BOOL;
+END_VAR
+VAR
+	sNetId: T_AmsNetId;
+	astTermStates: ARRAY[1..256] OF ST_EcSlaveState;
+	fbGetAllSlaveStates: FB_EcGetAllSlaveStates;
+	ftReset: F_TRIG;
+	iterator: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* 
+Ecat bus diagnostic tool
+2015-11-4 Alex Wallace
+This function block checks the states of all slaves on the ecat bus network, 
+it could be modified to export the states of the slaves on an individual basis,
+but for now it sets the output boolean true if all slaves are OP and false otherwise.
+To start the block provide a falling edge on the first pass boolean input.
+*)
+
+//Create the net ID string
+sNetID := F_CreateAmsNetId(i_AMSNetId);
+
+//Query the state of all terminals, collect in astTermStates
+ftReset(CLK:=fbGetAllSlaveStates.bBusy OR i_xFirstPass);
+fbGetAllSlaveStates.bExecute := ftReset.Q;
+fbGetAllSlaveStates(sNetId:=sNetId, pStateBuf := ADR(astTermStates), cbBufLen:=SIZEOF(astTermStates));
+//Keep checking...
+
+//Cycle through each entry in the array and check if we have anyone not in OP and that the link state is good.
+// If so, then set our global IO bad boolean.
+IF fbGetAllSlaveStates.nSlaves > 0 THEN
+	q_xAllStatesGood := TRUE;
+FOR iterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) -1) BY 1
+	DO
+	IF NOT( (astTermStates[iterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[iterator].linkState = EC_LINK_STATE_OK)) THEN
+		q_xAllStatesGood := FALSE;
+	END_IF
+END_FOR
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
