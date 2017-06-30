@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.3">
+  <POU Name="FB_XKoyoPLCModbus" Id="{a477c376-dd06-40c3-b569-438369655d9b}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM FB_XKoyoPLCModbus
+VAR
+	fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils;
+	xKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE;
+	ftReset	: F_TRIG; 
+	tonRetry : TON;
+	index : INT;
+END_VAR
+
+VAR_INPUT
+	i_tRetryTime : TIME := T#10S;
+	i_sIPAddr	 : STRING[15];
+END_VAR
+
+VAR_OUTPUT
+	q_xNoPLCResponse : BOOL := TRUE;
+	q_xPLCResponse   : ARRAY [0..20] OF BYTE;
+	q_xError         : BOOL := FALSE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Look ma' no wires! *)
+(* A. Wallace, 2015-7-22 *)
+
+(* Modbus Info for Koyo
+Modbus Addresses for
+Koyo DL05/06/240/250/260/430/440/450 PLCs
+PLC Memory Type		| Modbus start address Decimal (octal) | Function codes
+Inputs (X)			  2048 (04000)							2
+Special Relays (SP)	  3072 (06000)							2
+Outputs (Y)			  2048 (04000)							1, 5, 15
+Control Relays (C)	  3072 (06000)							1, 5, 15
+Timer Contacts (T)	  6144 (014000)							1, 5, 15
+Counter Contacts (CT) 6400 (014400)							1, 5, 15
+Stage Status Bits (S) 6144 (012000)							1, 5, 15
+*)
+
+(* Begin code *)
+// Retry after some time
+tonRetry.IN := NOT fbKoyo_PLCInputCoilsRx.bBusy;
+tonRetry.PT := i_tRetryTime;
+tonRetry();
+
+ftReset(CLK:=fbKoyo_PLCInputCoilsRx.bBusy);
+ftReset();
+
+fbKoyo_PLCInputCoilsRx.bExecute := ftReset.Q OR tonRetry.Q;
+
+fbKoyo_PLCInputCoilsRx(sIPAddr:='i_sIPAddr', nTCPPort:=502, nQuantity:=32, nMBAddr:=8#6000, cbLength:=SIZEOF(xKoyo_PLC_CnBits),  pDestAddr:=ADR(xKoyo_PLC_CnBits), tTimeout:=T#10S);
+
+//run some error code for modbus
+IF fbKoyo_PLCInputCoilsRx.bError THEN
+	//if there's a modbus error, set all incoming bits to zero
+	FOR index := 0 TO UINT_TO_INT(SIZEOF(xKoyo_PLC_CnBits))-1 DO //starts at 0
+		xKoyo_PLC_CnBits[index]:=0;
+	END_FOR
+	q_xError := TRUE;
+	
+ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
+	fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
+	q_xNoPLCResponse:= FALSE;
+	q_xError := FALSE;
+
+//more error code cause we didn't manage to read anything	
+ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
+	q_xError := TRUE;
+	q_xNoPLCResponse:= TRUE;
+			
+END_IF
+
+q_xPLCResponse := xKoyo_PLC_CnBits;
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_XKoyoPLCModbus">
+      <LineId Id="628" Count="49" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

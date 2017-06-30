@@ -63,6 +63,9 @@
     <Compile Include="POUs\Functions\FB_Index.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Functions\FB_XKoyoPLCModbus.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Logger\FB_Logger.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -80,6 +83,10 @@
     <PlaceholderReference Include="Tc2_EtherCAT">
       <DefaultResolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_EtherCAT</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_ModbusSrv">
+      <DefaultResolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_ModbusSrv</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
