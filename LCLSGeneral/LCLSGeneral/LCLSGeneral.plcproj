@@ -23,7 +23,7 @@
 - Logger
 - FB diagnostics
 - EtherCAT diagnostic</Description>
-    <ProjectVersion>0.1.2</ProjectVersion>
+    <ProjectVersion>0.1.3</ProjectVersion>
     <!--    <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>-->
