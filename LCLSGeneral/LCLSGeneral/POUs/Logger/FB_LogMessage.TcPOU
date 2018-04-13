@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
@@ -21,8 +21,12 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[gfbBuffer.putValue := '';
-gfbBuffer.pBuffer := ADR(gMesgBuffer);
+      <ST><![CDATA[// LogMessage
+// A Wallace, 18-4-12
+// Adds a message to the global queue to be sent to the syslog server
+
+gfbBuffer.putValue := '';
+gfbBuffer.pBuffer := ADR(gMesgBuffer); //Global buffer address
 gfbBuffer.cbBuffer := SIZEOF(gMesgBuffer);
 
 fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
@@ -44,5 +48,12 @@ fbFormatString.arg7 := F_STRING(sMsg);
 fbFormatString( sOut=>gfbBuffer.putValue);
 gfbBuffer.A_AddTail();]]></ST>
     </Implementation>
+    <LineIds Name="FB_LogMessage">
+      <LineId Id="42" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="3" Count="20" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

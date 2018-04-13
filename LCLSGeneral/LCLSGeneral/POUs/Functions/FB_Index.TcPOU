@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="FB_Index" Id="{ca8a34e3-bd4f-442e-9caf-17285b4f6fa2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Index
 VAR_INPUT
@@ -19,6 +19,8 @@ END_VAR
 A. Wallace 2016-9-3
 
 Why doesn't beckhoff have this as a builtin type?
+
+Use this thing to have a simple indexer with rollover.
 *)
 
 ;]]></ST>
@@ -56,5 +58,28 @@ END_VAR
 IncVal := Val;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Index">
+      <LineId Id="3" Count="3" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Index.Dec">
+      <LineId Id="2" Count="0" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Index.DecVal">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Index.Inc">
+      <LineId Id="2" Count="1" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Index.IncVal">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

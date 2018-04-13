@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.3">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="FB_XKoyoPLCModbus" Id="{a477c376-dd06-40c3-b569-438369655d9b}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM FB_XKoyoPLCModbus
 VAR
@@ -22,7 +22,14 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Look ma' no wires! *)
-(* A. Wallace, 2015-7-22 *)
+(* A. Wallace, 2015-7-22 
+XKoyoPLCModbus
+
+Facilitates communication between Beckhoff and Koyo PLC over the network.
+
+Useful if you don't have time to run a wire. Fairly reliable.
+
+*)
 
 (* Modbus Info for Koyo
 Modbus Addresses for
@@ -74,7 +81,15 @@ q_xPLCResponse := xKoyo_PLC_CnBits;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_XKoyoPLCModbus">
-      <LineId Id="628" Count="49" />
+      <LineId Id="628" Count="1" />
+      <LineId Id="697" Count="0" />
+      <LineId Id="700" Count="0" />
+      <LineId Id="699" Count="0" />
+      <LineId Id="702" Count="0" />
+      <LineId Id="701" Count="0" />
+      <LineId Id="698" Count="0" />
+      <LineId Id="696" Count="0" />
+      <LineId Id="630" Count="47" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
