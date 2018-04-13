@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	g_psLogHost	: T_IPv4Addr := '172.21.32.9';
+	g_udpSyslog	:	UDINT := 514;
+	gMesgBuffer	:	ARRAY [0..cMesgArraySize] OF T_MaxString; //maybe this should be persistent...
+	gsCurrentTime	:	T_MaxString := cNILVALUE;
+	gsHostName	:	T_MaxString := cNILVALUE;
+	fbLogMessage : FB_LogMessage;
+	gfbBuffer 			:	FB_StringRingBuffer;
+END_VAR
+VAR_GLOBAL CONSTANT
+	acsSubsystems	:	ARRAY [0..5] OF STRING := 
+	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
+	cNILVALUE	:	STRING(1) := '-';
+	cMesgArraySize : INT := 50;
+	cwFacility: WORD := 20; // local4
+	// Syslog Version
+	cwSyslogVer: WORD := 1;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
