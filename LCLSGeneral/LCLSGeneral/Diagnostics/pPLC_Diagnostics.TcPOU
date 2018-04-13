@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="pPLC_Diagnostics" Id="{102759fd-9553-4b1c-afe0-5109c46f73f2}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM pPLC_Diagnostics
+VAR
+	//FB
+	fbCheckLicense	:	FB_CheckLicense;
+	fbGetSystemId	:	FB_GetSystemId;
+	//Variables
+	{attribute 'pytmc' := '}
+    pv: TEST:MAIN:ULIMIT_R
+    type: ai
+    field: DTYP stream
+    field: SCAN 1 second
+    io: input
+    str: %d
+    pv: $(P):DIAG:
+    type: ao
+    field: DTYP stream
+    io: out
+    str: %d
+	'}
+	
+	xGetSystemId: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+fbGetSystemId.bExecute := xGetSystemId;
+fbCheckLicense();
+//Stuff that only needs to run once
+fbGetSystemId(bExecute:=
+]]></ST>
+    </Implementation>
+    <LineIds Name="pPLC_Diagnostics">
+      <LineId Id="12" Count="2" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
