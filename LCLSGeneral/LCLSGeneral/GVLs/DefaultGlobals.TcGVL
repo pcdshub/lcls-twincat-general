@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <GVL Name="DefaultGlobals" Id="{2d2569a9-cdb9-4b2c-9048-e9448cd0d09e}">
     <Declaration><![CDATA[//These are variables every PLC project should have
 VAR_GLOBAL
-	{
+	
 	g_stSys	:	System_Struct;
 END_VAR]]></Declaration>
   </GVL>

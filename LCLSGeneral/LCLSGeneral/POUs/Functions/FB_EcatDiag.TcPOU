@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
-  <POU Name="FB_EcatDiag" Id="{88d39412-3c5d-46f9-9207-5cb5ea2cabda}" SpecialFunc="None">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="FB_EcatDiag" Id="{04266cc1-1752-4ae8-b692-47df0663f314}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
 VAR_INPUT
 	///Connect this to an AMSNETID structure as a PLC input. Then link the input to the AMSNETID name in the master info.
@@ -8,13 +8,24 @@ VAR_INPUT
 	i_xFirstPass: BOOL;
 END_VAR
 VAR_OUTPUT
-	q_xAllStatesGood: BOOL;
+	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
+	q_aiTermStates: ARRAY[1..256] OF INT; 
+	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
+	q_iMasterState: WORD; // The Device State of the Master
+	q_sMasterState:STRING;
+	q_aEcConfSlaveInfo :  ARRAY[1..256] OF DUT_EcDevice;
+	q_nSlaves: UINT; // the Number of the connected Slaves
 END_VAR
 VAR
 	sNetId: T_AmsNetId;
 	astTermStates: ARRAY[1..256] OF ST_EcSlaveState;
+	pArrEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData;
 	fbGetAllSlaveStates: FB_EcGetAllSlaveStates;
+	fbGetSlaveCount: FB_EcGetSlaveCount;
+	fbGetMasterState: FB_EcGetMasterState;
+	fbGetConfSlaves: FB_EcGetConfSlaves; 
 	ftReset: F_TRIG;
+	ftMasterReset: F_TRIG;
 	iterator: INT;
 END_VAR
 ]]></Declaration>
@@ -26,7 +37,14 @@ This function block checks the states of all slaves on the ecat bus network,
 it could be modified to export the states of the slaves on an individual basis,
 but for now it sets the output boolean true if all slaves are OP and false otherwise.
 To start the block provide a falling edge on the first pass boolean input.
+
+2018-05-05 Margaret Ghaly
+Function block has been modified to retrieve the Device State of the Ethercat Master.
+It also exports the states and information of each individual configured Slave. 
+And saves them in the array q_aEcConfSlaveInfo.
 *)
+
+
 
 //Create the net ID string
 sNetID := F_CreateAmsNetId(i_AMSNetId);
@@ -37,17 +55,90 @@ fbGetAllSlaveStates.bExecute := ftReset.Q;
 fbGetAllSlaveStates(sNetId:=sNetId, pStateBuf := ADR(astTermStates), cbBufLen:=SIZEOF(astTermStates));
 //Keep checking...
 
+
+
 //Cycle through each entry in the array and check if we have anyone not in OP and that the link state is good.
 // If so, then set our global IO bad boolean.
 IF fbGetAllSlaveStates.nSlaves > 0 THEN
-	q_xAllStatesGood := TRUE;
-FOR iterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) -1) BY 1
+	q_xAllSlaveStatesGood := TRUE;
+FOR iterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
 	DO
 	IF NOT( (astTermStates[iterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[iterator].linkState = EC_LINK_STATE_OK)) THEN
-		q_xAllStatesGood := FALSE;
+		q_xAllSlaveStatesGood := FALSE;
 	END_IF
+	q_aiTermStates[iterator] := astTermStates[iterator].deviceState;
+	q_aEcConfSlaveInfo[iterator].iDeviceState :=astTermStates[iterator].deviceState;//
+	q_aEcConfSlaveInfo[iterator].iLinkState :=astTermStates[iterator].linkState;//
+	q_aEcConfSlaveInfo[iterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[iterator]);//
+	
 END_FOR
-END_IF]]></ST>
+END_IF
+
+// Read the EtherCAT state of the master. If the call is successful, 
+//the State output variable of type WORD contains the requested status information.
+ftMasterReset(CLK:=fbGetMasterState.bBusy OR i_xFirstPass);
+fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q, 
+				state => q_iMasterState,bError=>,
+				nErrId=>);
+q_xMasterStateGood:= (fbGetMasterState.state = EC_DEVICE_STATE_OP);
+q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
+
+//This function is used to read a list of all configured slaves from the EtherCat master object Directory
+//needs to run only once
+fbGetConfSlaves(bExecute := i_xFirstPass, sNetId :=sNetId, pArrEcConfSlaveInfo := ADR(pArrEcConfSlaveInfo),cbBufLen := SIZEOF(pArrEcConfSlaveInfo));
+q_nslaves:=fbGetConfSlaves.nSlaves;
+
+IF  NOT (fbGetConfSlaves.bBusy) THEN
+	FOR iterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
+	DO
+	q_aEcConfSlaveInfo[iterator].nAddrr :=pArrEcConfSlaveInfo[iterator].nAddr;
+	q_aEcConfSlaveInfo[iterator].sName :=pArrEcConfSlaveInfo[iterator].sName;
+	q_aEcConfSlaveInfo[iterator].sType :=pArrEcConfSlaveInfo[iterator].sType;
+END_FOR
+	fbGetConfSlaves.bExecute := FALSE;
+END_IF
+
+
+
+]]></ST>
     </Implementation>
+    <LineIds Name="FB_EcatDiag">
+      <LineId Id="33" Count="6" />
+      <LineId Id="309" Count="2" />
+      <LineId Id="361" Count="0" />
+      <LineId Id="308" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="254" Count="0" />
+      <LineId Id="248" Count="3" />
+      <LineId Id="45" Count="4" />
+      <LineId Id="278" Count="1" />
+      <LineId Id="50" Count="8" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="265" Count="1" />
+      <LineId Id="313" Count="0" />
+      <LineId Id="289" Count="0" />
+      <LineId Id="59" Count="2" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="137" Count="0" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="134" Count="2" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="255" Count="0" />
+      <LineId Id="301" Count="0" />
+      <LineId Id="297" Count="1" />
+      <LineId Id="316" Count="1" />
+      <LineId Id="320" Count="1" />
+      <LineId Id="328" Count="2" />
+      <LineId Id="333" Count="0" />
+      <LineId Id="318" Count="1" />
+      <LineId Id="276" Count="0" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
