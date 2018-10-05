@@ -47,7 +47,7 @@ And saves them in the array q_aEcConfSlaveInfo.
 
 
 //Create the net ID string
-sNetID := F_CreateAmsNetId(i_AMSNetId);
+sNetId := F_CreateAmsNetId(i_AMSNetId);
 
 //Query the state of all terminals, collect in astTermStates
 ftReset(CLK:=fbGetAllSlaveStates.bBusy OR i_xFirstPass);
@@ -86,7 +86,7 @@ q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
 //This function is used to read a list of all configured slaves from the EtherCat master object Directory
 //needs to run only once
 fbGetConfSlaves(bExecute := i_xFirstPass, sNetId :=sNetId, pArrEcConfSlaveInfo := ADR(pArrEcConfSlaveInfo),cbBufLen := SIZEOF(pArrEcConfSlaveInfo));
-q_nslaves:=fbGetConfSlaves.nSlaves;
+q_nSlaves:=fbGetConfSlaves.nSlaves;
 
 IF  NOT (fbGetConfSlaves.bBusy) THEN
 	FOR iterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1

@@ -82,7 +82,7 @@ CASE eState OF
 		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_TRANSIENT  OR 
 			fbUDPSocketManager.bError THEN
 			eState := E_MessengerState.Err; 
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socketmanager error in active: %d', arg1:=F_UDINT(fbUDPSocketManager.nErrId));
+			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socketmanager error in active: %d', arg1:=F_UDINT(fbUDPSocketManager.nErrID));
 		END_IF
 		
 		// While the socket is active, go ahead and send whatever is in the buffer
