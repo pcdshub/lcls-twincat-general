@@ -12,8 +12,7 @@ VAR_OUTPUT
 END_VAR
 VAR
 	Val	:	INT := LowerLimit;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Index FB
 A. Wallace 2016-9-3
@@ -21,9 +20,8 @@ A. Wallace 2016-9-3
 Why doesn't beckhoff have this as a builtin type?
 
 Use this thing to have a simple indexer with rollover.
-*)
 
-;]]></ST>
+*)]]></ST>
     </Implementation>
     <Action Name="Dec" Id="{b1b81818-0c2b-42cc-90f3-55cd7cad3e87}">
       <Implementation>
@@ -62,8 +60,8 @@ IncVal := Val;]]></ST>
       <LineId Id="3" Count="3" />
       <LineId Id="22" Count="0" />
       <LineId Id="21" Count="0" />
-      <LineId Id="7" Count="1" />
-      <LineId Id="2" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="FB_Index.Dec">
       <LineId Id="2" Count="0" />
