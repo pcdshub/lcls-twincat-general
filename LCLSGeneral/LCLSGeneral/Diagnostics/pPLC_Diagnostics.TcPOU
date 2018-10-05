@@ -7,36 +7,13 @@ VAR
 	fbCheckLicense	:	FB_CheckLicense;
 	fbGetSystemId	:	FB_GetSystemId;
 	//Variables
-	{attribute 'pytmc' := '}
-    pv: TEST:MAIN:ULIMIT_R
-    type: ai
-    field: DTYP stream
-    field: SCAN 1 second
-    io: input
-    str: %d
-    pv: $(P):DIAG:
-    type: ao
-    field: DTYP stream
-    io: out
-    str: %d
-	'}
-	
 	xGetSystemId: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-
-fbGetSystemId.bExecute := xGetSystemId;
-fbCheckLicense();
-//Stuff that only needs to run once
-fbGetSystemId(bExecute:=
-]]></ST>
+      <ST><![CDATA[]]></ST>
     </Implementation>
     <LineIds Name="pPLC_Diagnostics">
-      <LineId Id="12" Count="2" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="10" Count="1" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
