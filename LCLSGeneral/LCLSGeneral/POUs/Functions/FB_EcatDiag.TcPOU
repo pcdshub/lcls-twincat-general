@@ -80,7 +80,7 @@ ftMasterReset(CLK:=fbGetMasterState.bBusy OR i_xFirstPass);
 fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q, 
 				state => q_iMasterState,bError=>,
 				nErrId=>);
-q_xMasterStateGood:= (fbGetMasterState.state = EC_DEVICE_STATE_OP);
+q_xMasterStateGood:= (fbGetMasterState.state = BYTE_TO_UINT(EC_DEVICE_STATE_OP));
 q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
 
 //This function is used to read a list of all configured slaves from the EtherCat master object Directory

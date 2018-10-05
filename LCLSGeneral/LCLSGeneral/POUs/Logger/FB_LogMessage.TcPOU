@@ -29,7 +29,7 @@ END_VAR]]></Declaration>
 
 gfbBuffer.putValue := '';
 gfbBuffer.pBuffer := ADR(gMesgBuffer); //Global buffer address
-gfbBuffer.cbBuffer := SIZEOF(gMesgBuffer);
+gfbBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(gMesgBuffer));
 
 fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
 

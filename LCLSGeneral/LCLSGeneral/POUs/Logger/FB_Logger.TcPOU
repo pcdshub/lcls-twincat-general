@@ -33,7 +33,7 @@ This POU constantly attempts to send out messages from the global buffer.
 *)
 
 gfbBuffer.pBuffer := ADR(gMesgBuffer); 
-gfbBuffer.cbBuffer:= SIZEOF(gMesgBuffer);
+gfbBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(gMesgBuffer));
 
 fbGetSystemTime(); 
 IF fbGetSystemTime.bValid THEN
@@ -135,7 +135,7 @@ SocketSendTo();]]></ST>
 fbUDPSocketSend.sRemoteHost := g_psLogHost;
 fbUDPSocketSend.nRemotePort := g_udpSyslog;
 fbUDPSocketSend.pSrc := ADR(sOutgoingMesg);
-fbUDPSocketSend.cbLen := SIZEOF(sOutgoingMesg);
+fbUDPSocketSend.cbLen := UINT_TO_UDINT(SIZEOF(sOutgoingMesg));
 fbUDPSocketSend();
 fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>

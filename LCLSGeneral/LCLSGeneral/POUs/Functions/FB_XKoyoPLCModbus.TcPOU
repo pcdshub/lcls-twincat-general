@@ -55,12 +55,12 @@ ftReset();
 
 fbKoyo_PLCInputCoilsRx.bExecute := ftReset.Q OR tonRetry.Q;
 
-fbKoyo_PLCInputCoilsRx(sIPAddr:='i_sIPAddr', nTCPPort:=502, nQuantity:=32, nMBAddr:=8#6000, cbLength:=SIZEOF(xKoyo_PLC_CnBits),  pDestAddr:=ADR(xKoyo_PLC_CnBits), tTimeout:=T#10S);
+fbKoyo_PLCInputCoilsRx(sIPAddr:='i_sIPAddr', nTCPPort:=502, nQuantity:=32, nMBAddr:=8#6000, cbLength:=USINT_TO_UDINT(SIZEOF(xKoyo_PLC_CnBits)),  pDestAddr:=ADR(xKoyo_PLC_CnBits), tTimeout:=T#10S);
 
 //run some error code for modbus
 IF fbKoyo_PLCInputCoilsRx.bError THEN
 	//if there's a modbus error, set all incoming bits to zero
-	FOR index := 0 TO UINT_TO_INT(SIZEOF(xKoyo_PLC_CnBits))-1 DO //starts at 0
+	FOR index := 0 TO USINT_TO_INT(SIZEOF(xKoyo_PLC_CnBits))-1 DO //starts at 0
 		xKoyo_PLC_CnBits[index]:=0;
 	END_FOR
 	q_xError := TRUE;
