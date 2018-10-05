@@ -2,8 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
     <Declaration><![CDATA[VAR_GLOBAL
-	g_psLogHost	: T_IPv4Addr := '172.21.32.9';
-	g_udpSyslog	:	UDINT := 514;
+	
+	
 	gMesgBuffer	:	ARRAY [0..cMesgArraySize] OF T_MaxString; //maybe this should be persistent...
 	gsCurrentTime	:	T_MaxString := cNILVALUE;
 	gsHostName	:	T_MaxString := cNILVALUE;
@@ -11,6 +11,8 @@
 	gfbBuffer 			:	FB_StringRingBuffer;
 END_VAR
 VAR_GLOBAL CONSTANT
+	g_psLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
+	g_udpSyslog	:	UDINT := 514; //syslog port
 	acsSubsystems	:	ARRAY [0..5] OF STRING := 
 	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
 	cNILVALUE	:	STRING(1) := '-';
