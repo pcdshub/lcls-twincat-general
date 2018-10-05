@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="FB_EcatDiag" Id="{04266cc1-1752-4ae8-b692-47df0663f314}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
 VAR_INPUT
@@ -9,7 +9,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
-	q_aiTermStates: ARRAY[1..256] OF INT; 
+	q_aiTermStates: ARRAY[1..256] OF BYTE; 
 	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
 	q_iMasterState: WORD; // The Device State of the Master
 	q_sMasterState:STRING;
