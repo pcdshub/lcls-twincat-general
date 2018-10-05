@@ -56,7 +56,6 @@ END_IF
 rtReset(CLK:=i_bReset);
 IF rtReset.Q THEN
 	eState := E_MessengerState.CreateSocket;
-	i_bReset R= i_bReset;
 END_IF
 
 rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
@@ -141,7 +140,8 @@ fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_Logger">
-      <LineId Id="3" Count="97" />
+      <LineId Id="3" Count="31" />
+      <LineId Id="36" Count="64" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Logger.Manager">
