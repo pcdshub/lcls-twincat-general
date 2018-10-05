@@ -8,9 +8,7 @@ VAR_INPUT
 	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
 END_VAR
 VAR
-	i_sPID	:	STRING := cNILVALUE;	//Not currently used
-	i_sMSGID	:	STRING := cNILVALUE; //Not currently used
-	i_sSD	:	STRING := cNILVALUE; //Not currently used
+
 	fbFormatString		:	FB_FormatString;
 	sPRIVAL				: 	T_MaxString := cNILVALUE;
 	sPID				: 	T_MaxString := cNILVALUE;
@@ -19,7 +17,11 @@ VAR
 	sSD					: 	T_MaxString := cNILVALUE;
 	sMsg				: 	T_MaxString := cNILVALUE;
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	i_sPID	:	STRING := cNILVALUE;	//Not currently used
+	i_sMSGID	:	STRING := cNILVALUE; //Not currently used
+	i_sSD	:	STRING := cNILVALUE; //Not currently used
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// LogMessage
 // A Wallace, 18-4-12
