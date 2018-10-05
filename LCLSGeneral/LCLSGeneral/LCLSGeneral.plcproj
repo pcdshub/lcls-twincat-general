@@ -2233,7 +2233,7 @@
                   <d n="SubKeys" t="Hashtable" />
                   <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
                     <v>bWarning</v>
-                    <v>False</v>
+                    <v>True</v>
                     <v>bActive</v>
                     <v>True</v>
                   </d>
