@@ -60,9 +60,11 @@ fbKoyo_PLCInputCoilsRx(sIPAddr:='i_sIPAddr', nTCPPort:=502, nQuantity:=32, nMBAd
 //run some error code for modbus
 IF fbKoyo_PLCInputCoilsRx.bError THEN
 	//if there's a modbus error, set all incoming bits to zero
+	{analysis -41} //There are one-liners for resetting an array to zero but they don't comply with 61131
 	FOR index := 0 TO USINT_TO_INT(SIZEOF(xKoyo_PLC_CnBits))-1 DO //starts at 0
 		xKoyo_PLC_CnBits[index]:=0;
 	END_FOR
+	{analysis +41}
 	q_xError := TRUE;
 	
 ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
@@ -89,7 +91,11 @@ q_xPLCResponse := xKoyo_PLC_CnBits;
       <LineId Id="701" Count="0" />
       <LineId Id="698" Count="0" />
       <LineId Id="696" Count="0" />
-      <LineId Id="630" Count="47" />
+      <LineId Id="630" Count="29" />
+      <LineId Id="721" Count="0" />
+      <LineId Id="660" Count="2" />
+      <LineId Id="722" Count="0" />
+      <LineId Id="663" Count="14" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
