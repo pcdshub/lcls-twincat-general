@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="FB_Logger" Id="{227c1bce-209d-4aad-8160-124282bb6370}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Logger
 VAR_INPUT
@@ -50,44 +50,44 @@ ELSE
 END_IF
 
 IF i_CloseSocket THEN 
-	eState := CloseSocket; 
+	eState := E_MessengerState.CloseSocket; 
 END_IF
 
 rtReset(CLK:=i_bReset);
 IF rtReset.Q THEN
-	eState := CreateSocket;
+	eState := E_MessengerState.CreateSocket;
 	i_bReset R= i_bReset;
 END_IF
 
 rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
 
 CASE eState OF
-	Init:
+	E_MessengerState.Init:
 		;
-	CreateSocket:
+	E_MessengerState.CreateSocket:
 		fbUDPSocketManager.nLocalPort := g_udpSyslog;
 		fbUDPSocketManager.bEnable := TRUE;
 		
-		IF fbUDPSocketManager.eState = eSOCKET_CREATED THEN
-			eState := Active;
+		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CREATED THEN
+			eState := E_MessengerState.Active;
 		ELSIF fbUDPSocketManager.bError THEN
-			eState := Err;
+			eState := E_MessengerState.Err;
 			fbUDPSocketManager.bEnable := FALSE;
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socketmanger error in createsocket: %d', arg1:=F_UDINT(fbUDPSocketManager.nErrID));
 		//ELSE
 			//eState := Err;
 			//stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Something else happened in createsocket -> error');
 		END_IF
-	Active:
-		IF fbUDPSocketManager.eState = eSOCKET_TRANSIENT  OR 
+	E_MessengerState.Active:
+		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_TRANSIENT  OR 
 			fbUDPSocketManager.bError THEN
-			eState := Err; 
+			eState := E_MessengerState.Err; 
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socketmanager error in active: %d', arg1:=F_UDINT(fbUDPSocketManager.nErrId));
 		END_IF
 		
 		// While the socket is active, go ahead and send whatever is in the buffer
 		IF rtSocketSendErr.Q THEN
-			eState := Err;
+			eState := E_MessengerState.Err;
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socket send error: %d', arg1:=F_UDINT(fbUDPSocketSend.nErrId));
 		ELSIF gfbBuffer.nCount > 0 AND NOT fbUDPSocketSend.bBusy THEN
 			gfbBuffer.A_RemoveHead(getValue=>sOutgoingMesg);
@@ -99,23 +99,23 @@ CASE eState OF
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Waiting to send');
 			ctuSentSomething(CU:=FALSE);
 		ELSE
-			eState := Err;
+			eState := E_MessengerState.Err;
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Something else happened in active -> error');
 		END_IF
 		
-	CloseSocket:
+	E_MessengerState.CloseSocket:
 		fbUDPSocketManager.bEnable R= i_CloseSocket;
-		IF fbUDPSocketManager.eState = eSOCKET_CLOSED THEN
-			eState := Init;
+		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CLOSED THEN
+			eState := E_MessengerState.Init;
 		ELSIF fbUDPSocketManager.bBusy AND NOT fbUDPSocketManager.bEnable THEN
 			;
 		ELSIF fbUDPSocketManager.bError THEN
-			eState := Err;
+			eState := E_MessengerState.Err;
 		ELSE
-			eState := Err;
+			eState := E_MessengerState.Err;
 		END_IF
-	Err:
-		eState := Init;
+	E_MessengerState.Err:
+		eState := E_MessengerState.Init;
 		stDiag.asResults[stDiag.resultIdx.IncVal()] := 'Moving back to Init state from Error';
 END_CASE
 
@@ -140,5 +140,16 @@ fbUDPSocketSend();
 fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>
     </Action>
+    <LineIds Name="FB_Logger">
+      <LineId Id="3" Count="97" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Logger.Manager">
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Logger.SocketSendTo">
+      <LineId Id="2" Count="5" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
