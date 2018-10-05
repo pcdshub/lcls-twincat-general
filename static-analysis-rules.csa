@@ -1,0 +1,255 @@
+﻿<CoDeSysStaticAnalysisTool>
+  <Settings AutoPerform="TRUE" />
+  <Rules>
+    <Rule Name="Rules" Id="0" Activated="FALSE" Warning="FALSE">
+      <Rule Name="Unreachable code" Id="1" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Empty objects" Id="2" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Empty statements" Id="3" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Multiple write access on output" Id="4" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Concurrent access" Id="6" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Address operator on constants" Id="7" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Check subrange types" Id="8" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Unused return values " Id="9" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Arrays with only one component" Id="10" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Useless declarations" Id="11" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Variables which could be declared as constants" Id="12" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Declarations with the same variable name" Id="13" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Assignment of instances" Id="14" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Access to global data via  FB_Init" Id="15" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Gaps in structures" Id="16" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Non-regular assignments" Id="17" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Unusual bit access" Id="18" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Possibly assignment of truncated value to REAL variable" Id="20" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Transporting the address of a temporary variable" Id="21" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="(Possibly) unassigned return value" Id="22" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Too big return values" Id="23" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Untyped literals / constants" Id="24" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Unqualified enumeration constants" Id="25" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Possible truncated strings" Id="26" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Multiple usage of name" Id="27" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Overlapping memory areas" Id="28" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Notation in code different to declaration" Id="29" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Unused objects" Id="30" Activated="FALSE" Warning="FALSE">
+        <Rule Name="Unused signatures" Id="31" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Unused enumeration constants" Id="32" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Unused variables" Id="33" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Unused input variables" Id="35" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Unused output variables" Id="36" Activated="FALSE" Warning="FALSE" />
+      </Rule>
+      <Rule Name="Enumerations with incorrect assignment" Id="34" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Write access to input variable " Id="37" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Read access to output variable" Id="38" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Possible null pointer dereferences" Id="39" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Possible division by zero" Id="40" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Detect possible loop invariant code" Id="41" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Usage of different access paths" Id="42" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Use of a global variable in only one POU" Id="43" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Declarations with reference to interface" Id="44" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Conversions" Id="45" Activated="FALSE" Warning="FALSE">
+        <Rule Name="Implicit pointer conversions" Id="19" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Implicit expanding conversions" Id="130" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Implicit narrowing conversions" Id="131" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Implicit signed/unsigned conversions" Id="132" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Explicit narrowing conversions" Id="133" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Explicit signed/unsigned conversions" Id="134" Activated="FALSE" Warning="FALSE" />
+      </Rule>
+      <Rule Name="Possible use of not initialised interface" Id="46" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Usage of direct addresses" Id="49" Activated="TRUE" Warning="FALSE">
+        <Rule Name="Invalid addresses and data types" Id="5" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Accesses to direct address" Id="47" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="AT-declarations on direct addresses" Id="48" Activated="TRUE" Warning="FALSE" />
+      </Rule>
+      <Rule Name="Rules for operators" Id="50" Activated="TRUE" Warning="FALSE">
+        <Rule Name="Comparison operations on BOOL vairables" Id="51" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Unusual shift operation" Id="52" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Too big bitwise shift" Id="53" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Comparisons of REAL/LREAL for equality / inequality" Id="54" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Unnecessary comparisons of unsigned operands" Id="55" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Constant out of valid range" Id="56" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Possible loss of decimal places" Id="57" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Operations on enumeration variables" Id="58" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Comparison operations always returning TRUE or FALSE" Id="59" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Zero used as invalid operand" Id="60" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Unusual operation on pointer" Id="61" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Uses of TRUE or FALSE in expressions" Id="62" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Possibly not 16-bit-compatible operations" Id="63" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Addition of pointer" Id="64" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Incorrect pointer addition to base size" Id="65" Activated="TRUE" Warning="FALSE" />
+        <Rule Name="Uses of temporary results" Id="66" Activated="TRUE" Warning="FALSE" />
+      </Rule>
+      <Rule Name="Rules for statements" Id="70" Activated="FALSE" Warning="FALSE">
+        <Rule Name="FOR statements" Id="71" Activated="FALSE" Warning="FALSE">
+          <Rule Name="Invalid uses of counter variable" Id="72" Activated="TRUE" Warning="FALSE" />
+          <Rule Name="Uses of inadequate counter variable" Id="73" Activated="FALSE" Warning="FALSE" />
+          <Rule Name="Loop index variable for array index exeeds array range" Id="80" Activated="TRUE" Warning="FALSE" />
+          <Rule Name="Upper border is not a constant" Id="81" Activated="TRUE" Warning="FALSE" />
+        </Rule>
+        <Rule Name="CASE statement" Id="74" Activated="TRUE" Warning="FALSE">
+          <Rule Name="Missing ELSE" Id="75" Activated="TRUE" Warning="FALSE" />
+          <Rule Name="Missing enumeration constant" Id="76" Activated="TRUE" Warning="FALSE" />
+          <Rule Name="Type mismatches with CASE expression" Id="77" Activated="TRUE" Warning="FALSE" />
+          <Rule Name="Missing CASE branches" Id="78" Activated="TRUE" Warning="FALSE" />
+        </Rule>
+        <Rule Name="Return statement before end of function" Id="90" Activated="TRUE" Warning="FALSE" />
+      </Rule>
+      <Rule Name="Assignments in conditions" Id="95" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Variables greater than 1024 bytes..." Id="100" Activated="TRUE" Warning="TRUE">
+        <UpperLimit>1024</UpperLimit>
+      </Rule>
+      <Rule Name="Names with invalid length" Id="101" Activated="FALSE" Warning="FALSE">
+        <MinChars>5</MinChars>
+        <MaxChars>30</MaxChars>
+        <Exceptions />
+      </Rule>
+      <Rule Name="Access to program/fb variables from the outside" Id="102" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Multiple instance calls" Id="105" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Virtual method calls in FB_INIT" Id="106" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Missing formal parameters" Id="107" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Check strict IEC rules" Id="110" Activated="FALSE" Warning="FALSE">
+        <Rule Name="Pointer variables" Id="111" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Reference variables" Id="112" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Variables with data type WSTRING" Id="113" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Variables with data type LTIME" Id="114" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Variables with data type UNION" Id="115" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Variables with data type BIT" Id="117" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Initialisations not using constants&#xD;&#xA;" Id="118" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Object-oriented features" Id="119" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Program calls" Id="120" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Missing VAR_EXTERNAL declarations" Id="121" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Array index defined as expression" Id="122" Activated="FALSE" Warning="FALSE" />
+        <Rule Name="Usages of INI, ADR or BITADR" Id="123" Activated="FALSE" Warning="FALSE" />
+      </Rule>
+      <Rule Name="Statements commented out " Id="140" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Violations of lower or upper limits or the metrics" Id="150" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Recursive calls" Id="160" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Unpacked structure in packed structure" Id="161" Activated="TRUE" Warning="FALSE" />
+      <Rule Name="Missing comments" Id="162" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Nested comments" Id="163" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Multiline comments" Id="164" Activated="FALSE" Warning="FALSE" />
+      <Rule Name="Max. number of input/output/in-out variables..." Id="166" Activated="FALSE" Warning="FALSE">
+        <MaxInputs>10</MaxInputs>
+        <MaxOutputs>10</MaxOutputs>
+        <MaxInOuts>10</MaxInOuts>
+      </Rule>
+      <Rule Name="Report temporary FunctionBlock instances" Id="167" Activated="FALSE" Warning="FALSE" />
+    </Rule>
+  </Rules>
+  <NamingConventions>
+    <NamingConvention Name="Prefixes for variables" Id="1">
+      <NamingConvention Name="Prefixes for types" Id="2">
+        <NamingConvention Name="BOOL" Id="3" Prefix="" />
+        <NamingConvention Name="BIT" Id="4" Prefix="" />
+        <NamingConvention Name="BYTE" Id="5" Prefix="" />
+        <NamingConvention Name="WORD" Id="6" Prefix="" />
+        <NamingConvention Name="DWORD" Id="7" Prefix="" />
+        <NamingConvention Name="LWORD" Id="8" Prefix="" />
+        <NamingConvention Name="SINT" Id="13" Prefix="" />
+        <NamingConvention Name="INT" Id="14" Prefix="" />
+        <NamingConvention Name="DINT" Id="15" Prefix="" />
+        <NamingConvention Name="LINT" Id="16" Prefix="" />
+        <NamingConvention Name="USINT" Id="9" Prefix="" />
+        <NamingConvention Name="UINT" Id="10" Prefix="" />
+        <NamingConvention Name="UDINT" Id="11" Prefix="" />
+        <NamingConvention Name="ULINT" Id="12" Prefix="" />
+        <NamingConvention Name="REAL" Id="17" Prefix="" />
+        <NamingConvention Name="LREAL" Id="18" Prefix="" />
+        <NamingConvention Name="STRING" Id="19" Prefix="" />
+        <NamingConvention Name="WSTRING" Id="20" Prefix="" />
+        <NamingConvention Name="TIME" Id="21" Prefix="" />
+        <NamingConvention Name="LTIME" Id="22" Prefix="" />
+        <NamingConvention Name="DATE" Id="23" Prefix="" />
+        <NamingConvention Name="DATE_AND_TIME" Id="24" Prefix="" />
+        <NamingConvention Name="TIME_OF_DAY" Id="25" Prefix="" />
+        <NamingConvention Name="POINTER" Id="26" Prefix="" />
+        <NamingConvention Name="REFERENCE" Id="27" Prefix="" />
+        <NamingConvention Name="SUBRANGE" Id="28" Prefix="" />
+        <NamingConvention Name="ARRAY" Id="30" Prefix="" />
+        <NamingConvention Name="Function block instance" Id="31" Prefix="" />
+        <NamingConvention Name="Interface" Id="36" Prefix="" />
+        <NamingConvention Name="Structure" Id="32" Prefix="" />
+        <NamingConvention Name="ENUM" Id="29" Prefix="" />
+        <NamingConvention Name="Alias" Id="33" Prefix="" />
+        <NamingConvention Name="Variables with data type UNION" Id="34" Prefix="" />
+        <NamingConvention Name="XWORD" Id="35" Prefix="" />
+        <NamingConvention Name="UXINT" Id="37" Prefix="" />
+        <NamingConvention Name="XINT" Id="38" Prefix="" />
+      </NamingConvention>
+      <NamingConvention Name="Prefixes for scopes" Id="50">
+        <NamingConvention Name="VAR_GLOBAL" Id="51" Prefix="" />
+        <NamingConvention Name="VAR_GLOBAL CONSTANT" Id="70" Prefix="" />
+        <NamingConvention Name="VAR_GLOBAL RETAIN" Id="71" Prefix="" />
+        <NamingConvention Name="VAR_GLOBAL PERSISTENT" Id="72" Prefix="" />
+        <NamingConvention Name="VAR_GLOBAL RETAIN PERSISTENT" Id="73" Prefix="" />
+        <NamingConvention Name="VAR" Id="52">
+          <NamingConvention Name="Program variables" Id="53" Prefix="" />
+          <NamingConvention Name="Function block variables" Id="54" Prefix="" />
+          <NamingConvention Name="Function\Method variables" Id="55" Prefix="" />
+        </NamingConvention>
+        <NamingConvention Name="VAR_INPUT" Id="56" Prefix="" />
+        <NamingConvention Name="VAR_OUTPUT" Id="57" Prefix="" />
+        <NamingConvention Name="VAR_IN_OUT" Id="58" Prefix="" />
+        <NamingConvention Name="VAR_STAT" Id="59" Prefix="" />
+        <NamingConvention Name="VAR_TEMP" Id="61" Prefix="" />
+        <NamingConvention Name="VAR CONSTANT" Id="62" Prefix="" />
+        <NamingConvention Name="VAR PERSISTENT" Id="63" Prefix="" />
+        <NamingConvention Name="VAR RETAIN" Id="64" Prefix="" />
+        <NamingConvention Name="IO variables" Id="65" Prefix="" />
+      </NamingConvention>
+    </NamingConvention>
+    <NamingConvention Name="Prefixes for POUs" Id="100">
+      <NamingConvention Name="Prefixes for POU type" Id="101">
+        <NamingConvention Name="PROGRAM" Id="102" Prefix="" />
+        <NamingConvention Name="FUNCTIONBLOCK" Id="103" Prefix="" />
+        <NamingConvention Name="FUNCTION" Id="104" Prefix="" />
+        <NamingConvention Name="METHOD" Id="105" Prefix="" />
+        <NamingConvention Name="ACTION" Id="106" Prefix="" />
+        <NamingConvention Name="PROPERTY" Id="107" Prefix="" />
+        <NamingConvention Name="INTERFACE" Id="108" Prefix="" />
+      </NamingConvention>
+      <NamingConvention Name="Method scope" Id="120">
+        <NamingConvention Name="PRIVATE" Id="121" Prefix="" />
+        <NamingConvention Name="PROTECTED" Id="122" Prefix="" />
+        <NamingConvention Name="INTERNAL" Id="123" Prefix="" />
+        <NamingConvention Name="PUBLIC" Id="124" Prefix="" />
+      </NamingConvention>
+    </NamingConvention>
+    <NamingConvention Name="Prefixes for DUTs" Id="150">
+      <NamingConvention Name="Structure" Id="151" Prefix="" />
+      <NamingConvention Name="Enumeration" Id="152" Prefix="" />
+      <NamingConvention Name="Variables with data type UNION" Id="153" Prefix="" />
+      <NamingConvention Name="Alias" Id="154" Prefix="" />
+    </NamingConvention>
+  </NamingConventions>
+  <Metrics>
+    <Metric Name="Code size (number of bytes)" Guid="62b98ef9-b4c6-4777-bc0a-29245bb8b9f3" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Variables size (number of bytes)" Guid="6c74d656-f35f-41b9-b449-eae882ed12fe" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Stack size (number of bytes)" Guid="daa3e89b-a727-4bc9-bd38-29afc6024f90" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of calls" Guid="e58378e8-a2fb-4a33-8013-8a91270388d0" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Called in tasks" Guid="aebdfc4d-fc4f-4fac-bf2e-22b603bc1880" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Used different global Variables" Guid="15c07c54-9586-460c-802f-b3b4a408e3c7" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of direct address accesses" Guid="19fab17a-876c-4a8d-9d74-3e5d92b63dc8" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of local variables" Guid="87b20586-90da-40d8-82ce-62a7dd0ba8af" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of inputs variables" Guid="2a5d0bd7-5767-43e1-92ab-90d924ade69e" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of output variables" Guid="6cb1bfb1-4d4a-43ed-96f4-cd0254fc33b5" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="NOS - Number Of Statements" Guid="0ade9a3b-311c-4293-bc26-bcf994cdbbdc" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Percentage of comment" Guid="9b526466-3bbe-40a9-b5a5-1cfadd791459" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Complexity (McCabe)" Guid="0ba696f2-ce22-4330-931f-4ddd5c597896" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Complexity of nesting (Prather)" Guid="c20d083b-41ea-4867-b762-015491579932" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="DIT - Depth of Inheritance Tree" Guid="c4137578-73e0-4a9c-ad9c-7773a1cff401" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="NOC - Number Of Children" Guid="f6dd9a78-1e71-4d9c-9e61-394eb38f3809" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="RFC - Response For Class" Guid="b42720b9-b152-4b52-ad89-630e0f5acab1" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="CBO - Coupling Between Objects" Guid="6549803a-9e82-4b28-aff1-2425cbec813b" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Complexity of reference (Elshof)" Guid="571980c1-792d-4355-a9cb-4c3a8f254ab0" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Lack of Cohesion Of Methods - LCOM" Guid="3fb5ac29-8ac7-4ca4-863e-49c3c89643b9" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of different used operators - Halstead (n1)" Guid="209f2982-bd60-4988-9cf9-9ff21cbf643f" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of operators - Halstead (N1)" Guid="bb1ff1d3-b0bc-4909-9034-11d7c6edb61f" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of different used operands - Halstead (n2)" Guid="8360c2b5-e762-4cc0-935b-fb129cda1b4a" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of operands - Halstead (N2)" Guid="1a004255-b771-48b6-aa33-ea35ce4d37ea" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Length - Halstead (HL)" Guid="827ae15d-4cb9-4177-b870-6bea1db8ee44" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Volume - Halstead (HV)" Guid="eb349b41-54d8-47ed-ab7d-b5dbbc17709f" Activated="TRUE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Difficulty - Halstead (D)" Guid="ca51b834-cb16-4517-8b02-4807ce263107" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of SFC branches&#xD;&#xA;" Guid="40f104a2-99f0-486d-9c44-47e8c759ca07" Activated="FALSE" LowerLimit="" UpperLimit="" />
+    <Metric Name="Number of SFC steps&#xD;&#xA;" Guid="2ee16325-7a34-4109-82cd-e99144bdbf43" Activated="FALSE" LowerLimit="" UpperLimit="" />
+  </Metrics>
+  <SuppressedSymbols />
+</CoDeSysStaticAnalysisTool>
