@@ -11,7 +11,7 @@ VAR_OUTPUT
 	
 END_VAR
 VAR
-	Val	:	INT := LowerLimit;
+	nVal	:	INT := LowerLimit;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Index FB
@@ -25,8 +25,8 @@ Use this thing to have a simple indexer with rollover.
     </Implementation>
     <Action Name="Dec" Id="{b1b81818-0c2b-42cc-90f3-55cd7cad3e87}">
       <Implementation>
-        <ST><![CDATA[Val := Val - ValInc;
-IF Val < LowerLimit THEN Val := UpperLimit; END_IF]]></ST>
+        <ST><![CDATA[nVal := nVal - ValInc;
+IF nVal < LowerLimit THEN nVal := UpperLimit; END_IF]]></ST>
       </Implementation>
     </Action>
     <Method Name="DecVal" Id="{cf4e17a1-86cd-4a59-ad6f-fc3838ffede5}">
@@ -36,14 +36,14 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Dec();
-DecVal := Val;]]></ST>
+DecVal := nVal;]]></ST>
       </Implementation>
     </Method>
     <Action Name="Inc" Id="{a11e830b-c881-456f-af74-5a750bccfd58}">
       <Implementation>
         <ST><![CDATA[// Dont use this, use ValInc
-Val := Val + ValInc;
-IF Val >  UpperLimit THEN Val := LowerLimit; END_IF]]></ST>
+nVal := nVal + ValInc;
+IF nVal >  UpperLimit THEN nVal := LowerLimit; END_IF]]></ST>
       </Implementation>
     </Action>
     <Method Name="IncVal" Id="{6f28d89a-7191-4dad-8824-c5fe9fb32dd9}">
@@ -53,7 +53,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Inc();
-IncVal := Val;]]></ST>
+IncVal := nVal;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_Index">

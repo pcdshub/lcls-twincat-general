@@ -26,7 +26,7 @@ VAR
 	fbGetConfSlaves: FB_EcGetConfSlaves; 
 	ftReset: F_TRIG;
 	ftMasterReset: F_TRIG;
-	iterator: INT;
+	nIterator: INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -61,15 +61,15 @@ fbGetAllSlaveStates(sNetId:=sNetId, pStateBuf := ADR(astTermStates), cbBufLen:=S
 // If so, then set our global IO bad boolean.
 IF fbGetAllSlaveStates.nSlaves > 0 THEN
 	q_xAllSlaveStatesGood := TRUE;
-FOR iterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
+FOR nIterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
 	DO
-	IF NOT( (astTermStates[iterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[iterator].linkState = EC_LINK_STATE_OK)) THEN
+	IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
 		q_xAllSlaveStatesGood := FALSE;
 	END_IF
-	q_aiTermStates[iterator] := astTermStates[iterator].deviceState;
-	q_aEcConfSlaveInfo[iterator].iDeviceState :=astTermStates[iterator].deviceState;//
-	q_aEcConfSlaveInfo[iterator].iLinkState :=astTermStates[iterator].linkState;//
-	q_aEcConfSlaveInfo[iterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[iterator]);//
+	q_aiTermStates[nIterator] := astTermStates[nIterator].deviceState;
+	q_aEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
+	q_aEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
+	q_aEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
 	
 END_FOR
 END_IF
@@ -89,11 +89,11 @@ fbGetConfSlaves(bExecute := i_xFirstPass, sNetId :=sNetId, pArrEcConfSlaveInfo :
 q_nSlaves:=fbGetConfSlaves.nSlaves;
 
 IF  NOT (fbGetConfSlaves.bBusy) THEN
-	FOR iterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
+	FOR nIterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
 	DO
-	q_aEcConfSlaveInfo[iterator].nAddrr :=pArrEcConfSlaveInfo[iterator].nAddr;
-	q_aEcConfSlaveInfo[iterator].sName :=pArrEcConfSlaveInfo[iterator].sName;
-	q_aEcConfSlaveInfo[iterator].sType :=pArrEcConfSlaveInfo[iterator].sType;
+	q_aEcConfSlaveInfo[nIterator].nAddrr :=pArrEcConfSlaveInfo[nIterator].nAddr;
+	q_aEcConfSlaveInfo[nIterator].sName :=pArrEcConfSlaveInfo[nIterator].sName;
+	q_aEcConfSlaveInfo[nIterator].sType :=pArrEcConfSlaveInfo[nIterator].sType;
 END_FOR
 	fbGetConfSlaves.bExecute := FALSE;
 END_IF
@@ -103,41 +103,7 @@ END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_EcatDiag">
-      <LineId Id="33" Count="6" />
-      <LineId Id="309" Count="2" />
-      <LineId Id="361" Count="0" />
-      <LineId Id="308" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="163" Count="0" />
-      <LineId Id="254" Count="0" />
-      <LineId Id="248" Count="3" />
-      <LineId Id="45" Count="4" />
-      <LineId Id="278" Count="1" />
-      <LineId Id="50" Count="8" />
-      <LineId Id="162" Count="0" />
-      <LineId Id="265" Count="1" />
-      <LineId Id="313" Count="0" />
-      <LineId Id="289" Count="0" />
-      <LineId Id="59" Count="2" />
-      <LineId Id="129" Count="0" />
-      <LineId Id="137" Count="0" />
-      <LineId Id="133" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="134" Count="2" />
-      <LineId Id="130" Count="0" />
-      <LineId Id="181" Count="0" />
-      <LineId Id="255" Count="0" />
-      <LineId Id="301" Count="0" />
-      <LineId Id="297" Count="1" />
-      <LineId Id="316" Count="1" />
-      <LineId Id="320" Count="1" />
-      <LineId Id="328" Count="2" />
-      <LineId Id="333" Count="0" />
-      <LineId Id="318" Count="1" />
-      <LineId Id="276" Count="0" />
-      <LineId Id="212" Count="0" />
-      <LineId Id="192" Count="0" />
-      <LineId Id="97" Count="0" />
+      <LineId Id="416" Count="69" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

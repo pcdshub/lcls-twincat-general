@@ -10,17 +10,20 @@ END_VAR
 VAR
 
 	fbFormatString		:	FB_FormatString;
-	sPRIVAL				: 	T_MaxString := cNILVALUE;
-	sPID				: 	T_MaxString := cNILVALUE;
-	sSubsystem			: 	T_MaxString := cNILVALUE;
-	wSyslogVer			: 	WORD := cwSyslogVer;
-	sSD					: 	T_MaxString := cNILVALUE;
-	sMsg				: 	T_MaxString := cNILVALUE;
+	sPRIVAL				: 	T_MaxString := csNILVALUE;
+	sPID				: 	T_MaxString := csNILVALUE;
+	sSubsystem			: 	T_MaxString := csNILVALUE;
+	nSyslogVer			: 	WORD := cnSyslogVer;
+	sSD					: 	T_MaxString := csNILVALUE;
+	sMsg				: 	T_MaxString := csNILVALUE;
 END_VAR
 VAR CONSTANT
-	i_sPID	:	STRING := cNILVALUE;	//Not currently used
-	i_sMSGID	:	STRING := cNILVALUE; //Not currently used
-	i_sSD	:	STRING := cNILVALUE; //Not currently used
+	i_sPID	:	STRING := csNILVALUE;	//Not currently used
+	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
+	i_sSD	:	STRING := csNILVALUE; //Not currently used
+	acsSubsystems	:	ARRAY [0..5] OF STRING := 
+	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
+	cwFacility: WORD := 20; // local4
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// LogMessage
@@ -28,20 +31,20 @@ END_VAR]]></Declaration>
 // Adds a message to the global queue to be sent to the syslog server
 
 gfbBuffer.putValue := '';
-gfbBuffer.pBuffer := ADR(gMesgBuffer); //Global buffer address
-gfbBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(gMesgBuffer));
+gfbBuffer.pBuffer := ADR(asMesgBuffer); //Global buffer address
+gfbBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asMesgBuffer));
 
 fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
 
 sPRIVAL := LEFT( WORD_TO_STRING(cwFacility * 8 + i_eSevr), 5);
-sPID := cNILVALUE;
+sPID := csNILVALUE;
 sSubsystem := acsSubsystems[i_eSubsystem];
-wSyslogVer := cwSyslogVer;
+nSyslogVer := cnSyslogVer;
 sSD := i_sSD;
 sMsg := i_sMsg;
 //bad language ahead, sorry
 fbFormatString.arg1 := F_STRING(sPRIVAL);
-fbFormatString.arg2 := F_WORD(wSyslogVer);
+fbFormatString.arg2 := F_WORD(nSyslogVer);
 fbFormatString.arg3 := F_STRING(gsCurrentTime);
 fbFormatString.arg4 := F_STRING(sSubsystem);
 fbFormatString.arg5 := F_STRING(sPID);
@@ -51,10 +54,7 @@ fbFormatString( sOut=>gfbBuffer.putValue);
 gfbBuffer.A_AddTail();]]></ST>
     </Implementation>
     <LineIds Name="FB_LogMessage">
-      <LineId Id="42" Count="0" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="3" Count="20" />
+      <LineId Id="216" Count="24" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

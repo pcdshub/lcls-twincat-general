@@ -3,9 +3,9 @@
   <DUT Name="DUT_EcDevice" Id="{6cec24f0-c59b-4ab2-9bf0-b6fda49b0d71}">
     <Declaration><![CDATA[TYPE DUT_EcDevice :
 STRUCT
-	iDeviceState: BYTE;
+	nDeviceState: BYTE;
 	sDeviceState :STRING;
-	iLinkState: BYTE;
+	nLinkState: BYTE;
 	nAddrr: WORD;
 	sType: STRING;
 	sName:STRING;

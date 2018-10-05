@@ -18,9 +18,11 @@ VAR
 	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := '');
 	ctuSentSomething	:	CTU := (PV := 100);
 	rtSocketSendErr		:	R_TRIG;
+	sHostName	:	T_MaxString := csNILVALUE;
 END_VAR
 VAR CONSTANT
-
+	g_psLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
+	g_udpSyslog	:	UDINT := 514; //syslog port
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -30,23 +32,24 @@ A. Wallace 2016-9-3
 This is used to pass PLC notification messeges to a syslog server.
 
 This POU constantly attempts to send out messages from the global buffer.
+
 *)
 
-gfbBuffer.pBuffer := ADR(gMesgBuffer); 
-gfbBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(gMesgBuffer));
+gfbBuffer.pBuffer := ADR(asMesgBuffer); 
+gfbBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asMesgBuffer));
 
 fbGetSystemTime(); 
 IF fbGetSystemTime.bValid THEN
 	gsCurrentTime := SYSTEM_TIME_TO_RFC3339(fbGetSystemTime.systemTime);
 ELSE
-	gsCurrentTime := cNILVALUE;
+	gsCurrentTime := csNILVALUE;
 END_IF
 
 fbGetHostName();
 IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
-	gsHostName := fbGetHostName.sHostName;
+	sHostName := fbGetHostName.sHostName;
 ELSE
-	gsHostName := cNILVALUE;
+	sHostName := csNILVALUE;
 END_IF
 
 IF i_CloseSocket THEN 
@@ -116,6 +119,9 @@ CASE eState OF
 	E_MessengerState.Err:
 		eState := E_MessengerState.Init;
 		stDiag.asResults[stDiag.resultIdx.IncVal()] := 'Moving back to Init state from Error';
+	ELSE
+		eState := E_MessengerState.Init;		
+		stDiag.asResults[stDiag.resultIdx.IncVal()] := 'Uncaught state';
 END_CASE
 
 
@@ -140,8 +146,11 @@ fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_Logger">
-      <LineId Id="3" Count="31" />
-      <LineId Id="36" Count="64" />
+      <LineId Id="148" Count="6" />
+      <LineId Id="251" Count="0" />
+      <LineId Id="155" Count="86" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="242" Count="4" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Logger.Manager">
