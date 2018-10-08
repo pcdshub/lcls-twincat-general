@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
     <Declaration><![CDATA[{attribute 'qualified only'}
 VAR_GLOBAL
@@ -8,7 +8,7 @@ VAR_GLOBAL
 	gsCurrentTime	:	T_MaxString := csNILVALUE;
 	
 	fbLogMessage : FB_LogMessage;
-	gfbBuffer 			:	FB_StringRingBuffer;
+	fbLoggerBuffer 			:	FB_StringRingBuffer;
 END_VAR
 VAR_GLOBAL CONSTANT
 	csNILVALUE	:	STRING(1) := '-';

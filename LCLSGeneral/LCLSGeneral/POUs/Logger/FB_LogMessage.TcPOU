@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
@@ -18,25 +18,27 @@ VAR
 	sMsg				: 	T_MaxString := csNILVALUE;
 END_VAR
 VAR CONSTANT
+	{attribute 'naming' := 'off'}
 	i_sPID	:	STRING := csNILVALUE;	//Not currently used
 	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
 	i_sSD	:	STRING := csNILVALUE; //Not currently used
+	{attribute 'naming' := 'on'}
 	acsSubsystems	:	ARRAY [0..5] OF STRING := 
 	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
-	cwFacility: WORD := 20; // local4
+	cnFacility: WORD := 20; // local4
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// LogMessage
 // A Wallace, 18-4-12
 // Adds a message to the global queue to be sent to the syslog server
 
-gfbBuffer.putValue := '';
-gfbBuffer.pBuffer := ADR(asMesgBuffer); //Global buffer address
-gfbBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asMesgBuffer));
+fbLoggerBuffer.putValue := '';
+fbLoggerBuffer.pBuffer := ADR(asMesgBuffer); //Global buffer address
+fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asMesgBuffer));
 
 fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
 
-sPRIVAL := LEFT( WORD_TO_STRING(cwFacility * 8 + i_eSevr), 5);
+sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
 sPID := csNILVALUE;
 sSubsystem := acsSubsystems[i_eSubsystem];
 nSyslogVer := cnSyslogVer;
@@ -50,11 +52,11 @@ fbFormatString.arg4 := F_STRING(sSubsystem);
 fbFormatString.arg5 := F_STRING(sPID);
 fbFormatString.arg6 := F_STRING(sSD);
 fbFormatString.arg7 := F_STRING(sMsg);
-fbFormatString( sOut=>gfbBuffer.putValue);
-gfbBuffer.A_AddTail();]]></ST>
+fbFormatString( sOut=>fbLoggerBuffer.putValue);
+fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>
     <LineIds Name="FB_LogMessage">
-      <LineId Id="216" Count="24" />
+      <LineId Id="341" Count="24" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

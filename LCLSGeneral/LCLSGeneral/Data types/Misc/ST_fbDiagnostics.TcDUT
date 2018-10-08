@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <DUT Name="ST_fbDiagnostics" Id="{07dcfd66-d6ab-4320-bb04-7a16ac42f205}">
     <Declaration><![CDATA[TYPE ST_fbDiagnostics :
 STRUCT
 	asResults	:	ARRAY [1..20] OF T_MaxString;
+	{attribute 'naming' := 'omit'}
 	resultIdx	:	FB_Index := (
 		LowerLimit := 1,
 		UpperLimit := 20
 	);
+	{attribute 'naming' := 'omit'}
 	fString	:	FB_FormatString;
 END_STRUCT
 END_TYPE

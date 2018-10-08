@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_Logger" Id="{227c1bce-209d-4aad-8160-124282bb6370}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Logger
 VAR_INPUT
@@ -8,21 +8,24 @@ VAR_INPUT
 END_VAR
 VAR
 	fbUDPSocketManager	:	FB_ConnectionlessSocket;
-	udpSocket			:	T_HSOCKET;
+	stUDPSocket			:	T_HSOCKET;
 	fbUDPSocketSend		:	FB_SocketUdpSendTo;
 	sOutgoingMesg		:	T_MaxString;
 	eState				:	E_MessengerState;
 	stDiag				:	ST_fbDiagnostics;
+	{attribute 'naming' := 'omit'}
 	rtReset				:	R_TRIG;
 	fbGetSystemTime		:	FB_LocalSystemTime := (bEnable := TRUE);
 	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := '');
+	{attribute 'naming' := 'omit'}
 	ctuSentSomething	:	CTU := (PV := 100);
+	{attribute 'naming' := 'omit'}
 	rtSocketSendErr		:	R_TRIG;
 	sHostName	:	T_MaxString := csNILVALUE;
 END_VAR
 VAR CONSTANT
-	g_psLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
-	g_udpSyslog	:	UDINT := 514; //syslog port
+	cPSLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
+	cnUdpSyslog	:	UDINT := 514; //syslog port
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -35,8 +38,8 @@ This POU constantly attempts to send out messages from the global buffer.
 
 *)
 
-gfbBuffer.pBuffer := ADR(asMesgBuffer); 
-gfbBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asMesgBuffer));
+fbLoggerBuffer.pBuffer := ADR(asMesgBuffer); 
+fbLoggerBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asMesgBuffer));
 
 fbGetSystemTime(); 
 IF fbGetSystemTime.bValid THEN
@@ -67,7 +70,7 @@ CASE eState OF
 	E_MessengerState.Init:
 		;
 	E_MessengerState.CreateSocket:
-		fbUDPSocketManager.nLocalPort := g_udpSyslog;
+		fbUDPSocketManager.nLocalPort := cnUdpSyslog;
 		fbUDPSocketManager.bEnable := TRUE;
 		
 		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CREATED THEN
@@ -91,13 +94,13 @@ CASE eState OF
 		IF rtSocketSendErr.Q THEN
 			eState := E_MessengerState.Err;
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socket send error: %d', arg1:=F_UDINT(fbUDPSocketSend.nErrId));
-		ELSIF gfbBuffer.nCount > 0 AND NOT fbUDPSocketSend.bBusy THEN
-			gfbBuffer.A_RemoveHead(getValue=>sOutgoingMesg);
+		ELSIF fbLoggerBuffer.nCount > 0 AND NOT fbUDPSocketSend.bBusy THEN
+			fbLoggerBuffer.A_RemoveHead(getValue=>sOutgoingMesg);
 			fbUDPSocketSend.bExecute := TRUE; //reset in the action after busy goes true
 			IF sOutgoingMesg <> '' THEN
 				ctuSentSomething(CU:=TRUE);
 			END_IF
-		ELSIF gfbBuffer.nCount = 0 OR fbUDPSocketSend.bBusy THEN
+		ELSIF fbLoggerBuffer.nCount = 0 OR fbUDPSocketSend.bBusy THEN
 			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Waiting to send');
 			ctuSentSomething(CU:=FALSE);
 		ELSE
@@ -131,14 +134,14 @@ SocketSendTo();]]></ST>
     </Implementation>
     <Action Name="Manager" Id="{0b30d4fb-bcf3-449a-83ce-64e06542700f}">
       <Implementation>
-        <ST><![CDATA[fbUDPSocketManager(hSocket => udpSocket);]]></ST>
+        <ST><![CDATA[fbUDPSocketManager(hSocket => stUDPSocket);]]></ST>
       </Implementation>
     </Action>
     <Action Name="SocketSendTo" Id="{fca34bf9-1619-4cff-a5ea-95f906bcb6c8}">
       <Implementation>
-        <ST><![CDATA[fbUDPSocketSend.hSocket := udpSocket;
-fbUDPSocketSend.sRemoteHost := g_psLogHost;
-fbUDPSocketSend.nRemotePort := g_udpSyslog;
+        <ST><![CDATA[fbUDPSocketSend.hSocket := stUDPSocket;
+fbUDPSocketSend.sRemoteHost := cPSLogHost;
+fbUDPSocketSend.nRemotePort := cnUdpSyslog;
 fbUDPSocketSend.pSrc := ADR(sOutgoingMesg);
 fbUDPSocketSend.cbLen := UINT_TO_UDINT(SIZEOF(sOutgoingMesg));
 fbUDPSocketSend();
@@ -146,11 +149,7 @@ fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_Logger">
-      <LineId Id="148" Count="6" />
-      <LineId Id="251" Count="0" />
-      <LineId Id="155" Count="86" />
-      <LineId Id="247" Count="0" />
-      <LineId Id="242" Count="4" />
+      <LineId Id="445" Count="100" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Logger.Manager">
