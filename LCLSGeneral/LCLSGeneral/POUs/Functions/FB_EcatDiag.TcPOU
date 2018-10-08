@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
 VAR_INPUT
 	{attribute 'naming' := 'omit'}
-	i_AMSNetId : AMSNETID; ///Connect this to an AMSNETID structure as a PLC input. Then link the input to the AMSNETID name in the master info.
+	i_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
 	i_xFirstPass: BOOL;
 END_VAR
 VAR_OUTPUT
