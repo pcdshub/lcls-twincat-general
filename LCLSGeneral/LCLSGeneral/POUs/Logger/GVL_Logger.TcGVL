@@ -4,7 +4,7 @@
     <Declaration><![CDATA[{attribute 'qualified only'}
 VAR_GLOBAL
 
-	asMesgBuffer	:	ARRAY [0..cnMesgArraySize] OF T_MaxString; //maybe this should be persistent...
+	asLoggerMesgBuffer	:	ARRAY [0..cnMesgArraySize] OF T_MaxString; //maybe this should be persistent...
 	gsCurrentTime	:	T_MaxString := csNILVALUE;
 	
 	fbLogMessage : FB_LogMessage;

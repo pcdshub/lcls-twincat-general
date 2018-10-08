@@ -23,7 +23,7 @@ VAR CONSTANT
 	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
 	i_sSD	:	STRING := csNILVALUE; //Not currently used
 	{attribute 'naming' := 'on'}
-	acsSubsystems	:	ARRAY [0..5] OF STRING := 
+	casSubsystems	:	ARRAY [0..5] OF STRING := 
 	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
 	cnFacility: WORD := 20; // local4
 END_VAR]]></Declaration>
@@ -33,14 +33,14 @@ END_VAR]]></Declaration>
 // Adds a message to the global queue to be sent to the syslog server
 
 fbLoggerBuffer.putValue := '';
-fbLoggerBuffer.pBuffer := ADR(asMesgBuffer); //Global buffer address
-fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asMesgBuffer));
+fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
+fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
 fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
 
 sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
 sPID := csNILVALUE;
-sSubsystem := acsSubsystems[i_eSubsystem];
+sSubsystem := casSubsystems[i_eSubsystem];
 nSyslogVer := cnSyslogVer;
 sSD := i_sSD;
 sMsg := i_sMsg;
@@ -56,7 +56,7 @@ fbFormatString( sOut=>fbLoggerBuffer.putValue);
 fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>
     <LineIds Name="FB_LogMessage">
-      <LineId Id="341" Count="24" />
+      <LineId Id="416" Count="24" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

@@ -20,7 +20,7 @@ END_VAR
 
 VAR_OUTPUT
 	q_xNoPLCResponse : BOOL := TRUE;
-	q_xPLCResponse   : ARRAY [0..20] OF BYTE;
+	q_anPLCResponse   : ARRAY [0..20] OF BYTE;
 	q_xError         : BOOL := FALSE;
 END_VAR]]></Declaration>
     <Implementation>
@@ -82,11 +82,11 @@ ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
 			
 END_IF
 
-q_xPLCResponse := anKoyo_PLC_CnBits;
+q_anPLCResponse := anKoyo_PLC_CnBits;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_XKoyoPLCModbus">
-      <LineId Id="836" Count="58" />
+      <LineId Id="919" Count="58" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

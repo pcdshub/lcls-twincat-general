@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_Index" Id="{ca8a34e3-bd4f-442e-9caf-17285b4f6fa2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Index
 VAR_INPUT
-	LowerLimit : INT := 1;
+	{attribute 'naming' := 'off'}
+	LowerLimit : INT := 1; //Incrementer will 
 	ValInc : INT := 1;
 	UpperLimit	:	INT := 1;
+	{attribute 'naming' := 'off'}
 END_VAR
 VAR_OUTPUT
 	

@@ -4,7 +4,8 @@
     <Declaration><![CDATA[{attribute 'naming' := 'omit'}
 FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
 VAR_INPUT
-	tCurrentTime	:	TIMESTRUCT;
+	{attribute 'naming' := 'omit'}
+	tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
 END_VAR
 VAR
 END_VAR

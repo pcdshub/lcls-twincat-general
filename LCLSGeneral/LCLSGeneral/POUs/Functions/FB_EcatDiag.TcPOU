@@ -4,16 +4,16 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
 VAR_INPUT
 	{attribute 'naming' := 'omit'}
-	i_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
+	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
 	i_xFirstPass: BOOL;
 END_VAR
 VAR_OUTPUT
 	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
-	q_aiTermStates: ARRAY[1..256] OF BYTE; 
+	q_anTermStates: ARRAY[1..256] OF BYTE; 
 	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
-	q_iMasterState: WORD; // The Device State of the Master
+	q_nMasterState: WORD; // The Device State of the Master
 	q_sMasterState:STRING;
-	q_aEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice;
+	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice;
 	q_nSlaves: UINT; // the Number of the connected Slaves
 END_VAR
 VAR
@@ -49,7 +49,7 @@ And saves them in the array q_aEcConfSlaveInfo.
 
 
 //Create the net ID string
-sNetId := F_CreateAmsNetId(i_AMSNetId);
+sNetId := F_CreateAmsNetId(I_AMSNetId);
 
 //Query the state of all terminals, collect in astTermStates
 ftReset(CLK:=fbGetAllSlaveStates.bBusy OR i_xFirstPass);
@@ -68,10 +68,10 @@ FOR nIterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
 	IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
 		q_xAllSlaveStatesGood := FALSE;
 	END_IF
-	q_aiTermStates[nIterator] := astTermStates[nIterator].deviceState;
-	q_aEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
-	q_aEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
-	q_aEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
+	q_anTermStates[nIterator] := astTermStates[nIterator].deviceState;
+	q_astEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
+	q_astEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
+	q_astEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
 	
 END_FOR
 END_IF
@@ -80,7 +80,7 @@ END_IF
 //the State output variable of type WORD contains the requested status information.
 ftMasterReset(CLK:=fbGetMasterState.bBusy OR i_xFirstPass);
 fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q, 
-				state => q_iMasterState,bError=>,
+				state => q_nMasterState,bError=>,
 				nErrId=>);
 q_xMasterStateGood:= (fbGetMasterState.state = BYTE_TO_UINT(EC_DEVICE_STATE_OP));
 q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
@@ -93,9 +93,9 @@ q_nSlaves:=fbGetConfSlaves.nSlaves;
 IF  NOT (fbGetConfSlaves.bBusy) THEN
 	FOR nIterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
 	DO
-	q_aEcConfSlaveInfo[nIterator].nAddrr :=astEcConfSlaveInfo[nIterator].nAddr;
-	q_aEcConfSlaveInfo[nIterator].sName :=astEcConfSlaveInfo[nIterator].sName;
-	q_aEcConfSlaveInfo[nIterator].sType :=astEcConfSlaveInfo[nIterator].sType;
+	q_astEcConfSlaveInfo[nIterator].nAddrr :=astEcConfSlaveInfo[nIterator].nAddr;
+	q_astEcConfSlaveInfo[nIterator].sName :=astEcConfSlaveInfo[nIterator].sName;
+	q_astEcConfSlaveInfo[nIterator].sType :=astEcConfSlaveInfo[nIterator].sType;
 END_FOR
 	fbGetConfSlaves.bExecute := FALSE;
 END_IF
@@ -105,7 +105,7 @@ END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_EcatDiag">
-      <LineId Id="540" Count="69" />
+      <LineId Id="840" Count="69" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

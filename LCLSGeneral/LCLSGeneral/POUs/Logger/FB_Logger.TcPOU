@@ -3,8 +3,8 @@
   <POU Name="FB_Logger" Id="{227c1bce-209d-4aad-8160-124282bb6370}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Logger
 VAR_INPUT
-	i_CloseSocket	:	BOOL := FALSE;
-	i_bReset		:	BOOL := FALSE;
+	i_xCloseSocket	:	BOOL := FALSE;
+	i_xReset		:	BOOL := FALSE;
 END_VAR
 VAR
 	fbUDPSocketManager	:	FB_ConnectionlessSocket;
@@ -38,8 +38,8 @@ This POU constantly attempts to send out messages from the global buffer.
 
 *)
 
-fbLoggerBuffer.pBuffer := ADR(asMesgBuffer); 
-fbLoggerBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asMesgBuffer));
+fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); 
+fbLoggerBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
 fbGetSystemTime(); 
 IF fbGetSystemTime.bValid THEN
@@ -55,11 +55,11 @@ ELSE
 	sHostName := csNILVALUE;
 END_IF
 
-IF i_CloseSocket THEN 
+IF i_xCloseSocket THEN 
 	eState := E_MessengerState.CloseSocket; 
 END_IF
 
-rtReset(CLK:=i_bReset);
+rtReset(CLK:=i_xReset);
 IF rtReset.Q THEN
 	eState := E_MessengerState.CreateSocket;
 END_IF
@@ -109,7 +109,7 @@ CASE eState OF
 		END_IF
 		
 	E_MessengerState.CloseSocket:
-		fbUDPSocketManager.bEnable R= i_CloseSocket;
+		fbUDPSocketManager.bEnable R= i_xCloseSocket;
 		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CLOSED THEN
 			eState := E_MessengerState.Init;
 		ELSIF fbUDPSocketManager.bBusy AND NOT fbUDPSocketManager.bEnable THEN
@@ -149,7 +149,7 @@ fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_Logger">
-      <LineId Id="445" Count="100" />
+      <LineId Id="751" Count="100" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Logger.Manager">
