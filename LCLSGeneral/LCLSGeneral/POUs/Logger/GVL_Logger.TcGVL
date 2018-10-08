@@ -2,19 +2,19 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
     <Declaration><![CDATA[{attribute 'qualified only'}
+VAR_GLOBAL CONSTANT
+	csNILVALUE	:	STRING(1) := '-';
+	cnMesgArraySize : INT := 50;
+	// Syslog Version
+	cnSyslogVer: WORD := 1;
+END_VAR
 VAR_GLOBAL
-
 	asLoggerMesgBuffer	:	ARRAY [0..cnMesgArraySize] OF T_MaxString; //maybe this should be persistent...
 	gsCurrentTime	:	T_MaxString := csNILVALUE;
 	
 	fbLogMessage : FB_LogMessage;
 	fbLoggerBuffer 			:	FB_StringRingBuffer;
 END_VAR
-VAR_GLOBAL CONSTANT
-	csNILVALUE	:	STRING(1) := '-';
-	cnMesgArraySize : INT := 50;
-	// Syslog Version
-	cnSyslogVer: WORD := 1;
-END_VAR]]></Declaration>
+]]></Declaration>
   </GVL>
 </TcPlcObject>
