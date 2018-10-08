@@ -3,17 +3,21 @@
   <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
     <Declaration><![CDATA[{attribute 'qualified only'}
 VAR_GLOBAL CONSTANT
-	csNILVALUE	:	STRING(1) := '-';
-	cnMesgArraySize : INT := 50;
+	csNILVALUE	:	STRING(1) := '-'; //Syslog standard placeholder/ blank
+	{attribute 'analysis' := '-33'} //This is used just below in decl. of asLoggerMesgBuffer
+	cnLoggerMesgArraySize : INT := 50; //Size of the Logger buffer
 	// Syslog Version
-	cnSyslogVer: WORD := 1;
+	cnSyslogVer: WORD := 1; //Logger written to work with Syslog V1
 END_VAR
 VAR_GLOBAL
-	asLoggerMesgBuffer	:	ARRAY [0..cnMesgArraySize] OF T_MaxString; //maybe this should be persistent...
-	gsCurrentTime	:	T_MaxString := csNILVALUE;
+	asLoggerMesgBuffer	:	ARRAY [0..cnLoggerMesgArraySize] OF T_MaxString; //Logger message buffer, FB_LogMessage puts messages in here for FB_Logger to send out
+	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
+	{analysis -33}
+	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
+	{analysis +33}
+	fbLoggerBuffer 			:	FB_StringRingBuffer; //For working with the Logger message buffer
 	
-	fbLogMessage : FB_LogMessage;
-	fbLoggerBuffer 			:	FB_StringRingBuffer;
+	//Note: FB_Logger is not declared here as it needs to be integrated into each project manually. See FB comment for more info.
 END_VAR
 ]]></Declaration>
   </GVL>

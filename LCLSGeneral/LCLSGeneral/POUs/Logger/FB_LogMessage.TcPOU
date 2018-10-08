@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_LogMessage
+    <Declaration><![CDATA[// LogMessage
+// A Wallace, 18-4-12
+// Adds a message to the global queue to be sent to the syslog server
+FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
 	i_sMsg	:	STRING;
 	i_eSevr	:	E_MesgSevr;
@@ -23,16 +26,11 @@ VAR CONSTANT
 	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
 	i_sSD	:	STRING := csNILVALUE; //Not currently used
 	{attribute 'naming' := 'on'}
-	casSubsystems	:	ARRAY [0..5] OF STRING := 
-	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
+	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
 	cnFacility: WORD := 20; // local4
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// LogMessage
-// A Wallace, 18-4-12
-// Adds a message to the global queue to be sent to the syslog server
-
-fbLoggerBuffer.putValue := '';
+      <ST><![CDATA[fbLoggerBuffer.putValue := '';
 fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
 fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
@@ -56,7 +54,7 @@ fbFormatString( sOut=>fbLoggerBuffer.putValue);
 fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>
     <LineIds Name="FB_LogMessage">
-      <LineId Id="416" Count="24" />
+      <LineId Id="420" Count="20" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

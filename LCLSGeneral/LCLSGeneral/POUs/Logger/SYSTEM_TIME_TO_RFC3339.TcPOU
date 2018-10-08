@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="SYSTEM_TIME_TO_RFC3339" Id="{8224a586-2295-4f0e-ba2f-710d1a2cbe6b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'naming' := 'omit'}
+{attribute 'analysis' := '-23'}
 FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
 VAR_INPUT
 	{attribute 'naming' := 'omit'}

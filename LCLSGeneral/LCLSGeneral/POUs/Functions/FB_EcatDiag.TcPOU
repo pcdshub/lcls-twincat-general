@@ -1,38 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_EcatDiag" Id="{04266cc1-1752-4ae8-b692-47df0663f314}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
-VAR_INPUT
-	{attribute 'naming' := 'omit'}
-	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
-	i_xFirstPass: BOOL;
-END_VAR
-VAR_OUTPUT
-	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
-	q_anTermStates: ARRAY[1..256] OF BYTE; 
-	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
-	q_nMasterState: WORD; // The Device State of the Master
-	q_sMasterState:STRING;
-	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice;
-	q_nSlaves: UINT; // the Number of the connected Slaves
-END_VAR
-VAR
-	sNetId: T_AmsNetId;
-	astTermStates: ARRAY[1..256] OF ST_EcSlaveState;
-	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData;
-	fbGetAllSlaveStates: FB_EcGetAllSlaveStates;
-	fbGetSlaveCount: FB_EcGetSlaveCount;
-	fbGetMasterState: FB_EcGetMasterState;
-	fbGetConfSlaves: FB_EcGetConfSlaves;
-	{attribute 'naming' := 'omit'} 
-	ftReset: F_TRIG;
-	{attribute 'naming' := 'omit'}
-	ftMasterReset: F_TRIG;
-	nIterator: INT;
-END_VAR
-]]></Declaration>
-    <Implementation>
-      <ST><![CDATA[(* 
+    <Declaration><![CDATA[(* 
 Ecat bus diagnostic tool
 2015-11-4 Alex Wallace
 This function block checks the states of all slaves on the ecat bus network, 
@@ -45,10 +14,38 @@ Function block has been modified to retrieve the Device State of the Ethercat Ma
 It also exports the states and information of each individual configured Slave. 
 And saves them in the array q_aEcConfSlaveInfo.
 *)
-
-
-
-//Create the net ID string
+FUNCTION_BLOCK FB_EcatDiag
+VAR_INPUT
+	{attribute 'naming' := 'omit'}
+	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
+	i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
+END_VAR
+VAR_OUTPUT
+	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
+	q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
+	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
+	q_nMasterState: WORD; // The Device State of the Master
+	q_sMasterState:STRING; //State of the ECAT master
+	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
+	q_nSlaves: UINT; // the Number of the connected Slaves
+END_VAR
+VAR
+	sNetId: T_AmsNetId; //NetId string
+	astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
+	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
+	fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates 
+	
+	fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
+	fbGetConfSlaves: FB_EcGetConfSlaves; //Acquires the ECAT slave configuration of the bus (how many, what kind, etc)
+	{attribute 'naming' := 'omit'} 
+	ftReset: F_TRIG; //Reset trigger sensor
+	{attribute 'naming' := 'omit'}
+	ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
+	nIterator: INT; //Generic iterator placeholder
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Create the net ID string
 sNetId := F_CreateAmsNetId(I_AMSNetId);
 
 //Query the state of all terminals, collect in astTermStates
@@ -105,7 +102,7 @@ END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_EcatDiag">
-      <LineId Id="840" Count="69" />
+      <LineId Id="856" Count="53" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

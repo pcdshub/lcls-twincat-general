@@ -4,7 +4,7 @@
     <Declaration><![CDATA[TYPE ST_System :
 STRUCT
 	
-	xswAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+	xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
 	xAtVacuum 	    : BOOL;(* System At Vacuum *)
 	xFirstScan	    : BOOL; (* Bit set for one scan only during startup. Used for initialization. *)
 	xOverrideMode	: BOOL; //This bit is set when using the override features of the system

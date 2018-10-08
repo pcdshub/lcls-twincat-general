@@ -1,27 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_Logger" Id="{227c1bce-209d-4aad-8160-124282bb6370}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Logger
+    <Declaration><![CDATA[(* Syslog Logger
+A. Wallace 2016-9-3
+
+This is used to pass PLC notification messeges to a syslog server.
+
+This POU constantly attempts to send out messages from the global buffer: GVL_Logger.fbLoggerBuffer.
+This buffer is filled by calling fbLogMessage.
+
+NOTE: FB_Logger must integrated into your project manually. It is recommended that you add it to its own 
+task.
+*)
+FUNCTION_BLOCK FB_Logger
 VAR_INPUT
-	i_xCloseSocket	:	BOOL := FALSE;
-	i_xReset		:	BOOL := FALSE;
+	i_xReset		:	BOOL := FALSE; //Closes the socket and attempts to open another
 END_VAR
 VAR
-	fbUDPSocketManager	:	FB_ConnectionlessSocket;
-	stUDPSocket			:	T_HSOCKET;
-	fbUDPSocketSend		:	FB_SocketUdpSendTo;
-	sOutgoingMesg		:	T_MaxString;
-	eState				:	E_MessengerState;
-	stDiag				:	ST_fbDiagnostics;
+	fbUDPSocketManager	:	FB_ConnectionlessSocket; //Creates the UDP socket handle to the syslog server
+	stUDPSocket			:	T_HSOCKET; //UDP socket handle for syslog server
+	fbUDPSocketSend		:	FB_SocketUdpSendTo; //FB for sending the sOutgoingMesg
+	sOutgoingMesg		:	T_MaxString; //Outgoing message holder
+	eState				:	E_MessengerState; //State of the messenger connection to the syslog server
+	stDiag				:	ST_FbDiagnostics; //Generic FB diagnostics, check here for insight into errors/ other FB events
 	{attribute 'naming' := 'omit'}
-	rtReset				:	R_TRIG;
-	fbGetSystemTime		:	FB_LocalSystemTime := (bEnable := TRUE);
-	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := '');
+	rtReset				:	R_TRIG; //Reset sensor
+	fbGetSystemTime		:	FB_LocalSystemTime := (bEnable := TRUE); //Acquires system time as message is being sent
+	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
 	{attribute 'naming' := 'omit'}
-	ctuSentSomething	:	CTU := (PV := 100);
+	ctuSentSomething	:	CTU := (PV := 100); //Diagnostic to indicate this thing is working. Increments with each successful send.
 	{attribute 'naming' := 'omit'}
-	rtSocketSendErr		:	R_TRIG;
-	sHostName	:	T_MaxString := csNILVALUE;
+	rtSocketSendErr		:	R_TRIG; //Socket send error sensor
+	sHostName	:	T_MaxString := csNILVALUE; //PLC hostname holder
 END_VAR
 VAR CONSTANT
 	cPSLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
@@ -29,14 +39,7 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(* Syslog Logger
-A. Wallace 2016-9-3
-
-This is used to pass PLC notification messeges to a syslog server.
-
-This POU constantly attempts to send out messages from the global buffer.
-
-*)
+      <ST><![CDATA[
 
 fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); 
 fbLoggerBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
@@ -55,13 +58,9 @@ ELSE
 	sHostName := csNILVALUE;
 END_IF
 
-IF i_xCloseSocket THEN 
-	eState := E_MessengerState.CloseSocket; 
-END_IF
-
 rtReset(CLK:=i_xReset);
 IF rtReset.Q THEN
-	eState := E_MessengerState.CreateSocket;
+	eState := E_MessengerState.CloseSocket;
 END_IF
 
 rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
@@ -109,7 +108,7 @@ CASE eState OF
 		END_IF
 		
 	E_MessengerState.CloseSocket:
-		fbUDPSocketManager.bEnable R= i_xCloseSocket;
+		fbUDPSocketManager.bEnable := FALSE;
 		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CLOSED THEN
 			eState := E_MessengerState.Init;
 		ELSIF fbUDPSocketManager.bBusy AND NOT fbUDPSocketManager.bEnable THEN
@@ -149,7 +148,8 @@ fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_Logger">
-      <LineId Id="751" Count="100" />
+      <LineId Id="758" Count="17" />
+      <LineId Id="780" Count="71" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Logger.Manager">
