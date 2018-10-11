@@ -9,7 +9,6 @@ Why doesn't beckhoff have this as a builtin type?
 Use this thing to have a simple indexer with rollover.
 
 *)
-{attribute 'analysis' := '-2'}
 FUNCTION_BLOCK FB_Index
 VAR_INPUT
 	{attribute 'naming' := 'off'}
@@ -25,7 +24,7 @@ VAR
 	nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[{analysis -2} //Only the methods and actions are needed]]></ST>
     </Implementation>
     <Action Name="Dec" Id="{b1b81818-0c2b-42cc-90f3-55cd7cad3e87}">
       <Implementation>
