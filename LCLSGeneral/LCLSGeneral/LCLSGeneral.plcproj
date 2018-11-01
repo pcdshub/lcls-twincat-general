@@ -16,14 +16,14 @@
     <LibraryReferences>{98404149-d14e-4423-bb2a-5ce9da8152bf}</LibraryReferences>
     <CombineIds>false</CombineIds>
     <Company>SLAC</Company>
-    <Released>true</Released>
+    <Released>false</Released>
     <Title>LCLS General</Title>
     <Author>Alex Wallace</Author>
     <Description>Generally useful POUs:
 - Logger
 - FB diagnostics
 - EtherCAT diagnostic</Description>
-    <ProjectVersion>0.1.4</ProjectVersion>
+    <ProjectVersion>0.0.0</ProjectVersion>
     <!--    <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>-->
@@ -37,7 +37,6 @@
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
     <Folder Include="POUs\Logger\DUTs" />
-    <Folder Include="Version" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
@@ -47,9 +46,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data types\Misc\ST_System.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Diagnostics\P_PLC_Diagnostics.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\DefaultGlobals.TcGVL">
@@ -87,9 +83,6 @@
     <Compile Include="POUs\Logger\SYSTEM_TIME_TO_RFC3339.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Version\Global_Version.TcGVL">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="Tc2_EtherCAT">
@@ -125,8 +118,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
@@ -2429,15 +2422,15 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Boolean">System.Boolean</Type>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="Int32">System.Int32</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
   <!-- 
