@@ -6,7 +6,8 @@ TYPE ST_FbDiagnostics :
 STRUCT
 	asResults	:	ARRAY [1..20] OF T_MaxString; //Diagnostic messages, use to record state changes or other important events.
 	{attribute 'naming' := 'omit'}
-	resultIdx	:	FB_Index := ( //Incrementer, included here to facilitate using asResults
+	//Incrementer, included here to facilitate using asResults
+	resultIdx	:	FB_Index := ( 
 		LowerLimit := 1,
 		UpperLimit := 20
 	);

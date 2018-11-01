@@ -6,19 +6,19 @@
 // Adds a message to the global queue to be sent to the syslog server
 FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
-	i_sMsg	:	STRING;
-	i_eSevr	:	E_MesgSevr;
+	i_sMsg	:	STRING; //Message to send
+	i_eSevr	:	E_MesgSevr; //Message severity
 	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
 END_VAR
 VAR
 
-	fbFormatString		:	FB_FormatString;
-	sPRIVAL				: 	T_MaxString := csNILVALUE;
-	sPID				: 	T_MaxString := csNILVALUE;
-	sSubsystem			: 	T_MaxString := csNILVALUE;
-	nSyslogVer			: 	WORD := cnSyslogVer;
-	sSD					: 	T_MaxString := csNILVALUE;
-	sMsg				: 	T_MaxString := csNILVALUE;
+	fbFormatString		:	FB_FormatString; //String formatter
+	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
+	sPID				: 	T_MaxString := csNILVALUE; //Unused
+	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
+	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
+	sSD					: 	T_MaxString := csNILVALUE; //Unused
+	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
 END_VAR
 VAR CONSTANT
 	{attribute 'naming' := 'off'}

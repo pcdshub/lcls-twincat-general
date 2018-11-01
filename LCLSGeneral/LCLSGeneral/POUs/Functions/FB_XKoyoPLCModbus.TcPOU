@@ -19,9 +19,9 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	q_xNoPLCResponse : BOOL := TRUE;
-	q_anPLCResponse   : ARRAY [0..20] OF BYTE;
-	q_xError         : BOOL := FALSE;
+	q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
+	q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
+	q_xError         : BOOL := FALSE; //Transaction or other error
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Look ma' no wires! *)

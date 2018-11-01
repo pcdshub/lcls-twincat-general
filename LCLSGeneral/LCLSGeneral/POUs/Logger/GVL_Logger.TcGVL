@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
     <Declaration><![CDATA[{attribute 'qualified only'}
+//Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
 	csNILVALUE	:	STRING(1) := '-'; //Syslog standard placeholder/ blank
 	{attribute 'analysis' := '-33'} //This is used just below in decl. of asLoggerMesgBuffer

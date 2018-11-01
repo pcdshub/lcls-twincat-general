@@ -4,7 +4,7 @@
     <Declaration><![CDATA[//These are variables every PLC project should have
 VAR_GLOBAL
 	
-	stSys	:	ST_System;
+	stSys	:	ST_System; //Included for you
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
