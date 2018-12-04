@@ -1,58 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_LogMessage
+    <Declaration><![CDATA[// LogMessage
+// A Wallace, 18-4-12
+// Adds a message to the global queue to be sent to the syslog server
+FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
-	i_sMsg	:	STRING;
-	i_eSevr	:	E_MesgSevr;
+	i_sMsg	:	STRING; //Message to send
+	i_eSevr	:	E_MesgSevr; //Message severity
 	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
 END_VAR
 VAR
-	i_sPID	:	STRING := cNILVALUE;	//Not currently used
-	i_sMSGID	:	STRING := cNILVALUE; //Not currently used
-	i_sSD	:	STRING := cNILVALUE; //Not currently used
-	fbFormatString		:	FB_FormatString;
-	sPRIVAL				: 	T_MaxString := cNILVALUE;
-	sPID				: 	T_MaxString := cNILVALUE;
-	sSubsystem			: 	T_MaxString := cNILVALUE;
-	wSyslogVer			: 	WORD := cwSyslogVer;
-	sSD					: 	T_MaxString := cNILVALUE;
-	sMsg				: 	T_MaxString := cNILVALUE;
-END_VAR
-]]></Declaration>
-    <Implementation>
-      <ST><![CDATA[// LogMessage
-// A Wallace, 18-4-12
-// Adds a message to the global queue to be sent to the syslog server
 
-gfbBuffer.putValue := '';
-gfbBuffer.pBuffer := ADR(gMesgBuffer); //Global buffer address
-gfbBuffer.cbBuffer := SIZEOF(gMesgBuffer);
+	fbFormatString		:	FB_FormatString; //String formatter
+	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
+	sPID				: 	T_MaxString := csNILVALUE; //Unused
+	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
+	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
+	sSD					: 	T_MaxString := csNILVALUE; //Unused
+	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
+END_VAR
+VAR CONSTANT
+	{attribute 'naming' := 'off'}
+	i_sPID	:	STRING := csNILVALUE;	//Not currently used
+	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
+	i_sSD	:	STRING := csNILVALUE; //Not currently used
+	{attribute 'naming' := 'on'}
+	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
+	cnFacility: WORD := 20; // local4
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbLoggerBuffer.putValue := '';
+fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
+fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
 fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
 
-sPRIVAL := LEFT( WORD_TO_STRING(cwFacility * 8 + i_eSevr), 5);
-sPID := cNILVALUE;
-sSubsystem := acsSubsystems[i_eSubsystem];
-wSyslogVer := cwSyslogVer;
+sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
+sPID := csNILVALUE;
+sSubsystem := casSubsystems[i_eSubsystem];
+nSyslogVer := cnSyslogVer;
 sSD := i_sSD;
 sMsg := i_sMsg;
 //bad language ahead, sorry
 fbFormatString.arg1 := F_STRING(sPRIVAL);
-fbFormatString.arg2 := F_WORD(wSyslogVer);
+fbFormatString.arg2 := F_WORD(nSyslogVer);
 fbFormatString.arg3 := F_STRING(gsCurrentTime);
 fbFormatString.arg4 := F_STRING(sSubsystem);
 fbFormatString.arg5 := F_STRING(sPID);
 fbFormatString.arg6 := F_STRING(sSD);
 fbFormatString.arg7 := F_STRING(sMsg);
-fbFormatString( sOut=>gfbBuffer.putValue);
-gfbBuffer.A_AddTail();]]></ST>
+fbFormatString( sOut=>fbLoggerBuffer.putValue);
+fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>
     <LineIds Name="FB_LogMessage">
-      <LineId Id="42" Count="0" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="3" Count="20" />
+      <LineId Id="420" Count="20" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

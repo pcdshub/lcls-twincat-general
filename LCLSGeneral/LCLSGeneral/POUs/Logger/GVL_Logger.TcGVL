@@ -1,23 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <GVL Name="GVL_Logger" Id="{047a20cc-a785-4614-8465-ede098785b35}">
-    <Declaration><![CDATA[VAR_GLOBAL
-	g_psLogHost	: T_IPv4Addr := '172.21.32.9';
-	g_udpSyslog	:	UDINT := 514;
-	gMesgBuffer	:	ARRAY [0..cMesgArraySize] OF T_MaxString; //maybe this should be persistent...
-	gsCurrentTime	:	T_MaxString := cNILVALUE;
-	gsHostName	:	T_MaxString := cNILVALUE;
-	fbLogMessage : FB_LogMessage;
-	gfbBuffer 			:	FB_StringRingBuffer;
-END_VAR
+    <Declaration><![CDATA[{attribute 'qualified only'}
+//Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
-	acsSubsystems	:	ARRAY [0..5] OF STRING := 
-	['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS'];
-	cNILVALUE	:	STRING(1) := '-';
-	cMesgArraySize : INT := 50;
-	cwFacility: WORD := 20; // local4
+	csNILVALUE	:	STRING(1) := '-'; //Syslog standard placeholder/ blank
+	{attribute 'analysis' := '-33'} //This is used just below in decl. of asLoggerMesgBuffer
+	cnLoggerMesgArraySize : INT := 50; //Size of the Logger buffer
 	// Syslog Version
-	cwSyslogVer: WORD := 1;
-END_VAR]]></Declaration>
+	cnSyslogVer: WORD := 1; //Logger written to work with Syslog V1
+END_VAR
+VAR_GLOBAL
+	asLoggerMesgBuffer	:	ARRAY [0..cnLoggerMesgArraySize] OF T_MaxString; //Logger message buffer, FB_LogMessage puts messages in here for FB_Logger to send out
+	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
+	{analysis -33}
+	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
+	{analysis +33}
+	fbLoggerBuffer 			:	FB_StringRingBuffer; //For working with the Logger message buffer
+	
+	//Note: FB_Logger is not declared here as it needs to be integrated into each project manually. See FB comment for more info.
+END_VAR
+]]></Declaration>
   </GVL>
 </TcPlcObject>

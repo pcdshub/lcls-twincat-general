@@ -1,36 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_EcatDiag" Id="{04266cc1-1752-4ae8-b692-47df0663f314}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiag
-VAR_INPUT
-	///Connect this to an AMSNETID structure as a PLC input. Then link the input to the AMSNETID name in the master info.
-	i_AMSNetId: AMSNETID; 
-	i_xFirstPass: BOOL;
-END_VAR
-VAR_OUTPUT
-	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
-	q_aiTermStates: ARRAY[1..256] OF INT; 
-	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
-	q_iMasterState: WORD; // The Device State of the Master
-	q_sMasterState:STRING;
-	q_aEcConfSlaveInfo :  ARRAY[1..256] OF DUT_EcDevice;
-	q_nSlaves: UINT; // the Number of the connected Slaves
-END_VAR
-VAR
-	sNetId: T_AmsNetId;
-	astTermStates: ARRAY[1..256] OF ST_EcSlaveState;
-	pArrEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData;
-	fbGetAllSlaveStates: FB_EcGetAllSlaveStates;
-	fbGetSlaveCount: FB_EcGetSlaveCount;
-	fbGetMasterState: FB_EcGetMasterState;
-	fbGetConfSlaves: FB_EcGetConfSlaves; 
-	ftReset: F_TRIG;
-	ftMasterReset: F_TRIG;
-	iterator: INT;
-END_VAR
-]]></Declaration>
-    <Implementation>
-      <ST><![CDATA[(* 
+    <Declaration><![CDATA[(* 
 Ecat bus diagnostic tool
 2015-11-4 Alex Wallace
 This function block checks the states of all slaves on the ecat bus network, 
@@ -43,11 +14,39 @@ Function block has been modified to retrieve the Device State of the Ethercat Ma
 It also exports the states and information of each individual configured Slave. 
 And saves them in the array q_aEcConfSlaveInfo.
 *)
-
-
-
-//Create the net ID string
-sNetID := F_CreateAmsNetId(i_AMSNetId);
+FUNCTION_BLOCK FB_EcatDiag
+VAR_INPUT
+	{attribute 'naming' := 'omit'}
+	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
+	i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
+END_VAR
+VAR_OUTPUT
+	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
+	q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
+	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
+	q_nMasterState: WORD; // The Device State of the Master
+	q_sMasterState:STRING; //State of the ECAT master
+	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
+	q_nSlaves: UINT; // the Number of the connected Slaves
+END_VAR
+VAR
+	sNetId: T_AmsNetId; //NetId string
+	astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
+	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
+	fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates 
+	
+	fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
+	fbGetConfSlaves: FB_EcGetConfSlaves; //Acquires the ECAT slave configuration of the bus (how many, what kind, etc)
+	{attribute 'naming' := 'omit'} 
+	ftReset: F_TRIG; //Reset trigger sensor
+	{attribute 'naming' := 'omit'}
+	ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
+	nIterator: INT; //Generic iterator placeholder
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Create the net ID string
+sNetId := F_CreateAmsNetId(I_AMSNetId);
 
 //Query the state of all terminals, collect in astTermStates
 ftReset(CLK:=fbGetAllSlaveStates.bBusy OR i_xFirstPass);
@@ -61,15 +60,15 @@ fbGetAllSlaveStates(sNetId:=sNetId, pStateBuf := ADR(astTermStates), cbBufLen:=S
 // If so, then set our global IO bad boolean.
 IF fbGetAllSlaveStates.nSlaves > 0 THEN
 	q_xAllSlaveStatesGood := TRUE;
-FOR iterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
+FOR nIterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
 	DO
-	IF NOT( (astTermStates[iterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[iterator].linkState = EC_LINK_STATE_OK)) THEN
+	IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
 		q_xAllSlaveStatesGood := FALSE;
 	END_IF
-	q_aiTermStates[iterator] := astTermStates[iterator].deviceState;
-	q_aEcConfSlaveInfo[iterator].iDeviceState :=astTermStates[iterator].deviceState;//
-	q_aEcConfSlaveInfo[iterator].iLinkState :=astTermStates[iterator].linkState;//
-	q_aEcConfSlaveInfo[iterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[iterator]);//
+	q_anTermStates[nIterator] := astTermStates[nIterator].deviceState;
+	q_astEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
+	q_astEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
+	q_astEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
 	
 END_FOR
 END_IF
@@ -78,22 +77,22 @@ END_IF
 //the State output variable of type WORD contains the requested status information.
 ftMasterReset(CLK:=fbGetMasterState.bBusy OR i_xFirstPass);
 fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q, 
-				state => q_iMasterState,bError=>,
+				state => q_nMasterState,bError=>,
 				nErrId=>);
-q_xMasterStateGood:= (fbGetMasterState.state = EC_DEVICE_STATE_OP);
+q_xMasterStateGood:= (fbGetMasterState.state = BYTE_TO_UINT(EC_DEVICE_STATE_OP));
 q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
 
 //This function is used to read a list of all configured slaves from the EtherCat master object Directory
 //needs to run only once
-fbGetConfSlaves(bExecute := i_xFirstPass, sNetId :=sNetId, pArrEcConfSlaveInfo := ADR(pArrEcConfSlaveInfo),cbBufLen := SIZEOF(pArrEcConfSlaveInfo));
-q_nslaves:=fbGetConfSlaves.nSlaves;
+fbGetConfSlaves(bExecute := i_xFirstPass, sNetId :=sNetId, pArrEcConfSlaveInfo := ADR(astEcConfSlaveInfo),cbBufLen := SIZEOF(astEcConfSlaveInfo));
+q_nSlaves:=fbGetConfSlaves.nSlaves;
 
 IF  NOT (fbGetConfSlaves.bBusy) THEN
-	FOR iterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
+	FOR nIterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
 	DO
-	q_aEcConfSlaveInfo[iterator].nAddrr :=pArrEcConfSlaveInfo[iterator].nAddr;
-	q_aEcConfSlaveInfo[iterator].sName :=pArrEcConfSlaveInfo[iterator].sName;
-	q_aEcConfSlaveInfo[iterator].sType :=pArrEcConfSlaveInfo[iterator].sType;
+	q_astEcConfSlaveInfo[nIterator].nAddrr :=astEcConfSlaveInfo[nIterator].nAddr;
+	q_astEcConfSlaveInfo[nIterator].sName :=astEcConfSlaveInfo[nIterator].sName;
+	q_astEcConfSlaveInfo[nIterator].sType :=astEcConfSlaveInfo[nIterator].sType;
 END_FOR
 	fbGetConfSlaves.bExecute := FALSE;
 END_IF
@@ -103,41 +102,7 @@ END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_EcatDiag">
-      <LineId Id="33" Count="6" />
-      <LineId Id="309" Count="2" />
-      <LineId Id="361" Count="0" />
-      <LineId Id="308" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="163" Count="0" />
-      <LineId Id="254" Count="0" />
-      <LineId Id="248" Count="3" />
-      <LineId Id="45" Count="4" />
-      <LineId Id="278" Count="1" />
-      <LineId Id="50" Count="8" />
-      <LineId Id="162" Count="0" />
-      <LineId Id="265" Count="1" />
-      <LineId Id="313" Count="0" />
-      <LineId Id="289" Count="0" />
-      <LineId Id="59" Count="2" />
-      <LineId Id="129" Count="0" />
-      <LineId Id="137" Count="0" />
-      <LineId Id="133" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="134" Count="2" />
-      <LineId Id="130" Count="0" />
-      <LineId Id="181" Count="0" />
-      <LineId Id="255" Count="0" />
-      <LineId Id="301" Count="0" />
-      <LineId Id="297" Count="1" />
-      <LineId Id="316" Count="1" />
-      <LineId Id="320" Count="1" />
-      <LineId Id="328" Count="2" />
-      <LineId Id="333" Count="0" />
-      <LineId Id="318" Count="1" />
-      <LineId Id="276" Count="0" />
-      <LineId Id="212" Count="0" />
-      <LineId Id="192" Count="0" />
-      <LineId Id="97" Count="0" />
+      <LineId Id="856" Count="53" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

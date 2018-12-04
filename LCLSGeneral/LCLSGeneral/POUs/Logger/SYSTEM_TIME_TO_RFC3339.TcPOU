@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="SYSTEM_TIME_TO_RFC3339" Id="{8224a586-2295-4f0e-ba2f-710d1a2cbe6b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING
+    <Declaration><![CDATA[//Converts Beckhoff PLC SYSTEMTIME to RFC3339 time format as a string
+{attribute 'naming' := 'omit'}
+{attribute 'analysis' := '-23'}
+FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
 VAR_INPUT
-	tCurrentTime	:	TIMESTRUCT;
+	{attribute 'naming' := 'omit'}
+	tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
 END_VAR
 VAR
 END_VAR
@@ -11,5 +15,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SYSTEM_TIME_TO_RFC3339 := CONCAT(REPLACE(SYSTEMTIME_TO_STRING(tCurrentTime), 'T', 1, 11), 'Z');]]></ST>
     </Implementation>
+    <LineIds Name="SYSTEM_TIME_TO_RFC3339">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

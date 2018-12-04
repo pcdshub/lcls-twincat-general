@@ -1,69 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="FB_Index" Id="{ca8a34e3-bd4f-442e-9caf-17285b4f6fa2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Index
-VAR_INPUT
-	LowerLimit : INT := 1;
-	ValInc : INT := 1;
-	UpperLimit	:	INT := 1;
-END_VAR
-VAR_OUTPUT
-	
-END_VAR
-VAR
-	Val	:	INT := LowerLimit;
-END_VAR
-]]></Declaration>
-    <Implementation>
-      <ST><![CDATA[(* Index FB
+    <Declaration><![CDATA[(* Index FB
 A. Wallace 2016-9-3
 
 Why doesn't beckhoff have this as a builtin type?
 
 Use this thing to have a simple indexer with rollover.
-*)
 
-;]]></ST>
+*)
+FUNCTION_BLOCK FB_Index
+VAR_INPUT
+	{attribute 'naming' := 'off'}
+	LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
+	ValInc : INT := 1; //Incrementer increments by this value
+	UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
+	{attribute 'naming' := 'off'}
+END_VAR
+VAR_OUTPUT
+	
+END_VAR
+VAR
+	nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[{analysis -2} //Only the methods and actions are needed]]></ST>
     </Implementation>
     <Action Name="Dec" Id="{b1b81818-0c2b-42cc-90f3-55cd7cad3e87}">
       <Implementation>
-        <ST><![CDATA[Val := Val - ValInc;
-IF Val < LowerLimit THEN Val := UpperLimit; END_IF]]></ST>
+        <ST><![CDATA[nVal := nVal - ValInc;
+IF nVal < LowerLimit THEN nVal := UpperLimit; END_IF]]></ST>
       </Implementation>
     </Action>
     <Method Name="DecVal" Id="{cf4e17a1-86cd-4a59-ad6f-fc3838ffede5}">
-      <Declaration><![CDATA[METHOD DecVal : INT
+      <Declaration><![CDATA[//Decrement the counter and return new value
+METHOD DecVal : INT
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Dec();
-DecVal := Val;]]></ST>
+DecVal := nVal;]]></ST>
       </Implementation>
     </Method>
     <Action Name="Inc" Id="{a11e830b-c881-456f-af74-5a750bccfd58}">
       <Implementation>
         <ST><![CDATA[// Dont use this, use ValInc
-Val := Val + ValInc;
-IF Val >  UpperLimit THEN Val := LowerLimit; END_IF]]></ST>
+nVal := nVal + ValInc;
+IF nVal >  UpperLimit THEN nVal := LowerLimit; END_IF]]></ST>
       </Implementation>
     </Action>
     <Method Name="IncVal" Id="{6f28d89a-7191-4dad-8824-c5fe9fb32dd9}">
-      <Declaration><![CDATA[METHOD PUBLIC IncVal : INT
+      <Declaration><![CDATA[//Increment the counter and return new value
+METHOD PUBLIC IncVal : INT
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Inc();
-IncVal := Val;]]></ST>
+IncVal := nVal;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_Index">
-      <LineId Id="3" Count="3" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="7" Count="1" />
-      <LineId Id="2" Count="0" />
+      <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="FB_Index.Dec">
       <LineId Id="2" Count="0" />
