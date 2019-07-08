@@ -1,0 +1,11 @@
+*.tsproj    text eol=crlf
+*.plcproj   text eol=crlf
+*.tmc       text eol=crlf
+*.xti       text eol=crlf
+*.TcTTO     text eol=crlf
+*.TcPOU     text eol=crlf
+*.TcDUT     text eol=crlf
+*.TcGVL     text eol=crlf
+*.TcVis     text eol=crlf
+*.TcVMO     text eol=crlf
+*.TcGTLO    text eol=crlf
