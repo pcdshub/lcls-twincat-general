@@ -14,14 +14,12 @@ task.
 *)
 FUNCTION_BLOCK FB_Logger
 VAR_INPUT
-	i_xReset		:	BOOL := FALSE; //Closes the socket and attempts to open another
+	i_xReset			:	BOOL := FALSE; //Closes the socket and attempts to open another
 END_VAR
 VAR
-	fbUDPSocketManager	:	FB_ConnectionlessSocket; //Creates the UDP socket handle to the syslog server
-	stUDPSocket			:	T_HSOCKET; //UDP socket handle for syslog server
+	fbUDPSocket	        :	FB_ConnectionlessSocket; //Handles creation/deletion of the UDP socket
 	fbUDPSocketSend		:	FB_SocketUdpSendTo; //FB for sending the sOutgoingMesg
 	sOutgoingMesg		:	T_MaxString; //Outgoing message holder
-	eState				:	E_MessengerState; //State of the messenger connection to the syslog server
 	stDiag				:	ST_FbDiagnostics; //Generic FB diagnostics, check here for insight into errors/ other FB events
 	{attribute 'naming' := 'omit'}
 	rtReset				:	R_TRIG; //Reset sensor
@@ -39,9 +37,7 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-
-fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); 
+      <ST><![CDATA[fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); 
 fbLoggerBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
 fbGetSystemTime(); 
@@ -59,105 +55,44 @@ ELSE
 END_IF
 
 rtReset(CLK:=i_xReset);
-IF rtReset.Q THEN
-	eState := E_MessengerState.CloseSocket;
+IF rtReset.Q AND fbUDPSocket.bEnable THEN
+	fbUDPSocket.bEnable := FALSE;
+	fbUDPSocket();
 END_IF
 
-rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
+fbUDPSocket(
+	nLocalPort := cnUdpSyslog,
+	bEnable := TRUE,
+	nMode := CONNECT_MODE_ENABLEDBG,
+);
 
-CASE eState OF
-	E_MessengerState.Init:
-		;
-	E_MessengerState.CreateSocket:
-		fbUDPSocketManager.nLocalPort := cnUdpSyslog;
-		fbUDPSocketManager.bEnable := TRUE;
-		
-		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CREATED THEN
-			eState := E_MessengerState.Active;
-		ELSIF fbUDPSocketManager.bError THEN
-			eState := E_MessengerState.Err;
-			fbUDPSocketManager.bEnable := FALSE;
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socketmanger error in createsocket: %d', arg1:=F_UDINT(fbUDPSocketManager.nErrID));
-		ELSE
-			eState := E_MessengerState.Err;
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Something else happened in createsocket -> error');
+IF fbUDPSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED THEN
+	IF fbLoggerBuffer.nCount > 0 AND NOT fbUDPSocketSend.bBusy THEN
+		fbLoggerBuffer.A_RemoveHead(getValue=>sOutgoingMesg);
+		fbUDPSocketSend.bExecute := TRUE; //reset in the action after busy goes true
+		IF sOutgoingMesg <> '' THEN
+			ctuSentSomething(CU:=TRUE);
+			fbUDPSocketSend.pSrc := ADR(sOutgoingMesg);
+			fbUDPSocketSend.cbLen := UINT_TO_UDINT(SIZEOF(sOutgoingMesg));
 		END_IF
-	E_MessengerState.Active:
-		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_TRANSIENT  OR 
-			fbUDPSocketManager.bError THEN
-			eState := E_MessengerState.Err; 
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socketmanager error in active: %d', arg1:=F_UDINT(fbUDPSocketManager.nErrID));
-		END_IF
-		
-		// While the socket is active, go ahead and send whatever is in the buffer
-		IF rtSocketSendErr.Q THEN
-			eState := E_MessengerState.Err;
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Socket send error: %d', arg1:=F_UDINT(fbUDPSocketSend.nErrId));
-		ELSIF fbLoggerBuffer.nCount > 0 AND NOT fbUDPSocketSend.bBusy THEN
-			fbLoggerBuffer.A_RemoveHead(getValue=>sOutgoingMesg);
-			fbUDPSocketSend.bExecute := TRUE; //reset in the action after busy goes true
-			IF sOutgoingMesg <> '' THEN
-				ctuSentSomething(CU:=TRUE);
-			END_IF
-		ELSIF fbLoggerBuffer.nCount = 0 OR fbUDPSocketSend.bBusy THEN
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Waiting to send');
-			ctuSentSomething(CU:=FALSE);
-		ELSE
-			eState := E_MessengerState.Err;
-			stDiag.fString( sOut=>stDiag.asResults[stDiag.resultIdx.IncVal()], sFormat:='Something else happened in active -> error');
-		END_IF
-		
-	E_MessengerState.CloseSocket:
-		fbUDPSocketManager.bEnable := FALSE;
-		IF fbUDPSocketManager.eState = E_SocketConnectionlessState.eSOCKET_CLOSED THEN
-			eState := E_MessengerState.Init;
-		ELSIF fbUDPSocketManager.bBusy AND NOT fbUDPSocketManager.bEnable THEN
-			;
-		ELSIF fbUDPSocketManager.bError THEN
-			eState := E_MessengerState.Err;
-		ELSE
-			eState := E_MessengerState.Err;
-		END_IF
-	E_MessengerState.Err:
-		eState := E_MessengerState.Init;
-		stDiag.asResults[stDiag.resultIdx.IncVal()] := 'Moving back to Init state from Error';
-	ELSE
-		eState := E_MessengerState.Init;		
-		stDiag.asResults[stDiag.resultIdx.IncVal()] := 'Uncaught state';
-END_CASE
-
-
-
-Manager();
-SocketSendTo();]]></ST>
+	END_IF
+	fbUDPSocketSend(
+		hSocket := fbUDPSocket.hSocket,
+		sRemoteHost := cPSLogHost,
+		nRemotePort := cnUdpSyslog,
+	);
+	fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;
+	rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
+END_IF]]></ST>
     </Implementation>
-    <Action Name="Manager" Id="{0b30d4fb-bcf3-449a-83ce-64e06542700f}">
-      <Implementation>
-        <ST><![CDATA[fbUDPSocketManager(hSocket => stUDPSocket);]]></ST>
-      </Implementation>
-    </Action>
-    <Action Name="SocketSendTo" Id="{fca34bf9-1619-4cff-a5ea-95f906bcb6c8}">
-      <Implementation>
-        <ST><![CDATA[fbUDPSocketSend.hSocket := stUDPSocket;
-fbUDPSocketSend.sRemoteHost := cPSLogHost;
-fbUDPSocketSend.nRemotePort := cnUdpSyslog;
-fbUDPSocketSend.pSrc := ADR(sOutgoingMesg);
-fbUDPSocketSend.cbLen := UINT_TO_UDINT(SIZEOF(sOutgoingMesg));
-fbUDPSocketSend();
-fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;]]></ST>
-      </Implementation>
-    </Action>
     <LineIds Name="FB_Logger">
-      <LineId Id="758" Count="17" />
-      <LineId Id="780" Count="71" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Logger.Manager">
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Logger.SocketSendTo">
-      <LineId Id="2" Count="5" />
-      <LineId Id="1" Count="0" />
+      <LineId Id="1168" Count="18" />
+      <LineId Id="1188" Count="1" />
+      <LineId Id="1191" Count="7" />
+      <LineId Id="1200" Count="8" />
+      <LineId Id="1217" Count="0" />
+      <LineId Id="1210" Count="6" />
+      <LineId Id="978" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
