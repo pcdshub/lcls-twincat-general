@@ -69,16 +69,22 @@
     <Compile Include="POUs\Functions\FB_Index.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Functions\FB_UnixTimestamp.TcPOU">
+    <Compile Include="POUs\Functions\FB_UnixTimeStamp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Functions\FB_UnixTimeStampGlobal.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Functions\FB_XKoyoPLCModbus.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Hardware\FB_AnalogOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_AnalogInput.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Hardware\FB_AnalogOutput.TcPOU">
+    <Compile Include="POUs\Hardware\FB_CoE_FastRead.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
@@ -118,6 +124,10 @@
     <PlaceholderReference Include="Tc2_ModbusSrv">
       <DefaultResolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_ModbusSrv</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_SerialCom">
+      <DefaultResolution>Tc2_SerialCom, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_SerialCom</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="FB_CoE_FastRead" Id="{9e9a5d86-3802-481f-8280-2e486202f2bf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CoE_FastRead
+(*
+	Utility to repeatedly read a CoE parameter
+	
+	In practice, it's impossible to read most CoE parameters every cycle,
+	but this is a best effort and will work if the data is available
+*)
+VAR_INPUT
+	bExecute: BOOL;
+	stDriveRef: ST_DriveRef;
+	nIndex: UINT;
+	nSubIndex: BYTE;
+	pDstBuf: PVOID;
+	cbBufLen: UINT;
+END_VAR
+VAR_OUTPUT
+	bNewValue: BOOL;
+END_VAR
+VAR
+	fbRead: FB_CoERead_ByDriveRef;
+	iLoop: INT;
+	bInnerExec: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[bNewValue := FALSE;
+IF bExecute THEN
+	// You need to do this block 3 times per cycle to have a chance at always getting a read
+	FOR iLoop:= 1 TO 3 DO
+		fbRead(
+			stDriveRef := stDriveRef,
+			nIndex := nIndex,
+			nSubIndex := nSubIndex,
+			pDstBuf := pDstBuf,
+			cbBufLen := cbBufLen,
+			bExecute := bInnerExec,
+			tTimeout := T#1s);
+			
+		IF bExecute AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
+			bInnerExec := FALSE;
+			bNewValue := TRUE;
+		ELSE
+			bInnerExec := TRUE;
+		END_IF
+	END_FOR
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
