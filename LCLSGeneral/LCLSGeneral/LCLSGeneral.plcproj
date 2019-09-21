@@ -37,6 +37,8 @@
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
     <Folder Include="POUs\Logger\DUTs" />
+    <Folder Include="POUs\Data" />
+    <Folder Include="POUs\Hardware" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
@@ -52,13 +54,37 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\Data\FB_DataBuffer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Data\FB_LREALBuffer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Data\FB_TimestampBuffer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Functions\FB_Index.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Functions\FB_UnixTimestamp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Functions\FB_XKoyoPLCModbus.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_AnalogInput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_AnalogOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_ThermoCouple.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Logger\FB_Logger.TcPOU">

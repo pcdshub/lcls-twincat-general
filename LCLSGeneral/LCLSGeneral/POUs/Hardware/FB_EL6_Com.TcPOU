@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="FB_EL6_Com" Id="{b4ce63ed-a08f-4c98-b824-d65c9e8a72f4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EL6_Com
+(*
+	Communicate with a serial device connected to an EL6XXX
+	May contain assumptions about the device we wrote it for, potentially will need to be adjusted
+*)
+VAR_INPUT
+	{attribute 'pytmc' := '
+		pv: CMD
+		io: io
+	'}
+	sCmd: STRING;
+	
+	{attribute 'pytmc' := '
+		pv: SEND
+		io: io
+	'}
+	bSend: BOOL;
+	
+	sSendPrefix: STRING;
+	sSendSuffix: STRING;
+	sRecvPrefix: STRING;
+	sRecvSuffix: STRING;
+	tTimeout: TIME := T#1S;
+END_VAR
+VAR_IN_OUT
+	stIn_EL6: EL6inData22B;
+	stOut_EL6: EL6outData22B;
+END_VAR
+VAR_OUTPUT
+	{attribute 'pytmc' := '
+		pv: RESP
+		io: input
+	'}
+	sResponse: STRING;
+	
+	{attribute 'pytmc' := '
+		pv: DONE
+		io: input
+	'}
+	bDone: BOOL;
+	
+	{attribute 'pytmc' := '
+		pv: ERR:SER
+		io: input
+	'}
+	eSerialLineErrorID: ComError_t;
+	
+	{attribute 'pytmc' := '
+		pv: ERR:SEND
+		io: input
+	'}
+	eSendErrorID: ComError_t;
+	
+	{attribute 'pytmc' := '
+		pv: ERR:RECV
+		io: input
+	'}
+	eRecvErrorID: ComError_t;
+END_VAR
+VAR
+	// Communication Buffers
+	TxBuffer: ComBuffer;
+	RxBuffer: ComBuffer;
+	fbClearComBuffer: ClearComBuffer;
+	
+	// Parameters for PLC -> EL6
+	fbEL6Ctrl: SerialLineControl;
+	bEL6CtrlError: BOOL;
+	eEL6CtrlErrorID: ComError_t;
+	
+	// Parameters for EL6 -> Serial Device
+	fbSend: SendString;
+	bSendBusy: BOOL;
+	eLastSendErrorID: ComError_t;
+	fbReceive: ReceiveString;
+	sReceivedString: STRING;
+	sLastReceivedString: STRING;
+	bStringReceived: BOOL;
+	bReceiveBusy: BOOL;
+	bReceiveError: BOOL;
+	eReceiveErrorID: ComError_t;
+	bReceiveTimeout: BOOL;
+	nReceiveCounter: UDINT;
+	nSendCounter: UDINT;
+	sStringToSend: STRING;
+	fbFormatString: FB_FormatString;
+	
+	// Parameters for state-machine implementation
+	nStep: INT := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbEL6Ctrl(
+	Mode:= SERIALLINEMODE_EL6_22B, 
+	pComIn:= ADR(stIn_EL6), 
+	pComOut:= ADR(stOut_EL6), 
+	SizeComIn:= UINT_TO_INT(SIZEOF(stIn_EL6)), 
+	Error=> , 
+	ErrorID=> eSerialLineErrorID, 
+	TxBuffer:= TxBuffer, 
+	RxBuffer:= RxBuffer );
+IF fbEL6Ctrl.Error THEN
+	bEL6CtrlError := TRUE;
+	eEL6CtrlErrorID := fbEL6Ctrl.ErrorID;
+END_IF
+IF bSend THEN
+	nStep := 10;
+	bSend := FALSE;
+	bDone := FALSE;
+END_IF
+// Attempt at solution that sends one command at a time, not on constant loop
+CASE nStep OF
+	0:
+		; // idle
+	10:
+		// Clear buffers in case any lingering data
+		fbClearComBuffer(Buffer:=TxBuffer);
+		fbClearComBuffer(Buffer:=RxBuffer);
+		// Prepare string to send
+		sStringToSend := CONCAT(sSendPrefix, CONCAT(sCmd, sSendSuffix));
+		// Send string
+		fbSend(	SendString:= sStringToSend,
+				TXbuffer:= TxBuffer,
+				Busy=> bSendBusy,
+				Error=> eSendErrorID);
+		IF fbSend.Error <> COMERROR_NOERROR THEN
+			eLastSendErrorID := fbSend.Error;
+		ELSE
+			nSendCounter := nSendCounter + 1;
+		END_IF
+		nStep := nStep + 10;
+	20:
+		// Finish sending String
+		IF fbSend.Busy THEN
+			fbSend(	SendString:= sStringToSend,
+					TXbuffer:= TxBuffer,
+					Busy=> bSendBusy,
+					Error=> eSendErrorID);
+			IF fbSend.Error <> COMERROR_NOERROR THEN
+				eLastSendErrorID := fbSend.Error;
+			ELSE
+				nSendCounter := nSendCounter + 1;
+			END_IF
+		ELSE
+			nStep := nStep + 10;
+		END_IF
+	30:
+		// Get Reply
+		fbReceive(
+			Prefix:= sRecvPrefix,
+			Suffix:= sRecvSuffix,
+			Timeout:= tTimeout,
+			ReceivedString:= sReceivedString,
+			RXbuffer:= RxBuffer,
+			StringReceived=> bStringReceived,
+			Busy=> bReceiveBusy,
+			Error=> eRecvErrorID,
+			RxTimeout=> bReceiveTimeout );
+		IF fbReceive.Error <> COMERROR_NOERROR THEN
+			eReceiveErrorID := fbReceive.Error;
+		END_IF
+		IF bStringReceived THEN
+			nReceiveCounter := nReceiveCounter + 1;
+			// Check for response
+			IF FIND(sReceivedString, sStringToSend)=0 THEN
+				sResponse := sReceivedString;
+				bDone := TRUE;
+				nStep := 0;
+			END_IF
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

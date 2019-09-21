@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="FB_AnalogOutput" Id="{d5385a96-e050-4c15-80d1-455e7d2a0d81}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AnalogOutput
+(* Converts a real unit value (e.g., volts) to the integer needed for an analog output terminal. *)
+VAR_INPUT
+	// The real value to send to the output
+	fReal: LREAL;
+	// The maximum allowed real value for the connected hardware
+	fSafeMax: LREAL;
+	// The minimum allowed real value for the connected hardware
+	fSafeMin: LREAL;
+	// The number of bits correlated with the terminal's max output
+	iTermBits: UINT;
+	// The fReal value correlated with the terminal's max output
+	fTermMax: LREAL;
+	// The fReal value correlated with the terminal's min output
+	fTermMin: LREAL;
+END_VAR
+VAR_OUTPUT
+	// Connect this output to the terminal
+	iRaw AT %Q*: INT;
+END_VAR
+VAR
+	fScale: LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Set the scaling from real to raw
+IF fScale = 0 AND fTermMax > fTermMin THEN
+	fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+END_IF
+
+// Adjust real value to be within the limits
+fReal := MIN(fReal, fSafeMax, fTermMax);
+fReal := MAX(fReal, fSafeMin, fTermMin);
+
+// Scale the output accordingly
+iRaw := LREAL_TO_INT((fReal - fTermMin) * fScale);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="FB_LREALBuffer" Id="{bbdb5874-82a3-4838-8bc3-8b225e25cc46}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LREALBuffer
+(* An example use of FB_DataBuffer for the likely most-common use case. *)
+VAR_INPUT
+	bExecute: BOOL;
+	fInput: LREAL;
+END_VAR
+VAR_OUTPUT
+	arrOutput: ARRAY [1..1000] OF LREAL;
+END_VAR
+VAR
+	arrPartial: ARRAY [1..1000] OF LREAL;
+	fbDataBuffer: FB_DataBuffer;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbDataBuffer(
+	bExecute := bExecute,
+	aInput := fInput,
+	iElemCount := 1000,
+	pPartialAdr := ADR(arrPartial),
+	pOutputAdr := ADR(arrOutput));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
