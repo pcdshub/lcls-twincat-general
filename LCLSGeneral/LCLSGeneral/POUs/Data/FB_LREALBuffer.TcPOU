@@ -18,7 +18,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[fbDataBuffer(
 	bExecute := bExecute,
-	aInput := fInput,
+	pInputAdr := ADR(fInput),
+	iInputSize := SIZEOF(fInput),
 	iElemCount := 1000,
 	pPartialAdr := ADR(arrPartial),
 	pOutputAdr := ADR(arrOutput));]]></ST>

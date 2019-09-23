@@ -5,21 +5,25 @@
 (*
 	Function Block to accumulate data into an array.
 	
-	Requires the user to supply pointers to two arrays:
+	Requires the user to supply pointers to the value and to 2 arrays:
 	1. A partial buffer that we will slowly fill one value at a time
 	2. An output buffer that will only update when the partial buffer is full
 	
-	Take great care of the following, or else your program will likely crash:
+	Take great care of the following, or else your program will likely crash,
+	or at least have corrupt data:
 	1. The input type and array types must match
 	2. The provided element count must be accurate and match both arrays
+	3. The provided element size is correct
 	
 	As this function block as no way of checking that you did this correctly.
 *)
 VAR_INPUT
 	// Whether or not to accumulate on this cycle
 	bExecute: BOOL;
-	// The value to accumulate
-	aInput: ANY;
+	// Address of the value to accumulate
+	pInputAdr: PVOID;
+	// Size of the accumulated value
+	iInputSize: UDINT;
 	// Number of values in the output array
 	iElemCount: UDINT;
 	// Address of the rolling buffer to be filled every cycle
@@ -28,26 +32,21 @@ VAR_INPUT
 	pOutputAdr: PVOID;
 END_VAR
 VAR
-	bInit: BOOL := FALSE;
-	iInputSize: UINT;
 	iArrayIndex: UDINT := 0;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT bInit THEN
-	bInit := TRUE;
-	iInputSize := SIZEOF(aInput);
-END_IF
+      <ST><![CDATA[
 IF bExecute THEN
 	MEMCPY(
-		destAddr := pPartialAdr + iArrayIndex*SIZEOF(aInput),
-		srcAddr := ADR(aInput),
-		n := SIZEOF(aInput));
+		destAddr := pPartialAdr + iArrayIndex*iInputSize,
+		srcAddr := pInputAdr,
+		n := iInputSize);
 	iArrayIndex := iArrayIndex + 1;
 	IF iArrayIndex >= iElemCount THEN
 		MEMCPY(
 			destAddr := pOutputAdr,
 			srcAddr := pPartialAdr,
-			n := iElemCount*SIZEOF(aInput));
+			n := iElemCount*iInputSize);
 		iArrayIndex := 0;
 	END_IF
 END_IF]]></ST>
