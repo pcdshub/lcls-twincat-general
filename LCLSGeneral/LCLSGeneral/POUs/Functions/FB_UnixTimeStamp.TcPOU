@@ -34,7 +34,7 @@ IF bExecute THEN
 		out => fileTime);
 	iSeconds := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600;
 	iMilliseconds := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
-	fTime := UINT_TO_LREAL(iSeconds) + UINT_TO_LREAL(iMilliseconds)/1000;
+	fTime := ULINT_TO_LREAL(iSeconds) + ULINT_TO_LREAL(iMilliseconds)/1000;
 END_IF]]></ST>
     </Implementation>
   </POU>
