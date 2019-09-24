@@ -12,6 +12,7 @@ END_VAR
 VAR_OUTPUT
 	iSeconds: ULINT;
 	iMilliseconds: ULINT;
+	iFull: ULINT;
 	fTime: LREAL;
 END_VAR
 VAR
@@ -20,6 +21,7 @@ VAR
 	fbGetTimeZone: FB_GetTimeZoneInformation;
 	fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
 	fileTime: T_FILETIME;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,9 +34,10 @@ IF bExecute THEN
 	fbTimeConv(
 		in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
 		out => fileTime);
-	iSeconds := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600;
-	iMilliseconds := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
-	fTime := ULINT_TO_LREAL(iSeconds) + ULINT_TO_LREAL(iMilliseconds)/1000;
+	iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+	fTime := ULINT_TO_LREAL(iFull)/1000;
+	iSeconds := SHR(iFull, 3);
+	iMilliseconds := iFull MOD 1000;
 END_IF]]></ST>
     </Implementation>
   </POU>
