@@ -35,8 +35,7 @@ VAR
 	iArrayIndex: UDINT := 0;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-IF bExecute THEN
+      <ST><![CDATA[IF bExecute THEN
 	MEMCPY(
 		destAddr := pPartialAdr + iArrayIndex*iInputSize,
 		srcAddr := pInputAdr,
