@@ -17,8 +17,8 @@ VAR_OUTPUT
 	{attribute 'pytmc' := '
 		pv: CONN
 		io: input
-		ONAM: Connected
-		ZNAM: Disconnected
+		field: ONAM Connected
+		field: ZNAM Disconnected
 	}
 	bConnected: BOOL;
 	
