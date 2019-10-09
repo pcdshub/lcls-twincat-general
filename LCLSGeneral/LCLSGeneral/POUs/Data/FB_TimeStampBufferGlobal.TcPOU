@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_TimeStampBufferGlobal" Id="{555c8b1d-2427-4d2c-8222-da9abd69b89f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TimeStampBufferGlobal
+(*
+	A Variant of FB_TimeStampBuffer that uses the global timestamp.
+	2019-10-09 Zachary Lentz
+
+	Assumes an instance of FB_UnixTimeStampGlobal is running every cycle.
+*)
+VAR_INPUT
+	// If TRUE, we'll accumulate a value on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+	arrOutput: ARRAY [1..1000] OF LREAL;
+END_VAR
+VAR
+	fbLREALBuffer: FB_LREALBuffer;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbLREALBuffer(
+	bExecute := bExecute,
+	fInput := DefaultGlobals.fTimeStamp,
+	arrOutput => arrOutput);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
