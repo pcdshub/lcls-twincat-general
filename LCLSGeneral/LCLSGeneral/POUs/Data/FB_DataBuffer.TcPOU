@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_DataBuffer" Id="{663bb4ee-ee74-4dfb-9a41-308201d6b012}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DataBuffer
 (*
 	Function Block to accumulate data into an array.
+	2019-10-09 Zachary Lentz
 	
 	Requires the user to supply pointers to the value and to 2 arrays:
 	1. A partial buffer that we will slowly fill one value at a time

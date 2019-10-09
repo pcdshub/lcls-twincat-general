@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_AnalogOutput" Id="{d5385a96-e050-4c15-80d1-455e7d2a0d81}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AnalogOutput
-(* Converts a real unit value (e.g., volts) to the integer needed for an analog output terminal. *)
+(*
+	Converts a real unit value (e.g., volts) to the integer needed for an analog output terminal.
+	2019-10-09 Zachary Lentz
+*)
 VAR_INPUT
 	// The real value to send to the output
 	fReal: LREAL;
@@ -10,7 +13,7 @@ VAR_INPUT
 	fSafeMax: LREAL;
 	// The minimum allowed real value for the connected hardware
 	fSafeMin: LREAL;
-	// The number of bits correlated with the terminal's max output
+	// The number of bits correlated with the terminal's max output. This is not necessarily the resolution parameter.
 	iTermBits: UINT;
 	// The fReal value correlated with the terminal's max output
 	fTermMax: LREAL;

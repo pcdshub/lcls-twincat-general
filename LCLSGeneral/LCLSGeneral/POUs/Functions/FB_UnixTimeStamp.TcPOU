@@ -1,19 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_UnixTimeStamp" Id="{74adc114-3015-429e-b699-b551ce54d443}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_UnixTimeStamp
 (*
-	Get the unix timestamp equivalent of the PLC's time
+	Get the unix timestamp equivalent of the PLC's time.
+	2019-10-09 Zachary Lentz
+	
+	This will only sync with the Linux host when both hosts' clocks are correct.
 	Largely stolen from stack overflow
 *)
 VAR_INPUT
+	// If TRUE, we'll try to update the output on this cycle.
 	bExecute: BOOL;
 END_VAR
 VAR_OUTPUT
+	// Number of seconds in the timestamp
 	iSeconds: ULINT;
+	// Number of milliseconds past the seconds
 	iMilliseconds: ULINT;
+	// Full raw number
 	iFull: ULINT;
+	// Full floating point number in units of seconds
 	fTime: LREAL;
+	// TRUE if the output is okay to use on this cycle. Typically the output is zero when this is FALSE.
 	bValid: BOOL;
 END_VAR
 VAR

@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_ThermoCouple" Id="{cc00895a-0264-4382-820e-9cfa9062e545}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ThermoCouple
-(* Handles scaling and default diagnostics for thermocouple terminals *)
+(*
+	Handles scaling and default diagnostics for thermocouple terminals
+	2019-10-09 Zachary Lentz
+*)
 VAR_INPUT
 	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
 	iScale: INT := 10;
@@ -35,7 +38,8 @@ VAR
 	iRaw AT %I*: INT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[bConnected := NOT (bOverrange AND bError);
+      <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
+bConnected := NOT (bOverrange AND bError);
 fTemp := iRaw / iScale;]]></ST>
     </Implementation>
   </POU>

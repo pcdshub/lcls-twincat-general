@@ -1,27 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_EL6_Com" Id="{b4ce63ed-a08f-4c98-b824-d65c9e8a72f4}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EL6_Com
 (*
 	Communicate with a serial device connected to an EL6XXX
+	2019-10-09 Zachary Lentz and Jackson Sheppard
+	
 	May contain assumptions about the device we wrote it for, potentially will need to be adjusted
 *)
 VAR_INPUT
+	// Command to send to the serial device
 	{attribute 'pytmc' := '
 		pv: CMD
 		io: io
 	'}
 	sCmd: STRING;
 	
+	// Pulse this to TRUE and back to FALSE when it's time to send
 	{attribute 'pytmc' := '
 		pv: SEND
 		io: io
 	'}
 	bSend: BOOL;
 	
+	// Any static prefix to add before every sent message
 	sSendPrefix: STRING;
+	// Any static suffix to add after every sent message
 	sSendSuffix: STRING;
+	// Any static prefix to strip off of every recieved message
 	sRecvPrefix: STRING;
+	// Any static suffic to strip off of every recieved message
 	sRecvSuffix: STRING;
 	tTimeout: TIME := T#1S;
 END_VAR
@@ -30,12 +38,14 @@ VAR_IN_OUT
 	stOut_EL6: EL6outData22B;
 END_VAR
 VAR_OUTPUT
+	// The response recieved from the serial device
 	{attribute 'pytmc' := '
 		pv: RESP
 		io: input
 	'}
 	sResponse: STRING;
 	
+	// This is set to TRUE after recieving a response
 	{attribute 'pytmc' := '
 		pv: DONE
 		io: input

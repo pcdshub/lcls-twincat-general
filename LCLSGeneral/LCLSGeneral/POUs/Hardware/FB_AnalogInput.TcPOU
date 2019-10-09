@@ -1,16 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_AnalogInput" Id="{c3bf2f11-e399-406d-ba95-ae8960e90a27}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AnalogInput
-(* Converts the integer from an analog input terminal to a real unit value (e.g., volts) *)
+(*
+	Converts the integer from an analog input terminal to a real unit value (e.g., volts)
+	2019-10-09 Zachary Lentz
+*)
 VAR_INPUT
 	// Connect this input to the terminal
 	iRaw AT %I*: INT;
-	// The number of bits correlated with the terminal's max output
+	// The number of bits correlated with the terminal's max value. This is not necessarily the resolution parameter.
 	iTermBits: UINT;
-	// The fReal value correlated with the terminal's max output
+	// The fReal value correlated with the terminal's max value
 	fTermMax: LREAL;
-	// The fReal value correlated with the terminal's min output
+	// The fReal value correlated with the terminal's min value
 	fTermMin: LREAL;
 END_VAR
 VAR_OUTPUT
@@ -24,7 +27,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[IF fScale = 0 AND fTermMax > fTermMin THEN
 	fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
 END_IF
-IF fScale + fTermMin <> 0 THEN
+IF fScale <> 0 THEN
 	fReal := iRaw / fScale + fTermMin;
 END_IF]]></ST>
     </Implementation>
