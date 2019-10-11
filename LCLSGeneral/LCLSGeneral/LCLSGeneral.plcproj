@@ -54,6 +54,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\Data\FB_BasicStats.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Data\FB_DataBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
