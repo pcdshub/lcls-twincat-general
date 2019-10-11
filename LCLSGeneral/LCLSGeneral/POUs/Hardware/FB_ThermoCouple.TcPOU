@@ -12,13 +12,13 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	{attribute 'pytmc' := '
-		pv: TEMP
+		pv: STC:TEMP
 		io: input
 	'}
 	fTemp: LREAL;
 	
 	{attribute 'pytmc' := '
-		pv: CONN
+		pv: STC:CONN
 		io: input
 		field: ONAM Connected
 		field: ZNAM Disconnected
@@ -26,7 +26,7 @@ VAR_OUTPUT
 	bConnected: BOOL;
 	
 	{attribute 'pytmc' := '
-		pv: ERR
+		pv: STC:ERR
 		io: input
 	'}
 	bError AT %I*: BOOL;
