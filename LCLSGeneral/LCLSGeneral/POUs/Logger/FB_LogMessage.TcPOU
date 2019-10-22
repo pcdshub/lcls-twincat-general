@@ -53,9 +53,5 @@ fbFormatString.arg7 := F_STRING(sMsg);
 fbFormatString( sOut=>fbLoggerBuffer.putValue);
 fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>
-    <LineIds Name="FB_LogMessage">
-      <LineId Id="420" Count="20" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

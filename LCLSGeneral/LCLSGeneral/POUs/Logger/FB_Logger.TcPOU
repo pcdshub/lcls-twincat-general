@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_Logger" Id="{227c1bce-209d-4aad-8160-124282bb6370}" SpecialFunc="None">
     <Declaration><![CDATA[(* Syslog Logger
 A. Wallace 2016-9-3
@@ -88,21 +88,5 @@ ELSIF fbUDPSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED THEN
 	rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
 END_IF]]></ST>
     </Implementation>
-    <LineIds Name="FB_Logger">
-      <LineId Id="1168" Count="18" />
-      <LineId Id="1189" Count="0" />
-      <LineId Id="1191" Count="0" />
-      <LineId Id="1227" Count="0" />
-      <LineId Id="1192" Count="0" />
-      <LineId Id="1194" Count="3" />
-      <LineId Id="1219" Count="0" />
-      <LineId Id="1198" Count="0" />
-      <LineId Id="1220" Count="0" />
-      <LineId Id="1225" Count="0" />
-      <LineId Id="1200" Count="8" />
-      <LineId Id="1217" Count="1" />
-      <LineId Id="1210" Count="6" />
-      <LineId Id="978" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
