@@ -14,6 +14,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
 END_VAR
 VAR
 	fbLREALBuffer: FB_LREALBuffer;
@@ -22,7 +23,8 @@ END_VAR]]></Declaration>
       <ST><![CDATA[fbLREALBuffer(
 	bExecute := bExecute,
 	fInput := DefaultGlobals.fTimeStamp,
-	arrOutput => arrOutput);]]></ST>
+	arrOutput => arrOutput,
+	bNewArray => bNewArray);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

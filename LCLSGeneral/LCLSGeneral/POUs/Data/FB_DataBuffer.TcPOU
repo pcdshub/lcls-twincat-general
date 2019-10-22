@@ -32,11 +32,16 @@ VAR_INPUT
 	// Address of the output buffer to be filled when the rolling buffer is full
 	pOutputAdr: PVOID;
 END_VAR
+VAR_OUTPUT
+	// Set to TRUE on the cycle that we copy the output array
+	bNewArray: BOOL;
+END_VAR
 VAR
 	iArrayIndex: UDINT := 0;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF bExecute THEN
+      <ST><![CDATA[bNewArray := FALSE;
+IF bExecute THEN
 	MEMCPY(
 		destAddr := pPartialAdr + iArrayIndex*iInputSize,
 		srcAddr := pInputAdr,
@@ -48,6 +53,7 @@ END_VAR]]></Declaration>
 			srcAddr := pPartialAdr,
 			n := iElemCount*iInputSize);
 		iArrayIndex := 0;
+		bNewArray := TRUE;
 	END_IF
 END_IF]]></ST>
     </Implementation>

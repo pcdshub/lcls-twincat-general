@@ -12,6 +12,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
 END_VAR
 VAR
 	fbUnixTime: FB_UnixTimestamp;
@@ -24,7 +25,8 @@ END_VAR
 	fTime => fbLREALBuffer.fInput);
 fbLREALBuffer(
 	bExecute := bExecute,
-	arrOutput => arrOutput);]]></ST>
+	arrOutput => arrOutput,
+	bNewArray => bNewArray);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -14,6 +14,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
 END_VAR
 VAR
 	arrPartial: ARRAY [1..1000] OF LREAL;
@@ -27,7 +28,8 @@ END_VAR
 	iInputSize := SIZEOF(fInput),
 	iElemCount := 1000,
 	pPartialAdr := ADR(arrPartial),
-	pOutputAdr := ADR(arrOutput));]]></ST>
+	pOutputAdr := ADR(arrOutput),
+	bNewArray => bNewArray);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
