@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_ThermoCouple" Id="{cc00895a-0264-4382-820e-9cfa9062e545}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ThermoCouple
+(*
+	Handles scaling and default diagnostics for thermocouple terminals
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
+	iScale: INT := 10;
+END_VAR
+VAR_OUTPUT
+	{attribute 'pytmc' := '
+		pv: STC:TEMP
+		io: input
+	'}
+	fTemp: LREAL;
+	
+	{attribute 'pytmc' := '
+		pv: STC:CONN
+		io: input
+		field: ONAM Connected
+		field: ZNAM Disconnected
+	}
+	bConnected: BOOL;
+	
+	{attribute 'pytmc' := '
+		pv: STC:ERR
+		io: input
+	'}
+	bError AT %I*: BOOL;
+	
+	bUnderrange AT %I*: BOOL;
+	bOverrange AT %I*: BOOL;
+END_VAR
+VAR
+	iRaw AT %I*: INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
+bConnected := NOT (bOverrange AND bError);
+fTemp := iRaw / iScale;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

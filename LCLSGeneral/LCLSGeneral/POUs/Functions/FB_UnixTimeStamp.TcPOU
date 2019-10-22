@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_UnixTimeStamp" Id="{74adc114-3015-429e-b699-b551ce54d443}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_UnixTimeStamp
+(*
+	Get the unix timestamp equivalent of the PLC's time.
+	2019-10-09 Zachary Lentz
+	
+	This will only sync with the Linux host when both hosts' clocks are correct.
+	Largely stolen from stack overflow
+*)
+VAR_INPUT
+	// If TRUE, we'll try to update the output on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+	// Number of seconds in the timestamp
+	iSeconds: ULINT;
+	// Number of milliseconds past the seconds
+	iMilliseconds: ULINT;
+	// Full raw number
+	iFull: ULINT;
+	// Full floating point number in units of seconds
+	fTime: LREAL;
+	// TRUE if the output is okay to use on this cycle. Typically the output is zero when this is FALSE.
+	bValid: BOOL;
+END_VAR
+VAR
+	bInit: BOOL;
+	fbLocalTime: FB_LocalSystemTime;
+	fbGetTimeZone: FB_GetTimeZoneInformation;
+	fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
+	fileTime: T_FILETIME;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bInit THEN
+	bInit := TRUE;
+	fbGetTimeZone(bExecute:=TRUE, tzInfo => fbTimeConv.tzInfo);
+END_IF
+IF bExecute THEN
+	fbLocalTime(
+		bEnable := TRUE,
+		dwCycle := 1,
+		bValid => bValid);
+	IF bValid THEN
+		fbTimeConv(
+			in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
+			out => fileTime);
+		iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+		fTime := ULINT_TO_LREAL(iFull)/1000;
+		iSeconds := iFull/1000;
+		iMilliseconds := iFull MOD 1000;
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

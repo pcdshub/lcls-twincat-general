@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_TimeStampBuffer" Id="{b2db97ec-7312-4822-a3b4-76ec1968b59f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TimeStampBuffer
+(*
+	A Companion to FB_LREALBuffer that accumulates timestamps
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// If TRUE, we'll accumulate a value on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
+END_VAR
+VAR
+	fbUnixTime: FB_UnixTimestamp;
+	fbLREALBuffer: FB_LREALBuffer;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbUnixTime(
+	bExecute := bExecute,
+	fTime => fbLREALBuffer.fInput);
+fbLREALBuffer(
+	bExecute := bExecute,
+	arrOutput => arrOutput,
+	bNewArray => bNewArray);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

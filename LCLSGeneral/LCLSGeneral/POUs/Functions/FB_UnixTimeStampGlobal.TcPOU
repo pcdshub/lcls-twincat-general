@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_UnixTimeStampGlobal" Id="{626742ce-ebb0-42d8-8b96-83167f2ea362}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_UnixTimeStampGlobal
+(*
+	Runs FB_UnixTimeStamp and stuffs the result into this library's GVL
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// If TRUE, we will update the output on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbTimeStamp: FB_UnixTimeStamp;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbTimeStamp(
+	bExecute := bExecute,
+	fTime => DefaultGlobals.fTimeStamp);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

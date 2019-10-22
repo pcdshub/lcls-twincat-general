@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_CoE_FastRead" Id="{9e9a5d86-3802-481f-8280-2e486202f2bf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CoE_FastRead
+(*
+	Utility to repeatedly read a CoE parameter
+	2019-10-09 Zachary Lentz
+	
+	In practice, it's impossible to read most CoE parameters every cycle,
+	but this is a best effort and will work if the data is available
+*)
+VAR_INPUT
+	// If TRUE we'll attempt a CoE read this cycle.
+	bExecute: BOOL;
+	// Link this to your terminal's drive reference variables under InfoData.
+	stPlcDriveRef AT %I*: ST_PlcDriveRef;
+	// Hexadecimal index of CoE, e.g. the 8010 in 8010:12
+	nIndex: UINT;
+	// Hexadecimal subindex of CoE, e.g. the 12 in 8010:12
+	nSubIndex: BYTE;
+	// Pointer to a value to fill with the result of the read, e.g. ADR(MyValue)
+	pDstBuf: PVOID;
+	// Data size of pDstBuf, e.g. SIZEOF(MyValue)
+	cbBufLen: UINT;
+END_VAR
+VAR_OUTPUT
+	// TRUE if the value was updated on this cycle.
+	bNewValue: BOOL;
+END_VAR
+VAR
+	fbRead: FB_CoERead_ByDriveRef;
+	stDriveRef: ST_DriveRef;
+	iLoop: INT;
+	bInnerExec: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[stDriveRef.sNetId := F_CreateAmsNetId(stPlcDriveRef.aNetId);
+stDriveRef.nSlaveAddr := stPlcDriveRef.nSlaveAddr;
+stDriveRef.nDriveNo := stPlcDriveRef.nDriveNo;
+stDriveRef.nDriveType := stPlcDriveRef.nDriveType;
+
+bNewValue := FALSE;
+IF bExecute THEN
+	// You need to do this block 3 times per cycle to have a chance at always getting a read
+	FOR iLoop:= 1 TO 3 DO
+		fbRead(
+			stDriveRef := stDriveRef,
+			nIndex := nIndex,
+			nSubIndex := nSubIndex,
+			pDstBuf := pDstBuf,
+			cbBufLen := cbBufLen,
+			bExecute := bInnerExec,
+			tTimeout := T#1s);
+			
+		IF bInnerExec AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
+			bInnerExec := FALSE;
+			bNewValue := TRUE;
+		ELSE
+			bInnerExec := TRUE;
+		END_IF
+	END_FOR
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

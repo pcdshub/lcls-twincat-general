@@ -5,6 +5,7 @@
 VAR_GLOBAL
 	
 	stSys	:	ST_System; //Included for you
+	fTimeStamp: LREAL;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
