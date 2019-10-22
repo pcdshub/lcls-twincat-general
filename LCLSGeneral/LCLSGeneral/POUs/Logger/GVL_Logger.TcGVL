@@ -12,7 +12,8 @@ VAR_GLOBAL CONSTANT
 END_VAR
 VAR_GLOBAL
 	asLoggerMesgBuffer	:	ARRAY [0..cnLoggerMesgArraySize] OF T_MaxString; //Logger message buffer, FB_LogMessage puts messages in here for FB_Logger to send out
-	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
+	gsCurrentTime	:	T_MaxString := '-'; //For timestamping messages
+	gsHostName	:	T_MaxString := '-'; //Hostname used for log messages
 	{analysis -33}
 	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
 	{analysis +33}

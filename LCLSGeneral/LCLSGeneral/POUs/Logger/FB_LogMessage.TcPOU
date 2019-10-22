@@ -28,21 +28,15 @@ VAR_INPUT
 	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
 END_VAR
 VAR
-
 	fbFormatString		:	FB_FormatString; //String formatter
 	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
 	sPID				: 	T_MaxString := csNILVALUE; //Unused
 	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
 	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
-	sSD					: 	T_MaxString := csNILVALUE; //Unused
 	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
+	sMsgID				: 	T_MaxString := csNILVALUE; // Message ID
 END_VAR
 VAR CONSTANT
-	{attribute 'naming' := 'off'}
-	i_sPID	:	STRING := csNILVALUE;	//Not currently used
-	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
-	i_sSD	:	STRING := csNILVALUE; //Not currently used
-	{attribute 'naming' := 'on'}
 	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
 	cnFacility: WORD := 20; // local4
 END_VAR]]></Declaration>
@@ -51,22 +45,23 @@ END_VAR]]></Declaration>
 fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
 fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
-fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
+fbFormatString.sFormat := '<%s>%d %s %s %s %s %s - %s';
 
 sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
 sPID := csNILVALUE;
 sSubsystem := casSubsystems[i_eSubsystem];
 nSyslogVer := cnSyslogVer;
-sSD := i_sSD;
 sMsg := i_sMsg;
+
 //bad language ahead, sorry
-fbFormatString.arg1 := F_STRING(sPRIVAL);
-fbFormatString.arg2 := F_WORD(nSyslogVer);
-fbFormatString.arg3 := F_STRING(gsCurrentTime);
-fbFormatString.arg4 := F_STRING(sSubsystem);
-fbFormatString.arg5 := F_STRING(sPID);
-fbFormatString.arg6 := F_STRING(sSD);
-fbFormatString.arg7 := F_STRING(sMsg);
+fbFormatString.arg1 := F_STRING(sPRIVAL); 			// <PRI>
+fbFormatString.arg2 := F_WORD(nSyslogVer);			// VER
+fbFormatString.arg3 := F_STRING(gsCurrentTime);		// TIMESTAMP
+fbFormatString.arg4 := F_STRING(gsHostName);		// IPorHOST/-
+fbFormatString.arg5 := F_STRING(sSubsystem);		// APP/-
+fbFormatString.arg6 := F_STRING(sPID);				// PROC/-
+fbFormatString.arg7 := F_STRING(sMsgID);			// MSGID/-
+fbFormatString.arg8 := F_STRING(sMsg);				// MESSAGE
 fbFormatString( sOut=>fbLoggerBuffer.putValue);
 fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>

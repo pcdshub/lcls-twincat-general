@@ -29,7 +29,6 @@ VAR
 	ctuSentSomething	:	CTU := (PV := 100); //Diagnostic to indicate this thing is working. Increments with each successful send.
 	{attribute 'naming' := 'omit'}
 	rtSocketSendErr		:	R_TRIG; //Socket send error sensor
-	sHostName	:	T_MaxString := csNILVALUE; //PLC hostname holder
 END_VAR
 VAR CONSTANT
 	cPSLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
@@ -49,9 +48,9 @@ END_IF
 
 fbGetHostName();
 IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
-	sHostName := fbGetHostName.sHostName;
+	gsHostName := fbGetHostName.sHostName;
 ELSE
-	sHostName := csNILVALUE;
+	gsHostName := csNILVALUE;
 END_IF
 
 rtReset(CLK:=i_xReset);
