@@ -53,7 +53,7 @@ IF bExecute THEN
 			bExecute := bInnerExec,
 			tTimeout := T#1s);
 			
-		IF bExecute AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
+		IF bInnerExec AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
 			bInnerExec := FALSE;
 			bNewValue := TRUE;
 		ELSE
