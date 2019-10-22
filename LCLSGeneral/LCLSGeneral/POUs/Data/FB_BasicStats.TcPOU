@@ -19,8 +19,15 @@ VAR_IN_OUT
 	aSignal: ARRAY[*] OF LREAL;
 END_VAR
 VAR_INPUT
-	// If TRUE, we will update the outputs based on aSignal
-	bEnable: BOOL;
+	// If TRUE, we will update the results every cycle
+	{attribute 'pytmc' := 'pv: STATS:ALWAYS_CALC'}
+	bAlwaysCalc: BOOL;
+	// On rising edge, do one calculation
+	{attribute 'pytmc' := 'pv: STATS:EXECUTE'}
+	bExecute: BOOL;
+	// If set to TRUE, reset outputs
+	{attribute 'pytmc' := 'pv: STATS:RESET'}
+	bReset: BOOL;
 	// If nonzero, we will only pay attention to the first nElems items in aSignal
 	{attribute 'pytmc' := '
 		pv: STATS:NELM
@@ -59,8 +66,15 @@ VAR_OUTPUT
 		io: i
 	'}
 	fRange: LREAL;
+	// True if the other outputs are valid
+	{attribute 'pytmc' := '
+		pv: STATS:VALID
+		io: i
+	'}
+	bValid: BOOL;
 END_VAR
 VAR
+	rTrig: R_TRIG;
 	nIndex: DINT;
 	nElemsSeen: UDINT;
 	fSum: LREAL;
@@ -69,7 +83,18 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF bEnable THEN
+      <ST><![CDATA[rTrig(CLK:=bExecute);
+IF bReset THEN
+	fMean := 0;
+	fStDev := 0;
+	fMax := 0;
+	fMin := 0;
+	fRange := 0;
+	bValid := FALSE;
+	bReset := FALSE;
+ELSIF NOT (bExecute OR bAlwaysCalc) THEN
+	bValid := FALSE;
+ELSIF bAlwaysCalc OR rTrig.Q THEN
 	// First pass through aSignal: get sum, mean, max, min
 	nElemsSeen := 0;
 	fSum := 0;
@@ -104,6 +129,7 @@ END_VAR
 		IF nElemsSeen > 1 THEN
 			fVarianceMean := fVarianceSum / (nElemsSeen - 1);
 			fStDev := SQRT(fVarianceMean);
+			bValid := TRUE;
 		END_IF
 	END_IF
 END_IF]]></ST>
