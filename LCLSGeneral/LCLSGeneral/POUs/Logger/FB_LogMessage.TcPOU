@@ -21,6 +21,7 @@ This could be summarized as:
 where dash '-' is used as the "nil value" or `csNILVALUE` here.
 *)
 
+{attribute 'reflection'}
 FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
 	i_sMsg	:	STRING; //Message to send
@@ -30,7 +31,9 @@ END_VAR
 VAR
 	fbFormatString		:	FB_FormatString; //String formatter
 	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
-	sPID				: 	T_MaxString := csNILVALUE; //Unused
+	{attribute 'instance-path'}
+	{attribute 'noinit'}
+	sPID				: 	T_MaxString; //PID -> changed to instance path
 	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
 	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
 	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
@@ -48,7 +51,6 @@ fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 fbFormatString.sFormat := '<%s>%d %s %s %s %s %s - %s';
 
 sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
-sPID := csNILVALUE;
 sSubsystem := casSubsystems[i_eSubsystem];
 nSyslogVer := cnSyslogVer;
 sMsg := i_sMsg;
