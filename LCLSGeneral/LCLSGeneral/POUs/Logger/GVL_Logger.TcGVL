@@ -15,7 +15,7 @@ VAR_GLOBAL
 	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
 	gsHostName	:	T_MaxString := csNILVALUE; //Hostname used for log messages
 	{analysis -33}
-	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
+	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
 	{analysis +33}
 	fbLoggerBuffer 			:	FB_StringRingBuffer; //For working with the Logger message buffer
 	
