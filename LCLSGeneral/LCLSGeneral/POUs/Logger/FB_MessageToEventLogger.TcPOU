@@ -26,14 +26,12 @@ END_VAR
     <Implementation>
       <ST><![CDATA[sMessage := i_sMsg;
 
-ipResultMessage.RequestEventText(
-	nLangId:=Tc3_EventLogger.GVL.nLangId_OnlineMonitoring, 
-	sResult:=sMessage, nResultSize:=SIZEOF(sMessage) );
-	
+// Build the message in the name: "(path): message" 
 fbSource.sName := i_sPath;
 fbSource.ExtendName(sExtension:=': ');
-fbSource.ExtendName(sExtension:=i_sMsg);
+fbSource.ExtendName(sExtension:=sMessage);
 
+// Map the message severity to the LCLSLoggingEventClass:
 CASE i_eSevr OF
 	E_MesgSevr.Alert: 		eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingAlertEvent;
 	E_MesgSevr.Critical: 	eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingCriticalEvent;
@@ -49,11 +47,12 @@ hr := fbResult.CreateEx(eEventEntry, 0 (*fbSource*) ); //This uses dyn resources
 
 IF NOT FAILED(hr) THEN
 	hr := fbResult.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInfo:=fbSource);
+	// Send the message if above the trace level:
 	IF NOT FAILED(hr) AND fbResult.eSeverity >= eTraceLevel THEN
 		hr := fbResult.Send(0);
 	END_IF
+	fbResult.Release();
 END_IF
-
 
 IF FAILED(hr) THEN
 	hrLastInternalError := hr;

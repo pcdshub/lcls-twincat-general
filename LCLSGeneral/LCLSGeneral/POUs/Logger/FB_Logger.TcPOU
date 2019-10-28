@@ -31,8 +31,8 @@ VAR
 	rtSocketSendErr		:	R_TRIG; //Socket send error sensor
 END_VAR
 VAR CONSTANT
-	cPSLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
-	cnUdpSyslog	:	UDINT := 514; //syslog port
+	cPSLogHost	: T_IPv4Addr := '172.21.148.141'; //syslog host
+	cnUdpSyslog	:	UDINT := 5000; //syslog port
 END_VAR
 ]]></Declaration>
     <Implementation>
