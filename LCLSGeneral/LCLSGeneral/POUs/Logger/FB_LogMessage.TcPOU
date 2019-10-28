@@ -1,9 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
     <Declaration><![CDATA[// LogMessage
 // A Wallace, 18-4-12
 // Adds a message to the global queue to be sent to the syslog server
+(* 
+For reference, the logstash pattern SYSLOG5424LINE will be used to grok the generated syslog-5424 message.
+
+	 SYSLOG5424PRI <%{NONNEGINT:syslog5424_pri}>
+	 SYSLOG5424SD \[%{DATA}\]+
+	 SYSLOG5424BASE %{SYSLOG5424PRI}%{NONNEGINT:syslog5424_ver} +(?:%{TIMESTAMP_ISO8601:syslog5424_ts}|-) +(?:%{IPORHOST:syslog5424_host}|-) 
+					+(-|%{SYSLOG5424PRINTASCII:syslog5424_app}) +(-|%{SYSLOG5424PRINTASCII:syslog5424_proc}) 
+					+(-|%{SYSLOG5424PRINTASCII:syslog5424_msgid}) +(?:%{SYSLOG5424SD:syslog5424_sd}|-|)
+	 SYSLOG5424LINE %{SYSLOG5424BASE} +%{GREEDYDATA:syslog5424_msg}
+
+This could be summarized as:
+
+	<PRI> VER TIMESTAMP/- IPorHOST/- APP/- PROC/- MSGID/- SD/- MESSAGE
+
+where dash '-' is used as the "nil value" or `csNILVALUE` here.
+*)
+
+{attribute 'reflection'}
 FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT	
 	i_sMsg	:	STRING; //Message to send
@@ -11,21 +29,17 @@ VAR_INPUT
 	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
 END_VAR
 VAR
-
 	fbFormatString		:	FB_FormatString; //String formatter
 	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
-	sPID				: 	T_MaxString := csNILVALUE; //Unused
+	{attribute 'instance-path'}
+	{attribute 'noinit'}
+	sPID				: 	T_MaxString; //PID -> changed to instance path
 	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
 	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
-	sSD					: 	T_MaxString := csNILVALUE; //Unused
 	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
+	sMsgID				: 	T_MaxString := csNILVALUE; // Message ID
 END_VAR
 VAR CONSTANT
-	{attribute 'naming' := 'off'}
-	i_sPID	:	STRING := csNILVALUE;	//Not currently used
-	i_sMSGID	:	STRING := csNILVALUE; //Not currently used
-	i_sSD	:	STRING := csNILVALUE; //Not currently used
-	{attribute 'naming' := 'on'}
 	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
 	cnFacility: WORD := 20; // local4
 END_VAR]]></Declaration>
@@ -34,28 +48,24 @@ END_VAR]]></Declaration>
 fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
 fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
 
-fbFormatString.sFormat := '<%s> %d %s %s %s %s BOM%s';
+fbFormatString.sFormat := '<%s>%d %s %s %s %s %s - %s';
 
 sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
-sPID := csNILVALUE;
 sSubsystem := casSubsystems[i_eSubsystem];
 nSyslogVer := cnSyslogVer;
-sSD := i_sSD;
 sMsg := i_sMsg;
+
 //bad language ahead, sorry
-fbFormatString.arg1 := F_STRING(sPRIVAL);
-fbFormatString.arg2 := F_WORD(nSyslogVer);
-fbFormatString.arg3 := F_STRING(gsCurrentTime);
-fbFormatString.arg4 := F_STRING(sSubsystem);
-fbFormatString.arg5 := F_STRING(sPID);
-fbFormatString.arg6 := F_STRING(sSD);
-fbFormatString.arg7 := F_STRING(sMsg);
+fbFormatString.arg1 := F_STRING(sPRIVAL); 			// <PRI>
+fbFormatString.arg2 := F_WORD(nSyslogVer);			// VER
+fbFormatString.arg3 := F_STRING(gsCurrentTime);		// TIMESTAMP
+fbFormatString.arg4 := F_STRING(gsHostName);		// IPorHOST/-
+fbFormatString.arg5 := F_STRING(sSubsystem);		// APP/-
+fbFormatString.arg6 := F_STRING(sPID);				// PROC/-
+fbFormatString.arg7 := F_STRING(sMsgID);			// MSGID/-
+fbFormatString.arg8 := F_STRING(sMsg);				// MESSAGE
 fbFormatString( sOut=>fbLoggerBuffer.putValue);
 fbLoggerBuffer.A_AddTail();]]></ST>
     </Implementation>
-    <LineIds Name="FB_LogMessage">
-      <LineId Id="420" Count="20" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
