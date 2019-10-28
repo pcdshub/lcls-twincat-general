@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_MessageToEventLogger" Id="{0893f9f8-65e8-4db6-822f-019a7a161c6c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_MessageToEventLogger
+VAR_INPUT
+	i_sMsg			: T_MaxString; // Message to send
+	i_eSevr			: E_MesgSevr; // Message severity
+	i_eSubsystem	: E_Subsystem; // Subsystem
+	i_sPath			: T_MaxString; // Path to FB_LogMessage
+END_VAR
+
+VAR_OUTPUT
+END_VAR
+
+VAR
+	sMessage : T_MaxString;
+	fbResult : FB_TcMessage;
+	fbSource : FB_TcSourceInfo;
+	ipResultMessage : I_TcMessage := fbResult;
+	hr : HRESULT;
+	hrLastInternalError : HRESULT;
+	eTraceLevel : TcEventSeverity := TcEventSeverity.Verbose;
+	eEventEntry : TcEventEntry;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[sMessage := i_sMsg;
+
+ipResultMessage.RequestEventText(
+	nLangId:=Tc3_EventLogger.GVL.nLangId_OnlineMonitoring, 
+	sResult:=sMessage, nResultSize:=SIZEOF(sMessage) );
+	
+fbSource.sName := i_sPath;
+fbSource.ExtendName(sExtension:=': ');
+fbSource.ExtendName(sExtension:=i_sMsg);
+
+CASE i_eSevr OF
+	E_MesgSevr.Alert: 		eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingAlertEvent;
+	E_MesgSevr.Critical: 	eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingCriticalEvent;
+	E_MesgSevr.Debug: 		eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingDebugEvent;
+	E_MesgSevr.Emergency: 	eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingEmergencyEvent;
+	E_MesgSevr.Error: 		eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingErrorEvent;
+	E_MesgSevr.Info: 		eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingInfoEvent;
+	E_MesgSevr.Notice: 		eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingNoticeEvent;
+	E_MesgSevr.Warning: 	eEventEntry := TC_EVENTS.LCLSLoggingEventClass.LoggingWarningEvent;
+END_CASE
+
+hr := fbResult.CreateEx(eEventEntry, 0 (*fbSource*) ); //This uses dyn resources and shouldn't be called cyclically.
+
+IF NOT FAILED(hr) THEN
+	hr := fbResult.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInfo:=fbSource);
+	IF NOT FAILED(hr) AND fbResult.eSeverity >= eTraceLevel THEN
+		hr := fbResult.Send(0);
+	END_IF
+END_IF
+
+
+IF FAILED(hr) THEN
+	hrLastInternalError := hr;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

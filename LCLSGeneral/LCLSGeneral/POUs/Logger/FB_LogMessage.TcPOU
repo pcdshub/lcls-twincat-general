@@ -38,6 +38,7 @@ VAR
 	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
 	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
 	sMsgID				: 	T_MaxString := csNILVALUE; // Message ID
+	fbEventLogger		: 	FB_MessageToEventLogger;
 END_VAR
 VAR CONSTANT
 	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
@@ -65,7 +66,10 @@ fbFormatString.arg6 := F_STRING(sPID);				// PROC/-
 fbFormatString.arg7 := F_STRING(sMsgID);			// MSGID/-
 fbFormatString.arg8 := F_STRING(sMsg);				// MESSAGE
 fbFormatString( sOut=>fbLoggerBuffer.putValue);
-fbLoggerBuffer.A_AddTail();]]></ST>
+fbLoggerBuffer.A_AddTail();
+
+// Also send the message to the event logger:
+fbEventLogger(i_sMsg:=sMsg, i_eSevr:=i_eSevr, i_eSubsystem:=i_eSubsystem, i_sPath:=sPID);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

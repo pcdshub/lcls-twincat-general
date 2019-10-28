@@ -105,6 +105,9 @@
     <Compile Include="POUs\Logger\FB_LogMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Logger\FB_MessageToEventLogger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Logger\GVL_Logger.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -151,11 +154,27 @@
       <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="LCLSGeneral.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="Tc3_EventLogger">
+      <Resolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+  </ItemGroup>
+  <ItemGroup>
+    <PinnedGlobalDataType Include="ST_LCLSLoggingEventClass" />
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

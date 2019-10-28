@@ -61,11 +61,91 @@
 				<Hide GUID="{B6598B95-DC2C-454C-9B12-DE628B32D897}"/>
 			</Hides>
 		</DataType>
+		<DataType>
+			<Name GUID="{EF2A8078-F347-4D07-ADF5-CB5BE720316E}" PersistentType="true">NewEventClass</Name>
+			<DisplayName TxtId="">
+				<![CDATA[NewEventClass_DisplayText]]>
+			</DisplayName>
+			<EventId>
+				<Name Id="1">Event</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Event_DisplayText]]>
+				</DisplayName>
+				<Severity>Verbose</Severity>
+			</EventId>
+		</DataType>
+		<DataType>
+			<Name GUID="{16BEE339-E307-4BC2-8E77-D5FB1794DF5A}" PersistentType="true">LCLSLoggingEventClass</Name>
+			<DisplayName TxtId="">
+				<![CDATA[Log event]]>
+			</DisplayName>
+			<EventId>
+				<Name Id="0">LoggingEmergencyEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Emergency]]>
+				</DisplayName>
+				<Severity>Critical</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="1">LoggingAlertEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Alert]]>
+				</DisplayName>
+				<Severity>Critical</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">LoggingCriticalEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Critical]]>
+				</DisplayName>
+				<Severity>Critical</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">LoggingErrorEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Error]]>
+				</DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">LoggingWarningEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Warning]]>
+				</DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">LoggingNoticeEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Notice]]>
+				</DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="6">LoggingInfoEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Info]]>
+				</DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="7">LoggingDebugEvent</Name>
+				<DisplayName TxtId="">
+					<![CDATA[Debug]]>
+				</DisplayName>
+				<Severity>Verbose</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{E50B8F82-4C54-4F5A-855E-90970D01354A}"/>
+				<Hide GUID="{772B0B6F-412E-46FD-9006-6E00BFFE1C3D}"/>
+				<Hide GUID="{8FAD87A4-C885-4A4F-85AF-8AB324945AE2}"/>
+			</Hides>
+		</DataType>
 	</DataTypes>
 	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" Target64Bit="true" ShowHideConfigurations="#x6">
 		<Plc>
 			<Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x01010010" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc">
 					<Name>LCLSGeneral Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 				</Instance>
