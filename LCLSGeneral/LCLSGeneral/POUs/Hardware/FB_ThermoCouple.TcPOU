@@ -22,7 +22,7 @@ VAR_OUTPUT
 		io: input
 		field: ONAM Connected
 		field: ZNAM Disconnected
-	}
+	'}
 	bConnected: BOOL;
 	
 	{attribute 'pytmc' := '
