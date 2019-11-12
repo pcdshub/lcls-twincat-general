@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
-  <POU Name="FB_Listener" Id="{31c03a21-938c-4420-9ba0-9b08c0e7cf5f}" SpecialFunc="None">
+  <POU Name="FB_Listener" Id="{50ed088d-9a7d-4c16-86a9-e90b487e4982}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Listener EXTENDS FB_ListenerBase
 VAR_INPUT
 END_VAR
@@ -16,8 +16,7 @@ VAR
 		pv: LogToVisualStudio
 		io: io
 	'}
-	bLogToVisualStudio	:	BOOL := TRUE;
-	// TODO: default should be FALSE
+	bLogToVisualStudio	:	BOOL := FALSE;
 	
 	{attribute 'pytmc' := '
 		pv: MessagesSent
@@ -44,12 +43,22 @@ VAR
 	nCntAlarmsCleared 	: UDINT := 0;
 	
 	{attribute 'pytmc' := '
+		pv: MinSeverity
+		io: io
+	'}
+	eMinSeverity	 	: TcEventSeverity;
+
+	{attribute 'pytmc' := '
 		pv: Log
 	'}
 	stEventInfo 		:	REFERENCE TO ST_EventInfo;
 	stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
-	
-	ipMessageConfig : ITcEventFilterConfig;
+	ipMessageConfig		:	ITcEventFilterConfig;
+	fbSocket			:	POINTER TO FB_ConnectionlessSocket;
+	bConfigured			:	BOOL	:= FALSE;
+END_VAR
+
+VAR_IN_OUT
 	
 END_VAR
 

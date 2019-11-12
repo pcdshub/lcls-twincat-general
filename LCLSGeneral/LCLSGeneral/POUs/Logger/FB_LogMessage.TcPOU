@@ -7,7 +7,6 @@ VAR_INPUT
 	sMsg			: T_MaxString; 		// Message to send
 	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
 	eSubsystem		: E_Subsystem; 		// Subsystem TODO
-	Json			: T_MaxString;		// JSON to add to the message
 END_VAR
 
 VAR_OUTPUT
@@ -16,7 +15,6 @@ END_VAR
 VAR
 	bInitialized		:	BOOL := FALSE;
 	bInitFailed			:	BOOL := FALSE;
-	sMessage 			:	T_MaxString;
 	sSubsystemSource	:	STRING;
 	fbMessage			:	REFERENCE TO FB_TcMessage;
 	fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
@@ -25,7 +23,6 @@ VAR
 	hr 					:	HRESULT;
 	hrLastInternalError :	HRESULT;
 	eTraceLevel 		:	TcEventSeverity := TcEventSeverity.Verbose;
-	eEventEntry 		:	TcEventEntry;
 	
 	{attribute 'instance-path'} 
     {attribute 'noinit'} 
