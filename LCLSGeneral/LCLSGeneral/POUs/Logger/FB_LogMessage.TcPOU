@@ -1,71 +1,127 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
-  <POU Name="FB_LogMessage" Id="{fe506c1b-49fd-40e1-9f69-3fdf525bddb1}" SpecialFunc="None">
-    <Declaration><![CDATA[// LogMessage
-// A Wallace, 18-4-12
-// Adds a message to the global queue to be sent to the syslog server
-(* 
-For reference, the logstash pattern SYSLOG5424LINE will be used to grok the generated syslog-5424 message.
-
-	 SYSLOG5424PRI <%{NONNEGINT:syslog5424_pri}>
-	 SYSLOG5424SD \[%{DATA}\]+
-	 SYSLOG5424BASE %{SYSLOG5424PRI}%{NONNEGINT:syslog5424_ver} +(?:%{TIMESTAMP_ISO8601:syslog5424_ts}|-) +(?:%{IPORHOST:syslog5424_host}|-) 
-					+(-|%{SYSLOG5424PRINTASCII:syslog5424_app}) +(-|%{SYSLOG5424PRINTASCII:syslog5424_proc}) 
-					+(-|%{SYSLOG5424PRINTASCII:syslog5424_msgid}) +(?:%{SYSLOG5424SD:syslog5424_sd}|-|)
-	 SYSLOG5424LINE %{SYSLOG5424BASE} +%{GREEDYDATA:syslog5424_msg}
-
-This could be summarized as:
-
-	<PRI> VER TIMESTAMP/- IPorHOST/- APP/- PROC/- MSGID/- SD/- MESSAGE
-
-where dash '-' is used as the "nil value" or `csNILVALUE` here.
-*)
-
-{attribute 'reflection'}
+  <POU Name="FB_LogMessage" Id="{0893f9f8-65e8-4db6-822f-019a7a161c6c}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'reflection'}
 FUNCTION_BLOCK FB_LogMessage
-VAR_INPUT	
-	i_sMsg	:	STRING; //Message to send
-	i_eSevr	:	E_MesgSevr; //Message severity
-	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
+VAR_INPUT
+	sMsg			: T_MaxString; 		// Message to send
+	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
+	eSubsystem		: E_Subsystem; 		// Subsystem TODO
+	Json			: T_MaxString;		// JSON to add to the message
 END_VAR
+
+VAR_OUTPUT
+END_VAR
+
 VAR
-	fbFormatString		:	FB_FormatString; //String formatter
-	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
-	{attribute 'instance-path'}
-	{attribute 'noinit'}
-	sPID				: 	T_MaxString; //PID -> changed to instance path
-	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
-	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
-	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
-	sMsgID				: 	T_MaxString := csNILVALUE; // Message ID
+	bInitialized		:	BOOL := FALSE;
+	bInitFailed			:	BOOL := FALSE;
+	sMessage 			:	T_MaxString;
+	sSubsystemSource	:	STRING;
+	fbMessage			:	REFERENCE TO FB_TcMessage;
+	fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
+	fbSource 			:	FB_TcSourceInfo;
+	ipResultMessage	 	:	I_TcMessage;
+	hr 					:	HRESULT;
+	hrLastInternalError :	HRESULT;
+	eTraceLevel 		:	TcEventSeverity := TcEventSeverity.Verbose;
+	eEventEntry 		:	TcEventEntry;
+	
+	{attribute 'instance-path'} 
+    {attribute 'noinit'} 
+	sPath				:	T_MaxString;
 END_VAR
-VAR CONSTANT
-	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
-	cnFacility: WORD := 20; // local4
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbLoggerBuffer.putValue := '';
-fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
-fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
+      <ST><![CDATA[IF NOT bInitialized AND NOT bInitFailed THEN
+	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
+	IF FAILED(hr) THEN
+		bInitFailed := TRUE;
+		hrLastInternalError := hr;
+	END_IF
 
-fbFormatString.sFormat := '<%s>%d %s %s %s %s %s - %s';
+	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Warning, 0 (*fbSource*) );
+	IF FAILED(hr) THEN
+		bInitFailed := TRUE;
+		hrLastInternalError := hr;
+	END_IF
 
-sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
-sSubsystem := casSubsystems[i_eSubsystem];
-nSyslogVer := cnSyslogVer;
-sMsg := i_sMsg;
+	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Info, 0 (*fbSource*) );
+	IF FAILED(hr) THEN
+		bInitFailed := TRUE;
+		hrLastInternalError := hr;
+	END_IF
 
-//bad language ahead, sorry
-fbFormatString.arg1 := F_STRING(sPRIVAL); 			// <PRI>
-fbFormatString.arg2 := F_WORD(nSyslogVer);			// VER
-fbFormatString.arg3 := F_STRING(gsCurrentTime);		// TIMESTAMP
-fbFormatString.arg4 := F_STRING(gsHostName);		// IPorHOST/-
-fbFormatString.arg5 := F_STRING(sSubsystem);		// APP/-
-fbFormatString.arg6 := F_STRING(sPID);				// PROC/-
-fbFormatString.arg7 := F_STRING(sMsgID);			// MSGID/-
-fbFormatString.arg8 := F_STRING(sMsg);				// MESSAGE
-fbFormatString( sOut=>fbLoggerBuffer.putValue);
-fbLoggerBuffer.A_AddTail();]]></ST>
+	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Error, 0 (*fbSource*) );
+	IF FAILED(hr) THEN
+		bInitFailed := TRUE;
+		hrLastInternalError := hr;
+	END_IF
+
+	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Critical, 0 (*fbSource*) );
+	IF FAILED(hr) THEN
+		bInitFailed := TRUE;
+		hrLastInternalError := hr;
+	END_IF
+	
+	IF bInitFailed THEN
+		ADSLOGSTR(
+			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
+			msgFmtStr   := '[LOGGER] Initialization failed in %s', 
+			strArg      := sPath,
+		); 
+	ELSE
+		bInitialized := TRUE;
+	END_IF
+END_IF
+
+IF bInitFailed THEN
+	RETURN;
+END_IF
+	
+// Map the message severity to the LCLSGeneralEventClass:
+CASE eSevr OF
+	TcEventSeverity.Verbose: 	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId];
+	TcEventSeverity.Warning:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId];
+	TcEventSeverity.Info:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId];		
+	TcEventSeverity.Error:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId]; 
+	TcEventSeverity.Critical:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId];
+	ELSE
+		RETURN;
+END_CASE
+
+CASE eSubsystem OF
+	E_Subsystem.FIELDBUS: 	sSubsystemSource := '/Fieldbus';
+	E_Subsystem.MOTION: 	sSubsystemSource := '/Motion';
+	E_Subsystem.MPS: 		sSubsystemSource := '/MPS';
+	E_Subsystem.SDS: 		sSubsystemSource := '/SDS';
+	E_Subsystem.VACUUM:		sSubsystemSource := '/Vacuum';	
+	ELSE
+		sSubsystemSource := '/Unknown';
+END_CASE
+
+// Clearing the source here will clear the event GUID, causing the message to not be resolved.
+// However, we can change the name as desired:
+//fbSource.Clear();
+fbSource.sName := CONCAT(sPath, sSubsystemSource);
+
+ipResultMessage := fbMessage;
+hr := fbMessage.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInfo:=fbSource);
+
+// This is where the message text gets appended:
+fbMessage.ipArguments.Clear();
+fbMessage.ipArguments.AddString(sMsg);
+
+// For a final format of:
+// 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
+
+IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel THEN
+	hr := fbMessage.Send(0);
+END_IF
+
+IF FAILED(hr) THEN
+	hrLastInternalError := hr;
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

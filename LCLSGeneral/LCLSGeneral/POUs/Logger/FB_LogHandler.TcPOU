@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_LogHandler" Id="{3f56ea05-5d12-4cf3-aa32-b1078ff3baf8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LogHandler
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+
+VAR
+	
+	bInitialized	:	BOOL	:= FALSE;
+	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
+	bHostnameSet	:	BOOL	:= FALSE;
+
+	{attribute 'pytmc' := '
+		pv: ADS
+	'}
+	fbTcAdsListener : FB_Listener;	
+	
+	{attribute 'pytmc' := '
+		pv: Router
+	'}
+	fbTcRouterListener : FB_Listener;	
+	
+	{attribute 'pytmc' := '
+		pv: RTime
+	'}
+	fbTcRTimeListener : FB_Listener;	
+	
+	{attribute 'pytmc' := '
+		pv: System
+	'}
+	fbTcSystemListener : FB_Listener;
+	
+	{attribute 'pytmc' := '
+		pv: Windows
+	'}
+	fbWindowsListener : FB_Listener;	
+
+	{attribute 'pytmc' := '
+		pv: LCLS
+	'}
+	fbLCLSListener 	: FB_Listener;	
+
+	fbListener		:	REFERENCE TO FB_Listener;
+	fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
+	
+	// Default minimum severity for subscriptions
+	eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;	
+	
+	{attribute 'naming' := 'omit'}
+	rtReset				:	R_TRIG; //Reset trigger
+	bReset				:	BOOL;
+		
+	fbSocket	   		:	FB_ConnectionlessSocket;
+	
+	nI: UINT;
+END_VAR
+
+VAR CONSTANT
+	nNumListeners		:	UINT	:= 6;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bInitialized THEN 
+	bInitialized := TRUE;
+	fbTcAdsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+	fbTcRouterListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRouterEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+	fbTcRTimeListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+	fbTcSystemListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcSystemEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+	fbWindowsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.Win32EventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+	fbLCLSListener.Configure(i_EventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+
+	fbListeners[0] := ADR(fbTcAdsListener);
+	fbListeners[1] := ADR(fbTcRouterListener);
+	fbListeners[2] := ADR(fbTcRTimeListener);
+	fbListeners[3] := ADR(fbTcSystemListener);
+	fbListeners[4] := ADR(fbWindowsListener);
+	fbListeners[5] := ADR(fbLCLSListener);
+END_IF 
+	
+IF NOT bHostnameSet THEN
+	fbGetHostName();
+	IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
+		GVL_Logger.sPlcHostname := fbGetHostName.sHostName;
+		bHostnameSet 			:= TRUE;
+	END_IF
+END_IF
+
+(* Ensure the socket is ready for when JSON documents are emitted *)
+rtReset(CLK:=bReset);
+
+IF (rtReset.Q AND fbSocket.bEnable) OR fbSocket.bError THEN
+	fbSocket(bEnable:=FALSE);
+END_IF
+
+fbSocket(
+	nLocalPort:=0,
+	bEnable:=TRUE,
+	nMode:=CONNECT_MODE_ENABLEDBG,
+);
+
+(* Poke all of the listeners *)
+FOR nI := 0 TO nNumListeners - 1 DO
+	fbListener REF= fbListeners[nI]^;
+	fbListener.Execute();
+	fbListener.PublishEvents();
+END_FOR
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

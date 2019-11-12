@@ -84,6 +84,9 @@
     <Compile Include="POUs\Functions\FB_XKoyoPLCModbus.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Functions\F_ConvertTicksToUnixTimestamp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_AnalogOutput.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -99,21 +102,30 @@
     <Compile Include="POUs\Hardware\FB_ThermoCouple.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Logger\FB_Logger.TcPOU">
+    <Compile Include="POUs\Logger\DUTs\E_LogEventType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Logger\DUTs\ST_EventInfo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Logger\DUTs\ST_PendingEvent.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Logger\FB_Listener.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Logger\FB_LogHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Logger\FB_LogMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Logger\F_SendUDPMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Logger\GVL_Logger.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="POUs\Logger\DUTs\E_MesgSevr.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Logger\DUTs\E_MessengerState.TcDUT">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Logger\DUTs\E_Subsystem.TcDUT">
       <SubType>Code</SubType>
@@ -151,11 +163,24 @@
       <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="LCLSGeneral.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="Tc3_EventLogger">
+      <Resolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

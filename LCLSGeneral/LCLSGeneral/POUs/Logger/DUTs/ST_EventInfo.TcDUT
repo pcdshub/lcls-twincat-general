@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_EventInfo" Id="{91686bb0-81a3-47a0-8e20-449823cce7f0}">
+    <Declaration><![CDATA[TYPE ST_EventInfo :
+STRUCT
+	(* 
+		Message or Alarm{Cleared,Confirmed,Raised} event information
+		
+		Note that elements here do not follow the usual Hungarian notation / 
+		variable-type-prefixing naming convention due to the member names being
+		used directly in the generation of the JSON document.
+	*)
+	
+	{attribute 'pytmc' := '
+		pv: Schema
+		io: i
+		field: DESC Schema string
+	'}
+	schema		:	STRING := 'twincat-event-0';
+	  
+	{attribute 'pytmc' := '
+		pv: Timestamp 
+		io: i
+		field: DESC Unix timestamp
+	'}
+  	ts			:	LREAL;
+	
+  	{attribute 'pytmc' := '
+		pv: Hostname 
+		io: i
+		field: DESC PLC Hostname
+	'}
+  	plc			:	STRING;
+  
+	{attribute 'pytmc' := '
+		pv: Severity
+		io: i
+		field: DESC TcEventSeverity	
+		field: ZRST Verbose
+		field: ONST Info
+		field: TWST Warning
+		field: THST Error
+	'}
+	severity	:	TcEventSeverity;
+	
+	{attribute 'pytmc' := '
+		pv: MessageID
+		io: i
+		field: DESC TwinCAT Message ID	
+	'}
+	id			:	UDINT;
+
+	{attribute 'pytmc' := '
+		pv: EventClass
+		io: i
+		field: DESC TwinCAT Event class	
+	'}
+	event_class		:	STRING;
+		
+	{attribute 'pytmc' := '
+		pv: Message
+		io: i
+	'}
+	msg			:	 T_MaxString;
+
+	{attribute 'pytmc' := '
+		pv: Source
+		io: i
+	'}
+	source		:	 T_MaxString;
+	
+	{attribute 'pytmc' := '
+		pv: EventType
+		io: i
+		field: DESC The event type
+	'}
+	event_type	:	 E_LogEventType;
+	
+	{attribute 'pytmc' := '
+		pv: MessageJSON
+		io: i
+		field: DESC Metadata with the message	
+	'}
+	json 		:	STRING(10000);
+	(* 
+	NOTE: this JSON gets inserted as an escaped string in the "json" key.
+	TODO: it may be possible to use `fbJson.AddRawObject`, but this would
+		  require us to switch back to creating the JSON in a more manual
+		  way with AddKey/AddInt (and such).
+	*)		 
+
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_PendingEvent" Id="{abbfd234-3623-42a3-aa27-c85d027ac193}">
+    <Declaration><![CDATA[TYPE ST_PendingEvent :
+STRUCT
+	
+	{attribute 'pytmc' := '
+		pv:
+	'}
+	stEventInfo			:	ST_EventInfo;
+	bInUse				:	BOOL;
+	fbRequestEventText	:	FB_RequestEventText;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

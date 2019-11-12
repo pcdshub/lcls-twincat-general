@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_ConvertTicksToUnixTimestamp" Id="{33156588-fcdd-4f41-9fa6-98babd8a3abc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ConvertTicksToUnixTimestamp : LREAL
+VAR_INPUT
+	nTimestamp : ULINT;
+END_VAR
+VAR CONSTANT
+	// Timer ticks in Windows are 100ns (1e-7 sec)
+	nTicksToSeconds : LREAL := 10_000_000;
+	// Epoch offset 1601 to 1970
+	nEpochOffset	: LREAL := 11_644_473_600;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ConvertTicksToUnixTimestamp := ULINT_TO_LREAL(nTimestamp) / nTicksToSeconds - nEpochOffset;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

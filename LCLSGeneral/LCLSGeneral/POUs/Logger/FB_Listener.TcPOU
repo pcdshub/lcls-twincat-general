@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_Listener" Id="{31c03a21-938c-4420-9ba0-9b08c0e7cf5f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Listener EXTENDS FB_ListenerBase
+VAR_INPUT
+END_VAR
+
+VAR_OUTPUT
+END_VAR
+
+VAR
+	nEventIdx			:	UINT := 0;
+	nPendingEvents		:	UINT := 0;
+	
+	{attribute 'pytmc' := '
+		pv: LogToVisualStudio
+		io: io
+	'}
+	bLogToVisualStudio	:	BOOL := TRUE;
+	// TODO: default should be FALSE
+	
+	{attribute 'pytmc' := '
+		pv: MessagesSent
+		io: i
+	'}
+	nCntMessagesSent 	: UDINT := 0;
+
+	{attribute 'pytmc' := '
+		pv: AlarmsRaised
+		io: i
+	'}
+	nCntAlarmsRaised 	: UDINT := 0;
+	
+	{attribute 'pytmc' := '
+		pv: AlarmsConfirmed
+		io: i
+	'}
+	nCntAlarmsConfirmed : UDINT := 0;
+	
+	{attribute 'pytmc' := '
+		pv: AlarmsCleared
+		io: i
+	'}
+	nCntAlarmsCleared 	: UDINT := 0;
+	
+	{attribute 'pytmc' := '
+		pv: Log
+	'}
+	stEventInfo 		:	REFERENCE TO ST_EventInfo;
+	stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
+	
+	ipMessageConfig : ITcEventFilterConfig;
+	
+END_VAR
+
+VAR CONSTANT
+	// The maximum number of events allowed *per-cycle*
+	nMaxEvents			:	UINT := 10;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Configure" Id="{e929b56f-8511-4af4-85d0-a30fca221844}">
+      <Declaration><![CDATA[(*
+	Configure an event class + severity
+*)
+METHOD Configure : HRESULT
+VAR_INPUT
+	i_EventClass 	:	GUID;
+	i_Severity		:	TcEventSeverity := TcEventSeverity.Verbose;
+END_VAR
+
+VAR
+	bSubscribed		:	BOOL := FALSE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bSubscribed THEN
+	Unsubscribe();
+END_IF
+
+THIS^.Subscribe(ADR(ipMessageConfig), 0);
+bSubscribed := TRUE;
+
+IF (ipMessageConfig = 0) THEN
+	Configure := 1;
+ELSE
+	ipMessageConfig.AddEventClass(i_EventClass, i_Severity);
+	Configure := 0;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{67cbacb7-999f-41d8-ae18-a10b2c9376f5}">
+      <Declaration><![CDATA[METHOD Execute : HRESULT
+VAR_INPUT
+END_VAR
+
+VAR
+	fbJson				:	FB_JsonSaxWriter;
+	fbJsonDataType		:	FB_JsonReadWriteDataType;
+	sJsonDoc			:	STRING(14000);
+	nEvent				:	UINT;
+	stPendingEvent		:	REFERENCE TO ST_PendingEvent;
+	stEventInfo			:	REFERENCE TO ST_EventInfo;
+	fbRequestEventText	:	REFERENCE TO FB_RequestEventText;
+
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Execute := SUPER^.Execute();
+
+IF nPendingEvents > 0 THEN
+	FOR nEvent := 0 TO nMaxEvents - 1 DO
+		stPendingEvent REF= stPendingEvents[nEvent];
+		IF NOT stPendingEvent.bInUse THEN
+			CONTINUE;
+		END_IF
+		
+		fbRequestEventText REF= stPendingEvent.fbRequestEventText;
+		stEventInfo 	   REF= stPendingEvent.stEventInfo;
+		
+		IF fbRequestEventText.bError THEN 
+			stEventInfo.Msg := '(Unable to retrieve message)';
+		ELSIF NOT fbRequestEventText.bBusy THEN
+			fbRequestEventText.GetString(stEventInfo.msg, SIZEOF(stEventInfo.msg));
+		ELSE
+			CONTINUE;
+		END_IF
+		
+		// Generate the JSON message
+		fbJson.ResetDocument();
+		fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_EventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
+		fbJson.CopyDocument(sJsonDoc, SIZEOF(sJsonDoc));
+		
+		// Optionally log it to Visual Studio's message list
+		IF bLogToVisualStudio THEN
+			ADSLOGSTR(
+				msgCtrlMask := ADSLOG_MSGTYPE_HINT, 
+				msgFmtStr   := '[Logger JSON Debug] %s', 
+				strArg      := LEFT(sJsonDoc, 250 - 20) // Keep the message length under 255
+			); 
+		END_IF
+		
+		// TODO: send message here
+		
+		// Mark as not in use, and fill in this event in the next StoreEvent call
+		nPendingEvents			:= nPendingEvents - 1;
+		stPendingEvent.bInUse 	:= FALSE;
+		nEventIdx 				:= nEvent;
+		
+	END_FOR
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnAlarmCleared" Id="{41a7a2e4-156b-4789-b1ce-630507d96a16}">
+      <Declaration><![CDATA[METHOD OnAlarmCleared
+VAR_INPUT
+	fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nCntAlarmsCleared := nCntAlarmsCleared + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmCleared);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnAlarmConfirmed" Id="{a656bd50-d593-4f9c-bd42-60b4cc389875}">
+      <Declaration><![CDATA[METHOD OnAlarmConfirmed
+VAR_INPUT
+	fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nCntAlarmsConfirmed := nCntAlarmsConfirmed + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmConfirmed);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnAlarmRaised" Id="{8b2d5545-65ac-4118-be16-800626c9d89c}">
+      <Declaration><![CDATA[METHOD OnAlarmRaised
+VAR_INPUT
+	fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nCntAlarmsRaised := nCntAlarmsRaised + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmRaised);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnMessageSent" Id="{67f7a73e-f7bf-4400-acb6-840a790a227d}">
+      <Declaration><![CDATA[METHOD OnMessageSent
+VAR_INPUT
+	fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nCntMessagesSent := nCntMessagesSent + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.MessageSent);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StoreEvent" Id="{c1d8e249-ad0d-4737-b8d8-b6acc7f0d62c}">
+      <Declaration><![CDATA[METHOD PRIVATE StoreEvent : HRESULT
+VAR_INPUT
+	fbEvent		:	REFERENCE TO FB_TcEvent;
+	eEventType	:	E_LogEventType;
+END_VAR
+
+VAR
+	stPendingEvent	:	REFERENCE TO ST_PendingEvent;
+	stEventInfo		:	REFERENCE TO ST_EventInfo;
+	nFailures		:	UINT := 0;
+
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE stPendingEvents[nEventIdx].bInUse AND nFailures < nMaxEvents DO
+	nFailures := nFailures + 1;
+	IF ((nEventIdx := (nEventIdx + 1)) = nMaxEvents) THEN
+		nEventIdx := 0;
+	END_IF
+END_WHILE
+
+IF (nFailures = nMaxEvents) THEN
+	ADSLOGSTR(
+		msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
+		msgFmtStr   := 'Logging message buffer full (%s)',
+		strArg		:= UINT_TO_STRING(nMaxEvents),
+	);
+	RETURN;
+END_IF
+
+nPendingEvents			:=	nPendingEvents + 1;
+nCntMessagesSent 		:=	nCntMessagesSent + 1;
+
+stPendingEvent			REF= stPendingEvents[nEventIdx];
+stEventInfo 			REF= stPendingEvent.stEventInfo;
+stPendingEvent.bInUse 	:= TRUE;
+
+stEventInfo.id 			:= fbEvent.nEventId;
+stEventInfo.event_class	:= GUID_TO_STRING(fbEvent.EventClass);
+stEventInfo.severity 	:= fbEvent.eSeverity;
+stEventInfo.ts			:= F_ConvertTicksToUnixTimestamp(fbEvent.nTimestamp);
+stEventInfo.source 		:= fbEvent.ipSourceInfo.sName;
+stEventInfo.event_type	:= eEventType;
+
+fbEvent.GetJsonAttribute(stEventInfo.json, SIZEOF(stEventInfo.json));
+stPendingEvent.fbRequestEventText.Request(eventClass:=fbEvent.EventClass, nEventId:=fbEvent.nEventId, nLangId:=1033, ipArgs:=fbEvent.ipArguments);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
