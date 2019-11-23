@@ -1,0 +1,1640 @@
+PLC Project (1): LCLSGeneral
+============================
+
+    Project path: /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/LCLSGeneral.plcproj
+    TMC path:     /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/LCLSGeneral.tmc
+    AMS ID:       
+    IP Address:    (* based on AMS ID)
+    Port:         851
+
+    Source files:
+        1.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/Data types/Misc/ST_EcDevice.TcDUT
+        2.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/Data types/Misc/ST_FbDiagnostics.TcDUT
+        3.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/Data types/Misc/ST_System.TcDUT
+        4.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/GVLs/DefaultGlobals.TcGVL
+        5.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_BasicStats.TcPOU
+        6.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_DataBuffer.TcPOU
+        7.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_LREALBuffer.TcPOU
+        8.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
+        9.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
+        10.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
+        11.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_Index.TcPOU
+        12.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
+        13.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
+        14.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
+        15.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
+        16.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
+        17.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
+        18.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
+        19.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
+        20.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/FB_Logger.TcPOU
+        21.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
+        22.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
+        23.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/E_MesgSevr.TcDUT
+        24.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/E_MessengerState.TcDUT
+        25.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
+        26.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
+
+    GVLs:
+        1.) DefaultGlobals
+        2.) GVL_Logger
+
+Data types/Misc/ST_EcDevice.TcDUT (TcPlcObject)
+-----------------------------------------------
+
+### ST_EcDevice: Declaration
+
+```vhdl
+//EtherCAT Device struct for EtherCAT diagnostics
+TYPE ST_EcDevice :
+STRUCT
+	nDeviceState: BYTE; //EtherCAT state machine state number, 8 is OP is good
+	sDeviceState :STRING; //EtherCAT state machine state, OP is good
+	nLinkState: BYTE; //EtherCAT link state, 8 is good
+	nAddrr: WORD; //EtherCAT slave address
+	sType: STRING; //EtherCAT slave type
+	sName:STRING; //EtherCAT slave name
+END_STRUCT
+END_TYPE
+```
+
+
+Data types/Misc/ST_FbDiagnostics.TcDUT (TcPlcObject)
+----------------------------------------------------
+
+### ST_FbDiagnostics: Declaration
+
+```vhdl
+//Stuff to log messages within function blocks
+TYPE ST_FbDiagnostics :
+STRUCT
+	asResults	:	ARRAY [1..20] OF T_MaxString; //Diagnostic messages, use to record state changes or other important events.
+	{attribute 'naming' := 'omit'}
+	//Incrementer, included here to facilitate using asResults
+	resultIdx	:	FB_Index := ( 
+		LowerLimit := 1,
+		UpperLimit := 20
+	);
+	{attribute 'naming' := 'omit'}
+	fString	:	FB_FormatString; //Use to create good log messages, similar to C++ fstring
+END_STRUCT
+END_TYPE
+```
+
+
+Data types/Misc/ST_System.TcDUT (TcPlcObject)
+---------------------------------------------
+
+### ST_System: Declaration
+
+```vhdl
+//Defacto system structure, must be included in all projects
+TYPE ST_System :
+STRUCT
+	
+	xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+	xAtVacuum 	    : BOOL;(* System At Vacuum *)
+	xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
+	xOverrideMode	: BOOL; //This bit is set when using the override features of the system
+	xIOState        : BOOL; (* ECat Bus Health *)
+	{attribute 'naming' := 'omit'}
+	I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
+
+END_STRUCT
+END_TYPE
+```
+
+
+GVLs/DefaultGlobals.TcGVL (TcPlcObject)
+---------------------------------------
+
+### DefaultGlobals: Declaration
+
+```vhdl
+//These are variables every PLC project should have
+VAR_GLOBAL
+	
+	stSys	:	ST_System; //Included for you
+	fTimeStamp: LREAL;
+END_VAR
+```
+
+
+POUs/Data/FB_BasicStats.TcPOU (TcPlcObject)
+-------------------------------------------
+
+### FB_BasicStats: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_BasicStats
+(*
+	Minimalist Array Stats for LREALs
+	2019-10-10 Zachary Lentz
+	
+	Calculates the most basic stats for an array and provides pytmc control points.
+	This is an alternative to the TC3 Condition Monitoring library which requires an
+	additional license and had a more complicated interface.
+*)
+VAR_IN_OUT
+	// Input array of floats
+	{attribute 'pytmc' := '
+		pv: STATS:DATA
+		io: i
+	'}
+	aSignal: ARRAY[*] OF LREAL;
+END_VAR
+VAR_INPUT
+	// If TRUE, we will update the results every cycle
+	{attribute 'pytmc' := 'pv: STATS:ALWAYS_CALC'}
+	bAlwaysCalc: BOOL;
+	// On rising edge, do one calculation
+	{attribute 'pytmc' := 'pv: STATS:EXECUTE'}
+	bExecute: BOOL;
+	// If set to TRUE, reset outputs
+	{attribute 'pytmc' := 'pv: STATS:RESET'}
+	bReset: BOOL;
+	// If nonzero, we will only pay attention to the first nElems items in aSignal
+	{attribute 'pytmc' := '
+		pv: STATS:NELM
+		io: i
+	'}
+	nElems: UDINT;
+END_VAR
+VAR_OUTPUT
+	// Average of all values in the array
+	{attribute 'pytmc' := '
+		pv: STATS:MEAN
+		io: i
+	'}
+	fMean: LREAL;
+	// Standard deviation of all values in the array
+	{attribute 'pytmc' := '
+		pv: STATS:STDEV
+		io: i
+	'}
+	fStDev: LREAL;
+	// Largest value in the array
+	{attribute 'pytmc' := '
+		pv: STATS:MAX
+		io: i
+	'}
+	fMax: LREAL;
+	// Smallest value in the array
+	{attribute 'pytmc' := '
+		pv: STATS:MIN
+		io: i
+	'}
+	fMin: LREAL;
+	// Largest array element subtracted by the smallest
+	{attribute 'pytmc' := '
+		pv: STATS:RANGE
+		io: i
+	'}
+	fRange: LREAL;
+	// True if the other outputs are valid
+	{attribute 'pytmc' := '
+		pv: STATS:VALID
+		io: i
+	'}
+	bValid: BOOL;
+END_VAR
+VAR
+	rTrig: R_TRIG;
+	nIndex: DINT;
+	nElemsSeen: UDINT;
+	fSum: LREAL;
+	fVarianceSum: LREAL;
+	fVarianceMean: LREAL;
+END_VAR
+```
+
+### FB_BasicStats: ST
+
+```vhdl
+rTrig(CLK:=bExecute);
+IF bReset THEN
+	fMean := 0;
+	fStDev := 0;
+	fMax := 0;
+	fMin := 0;
+	fRange := 0;
+	bValid := FALSE;
+	bReset := FALSE;
+ELSIF NOT (bExecute OR bAlwaysCalc) THEN
+	bValid := FALSE;
+ELSIF bAlwaysCalc OR rTrig.Q THEN
+	// First pass through aSignal: get sum, mean, max, min
+	nElemsSeen := 0;
+	fSum := 0;
+	fMax := aSignal[LOWER_BOUND(aSignal, 1)];
+	fMin := fMax;
+	FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+		nElemsSeen := nElemsSeen + 1;
+		fSum := fSum + aSignal[nIndex];
+		IF aSignal[nIndex] > fMax THEN
+			fMax := aSignal[nIndex];
+		ELSIF aSignal[nIndex] < fMin tHEN
+			fMin := aSignal[nIndex];
+		END_IF
+		IF nElems > 0 AND nElemsSeen >= nElems THEN
+			EXIT;
+		END_IF
+	END_FOR
+	IF nElemsSeen > 0 THEN
+		fMean := fSum / nElemsSeen;
+		fRange := fMax - fMin;
+
+		// Second pass through aSignal: get the sum of the variances and then the stdev
+		nElemsSeen := 0;
+		fVarianceSum := 0;
+		FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+			nElemsSeen := nElemsSeen + 1;
+			fVarianceSum := fVarianceSum + (aSignal[nIndex] - fMean) * (aSignal[nIndex] - fMean);
+			IF nElems > 0 AND nElemsSeen >= nElems THEN
+				EXIT;
+			END_IF
+		END_FOR
+		IF nElemsSeen > 1 THEN
+			fVarianceMean := fVarianceSum / (nElemsSeen - 1);
+			fStDev := SQRT(fVarianceMean);
+			bValid := TRUE;
+		END_IF
+	END_IF
+END_IF
+```
+
+
+POUs/Data/FB_DataBuffer.TcPOU (TcPlcObject)
+-------------------------------------------
+
+### FB_DataBuffer: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_DataBuffer
+(*
+	Function Block to accumulate data into an array.
+	2019-10-09 Zachary Lentz
+	
+	Requires the user to supply pointers to the value and to 2 arrays:
+	1. A partial buffer that we will slowly fill one value at a time
+	2. An output buffer that will only update when the partial buffer is full
+	
+	Take great care of the following, or else your program will likely crash,
+	or at least have corrupt data:
+	1. The input type and array types must match
+	2. The provided element count must be accurate and match both arrays
+	3. The provided element size is correct
+	
+	As this function block as no way of checking that you did this correctly.
+*)
+VAR_INPUT
+	// Whether or not to accumulate on this cycle
+	bExecute: BOOL;
+	// Address of the value to accumulate
+	pInputAdr: PVOID;
+	// Size of the accumulated value
+	iInputSize: UDINT;
+	// Number of values in the output array
+	iElemCount: UDINT;
+	// Address of the rolling buffer to be filled every cycle
+	pPartialAdr: PVOID;
+	// Address of the output buffer to be filled when the rolling buffer is full
+	pOutputAdr: PVOID;
+END_VAR
+VAR_OUTPUT
+	// Set to TRUE on the cycle that we copy the output array
+	bNewArray: BOOL;
+END_VAR
+VAR
+	iArrayIndex: UDINT := 0;
+END_VAR
+```
+
+### FB_DataBuffer: ST
+
+```vhdl
+bNewArray := FALSE;
+IF bExecute THEN
+	MEMCPY(
+		destAddr := pPartialAdr + iArrayIndex*iInputSize,
+		srcAddr := pInputAdr,
+		n := iInputSize);
+	iArrayIndex := iArrayIndex + 1;
+	IF iArrayIndex >= iElemCount THEN
+		MEMCPY(
+			destAddr := pOutputAdr,
+			srcAddr := pPartialAdr,
+			n := iElemCount*iInputSize);
+		iArrayIndex := 0;
+		bNewArray := TRUE;
+	END_IF
+END_IF
+```
+
+
+POUs/Data/FB_LREALBuffer.TcPOU (TcPlcObject)
+--------------------------------------------
+
+### FB_LREALBuffer: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_LREALBuffer
+(*
+	An example use of FB_DataBuffer for the likely most-common use case.
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// If TRUE, we'll accumulate a value on this cycle.
+	bExecute: BOOL;
+	// The value to accumulate.
+	fInput: LREAL;
+END_VAR
+VAR_OUTPUT
+	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
+END_VAR
+VAR
+	arrPartial: ARRAY [1..1000] OF LREAL;
+	fbDataBuffer: FB_DataBuffer;
+END_VAR
+```
+
+### FB_LREALBuffer: ST
+
+```vhdl
+fbDataBuffer(
+	bExecute := bExecute,
+	pInputAdr := ADR(fInput),
+	iInputSize := SIZEOF(fInput),
+	iElemCount := 1000,
+	pPartialAdr := ADR(arrPartial),
+	pOutputAdr := ADR(arrOutput),
+	bNewArray => bNewArray);
+```
+
+
+POUs/Data/FB_TimeStampBuffer.TcPOU (TcPlcObject)
+------------------------------------------------
+
+### FB_TimeStampBuffer: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_TimeStampBuffer
+(*
+	A Companion to FB_LREALBuffer that accumulates timestamps
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// If TRUE, we'll accumulate a value on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
+END_VAR
+VAR
+	fbUnixTime: FB_UnixTimestamp;
+	fbLREALBuffer: FB_LREALBuffer;
+END_VAR
+```
+
+### FB_TimeStampBuffer: ST
+
+```vhdl
+fbUnixTime(
+	bExecute := bExecute,
+	fTime => fbLREALBuffer.fInput);
+fbLREALBuffer(
+	bExecute := bExecute,
+	arrOutput => arrOutput,
+	bNewArray => bNewArray);
+```
+
+
+POUs/Data/FB_TimeStampBufferGlobal.TcPOU (TcPlcObject)
+------------------------------------------------------
+
+### FB_TimeStampBufferGlobal: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_TimeStampBufferGlobal
+(*
+	A Variant of FB_TimeStampBuffer that uses the global timestamp.
+	2019-10-09 Zachary Lentz
+
+	Assumes an instance of FB_UnixTimeStampGlobal is running every cycle.
+*)
+VAR_INPUT
+	// If TRUE, we'll accumulate a value on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+	arrOutput: ARRAY [1..1000] OF LREAL;
+	bNewArray: BOOL;
+END_VAR
+VAR
+	fbLREALBuffer: FB_LREALBuffer;
+END_VAR
+```
+
+### FB_TimeStampBufferGlobal: ST
+
+```vhdl
+fbLREALBuffer(
+	bExecute := bExecute,
+	fInput := DefaultGlobals.fTimeStamp,
+	arrOutput => arrOutput,
+	bNewArray => bNewArray);
+```
+
+
+POUs/Functions/FB_EcatDiag.TcPOU (TcPlcObject)
+----------------------------------------------
+
+### FB_EcatDiag: Declaration
+
+```vhdl
+(* 
+Ecat bus diagnostic tool
+2015-11-4 Alex Wallace
+This function block checks the states of all slaves on the ecat bus network, 
+it could be modified to export the states of the slaves on an individual basis,
+but for now it sets the output boolean true if all slaves are OP and false otherwise.
+To start the block provide a falling edge on the first pass boolean input.
+
+2018-05-05 Margaret Ghaly
+Function block has been modified to retrieve the Device State of the Ethercat Master.
+It also exports the states and information of each individual configured Slave. 
+And saves them in the array q_aEcConfSlaveInfo.
+*)
+FUNCTION_BLOCK FB_EcatDiag
+VAR_INPUT
+	{attribute 'naming' := 'omit'}
+	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
+	i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
+END_VAR
+VAR_OUTPUT
+	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
+	q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
+	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
+	q_nMasterState: WORD; // The Device State of the Master
+	q_sMasterState:STRING; //State of the ECAT master
+	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
+	q_nSlaves: UINT; // the Number of the connected Slaves
+END_VAR
+VAR
+	sNetId: T_AmsNetId; //NetId string
+	astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
+	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
+	fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates 
+	
+	fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
+	fbGetConfSlaves: FB_EcGetConfSlaves; //Acquires the ECAT slave configuration of the bus (how many, what kind, etc)
+	{attribute 'naming' := 'omit'} 
+	ftReset: F_TRIG; //Reset trigger sensor
+	{attribute 'naming' := 'omit'}
+	ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
+	nIterator: INT; //Generic iterator placeholder
+END_VAR
+```
+
+### FB_EcatDiag: ST
+
+```vhdl
+//Create the net ID string
+sNetId := F_CreateAmsNetId(I_AMSNetId);
+
+//Query the state of all terminals, collect in astTermStates
+ftReset(CLK:=fbGetAllSlaveStates.bBusy OR i_xFirstPass);
+fbGetAllSlaveStates.bExecute := ftReset.Q;
+fbGetAllSlaveStates(sNetId:=sNetId, pStateBuf := ADR(astTermStates), cbBufLen:=SIZEOF(astTermStates));
+//Keep checking...
+
+
+
+//Cycle through each entry in the array and check if we have anyone not in OP and that the link state is good.
+// If so, then set our global IO bad boolean.
+IF fbGetAllSlaveStates.nSlaves > 0 THEN
+	q_xAllSlaveStatesGood := TRUE;
+FOR nIterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
+	DO
+	IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
+		q_xAllSlaveStatesGood := FALSE;
+	END_IF
+	q_anTermStates[nIterator] := astTermStates[nIterator].deviceState;
+	q_astEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
+	q_astEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
+	q_astEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
+	
+END_FOR
+END_IF
+
+// Read the EtherCAT state of the master. If the call is successful, 
+//the State output variable of type WORD contains the requested status information.
+ftMasterReset(CLK:=fbGetMasterState.bBusy OR i_xFirstPass);
+fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q, 
+				state => q_nMasterState,bError=>,
+				nErrId=>);
+q_xMasterStateGood:= (fbGetMasterState.state = BYTE_TO_UINT(EC_DEVICE_STATE_OP));
+q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
+
+//This function is used to read a list of all configured slaves from the EtherCat master object Directory
+//needs to run only once
+fbGetConfSlaves(bExecute := i_xFirstPass, sNetId :=sNetId, pArrEcConfSlaveInfo := ADR(astEcConfSlaveInfo),cbBufLen := SIZEOF(astEcConfSlaveInfo));
+q_nSlaves:=fbGetConfSlaves.nSlaves;
+
+IF  NOT (fbGetConfSlaves.bBusy) THEN
+	FOR nIterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
+	DO
+	q_astEcConfSlaveInfo[nIterator].nAddrr :=astEcConfSlaveInfo[nIterator].nAddr;
+	q_astEcConfSlaveInfo[nIterator].sName :=astEcConfSlaveInfo[nIterator].sName;
+	q_astEcConfSlaveInfo[nIterator].sType :=astEcConfSlaveInfo[nIterator].sType;
+END_FOR
+	fbGetConfSlaves.bExecute := FALSE;
+END_IF
+```
+
+
+POUs/Functions/FB_Index.TcPOU (TcPlcObject)
+-------------------------------------------
+
+### FB_Index: Declaration
+
+```vhdl
+(* Index FB
+A. Wallace 2016-9-3
+
+Why doesn't beckhoff have this as a builtin type?
+
+Use this thing to have a simple indexer with rollover.
+
+*)
+FUNCTION_BLOCK FB_Index
+VAR_INPUT
+	{attribute 'naming' := 'off'}
+	LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
+	ValInc : INT := 1; //Incrementer increments by this value
+	UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
+	{attribute 'naming' := 'off'}
+END_VAR
+VAR_OUTPUT
+	
+END_VAR
+VAR
+	nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
+END_VAR
+```
+
+### FB_Index: ST
+
+```vhdl
+{analysis -2} //Only the methods and actions are needed
+```
+
+### FB_Index.Dec: ST
+
+```vhdl
+nVal := nVal - ValInc;
+IF nVal < LowerLimit THEN nVal := UpperLimit; END_IF
+```
+
+### FB_Index.DecVal: Declaration
+
+```vhdl
+//Decrement the counter and return new value
+METHOD DecVal : INT
+VAR_INPUT
+END_VAR
+```
+
+### FB_Index.DecVal: ST
+
+```vhdl
+Dec();
+DecVal := nVal;
+```
+
+### FB_Index.Inc: ST
+
+```vhdl
+// Dont use this, use ValInc
+nVal := nVal + ValInc;
+IF nVal >  UpperLimit THEN nVal := LowerLimit; END_IF
+```
+
+### FB_Index.IncVal: Declaration
+
+```vhdl
+//Increment the counter and return new value
+METHOD PUBLIC IncVal : INT
+VAR_INPUT
+END_VAR
+```
+
+### FB_Index.IncVal: ST
+
+```vhdl
+Inc();
+IncVal := nVal;
+```
+
+
+POUs/Functions/FB_UnixTimeStamp.TcPOU (TcPlcObject)
+---------------------------------------------------
+
+### FB_UnixTimeStamp: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_UnixTimeStamp
+(*
+	Get the unix timestamp equivalent of the PLC's time.
+	2019-10-09 Zachary Lentz
+	
+	This will only sync with the Linux host when both hosts' clocks are correct.
+	Largely stolen from stack overflow
+*)
+VAR_INPUT
+	// If TRUE, we'll try to update the output on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+	// Number of seconds in the timestamp
+	iSeconds: ULINT;
+	// Number of milliseconds past the seconds
+	iMilliseconds: ULINT;
+	// Full raw number
+	iFull: ULINT;
+	// Full floating point number in units of seconds
+	fTime: LREAL;
+	// TRUE if the output is okay to use on this cycle. Typically the output is zero when this is FALSE.
+	bValid: BOOL;
+END_VAR
+VAR
+	bInit: BOOL;
+	fbLocalTime: FB_LocalSystemTime;
+	fbGetTimeZone: FB_GetTimeZoneInformation;
+	fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
+	fileTime: T_FILETIME;
+END_VAR
+```
+
+### FB_UnixTimeStamp: ST
+
+```vhdl
+IF NOT bInit THEN
+	bInit := TRUE;
+	fbGetTimeZone(bExecute:=TRUE, tzInfo => fbTimeConv.tzInfo);
+END_IF
+IF bExecute THEN
+	fbLocalTime(
+		bEnable := TRUE,
+		dwCycle := 1,
+		bValid => bValid);
+	IF bValid THEN
+		fbTimeConv(
+			in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
+			out => fileTime);
+		iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+		fTime := ULINT_TO_LREAL(iFull)/1000;
+		iSeconds := iFull/1000;
+		iMilliseconds := iFull MOD 1000;
+	END_IF
+END_IF
+```
+
+
+POUs/Functions/FB_UnixTimeStampGlobal.TcPOU (TcPlcObject)
+---------------------------------------------------------
+
+### FB_UnixTimeStampGlobal: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_UnixTimeStampGlobal
+(*
+	Runs FB_UnixTimeStamp and stuffs the result into this library's GVL
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// If TRUE, we will update the output on this cycle.
+	bExecute: BOOL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbTimeStamp: FB_UnixTimeStamp;
+END_VAR
+```
+
+### FB_UnixTimeStampGlobal: ST
+
+```vhdl
+fbTimeStamp(
+	bExecute := bExecute,
+	fTime => DefaultGlobals.fTimeStamp);
+```
+
+
+POUs/Functions/FB_XKoyoPLCModbus.TcPOU (TcPlcObject)
+----------------------------------------------------
+
+### FB_XKoyoPLCModbus: Declaration
+
+```vhdl
+//Facilitates communication between Beckhoff and Koyo PLC over the network.
+FUNCTION_BLOCK FB_XKoyoPLCModbus
+VAR
+	fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils; //FB for reading the coils from the other PLC
+	anKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE; //Buffer for coil readbacks
+	{attribute 'naming' := 'omit'}
+	ftReset	: F_TRIG; //Reset edge sensor
+	{attribute 'naming' := 'omit'}
+	tonRetry : TON; //Retry timer
+	nIndex : INT; //Index for clearing the coil array
+END_VAR
+
+VAR_INPUT
+	i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
+	i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
+END_VAR
+
+VAR_OUTPUT
+	q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
+	q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
+	q_xError         : BOOL := FALSE; //Transaction or other error
+END_VAR
+```
+
+### FB_XKoyoPLCModbus: ST
+
+```vhdl
+(* Look ma' no wires! *)
+(* A. Wallace, 2015-7-22 
+XKoyoPLCModbus
+
+Facilitates communication between Beckhoff and Koyo PLC over the network.
+
+Useful if you don't have time to run a wire. Fairly reliable.
+
+*)
+
+(* Modbus Info for Koyo
+Modbus Addresses for
+Koyo DL05/06/240/250/260/430/440/450 PLCs
+PLC Memory Type		| Modbus start address Decimal (octal) | Function codes
+Inputs (X)			  2048 (04000)							2
+Special Relays (SP)	  3072 (06000)							2
+Outputs (Y)			  2048 (04000)							1, 5, 15
+Control Relays (C)	  3072 (06000)							1, 5, 15
+Timer Contacts (T)	  6144 (014000)							1, 5, 15
+Counter Contacts (CT) 6400 (014400)							1, 5, 15
+Stage Status Bits (S) 6144 (012000)							1, 5, 15
+*)
+
+(* Begin code *)
+// Retry after some time
+tonRetry.IN := NOT fbKoyo_PLCInputCoilsRx.bBusy;
+tonRetry.PT := i_tRetryTime;
+tonRetry();
+
+ftReset(CLK:=fbKoyo_PLCInputCoilsRx.bBusy);
+ftReset();
+
+fbKoyo_PLCInputCoilsRx.bExecute := ftReset.Q OR tonRetry.Q;
+
+fbKoyo_PLCInputCoilsRx(sIPAddr:='i_sIPAddr', nTCPPort:=502, nQuantity:=32, nMBAddr:=8#6000, cbLength:=USINT_TO_UDINT(SIZEOF(anKoyo_PLC_CnBits)),  pDestAddr:=ADR(anKoyo_PLC_CnBits), tTimeout:=T#10S);
+
+//run some error code for modbus
+IF fbKoyo_PLCInputCoilsRx.bError THEN
+	//if there's a modbus error, set all incoming bits to zero
+	{analysis -41} //There are one-liners for resetting an array to zero but they don't comply with 61131
+	FOR nIndex := 0 TO USINT_TO_INT(SIZEOF(anKoyo_PLC_CnBits))-1 DO //starts at 0
+		anKoyo_PLC_CnBits[nIndex]:=0;
+	END_FOR
+	{analysis +41}
+	q_xError := TRUE;
+	
+ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
+	fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
+	q_xNoPLCResponse:= FALSE;
+	q_xError := FALSE;
+
+//more error code cause we didn't manage to read anything	
+ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
+	q_xError := TRUE;
+	q_xNoPLCResponse:= TRUE;
+			
+END_IF
+
+q_anPLCResponse := anKoyo_PLC_CnBits;
+```
+
+
+POUs/Hardware/FB_AnalogOutput.TcPOU (TcPlcObject)
+-------------------------------------------------
+
+### FB_AnalogOutput: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_AnalogOutput
+(*
+	Converts a real unit value (e.g., volts) to the integer needed for an analog output terminal.
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// The real value to send to the output
+	fReal: LREAL;
+	// The maximum allowed real value for the connected hardware
+	fSafeMax: LREAL;
+	// The minimum allowed real value for the connected hardware
+	fSafeMin: LREAL;
+	// The number of bits correlated with the terminal's max output. This is not necessarily the resolution parameter.
+	iTermBits: UINT;
+	// The fReal value correlated with the terminal's max output
+	fTermMax: LREAL;
+	// The fReal value correlated with the terminal's min output
+	fTermMin: LREAL;
+END_VAR
+VAR_OUTPUT
+	// Connect this output to the terminal
+	iRaw AT %Q*: INT;
+END_VAR
+VAR
+	fScale: LREAL;
+END_VAR
+```
+
+### FB_AnalogOutput: ST
+
+```vhdl
+// Set the scaling from real to raw
+IF fScale = 0 AND fTermMax > fTermMin THEN
+	fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+END_IF
+
+// Adjust real value to be within the limits
+fReal := MIN(fReal, fSafeMax, fTermMax);
+fReal := MAX(fReal, fSafeMin, fTermMin);
+
+// Scale the output accordingly
+iRaw := LREAL_TO_INT((fReal - fTermMin) * fScale);
+```
+
+
+POUs/Hardware/FB_AnalogInput.TcPOU (TcPlcObject)
+------------------------------------------------
+
+### FB_AnalogInput: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_AnalogInput
+(*
+	Converts the integer from an analog input terminal to a real unit value (e.g., volts)
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// Connect this input to the terminal
+	iRaw AT %I*: INT;
+	// The number of bits correlated with the terminal's max value. This is not necessarily the resolution parameter.
+	iTermBits: UINT;
+	// The fReal value correlated with the terminal's max value
+	fTermMax: LREAL;
+	// The fReal value correlated with the terminal's min value
+	fTermMin: LREAL;
+END_VAR
+VAR_OUTPUT
+	// The real value read from the output
+	fReal: LREAL;
+END_VAR
+VAR
+	fScale: LREAL;
+END_VAR
+```
+
+### FB_AnalogInput: ST
+
+```vhdl
+IF fScale = 0 AND fTermMax > fTermMin THEN
+	fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+END_IF
+IF fScale <> 0 THEN
+	fReal := iRaw / fScale + fTermMin;
+END_IF
+```
+
+
+POUs/Hardware/FB_CoE_FastRead.TcPOU (TcPlcObject)
+-------------------------------------------------
+
+### FB_CoE_FastRead: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_CoE_FastRead
+(*
+	Utility to repeatedly read a CoE parameter
+	2019-10-09 Zachary Lentz
+	
+	In practice, it's impossible to read most CoE parameters every cycle,
+	but this is a best effort and will work if the data is available
+*)
+VAR_INPUT
+	// If TRUE we'll attempt a CoE read this cycle.
+	bExecute: BOOL;
+	// Link this to your terminal's drive reference variables under InfoData.
+	stPlcDriveRef AT %I*: ST_PlcDriveRef;
+	// Hexadecimal index of CoE, e.g. the 8010 in 8010:12
+	nIndex: UINT;
+	// Hexadecimal subindex of CoE, e.g. the 12 in 8010:12
+	nSubIndex: BYTE;
+	// Pointer to a value to fill with the result of the read, e.g. ADR(MyValue)
+	pDstBuf: PVOID;
+	// Data size of pDstBuf, e.g. SIZEOF(MyValue)
+	cbBufLen: UINT;
+END_VAR
+VAR_OUTPUT
+	// TRUE if the value was updated on this cycle.
+	bNewValue: BOOL;
+END_VAR
+VAR
+	fbRead: FB_CoERead_ByDriveRef;
+	stDriveRef: ST_DriveRef;
+	iLoop: INT;
+	bInnerExec: BOOL;
+END_VAR
+```
+
+### FB_CoE_FastRead: ST
+
+```vhdl
+stDriveRef.sNetId := F_CreateAmsNetId(stPlcDriveRef.aNetId);
+stDriveRef.nSlaveAddr := stPlcDriveRef.nSlaveAddr;
+stDriveRef.nDriveNo := stPlcDriveRef.nDriveNo;
+stDriveRef.nDriveType := stPlcDriveRef.nDriveType;
+
+bNewValue := FALSE;
+IF bExecute THEN
+	// You need to do this block 3 times per cycle to have a chance at always getting a read
+	FOR iLoop:= 1 TO 3 DO
+		fbRead(
+			stDriveRef := stDriveRef,
+			nIndex := nIndex,
+			nSubIndex := nSubIndex,
+			pDstBuf := pDstBuf,
+			cbBufLen := cbBufLen,
+			bExecute := bInnerExec,
+			tTimeout := T#1s);
+			
+		IF bInnerExec AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
+			bInnerExec := FALSE;
+			bNewValue := TRUE;
+		ELSE
+			bInnerExec := TRUE;
+		END_IF
+	END_FOR
+END_IF
+```
+
+
+POUs/Hardware/FB_EL6_Com.TcPOU (TcPlcObject)
+--------------------------------------------
+
+### FB_EL6_Com: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_EL6_Com
+(*
+	Communicate with a serial device connected to an EL6XXX
+	2019-10-09 Zachary Lentz and Jackson Sheppard
+	
+	May contain assumptions about the device we wrote it for, potentially will need to be adjusted
+*)
+VAR_INPUT
+	// Command to send to the serial device
+	{attribute 'pytmc' := '
+		pv: CMD
+		io: io
+	'}
+	sCmd: STRING;
+	
+	// Pulse this to TRUE and back to FALSE when it's time to send
+	{attribute 'pytmc' := '
+		pv: SEND
+		io: io
+	'}
+	bSend: BOOL;
+	
+	// Any static prefix to add before every sent message
+	sSendPrefix: STRING;
+	// Any static suffix to add after every sent message
+	sSendSuffix: STRING;
+	// Any static prefix to strip off of every recieved message
+	sRecvPrefix: STRING;
+	// Any static suffic to strip off of every recieved message
+	sRecvSuffix: STRING;
+	tTimeout: TIME := T#1S;
+END_VAR
+VAR_IN_OUT
+	stIn_EL6: EL6inData22B;
+	stOut_EL6: EL6outData22B;
+END_VAR
+VAR_OUTPUT
+	// The response recieved from the serial device
+	{attribute 'pytmc' := '
+		pv: RESP
+		io: input
+	'}
+	sResponse: STRING;
+	
+	// This is set to TRUE after recieving a response
+	{attribute 'pytmc' := '
+		pv: DONE
+		io: input
+	'}
+	bDone: BOOL;
+	
+	{attribute 'pytmc' := '
+		pv: ERR:SER
+		io: input
+	'}
+	eSerialLineErrorID: ComError_t;
+	
+	{attribute 'pytmc' := '
+		pv: ERR:SEND
+		io: input
+	'}
+	eSendErrorID: ComError_t;
+	
+	{attribute 'pytmc' := '
+		pv: ERR:RECV
+		io: input
+	'}
+	eRecvErrorID: ComError_t;
+END_VAR
+VAR
+	// Communication Buffers
+	TxBuffer: ComBuffer;
+	RxBuffer: ComBuffer;
+	fbClearComBuffer: ClearComBuffer;
+	
+	// Parameters for PLC -> EL6
+	fbEL6Ctrl: SerialLineControl;
+	bEL6CtrlError: BOOL;
+	eEL6CtrlErrorID: ComError_t;
+	
+	// Parameters for EL6 -> Serial Device
+	fbSend: SendString;
+	bSendBusy: BOOL;
+	eLastSendErrorID: ComError_t;
+	fbReceive: ReceiveString;
+	sReceivedString: STRING;
+	sLastReceivedString: STRING;
+	bStringReceived: BOOL;
+	bReceiveBusy: BOOL;
+	bReceiveError: BOOL;
+	eReceiveErrorID: ComError_t;
+	bReceiveTimeout: BOOL;
+	nReceiveCounter: UDINT;
+	nSendCounter: UDINT;
+	sStringToSend: STRING;
+	fbFormatString: FB_FormatString;
+	
+	// Parameters for state-machine implementation
+	nStep: INT := 0;
+END_VAR
+```
+
+### FB_EL6_Com: ST
+
+```vhdl
+fbEL6Ctrl(
+	Mode:= SERIALLINEMODE_EL6_22B, 
+	pComIn:= ADR(stIn_EL6), 
+	pComOut:= ADR(stOut_EL6), 
+	SizeComIn:= UINT_TO_INT(SIZEOF(stIn_EL6)), 
+	Error=> , 
+	ErrorID=> eSerialLineErrorID, 
+	TxBuffer:= TxBuffer, 
+	RxBuffer:= RxBuffer );
+IF fbEL6Ctrl.Error THEN
+	bEL6CtrlError := TRUE;
+	eEL6CtrlErrorID := fbEL6Ctrl.ErrorID;
+END_IF
+IF bSend THEN
+	nStep := 10;
+	bSend := FALSE;
+	bDone := FALSE;
+END_IF
+// Attempt at solution that sends one command at a time, not on constant loop
+CASE nStep OF
+	0:
+		; // idle
+	10:
+		// Clear buffers in case any lingering data
+		fbClearComBuffer(Buffer:=TxBuffer);
+		fbClearComBuffer(Buffer:=RxBuffer);
+		// Prepare string to send
+		sStringToSend := CONCAT(sSendPrefix, CONCAT(sCmd, sSendSuffix));
+		// Send string
+		fbSend(	SendString:= sStringToSend,
+				TXbuffer:= TxBuffer,
+				Busy=> bSendBusy,
+				Error=> eSendErrorID);
+		IF fbSend.Error <> COMERROR_NOERROR THEN
+			eLastSendErrorID := fbSend.Error;
+		ELSE
+			nSendCounter := nSendCounter + 1;
+		END_IF
+		nStep := nStep + 10;
+	20:
+		// Finish sending String
+		IF fbSend.Busy THEN
+			fbSend(	SendString:= sStringToSend,
+					TXbuffer:= TxBuffer,
+					Busy=> bSendBusy,
+					Error=> eSendErrorID);
+			IF fbSend.Error <> COMERROR_NOERROR THEN
+				eLastSendErrorID := fbSend.Error;
+			ELSE
+				nSendCounter := nSendCounter + 1;
+			END_IF
+		ELSE
+			nStep := nStep + 10;
+		END_IF
+	30:
+		// Get Reply
+		fbReceive(
+			Prefix:= sRecvPrefix,
+			Suffix:= sRecvSuffix,
+			Timeout:= tTimeout,
+			ReceivedString:= sReceivedString,
+			RXbuffer:= RxBuffer,
+			StringReceived=> bStringReceived,
+			Busy=> bReceiveBusy,
+			Error=> eRecvErrorID,
+			RxTimeout=> bReceiveTimeout );
+		IF fbReceive.Error <> COMERROR_NOERROR THEN
+			eReceiveErrorID := fbReceive.Error;
+		END_IF
+		IF bStringReceived THEN
+			nReceiveCounter := nReceiveCounter + 1;
+			// Check for response
+			IF FIND(sReceivedString, sStringToSend)=0 THEN
+				sResponse := sReceivedString;
+				bDone := TRUE;
+				nStep := 0;
+			END_IF
+		END_IF
+END_CASE
+```
+
+
+POUs/Hardware/FB_ThermoCouple.TcPOU (TcPlcObject)
+-------------------------------------------------
+
+### FB_ThermoCouple: Declaration
+
+```vhdl
+FUNCTION_BLOCK FB_ThermoCouple
+(*
+	Handles scaling and default diagnostics for thermocouple terminals
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
+	iScale: INT := 10;
+END_VAR
+VAR_OUTPUT
+	{attribute 'pytmc' := '
+		pv: STC:TEMP
+		io: input
+	'}
+	fTemp: LREAL;
+	
+	{attribute 'pytmc' := '
+		pv: STC:CONN
+		io: input
+		field: ONAM Connected
+		field: ZNAM Disconnected
+	}
+	bConnected: BOOL;
+	
+	{attribute 'pytmc' := '
+		pv: STC:ERR
+		io: input
+	'}
+	bError AT %I*: BOOL;
+	
+	bUnderrange AT %I*: BOOL;
+	bOverrange AT %I*: BOOL;
+END_VAR
+VAR
+	iRaw AT %I*: INT;
+END_VAR
+```
+
+### FB_ThermoCouple: ST
+
+```vhdl
+// The manual states that we are disconnected if we are both overrange and in an error state
+bConnected := NOT (bOverrange AND bError);
+fTemp := iRaw / iScale;
+```
+
+
+POUs/Logger/FB_Logger.TcPOU (TcPlcObject)
+-----------------------------------------
+
+### FB_Logger: Declaration
+
+```vhdl
+(* Syslog Logger
+A. Wallace 2016-9-3
+
+This is used to pass PLC notification messeges to a syslog server.
+
+This POU constantly attempts to send out messages from the global buffer: GVL_Logger.fbLoggerBuffer.
+This buffer is filled by calling fbLogMessage.
+
+NOTE: FB_Logger must integrated into your project manually. It is recommended that you add it to its own 
+task.
+*)
+FUNCTION_BLOCK FB_Logger
+VAR_INPUT
+	i_xReset			:	BOOL := FALSE; //Closes the socket and attempts to open another
+END_VAR
+VAR
+	fbUDPSocket	        :	FB_ConnectionlessSocket; //Handles creation/deletion of the UDP socket
+	fbUDPSocketSend		:	FB_SocketUdpSendTo; //FB for sending the sOutgoingMesg
+	sOutgoingMesg		:	T_MaxString; //Outgoing message holder
+	stDiag				:	ST_FbDiagnostics; //Generic FB diagnostics, check here for insight into errors/ other FB events
+	{attribute 'naming' := 'omit'}
+	rtReset				:	R_TRIG; //Reset sensor
+	fbGetSystemTime		:	FB_LocalSystemTime := (bEnable := TRUE); //Acquires system time as message is being sent
+	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
+	{attribute 'naming' := 'omit'}
+	ctuSentSomething	:	CTU := (PV := 100); //Diagnostic to indicate this thing is working. Increments with each successful send.
+	{attribute 'naming' := 'omit'}
+	rtSocketSendErr		:	R_TRIG; //Socket send error sensor
+END_VAR
+VAR CONSTANT
+	cPSLogHost	: T_IPv4Addr := '172.21.32.9'; //syslog host
+	cnUdpSyslog	:	UDINT := 514; //syslog port
+END_VAR
+```
+
+### FB_Logger: ST
+
+```vhdl
+fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); 
+fbLoggerBuffer.cbBuffer:= UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
+
+fbGetSystemTime(); 
+IF fbGetSystemTime.bValid THEN
+	gsCurrentTime := SYSTEM_TIME_TO_RFC3339(fbGetSystemTime.systemTime);
+ELSE
+	gsCurrentTime := csNILVALUE;
+END_IF
+
+fbGetHostName();
+IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
+	gsHostName := fbGetHostName.sHostName;
+ELSE
+	gsHostName := csNILVALUE;
+END_IF
+
+rtReset(CLK:=i_xReset);
+IF (rtReset.Q AND fbUDPSocket.bEnable) OR fbUDPSocket.bError THEN
+	fbUDPSocket(bEnable := FALSE);
+END_IF
+
+fbUDPSocket(
+	nLocalPort := 0,
+	bEnable := TRUE,
+	nMode := CONNECT_MODE_ENABLEDBG,
+);
+
+IF fbUDPSocketSend.bBusy THEN
+	fbUDPSocketSend();
+	fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;
+ELSIF fbUDPSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED THEN
+	IF fbLoggerBuffer.nCount > 0 THEN
+		fbLoggerBuffer.A_RemoveHead(getValue=>sOutgoingMesg);
+		fbUDPSocketSend.bExecute := TRUE;
+		IF sOutgoingMesg <> '' THEN
+			ctuSentSomething(CU:=TRUE);
+			fbUDPSocketSend.pSrc := ADR(sOutgoingMesg);
+			fbUDPSocketSend.cbLen := UINT_TO_UDINT(SIZEOF(sOutgoingMesg));
+		END_IF
+	END_IF
+	
+	fbUDPSocketSend(
+		hSocket := fbUDPSocket.hSocket,
+		sRemoteHost := cPSLogHost,
+		nRemotePort := cnUdpSyslog,
+	);
+	fbUDPSocketSend.bExecute R= fbUDPSocketSend.bBusy;
+	rtSocketSendErr(CLK:=fbUDPSocketSend.bError);
+END_IF
+```
+
+
+POUs/Logger/FB_LogMessage.TcPOU (TcPlcObject)
+---------------------------------------------
+
+### FB_LogMessage: Declaration
+
+```vhdl
+// LogMessage
+// A Wallace, 18-4-12
+// Adds a message to the global queue to be sent to the syslog server
+(* 
+For reference, the logstash pattern SYSLOG5424LINE will be used to grok the generated syslog-5424 message.
+
+	 SYSLOG5424PRI <%{NONNEGINT:syslog5424_pri}>
+	 SYSLOG5424SD \[%{DATA}\]+
+	 SYSLOG5424BASE %{SYSLOG5424PRI}%{NONNEGINT:syslog5424_ver} +(?:%{TIMESTAMP_ISO8601:syslog5424_ts}|-) +(?:%{IPORHOST:syslog5424_host}|-) 
+					+(-|%{SYSLOG5424PRINTASCII:syslog5424_app}) +(-|%{SYSLOG5424PRINTASCII:syslog5424_proc}) 
+					+(-|%{SYSLOG5424PRINTASCII:syslog5424_msgid}) +(?:%{SYSLOG5424SD:syslog5424_sd}|-|)
+	 SYSLOG5424LINE %{SYSLOG5424BASE} +%{GREEDYDATA:syslog5424_msg}
+
+This could be summarized as:
+
+	<PRI> VER TIMESTAMP/- IPorHOST/- APP/- PROC/- MSGID/- SD/- MESSAGE
+
+where dash '-' is used as the "nil value" or `csNILVALUE` here.
+*)
+
+{attribute 'reflection'}
+FUNCTION_BLOCK FB_LogMessage
+VAR_INPUT	
+	i_sMsg	:	STRING; //Message to send
+	i_eSevr	:	E_MesgSevr; //Message severity
+	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
+END_VAR
+VAR
+	fbFormatString		:	FB_FormatString; //String formatter
+	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
+	{attribute 'instance-path'}
+	{attribute 'noinit'}
+	sPID				: 	T_MaxString; //PID -> changed to instance path
+	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
+	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
+	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
+	sMsgID				: 	T_MaxString := csNILVALUE; // Message ID
+END_VAR
+VAR CONSTANT
+	casSubsystems	:	ARRAY [0..5] OF STRING := ['-', 'VACUUM', 'MPS', 'MOTION', 'FIELDBUS', 'SDS']; //LCLS defined subsystems for global logging
+	cnFacility: WORD := 20; // local4
+END_VAR
+```
+
+### FB_LogMessage: ST
+
+```vhdl
+fbLoggerBuffer.putValue := '';
+fbLoggerBuffer.pBuffer := ADR(asLoggerMesgBuffer); //Global buffer address
+fbLoggerBuffer.cbBuffer := UINT_TO_UDINT(SIZEOF(asLoggerMesgBuffer));
+
+fbFormatString.sFormat := '<%s>%d %s %s %s %s %s - %s';
+
+sPRIVAL := LEFT( WORD_TO_STRING(cnFacility * 8 + i_eSevr), 5);
+sSubsystem := casSubsystems[i_eSubsystem];
+nSyslogVer := cnSyslogVer;
+sMsg := i_sMsg;
+
+//bad language ahead, sorry
+fbFormatString.arg1 := F_STRING(sPRIVAL); 			// <PRI>
+fbFormatString.arg2 := F_WORD(nSyslogVer);			// VER
+fbFormatString.arg3 := F_STRING(gsCurrentTime);		// TIMESTAMP
+fbFormatString.arg4 := F_STRING(gsHostName);		// IPorHOST/-
+fbFormatString.arg5 := F_STRING(sSubsystem);		// APP/-
+fbFormatString.arg6 := F_STRING(sPID);				// PROC/-
+fbFormatString.arg7 := F_STRING(sMsgID);			// MSGID/-
+fbFormatString.arg8 := F_STRING(sMsg);				// MESSAGE
+fbFormatString( sOut=>fbLoggerBuffer.putValue);
+fbLoggerBuffer.A_AddTail();
+```
+
+
+POUs/Logger/GVL_Logger.TcGVL (TcPlcObject)
+------------------------------------------
+
+### GVL_Logger: Declaration
+
+```vhdl
+{attribute 'qualified only'}
+//Global variables for logging to syslog
+VAR_GLOBAL CONSTANT
+	csNILVALUE	:	STRING(1) := '-'; //Syslog standard placeholder/ blank
+	{attribute 'analysis' := '-33'} //This is used just below in decl. of asLoggerMesgBuffer
+	cnLoggerMesgArraySize : INT := 50; //Size of the Logger buffer
+	// Syslog Version
+	cnSyslogVer: WORD := 1; //Logger written to work with Syslog V1
+END_VAR
+VAR_GLOBAL
+	asLoggerMesgBuffer	:	ARRAY [0..cnLoggerMesgArraySize] OF T_MaxString; //Logger message buffer, FB_LogMessage puts messages in here for FB_Logger to send out
+	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
+	gsHostName	:	T_MaxString := csNILVALUE; //Hostname used for log messages
+	{analysis -33}
+	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
+	{analysis +33}
+	fbLoggerBuffer 			:	FB_StringRingBuffer; //For working with the Logger message buffer
+	
+	//Note: FB_Logger is not declared here as it needs to be integrated into each project manually. See FB comment for more info.
+END_VAR
+```
+
+
+POUs/Logger/DUTs/E_MesgSevr.TcDUT (TcPlcObject)
+-----------------------------------------------
+
+### E_MesgSevr: Declaration
+
+```vhdl
+//Syslog message severities
+{attribute 'flags'}
+TYPE E_MesgSevr :
+(
+	Emergency := 0, //system is unusable
+	Alert	:= 1,	//action must be taken immediately
+	Critical:= 2,	//critical conditions
+	Error	:= 3,	//error conditions
+	Warning	:= 4,	//warning conditions
+	Notice	:= 5,	//normal but significant condition
+	Info	:= 6,	//informational messages
+	Debug	:= 7	//debug-level messages
+) WORD;
+END_TYPE
+```
+
+
+POUs/Logger/DUTs/E_MessengerState.TcDUT (TcPlcObject)
+-----------------------------------------------------
+
+### E_MessengerState: Declaration
+
+```vhdl
+//State of the FB_Logger
+TYPE E_MessengerState :
+(
+	Init := 0, //Messenger is not yet initialized
+	CreateSocket	:= 1, //Messenger is opening the connection to the syslog server
+	Active	:= 2, //Messenger is running, shipping messages to syslog
+	CloseSocket := 3, //Messenger is closing the connection to the syslog server
+	Err	:= 10 //Messenger has hit some error. Check diagnostics structure in the FB, this always goes back to Init.
+);
+END_TYPE
+```
+
+
+POUs/Logger/DUTs/E_Subsystem.TcDUT (TcPlcObject)
+------------------------------------------------
+
+### E_Subsystem: Declaration
+
+```vhdl
+//LCLS Defined subsystems, make sure these correspond with casSubsystems in FB_LogMessage
+TYPE E_Subsystem :
+(
+	NILVALUE := 0, //Undefined system
+	VACUUM := 1, //Vacuum control system
+	MPS := 2, //Machine protection system
+	MOTION := 3, //Motion control systems
+	FIELDBUS := 4, //EtherCAT networks
+	SDS := 5 //Sample delivery system
+)WORD;
+END_TYPE
+```
+
+
+POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU (TcPlcObject)
+------------------------------------------------------
+
+### SYSTEM_TIME_TO_RFC3339: Declaration
+
+```vhdl
+//Converts Beckhoff PLC SYSTEMTIME to RFC3339 time format as a string
+{attribute 'naming' := 'omit'}
+{attribute 'analysis' := '-23'}
+FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
+VAR_INPUT
+	{attribute 'naming' := 'omit'}
+	tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
+END_VAR
+VAR
+END_VAR
+```
+
+### SYSTEM_TIME_TO_RFC3339: ST
+
+```vhdl
+SYSTEM_TIME_TO_RFC3339 := CONCAT(REPLACE(SYSTEMTIME_TO_STRING(tCurrentTime), 'T', 1, 11), 'Z');
+```
+
+
+Symbols
+-------
+
+
+Boxes
+-----
+
+NC axes
+-------
+
+Links
+-----
+
+
+Pragma lint results
+-------------------
+```
+ERROR:pytmc.bin.pragmalint:Linter error: 
+POUs/Hardware/FB_ThermoCouple.TcPOU:line 17:     {attribute 'pytmc' := '
+    		pv: STC:CONN
+    		io: input
+    		field: ONAM Connected
+    		field: ZNAM Disconnected
+    	}
+INFO:pytmc.bin.pragmalint:Total pragmas found: 43 Total linter errors: 1
+PLC Project (1): LCLSGeneral
+============================
+
+
+Data types/Misc/ST_FbDiagnostics.TcDUT (TcPlcObject)
+----------------------------------------------------
+
+    - ST_FbDiagnostics: Declaration - 2 pragmas
+
+
+Data types/Misc/ST_System.TcDUT (TcPlcObject)
+---------------------------------------------
+
+    - ST_System: Declaration - 1 pragmas
+
+
+POUs/Data/FB_BasicStats.TcPOU (TcPlcObject)
+-------------------------------------------
+
+    - FB_BasicStats: Declaration - 11 pragmas
+
+
+POUs/Functions/FB_EcatDiag.TcPOU (TcPlcObject)
+----------------------------------------------
+
+    - FB_EcatDiag: Declaration - 3 pragmas
+
+
+POUs/Functions/FB_Index.TcPOU (TcPlcObject)
+-------------------------------------------
+
+    - FB_Index: Declaration - 2 pragmas
+
+
+POUs/Functions/FB_XKoyoPLCModbus.TcPOU (TcPlcObject)
+----------------------------------------------------
+
+    - FB_XKoyoPLCModbus: Declaration - 2 pragmas
+
+
+POUs/Hardware/FB_EL6_Com.TcPOU (TcPlcObject)
+--------------------------------------------
+
+    - FB_EL6_Com: Declaration - 7 pragmas
+
+
+POUs/Hardware/FB_ThermoCouple.TcPOU (TcPlcObject)
+-------------------------------------------------
+
+    - FB_ThermoCouple: Declaration - 3 pragmas
+
+
+POUs/Logger/FB_Logger.TcPOU (TcPlcObject)
+-----------------------------------------
+
+    - FB_Logger: Declaration - 3 pragmas
+
+
+POUs/Logger/FB_LogMessage.TcPOU (TcPlcObject)
+---------------------------------------------
+
+    - FB_LogMessage: Declaration - 3 pragmas
+
+
+POUs/Logger/GVL_Logger.TcGVL (TcPlcObject)
+------------------------------------------
+
+    - GVL_Logger: Declaration - 2 pragmas
+
+
+POUs/Logger/DUTs/E_MesgSevr.TcDUT (TcPlcObject)
+-----------------------------------------------
+
+    - E_MesgSevr: Declaration - 1 pragmas
+
+
+POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU (TcPlcObject)
+------------------------------------------------------
+
+    - SYSTEM_TIME_TO_RFC3339: Declaration - 3 pragmas
+
+```

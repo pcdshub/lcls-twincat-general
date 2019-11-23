@@ -1,0 +1,1749 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>PLC Project (1): LCLSGeneral &#8212; pcdshub/lcls-twincat-general  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to pcdshub/lcls-twincat-general’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="plc-project-1-lclsgeneral">
+<h1>PLC Project (1): LCLSGeneral<a class="headerlink" href="#plc-project-1-lclsgeneral" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Project</span> <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">.</span><span class="n">plcproj</span>
+<span class="n">TMC</span> <span class="n">path</span><span class="p">:</span>     <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">.</span><span class="n">tmc</span>
+<span class="n">AMS</span> <span class="n">ID</span><span class="p">:</span>       
+<span class="n">IP</span> <span class="n">Address</span><span class="p">:</span>    <span class="p">(</span><span class="o">*</span> <span class="n">based</span> <span class="n">on</span> <span class="n">AMS</span> <span class="n">ID</span><span class="p">)</span>
+<span class="n">Port</span><span class="p">:</span>         <span class="mi">851</span>
+
+<span class="n">Source</span> <span class="n">files</span><span class="p">:</span>
+    <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">Data</span> <span class="n">types</span><span class="o">/</span><span class="n">Misc</span><span class="o">/</span><span class="n">ST_EcDevice</span><span class="o">.</span><span class="n">TcDUT</span>
+    <span class="mf">2.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">Data</span> <span class="n">types</span><span class="o">/</span><span class="n">Misc</span><span class="o">/</span><span class="n">ST_FbDiagnostics</span><span class="o">.</span><span class="n">TcDUT</span>
+    <span class="mf">3.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">Data</span> <span class="n">types</span><span class="o">/</span><span class="n">Misc</span><span class="o">/</span><span class="n">ST_System</span><span class="o">.</span><span class="n">TcDUT</span>
+    <span class="mf">4.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">GVLs</span><span class="o">/</span><span class="n">DefaultGlobals</span><span class="o">.</span><span class="n">TcGVL</span>
+    <span class="mf">5.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span><span class="n">FB_BasicStats</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">6.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span><span class="n">FB_DataBuffer</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">7.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span><span class="n">FB_LREALBuffer</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">8.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span><span class="n">FB_TimeStampBuffer</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">9.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span><span class="n">FB_TimeStampBufferGlobal</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">10.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_EcatDiag</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">11.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_Index</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">12.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_UnixTimeStamp</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">13.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_UnixTimeStampGlobal</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">14.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_XKoyoPLCModbus</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">15.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_AnalogOutput</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">16.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_AnalogInput</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">17.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_CoE_FastRead</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">18.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_EL6_Com</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">19.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_ThermoCouple</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">20.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">FB_Logger</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">21.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">FB_LogMessage</span><span class="o">.</span><span class="n">TcPOU</span>
+    <span class="mf">22.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">GVL_Logger</span><span class="o">.</span><span class="n">TcGVL</span>
+    <span class="mf">23.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">DUTs</span><span class="o">/</span><span class="n">E_MesgSevr</span><span class="o">.</span><span class="n">TcDUT</span>
+    <span class="mf">24.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">DUTs</span><span class="o">/</span><span class="n">E_MessengerState</span><span class="o">.</span><span class="n">TcDUT</span>
+    <span class="mf">25.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">DUTs</span><span class="o">/</span><span class="n">E_Subsystem</span><span class="o">.</span><span class="n">TcDUT</span>
+    <span class="mf">26.</span><span class="p">)</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">pcdshub</span><span class="o">/</span><span class="n">lcls</span><span class="o">-</span><span class="n">twincat</span><span class="o">-</span><span class="n">general</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">LCLSGeneral</span><span class="o">/</span><span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">SYSTEM_TIME_TO_RFC3339</span><span class="o">.</span><span class="n">TcPOU</span>
+
+<span class="n">GVLs</span><span class="p">:</span>
+    <span class="mf">1.</span><span class="p">)</span> <span class="n">DefaultGlobals</span>
+    <span class="mf">2.</span><span class="p">)</span> <span class="n">GVL_Logger</span>
+</pre></div>
+</div>
+<div class="section" id="data-types-misc-st-ecdevice-tcdut-tcplcobject">
+<h2>Data types/Misc/ST_EcDevice.TcDUT (TcPlcObject)<a class="headerlink" href="#data-types-misc-st-ecdevice-tcdut-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="st-ecdevice-declaration">
+<h3>ST_EcDevice: Declaration<a class="headerlink" href="#st-ecdevice-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">EtherCAT</span> <span class="n">Device</span> <span class="n">struct</span> <span class="k">for</span> <span class="n">EtherCAT</span> <span class="n">diagnostics</span>
+<span class="k">TYPE</span> <span class="n">ST_EcDevice</span> <span class="o">:</span>
+<span class="n">STRUCT</span>
+	<span class="n">nDeviceState</span><span class="o">:</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">state</span> <span class="n">machine</span> <span class="n">state</span> <span class="n">number</span><span class="p">,</span> <span class="mi">8</span> <span class="k">is</span> <span class="n">OP</span> <span class="k">is</span> <span class="n">good</span>
+	<span class="n">sDeviceState</span> <span class="o">:</span><span class="kt">STRING</span><span class="p">;</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">state</span> <span class="n">machine</span> <span class="n">state</span><span class="p">,</span> <span class="n">OP</span> <span class="k">is</span> <span class="n">good</span>
+	<span class="n">nLinkState</span><span class="o">:</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">link</span> <span class="n">state</span><span class="p">,</span> <span class="mi">8</span> <span class="k">is</span> <span class="n">good</span>
+	<span class="n">nAddrr</span><span class="o">:</span> <span class="n">WORD</span><span class="p">;</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">slave</span> <span class="n">address</span>
+	<span class="n">sType</span><span class="o">:</span> <span class="kt">STRING</span><span class="p">;</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">slave</span> <span class="k">type</span>
+	<span class="n">sName</span><span class="o">:</span><span class="kt">STRING</span><span class="p">;</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">slave</span> <span class="n">name</span>
+<span class="n">END_STRUCT</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="data-types-misc-st-fbdiagnostics-tcdut-tcplcobject">
+<h2>Data types/Misc/ST_FbDiagnostics.TcDUT (TcPlcObject)<a class="headerlink" href="#data-types-misc-st-fbdiagnostics-tcdut-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="st-fbdiagnostics-declaration">
+<h3>ST_FbDiagnostics: Declaration<a class="headerlink" href="#st-fbdiagnostics-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>//Stuff to log messages within function blocks
+TYPE ST_FbDiagnostics :
+STRUCT
+	asResults	:	ARRAY [1..20] OF T_MaxString; //Diagnostic messages, use to record state changes or other important events.
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	//Incrementer, included here to facilitate using asResults
+	resultIdx	:	FB_Index := ( 
+		LowerLimit := 1,
+		UpperLimit := 20
+	);
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	fString	:	FB_FormatString; //Use to create good log messages, similar to C++ fstring
+END_STRUCT
+END_TYPE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="data-types-misc-st-system-tcdut-tcplcobject">
+<h2>Data types/Misc/ST_System.TcDUT (TcPlcObject)<a class="headerlink" href="#data-types-misc-st-system-tcdut-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="st-system-declaration">
+<h3>ST_System: Declaration<a class="headerlink" href="#st-system-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>//Defacto system structure, must be included in all projects
+TYPE ST_System :
+STRUCT
+	
+	xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+	xAtVacuum 	    : BOOL;(* System At Vacuum *)
+	xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
+	xOverrideMode	: BOOL; //This bit is set when using the override features of the system
+	xIOState        : BOOL; (* ECat Bus Health *)
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
+
+END_STRUCT
+END_TYPE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="gvls-defaultglobals-tcgvl-tcplcobject">
+<h2>GVLs/DefaultGlobals.TcGVL (TcPlcObject)<a class="headerlink" href="#gvls-defaultglobals-tcgvl-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defaultglobals-declaration">
+<h3>DefaultGlobals: Declaration<a class="headerlink" href="#defaultglobals-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">These</span> <span class="n">are</span> <span class="n">variables</span> <span class="n">every</span> <span class="n">PLC</span> <span class="n">project</span> <span class="n">should</span> <span class="n">have</span>
+<span class="n">VAR_GLOBAL</span>
+	
+	<span class="n">stSys</span>	<span class="o">:</span>	<span class="n">ST_System</span><span class="p">;</span> <span class="o">//</span><span class="n">Included</span> <span class="k">for</span> <span class="n">you</span>
+	<span class="n">fTimeStamp</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-data-fb-basicstats-tcpou-tcplcobject">
+<h2>POUs/Data/FB_BasicStats.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-data-fb-basicstats-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-basicstats-declaration">
+<h3>FB_BasicStats: Declaration<a class="headerlink" href="#fb-basicstats-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_BasicStats
+(*
+	Minimalist Array Stats for LREALs
+	2019-10-10 Zachary Lentz
+	
+	Calculates the most basic stats for an array and provides pytmc control points.
+	This is an alternative to the TC3 Condition Monitoring library which requires an
+	additional license and had a more complicated interface.
+*)
+VAR_IN_OUT
+	// Input array of floats
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:DATA
+		io: i
+	&#39;}
+	aSignal: ARRAY[*] OF LREAL;
+END_VAR
+VAR_INPUT
+	// If TRUE, we will update the results every cycle
+	{attribute &#39;pytmc&#39; := &#39;pv: STATS:ALWAYS_CALC&#39;}
+	bAlwaysCalc: BOOL;
+	// On rising edge, do one calculation
+	{attribute &#39;pytmc&#39; := &#39;pv: STATS:EXECUTE&#39;}
+	bExecute: BOOL;
+	// If set to TRUE, reset outputs
+	{attribute &#39;pytmc&#39; := &#39;pv: STATS:RESET&#39;}
+	bReset: BOOL;
+	// If nonzero, we will only pay attention to the first nElems items in aSignal
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:NELM
+		io: i
+	&#39;}
+	nElems: UDINT;
+END_VAR
+VAR_OUTPUT
+	// Average of all values in the array
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:MEAN
+		io: i
+	&#39;}
+	fMean: LREAL;
+	// Standard deviation of all values in the array
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:STDEV
+		io: i
+	&#39;}
+	fStDev: LREAL;
+	// Largest value in the array
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:MAX
+		io: i
+	&#39;}
+	fMax: LREAL;
+	// Smallest value in the array
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:MIN
+		io: i
+	&#39;}
+	fMin: LREAL;
+	// Largest array element subtracted by the smallest
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:RANGE
+		io: i
+	&#39;}
+	fRange: LREAL;
+	// True if the other outputs are valid
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STATS:VALID
+		io: i
+	&#39;}
+	bValid: BOOL;
+END_VAR
+VAR
+	rTrig: R_TRIG;
+	nIndex: DINT;
+	nElemsSeen: UDINT;
+	fSum: LREAL;
+	fVarianceSum: LREAL;
+	fVarianceMean: LREAL;
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-basicstats-st">
+<h3>FB_BasicStats: ST<a class="headerlink" href="#fb-basicstats-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">rTrig</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bExecute</span><span class="p">);</span>
+<span class="k">IF</span> <span class="n">bReset</span> <span class="k">THEN</span>
+	<span class="n">fMean</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">fStDev</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">fMax</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">fMin</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">fRange</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">bValid</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+	<span class="n">bReset</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="k">ELSIF</span> <span class="k">NOT</span> <span class="p">(</span><span class="n">bExecute</span> <span class="k">OR</span> <span class="n">bAlwaysCalc</span><span class="p">)</span> <span class="k">THEN</span>
+	<span class="n">bValid</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="k">ELSIF</span> <span class="n">bAlwaysCalc</span> <span class="k">OR</span> <span class="n">rTrig</span><span class="p">.</span><span class="n">Q</span> <span class="k">THEN</span>
+	<span class="o">//</span> <span class="n">First</span> <span class="n">pass</span> <span class="n">through</span> <span class="n">aSignal</span><span class="o">:</span> <span class="n">get</span> <span class="n">sum</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">max</span><span class="p">,</span> <span class="n">min</span>
+	<span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">fSum</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">fMax</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)];</span>
+	<span class="n">fMin</span> <span class="o">:=</span> <span class="n">fMax</span><span class="p">;</span>
+	<span class="k">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">TO</span> <span class="n">UPPER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">DO</span>
+		<span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="n">nElemsSeen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="n">fSum</span> <span class="o">:=</span> <span class="n">fSum</span> <span class="o">+</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+		<span class="k">IF</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">fMax</span> <span class="k">THEN</span>
+			<span class="n">fMax</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+		<span class="k">ELSIF</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fMin</span> <span class="k">tHEN</span>
+			<span class="n">fMin</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+		<span class="n">END_IF</span>
+		<span class="k">IF</span> <span class="n">nElems</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">AND</span> <span class="n">nElemsSeen</span> <span class="o">&gt;=</span> <span class="n">nElems</span> <span class="k">THEN</span>
+			<span class="k">EXIT</span><span class="p">;</span>
+		<span class="n">END_IF</span>
+	<span class="n">END_FOR</span>
+	<span class="k">IF</span> <span class="n">nElemsSeen</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">THEN</span>
+		<span class="n">fMean</span> <span class="o">:=</span> <span class="n">fSum</span> <span class="o">/</span> <span class="n">nElemsSeen</span><span class="p">;</span>
+		<span class="n">fRange</span> <span class="o">:=</span> <span class="n">fMax</span> <span class="o">-</span> <span class="n">fMin</span><span class="p">;</span>
+
+		<span class="o">//</span> <span class="n">Second</span> <span class="n">pass</span> <span class="n">through</span> <span class="n">aSignal</span><span class="o">:</span> <span class="n">get</span> <span class="n">the</span> <span class="n">sum</span> <span class="k">of</span> <span class="n">the</span> <span class="n">variances</span> <span class="k">and</span> <span class="k">then</span> <span class="n">the</span> <span class="n">stdev</span>
+		<span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="n">fVarianceSum</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="k">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">TO</span> <span class="n">UPPER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">DO</span>
+			<span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="n">nElemsSeen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+			<span class="n">fVarianceSum</span> <span class="o">:=</span> <span class="n">fVarianceSum</span> <span class="o">+</span> <span class="p">(</span><span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">-</span> <span class="n">fMean</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">-</span> <span class="n">fMean</span><span class="p">);</span>
+			<span class="k">IF</span> <span class="n">nElems</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">AND</span> <span class="n">nElemsSeen</span> <span class="o">&gt;=</span> <span class="n">nElems</span> <span class="k">THEN</span>
+				<span class="k">EXIT</span><span class="p">;</span>
+			<span class="n">END_IF</span>
+		<span class="n">END_FOR</span>
+		<span class="k">IF</span> <span class="n">nElemsSeen</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">THEN</span>
+			<span class="n">fVarianceMean</span> <span class="o">:=</span> <span class="n">fVarianceSum</span> <span class="o">/</span> <span class="p">(</span><span class="n">nElemsSeen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+			<span class="n">fStDev</span> <span class="o">:=</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">fVarianceMean</span><span class="p">);</span>
+			<span class="n">bValid</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+		<span class="n">END_IF</span>
+	<span class="n">END_IF</span>
+<span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-data-fb-databuffer-tcpou-tcplcobject">
+<h2>POUs/Data/FB_DataBuffer.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-data-fb-databuffer-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-databuffer-declaration">
+<h3>FB_DataBuffer: Declaration<a class="headerlink" href="#fb-databuffer-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_DataBuffer</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="k">Function</span> <span class="k">Block</span> <span class="k">to</span> <span class="n">accumulate</span> <span class="n">data</span> <span class="n">into</span> <span class="n">an</span> <span class="k">array</span><span class="p">.</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+	
+	<span class="n">Requires</span> <span class="n">the</span> <span class="n">user</span> <span class="k">to</span> <span class="n">supply</span> <span class="n">pointers</span> <span class="k">to</span> <span class="n">the</span> <span class="n">value</span> <span class="k">and</span> <span class="k">to</span> <span class="mi">2</span> <span class="n">arrays</span><span class="o">:</span>
+	<span class="mi">1</span><span class="p">.</span> <span class="n">A</span> <span class="n">partial</span> <span class="k">buffer</span> <span class="n">that</span> <span class="n">we</span> <span class="n">will</span> <span class="n">slowly</span> <span class="n">fill</span> <span class="n">one</span> <span class="n">value</span> <span class="n">at</span> <span class="n">a</span> <span class="kt">time</span>
+	<span class="mi">2</span><span class="p">.</span> <span class="n">An</span> <span class="n">output</span> <span class="k">buffer</span> <span class="n">that</span> <span class="n">will</span> <span class="n">only</span> <span class="n">update</span> <span class="k">when</span> <span class="n">the</span> <span class="n">partial</span> <span class="k">buffer</span> <span class="k">is</span> <span class="n">full</span>
+	
+	<span class="n">Take</span> <span class="n">great</span> <span class="n">care</span> <span class="k">of</span> <span class="n">the</span> <span class="n">following</span><span class="p">,</span> <span class="k">or</span> <span class="k">else</span> <span class="n">your</span> <span class="n">program</span> <span class="n">will</span> <span class="n">likely</span> <span class="n">crash</span><span class="p">,</span>
+	<span class="k">or</span> <span class="n">at</span> <span class="n">least</span> <span class="n">have</span> <span class="n">corrupt</span> <span class="n">data</span><span class="o">:</span>
+	<span class="mi">1</span><span class="p">.</span> <span class="n">The</span> <span class="n">input</span> <span class="k">type</span> <span class="k">and</span> <span class="k">array</span> <span class="n">types</span> <span class="n">must</span> <span class="n">match</span>
+	<span class="mi">2</span><span class="p">.</span> <span class="n">The</span> <span class="n">provided</span> <span class="n">element</span> <span class="n">count</span> <span class="n">must</span> <span class="n">be</span> <span class="n">accurate</span> <span class="k">and</span> <span class="n">match</span> <span class="n">both</span> <span class="n">arrays</span>
+	<span class="mi">3</span><span class="p">.</span> <span class="n">The</span> <span class="n">provided</span> <span class="n">element</span> <span class="n">size</span> <span class="k">is</span> <span class="n">correct</span>
+	
+	<span class="n">As</span> <span class="n">this</span> <span class="k">function</span> <span class="k">block</span> <span class="n">as</span> <span class="n">no</span> <span class="n">way</span> <span class="k">of</span> <span class="n">checking</span> <span class="n">that</span> <span class="n">you</span> <span class="n">did</span> <span class="n">this</span> <span class="n">correctly</span><span class="p">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="n">Whether</span> <span class="k">or</span> <span class="k">not</span> <span class="k">to</span> <span class="n">accumulate</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Address</span> <span class="k">of</span> <span class="n">the</span> <span class="n">value</span> <span class="k">to</span> <span class="n">accumulate</span>
+	<span class="n">pInputAdr</span><span class="o">:</span> <span class="n">PVOID</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Size</span> <span class="k">of</span> <span class="n">the</span> <span class="n">accumulated</span> <span class="n">value</span>
+	<span class="n">iInputSize</span><span class="o">:</span> <span class="n">UDINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Number</span> <span class="k">of</span> <span class="n">values</span> <span class="k">in</span> <span class="n">the</span> <span class="n">output</span> <span class="k">array</span>
+	<span class="n">iElemCount</span><span class="o">:</span> <span class="n">UDINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Address</span> <span class="k">of</span> <span class="n">the</span> <span class="n">rolling</span> <span class="k">buffer</span> <span class="k">to</span> <span class="n">be</span> <span class="n">filled</span> <span class="n">every</span> <span class="n">cycle</span>
+	<span class="n">pPartialAdr</span><span class="o">:</span> <span class="n">PVOID</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Address</span> <span class="k">of</span> <span class="n">the</span> <span class="n">output</span> <span class="k">buffer</span> <span class="k">to</span> <span class="n">be</span> <span class="n">filled</span> <span class="k">when</span> <span class="n">the</span> <span class="n">rolling</span> <span class="k">buffer</span> <span class="k">is</span> <span class="n">full</span>
+	<span class="n">pOutputAdr</span><span class="o">:</span> <span class="n">PVOID</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="o">//</span> <span class="n">Set</span> <span class="k">to</span> <span class="n">TRUE</span> <span class="k">on</span> <span class="n">the</span> <span class="n">cycle</span> <span class="n">that</span> <span class="n">we</span> <span class="n">copy</span> <span class="n">the</span> <span class="n">output</span> <span class="k">array</span>
+	<span class="n">bNewArray</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">iArrayIndex</span><span class="o">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-databuffer-st">
+<h3>FB_DataBuffer: ST<a class="headerlink" href="#fb-databuffer-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">bNewArray</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="k">IF</span> <span class="n">bExecute</span> <span class="k">THEN</span>
+	<span class="n">MEMCPY</span><span class="p">(</span>
+		<span class="n">destAddr</span> <span class="o">:=</span> <span class="n">pPartialAdr</span> <span class="o">+</span> <span class="n">iArrayIndex</span><span class="o">*</span><span class="n">iInputSize</span><span class="p">,</span>
+		<span class="n">srcAddr</span> <span class="o">:=</span> <span class="n">pInputAdr</span><span class="p">,</span>
+		<span class="n">n</span> <span class="o">:=</span> <span class="n">iInputSize</span><span class="p">);</span>
+	<span class="n">iArrayIndex</span> <span class="o">:=</span> <span class="n">iArrayIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">IF</span> <span class="n">iArrayIndex</span> <span class="o">&gt;=</span> <span class="n">iElemCount</span> <span class="k">THEN</span>
+		<span class="n">MEMCPY</span><span class="p">(</span>
+			<span class="n">destAddr</span> <span class="o">:=</span> <span class="n">pOutputAdr</span><span class="p">,</span>
+			<span class="n">srcAddr</span> <span class="o">:=</span> <span class="n">pPartialAdr</span><span class="p">,</span>
+			<span class="n">n</span> <span class="o">:=</span> <span class="n">iElemCount</span><span class="o">*</span><span class="n">iInputSize</span><span class="p">);</span>
+		<span class="n">iArrayIndex</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="n">bNewArray</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+	<span class="n">END_IF</span>
+<span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-data-fb-lrealbuffer-tcpou-tcplcobject">
+<h2>POUs/Data/FB_LREALBuffer.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-data-fb-lrealbuffer-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-lrealbuffer-declaration">
+<h3>FB_LREALBuffer: Declaration<a class="headerlink" href="#fb-lrealbuffer-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LREALBuffer</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">An</span> <span class="n">example</span> <span class="k">use</span> <span class="nn">of</span> <span class="n">FB_DataBuffer</span> <span class="k">for</span> <span class="n">the</span> <span class="n">likely</span> <span class="n">most</span><span class="o">-</span><span class="n">common</span> <span class="k">use</span> <span class="nn">case.</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="k">If</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">we</span><span class="na">&#39;ll</span> <span class="n">accumulate</span> <span class="n">a</span> <span class="n">value</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">value</span> <span class="k">to</span> <span class="n">accumulate</span><span class="p">.</span>
+	<span class="n">fInput</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="n">arrOutput</span><span class="o">:</span> <span class="k">ARRAY</span> <span class="p">[</span><span class="mi">1</span><span class="p">..</span><span class="mi">1000</span><span class="p">]</span> <span class="k">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="n">bNewArray</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">arrPartial</span><span class="o">:</span> <span class="k">ARRAY</span> <span class="p">[</span><span class="mi">1</span><span class="p">..</span><span class="mi">1000</span><span class="p">]</span> <span class="k">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="n">fbDataBuffer</span><span class="o">:</span> <span class="n">FB_DataBuffer</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-lrealbuffer-st">
+<h3>FB_LREALBuffer: ST<a class="headerlink" href="#fb-lrealbuffer-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbDataBuffer</span><span class="p">(</span>
+	<span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bExecute</span><span class="p">,</span>
+	<span class="n">pInputAdr</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fInput</span><span class="p">),</span>
+	<span class="n">iInputSize</span> <span class="o">:=</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">fInput</span><span class="p">),</span>
+	<span class="n">iElemCount</span> <span class="o">:=</span> <span class="mi">1000</span><span class="p">,</span>
+	<span class="n">pPartialAdr</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">arrPartial</span><span class="p">),</span>
+	<span class="n">pOutputAdr</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">arrOutput</span><span class="p">),</span>
+	<span class="n">bNewArray</span> <span class="o">=&gt;</span> <span class="n">bNewArray</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-data-fb-timestampbuffer-tcpou-tcplcobject">
+<h2>POUs/Data/FB_TimeStampBuffer.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-data-fb-timestampbuffer-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-timestampbuffer-declaration">
+<h3>FB_TimeStampBuffer: Declaration<a class="headerlink" href="#fb-timestampbuffer-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_TimeStampBuffer</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">A</span> <span class="n">Companion</span> <span class="k">to</span> <span class="n">FB_LREALBuffer</span> <span class="n">that</span> <span class="n">accumulates</span> <span class="n">timestamps</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="k">If</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">we</span><span class="na">&#39;ll</span> <span class="n">accumulate</span> <span class="n">a</span> <span class="n">value</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="n">arrOutput</span><span class="o">:</span> <span class="k">ARRAY</span> <span class="p">[</span><span class="mi">1</span><span class="p">..</span><span class="mi">1000</span><span class="p">]</span> <span class="k">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="n">bNewArray</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">fbUnixTime</span><span class="o">:</span> <span class="n">FB_UnixTimestamp</span><span class="p">;</span>
+	<span class="n">fbLREALBuffer</span><span class="o">:</span> <span class="n">FB_LREALBuffer</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-timestampbuffer-st">
+<h3>FB_TimeStampBuffer: ST<a class="headerlink" href="#fb-timestampbuffer-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbUnixTime</span><span class="p">(</span>
+	<span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bExecute</span><span class="p">,</span>
+	<span class="n">fTime</span> <span class="o">=&gt;</span> <span class="n">fbLREALBuffer</span><span class="p">.</span><span class="n">fInput</span><span class="p">);</span>
+<span class="n">fbLREALBuffer</span><span class="p">(</span>
+	<span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bExecute</span><span class="p">,</span>
+	<span class="n">arrOutput</span> <span class="o">=&gt;</span> <span class="n">arrOutput</span><span class="p">,</span>
+	<span class="n">bNewArray</span> <span class="o">=&gt;</span> <span class="n">bNewArray</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-data-fb-timestampbufferglobal-tcpou-tcplcobject">
+<h2>POUs/Data/FB_TimeStampBufferGlobal.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-data-fb-timestampbufferglobal-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-timestampbufferglobal-declaration">
+<h3>FB_TimeStampBufferGlobal: Declaration<a class="headerlink" href="#fb-timestampbufferglobal-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_TimeStampBufferGlobal</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">A</span> <span class="n">Variant</span> <span class="k">of</span> <span class="n">FB_TimeStampBuffer</span> <span class="n">that</span> <span class="n">uses</span> <span class="n">the</span> <span class="n">global</span> <span class="n">timestamp</span><span class="p">.</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+
+	<span class="n">Assumes</span> <span class="n">an</span> <span class="n">instance</span> <span class="k">of</span> <span class="n">FB_UnixTimeStampGlobal</span> <span class="k">is</span> <span class="n">running</span> <span class="n">every</span> <span class="n">cycle</span><span class="p">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="k">If</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">we</span><span class="na">&#39;ll</span> <span class="n">accumulate</span> <span class="n">a</span> <span class="n">value</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="n">arrOutput</span><span class="o">:</span> <span class="k">ARRAY</span> <span class="p">[</span><span class="mi">1</span><span class="p">..</span><span class="mi">1000</span><span class="p">]</span> <span class="k">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="n">bNewArray</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">fbLREALBuffer</span><span class="o">:</span> <span class="n">FB_LREALBuffer</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-timestampbufferglobal-st">
+<h3>FB_TimeStampBufferGlobal: ST<a class="headerlink" href="#fb-timestampbufferglobal-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbLREALBuffer</span><span class="p">(</span>
+	<span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bExecute</span><span class="p">,</span>
+	<span class="n">fInput</span> <span class="o">:=</span> <span class="n">DefaultGlobals</span><span class="p">.</span><span class="n">fTimeStamp</span><span class="p">,</span>
+	<span class="n">arrOutput</span> <span class="o">=&gt;</span> <span class="n">arrOutput</span><span class="p">,</span>
+	<span class="n">bNewArray</span> <span class="o">=&gt;</span> <span class="n">bNewArray</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-functions-fb-ecatdiag-tcpou-tcplcobject">
+<h2>POUs/Functions/FB_EcatDiag.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-functions-fb-ecatdiag-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-ecatdiag-declaration">
+<h3>FB_EcatDiag: Declaration<a class="headerlink" href="#fb-ecatdiag-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>(* 
+Ecat bus diagnostic tool
+2015-11-4 Alex Wallace
+This function block checks the states of all slaves on the ecat bus network, 
+it could be modified to export the states of the slaves on an individual basis,
+but for now it sets the output boolean true if all slaves are OP and false otherwise.
+To start the block provide a falling edge on the first pass boolean input.
+
+2018-05-05 Margaret Ghaly
+Function block has been modified to retrieve the Device State of the Ethercat Master.
+It also exports the states and information of each individual configured Slave. 
+And saves them in the array q_aEcConfSlaveInfo.
+*)
+FUNCTION_BLOCK FB_EcatDiag
+VAR_INPUT
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
+	i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
+END_VAR
+VAR_OUTPUT
+	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
+	q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
+	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
+	q_nMasterState: WORD; // The Device State of the Master
+	q_sMasterState:STRING; //State of the ECAT master
+	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
+	q_nSlaves: UINT; // the Number of the connected Slaves
+END_VAR
+VAR
+	sNetId: T_AmsNetId; //NetId string
+	astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
+	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
+	fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates 
+	
+	fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
+	fbGetConfSlaves: FB_EcGetConfSlaves; //Acquires the ECAT slave configuration of the bus (how many, what kind, etc)
+	{attribute &#39;naming&#39; := &#39;omit&#39;} 
+	ftReset: F_TRIG; //Reset trigger sensor
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
+	nIterator: INT; //Generic iterator placeholder
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-ecatdiag-st">
+<h3>FB_EcatDiag: ST<a class="headerlink" href="#fb-ecatdiag-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Create</span> <span class="n">the</span> <span class="n">net</span> <span class="n">ID</span> <span class="kt">string</span>
+<span class="n">sNetId</span> <span class="o">:=</span> <span class="n">F_CreateAmsNetId</span><span class="p">(</span><span class="n">I_AMSNetId</span><span class="p">);</span>
+
+<span class="o">//</span><span class="n">Query</span> <span class="n">the</span> <span class="n">state</span> <span class="k">of</span> <span class="k">all</span> <span class="n">terminals</span><span class="p">,</span> <span class="n">collect</span> <span class="k">in</span> <span class="n">astTermStates</span>
+<span class="n">ftReset</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">fbGetAllSlaveStates</span><span class="p">.</span><span class="n">bBusy</span> <span class="k">OR</span> <span class="n">i_xFirstPass</span><span class="p">);</span>
+<span class="n">fbGetAllSlaveStates</span><span class="p">.</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">ftReset</span><span class="p">.</span><span class="n">Q</span><span class="p">;</span>
+<span class="n">fbGetAllSlaveStates</span><span class="p">(</span><span class="n">sNetId</span><span class="o">:=</span><span class="n">sNetId</span><span class="p">,</span> <span class="n">pStateBuf</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">astTermStates</span><span class="p">),</span> <span class="n">cbBufLen</span><span class="o">:=</span><span class="n">SIZEOF</span><span class="p">(</span><span class="n">astTermStates</span><span class="p">));</span>
+<span class="o">//</span><span class="n">Keep</span> <span class="n">checking</span><span class="p">...</span>
+
+
+
+<span class="o">//</span><span class="n">Cycle</span> <span class="n">through</span> <span class="n">each</span> <span class="n">entry</span> <span class="k">in</span> <span class="n">the</span> <span class="k">array</span> <span class="k">and</span> <span class="n">check</span> <span class="k">if</span> <span class="n">we</span> <span class="n">have</span> <span class="n">anyone</span> <span class="k">not</span> <span class="k">in</span> <span class="n">OP</span> <span class="k">and</span> <span class="n">that</span> <span class="n">the</span> <span class="n">link</span> <span class="n">state</span> <span class="k">is</span> <span class="n">good</span><span class="p">.</span>
+<span class="o">//</span> <span class="k">If</span> <span class="n">so</span><span class="p">,</span> <span class="k">then</span> <span class="n">set</span> <span class="n">our</span> <span class="n">global</span> <span class="n">IO</span> <span class="n">bad</span> <span class="kt">boolean</span><span class="p">.</span>
+<span class="k">IF</span> <span class="n">fbGetAllSlaveStates</span><span class="p">.</span><span class="n">nSlaves</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">THEN</span>
+	<span class="n">q_xAllSlaveStatesGood</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="k">FOR</span> <span class="n">nIterator</span> <span class="o">:=</span> <span class="mi">1</span> <span class="k">TO</span> <span class="p">(</span><span class="n">UINT_TO_INT</span><span class="p">(</span><span class="n">fbGetAllSlaveStates</span><span class="p">.</span><span class="n">nSlaves</span><span class="p">)</span> <span class="p">)</span> <span class="n">BY</span> <span class="mi">1</span>
+	<span class="n">DO</span>
+	<span class="k">IF</span> <span class="k">NOT</span><span class="p">(</span> <span class="p">(</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">deviceState</span> <span class="o">=</span> <span class="n">EC_DEVICE_STATE_OP</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">linkState</span> <span class="o">=</span> <span class="n">EC_LINK_STATE_OK</span><span class="p">))</span> <span class="k">THEN</span>
+		<span class="n">q_xAllSlaveStatesGood</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+	<span class="n">END_IF</span>
+	<span class="n">q_anTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span> <span class="o">:=</span> <span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">deviceState</span><span class="p">;</span>
+	<span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">nDeviceState</span> <span class="o">:=</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">deviceState</span><span class="p">;</span><span class="o">//</span>
+	<span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">nLinkState</span> <span class="o">:=</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">linkState</span><span class="p">;</span><span class="o">//</span>
+	<span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">sDeviceState</span><span class="o">:=</span> <span class="n">F_ConvSlaveStateToString</span><span class="p">(</span><span class="n">state</span><span class="o">:=</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]);</span><span class="o">//</span>
+	
+<span class="n">END_FOR</span>
+<span class="n">END_IF</span>
+
+<span class="o">//</span> <span class="n">Read</span> <span class="n">the</span> <span class="n">EtherCAT</span> <span class="n">state</span> <span class="k">of</span> <span class="n">the</span> <span class="n">master</span><span class="p">.</span> <span class="k">If</span> <span class="n">the</span> <span class="n">call</span> <span class="k">is</span> <span class="n">successful</span><span class="p">,</span> 
+<span class="o">//</span><span class="n">the</span> <span class="n">State</span> <span class="n">output</span> <span class="k">variable</span> <span class="k">of</span> <span class="k">type</span> <span class="n">WORD</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">requested</span> <span class="n">status</span> <span class="n">information</span><span class="p">.</span>
+<span class="n">ftMasterReset</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">fbGetMasterState</span><span class="p">.</span><span class="n">bBusy</span> <span class="k">OR</span> <span class="n">i_xFirstPass</span><span class="p">);</span>
+<span class="n">fbGetMasterState</span><span class="p">(</span><span class="n">sNetId</span><span class="o">:=</span> <span class="n">sNetId</span><span class="p">,</span> <span class="n">bExecute</span><span class="o">:=</span><span class="n">ftMasterReset</span><span class="p">.</span><span class="n">Q</span><span class="p">,</span> 
+				<span class="n">state</span> <span class="o">=&gt;</span> <span class="n">q_nMasterState</span><span class="p">,</span><span class="n">bError</span><span class="o">=&gt;</span><span class="p">,</span>
+				<span class="n">nErrId</span><span class="o">=&gt;</span><span class="p">);</span>
+<span class="n">q_xMasterStateGood</span><span class="o">:=</span> <span class="p">(</span><span class="n">fbGetMasterState</span><span class="p">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">BYTE_TO_UINT</span><span class="p">(</span><span class="n">EC_DEVICE_STATE_OP</span><span class="p">));</span>
+<span class="n">q_sMasterState</span> <span class="o">:=</span> <span class="n">F_ConvMasterDevStateToString</span><span class="p">(</span><span class="n">fbGetMasterState</span><span class="p">.</span><span class="n">state</span><span class="p">);</span>
+
+<span class="o">//</span><span class="n">This</span> <span class="k">function</span> <span class="k">is</span> <span class="n">used</span> <span class="k">to</span> <span class="n">read</span> <span class="n">a</span> <span class="n">list</span> <span class="k">of</span> <span class="k">all</span> <span class="n">configured</span> <span class="n">slaves</span> <span class="n">from</span> <span class="n">the</span> <span class="n">EtherCat</span> <span class="n">master</span> <span class="n">object</span> <span class="n">Directory</span>
+<span class="o">//</span><span class="n">needs</span> <span class="k">to</span> <span class="n">run</span> <span class="n">only</span> <span class="n">once</span>
+<span class="n">fbGetConfSlaves</span><span class="p">(</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">i_xFirstPass</span><span class="p">,</span> <span class="n">sNetId</span> <span class="o">:=</span><span class="n">sNetId</span><span class="p">,</span> <span class="n">pArrEcConfSlaveInfo</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">astEcConfSlaveInfo</span><span class="p">),</span><span class="n">cbBufLen</span> <span class="o">:=</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">astEcConfSlaveInfo</span><span class="p">));</span>
+<span class="n">q_nSlaves</span><span class="o">:=</span><span class="n">fbGetConfSlaves</span><span class="p">.</span><span class="n">nSlaves</span><span class="p">;</span>
+
+<span class="k">IF</span>  <span class="k">NOT</span> <span class="p">(</span><span class="n">fbGetConfSlaves</span><span class="p">.</span><span class="n">bBusy</span><span class="p">)</span> <span class="k">THEN</span>
+	<span class="k">FOR</span> <span class="n">nIterator</span> <span class="o">:=</span> <span class="mi">1</span> <span class="k">TO</span> <span class="p">(</span><span class="n">UINT_TO_INT</span><span class="p">(</span><span class="n">fbGetConfSlaves</span><span class="p">.</span><span class="n">nSlaves</span><span class="p">)</span> <span class="p">)</span> <span class="n">BY</span> <span class="mi">1</span>
+	<span class="n">DO</span>
+	<span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">nAddrr</span> <span class="o">:=</span><span class="n">astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">nAddr</span><span class="p">;</span>
+	<span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">sName</span> <span class="o">:=</span><span class="n">astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">sName</span><span class="p">;</span>
+	<span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">sType</span> <span class="o">:=</span><span class="n">astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">].</span><span class="n">sType</span><span class="p">;</span>
+<span class="n">END_FOR</span>
+	<span class="n">fbGetConfSlaves</span><span class="p">.</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-functions-fb-index-tcpou-tcplcobject">
+<h2>POUs/Functions/FB_Index.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-functions-fb-index-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-index-declaration">
+<h3>FB_Index: Declaration<a class="headerlink" href="#fb-index-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>(* Index FB
+A. Wallace 2016-9-3
+
+Why doesn&#39;t beckhoff have this as a builtin type?
+
+Use this thing to have a simple indexer with rollover.
+
+*)
+FUNCTION_BLOCK FB_Index
+VAR_INPUT
+	{attribute &#39;naming&#39; := &#39;off&#39;}
+	LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
+	ValInc : INT := 1; //Incrementer increments by this value
+	UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
+	{attribute &#39;naming&#39; := &#39;off&#39;}
+END_VAR
+VAR_OUTPUT
+	
+END_VAR
+VAR
+	nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-st">
+<h3>FB_Index: ST<a class="headerlink" href="#fb-index-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>{analysis -2} //Only the methods and actions are needed
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-dec-st">
+<h3>FB_Index.Dec: ST<a class="headerlink" href="#fb-index-dec-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">nVal</span> <span class="o">:=</span> <span class="n">nVal</span> <span class="o">-</span> <span class="n">ValInc</span><span class="p">;</span>
+<span class="k">IF</span> <span class="n">nVal</span> <span class="o">&lt;</span> <span class="n">LowerLimit</span> <span class="k">THEN</span> <span class="n">nVal</span> <span class="o">:=</span> <span class="n">UpperLimit</span><span class="p">;</span> <span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-decval-declaration">
+<h3>FB_Index.DecVal: Declaration<a class="headerlink" href="#fb-index-decval-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Decrement</span> <span class="n">the</span> <span class="n">counter</span> <span class="k">and</span> <span class="k">return</span> <span class="k">new</span> <span class="n">value</span>
+<span class="n">METHOD</span> <span class="n">DecVal</span> <span class="o">:</span> <span class="n">INT</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-decval-st">
+<h3>FB_Index.DecVal: ST<a class="headerlink" href="#fb-index-decval-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">Dec</span><span class="p">();</span>
+<span class="n">DecVal</span> <span class="o">:=</span> <span class="n">nVal</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-inc-st">
+<h3>FB_Index.Inc: ST<a class="headerlink" href="#fb-index-inc-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Dont</span> <span class="k">use</span> <span class="nn">this</span><span class="p">,</span> <span class="k">use</span> <span class="nn">ValInc</span>
+<span class="n">nVal</span> <span class="o">:=</span> <span class="n">nVal</span> <span class="o">+</span> <span class="n">ValInc</span><span class="p">;</span>
+<span class="k">IF</span> <span class="n">nVal</span> <span class="o">&gt;</span>  <span class="n">UpperLimit</span> <span class="k">THEN</span> <span class="n">nVal</span> <span class="o">:=</span> <span class="n">LowerLimit</span><span class="p">;</span> <span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-incval-declaration">
+<h3>FB_Index.IncVal: Declaration<a class="headerlink" href="#fb-index-incval-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Increment</span> <span class="n">the</span> <span class="n">counter</span> <span class="k">and</span> <span class="k">return</span> <span class="k">new</span> <span class="n">value</span>
+<span class="n">METHOD</span> <span class="n">PUBLIC</span> <span class="n">IncVal</span> <span class="o">:</span> <span class="n">INT</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-index-incval-st">
+<h3>FB_Index.IncVal: ST<a class="headerlink" href="#fb-index-incval-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">Inc</span><span class="p">();</span>
+<span class="n">IncVal</span> <span class="o">:=</span> <span class="n">nVal</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-functions-fb-unixtimestamp-tcpou-tcplcobject">
+<h2>POUs/Functions/FB_UnixTimeStamp.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-functions-fb-unixtimestamp-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-unixtimestamp-declaration">
+<h3>FB_UnixTimeStamp: Declaration<a class="headerlink" href="#fb-unixtimestamp-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_UnixTimeStamp</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">Get</span> <span class="n">the</span> <span class="n">unix</span> <span class="n">timestamp</span> <span class="n">equivalent</span> <span class="k">of</span> <span class="n">the</span> <span class="n">PLC</span><span class="na">&#39;s</span> <span class="kt">time</span><span class="p">.</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+	
+	<span class="n">This</span> <span class="n">will</span> <span class="n">only</span> <span class="n">sync</span> <span class="k">with</span> <span class="n">the</span> <span class="n">Linux</span> <span class="n">host</span> <span class="k">when</span> <span class="n">both</span> <span class="n">hosts</span><span class="p">&#39;</span> <span class="n">clocks</span> <span class="n">are</span> <span class="n">correct</span><span class="p">.</span>
+	<span class="n">Largely</span> <span class="n">stolen</span> <span class="n">from</span> <span class="n">stack</span> <span class="n">overflow</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="k">If</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">we</span><span class="na">&#39;ll</span> <span class="n">try</span> <span class="k">to</span> <span class="n">update</span> <span class="n">the</span> <span class="n">output</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="o">//</span> <span class="n">Number</span> <span class="k">of</span> <span class="n">seconds</span> <span class="k">in</span> <span class="n">the</span> <span class="n">timestamp</span>
+	<span class="n">iSeconds</span><span class="o">:</span> <span class="n">ULINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Number</span> <span class="k">of</span> <span class="n">milliseconds</span> <span class="n">past</span> <span class="n">the</span> <span class="n">seconds</span>
+	<span class="n">iMilliseconds</span><span class="o">:</span> <span class="n">ULINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Full</span> <span class="n">raw</span> <span class="n">number</span>
+	<span class="n">iFull</span><span class="o">:</span> <span class="n">ULINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Full</span> <span class="n">floating</span> <span class="n">point</span> <span class="n">number</span> <span class="k">in</span> <span class="k">units</span> <span class="k">of</span> <span class="n">seconds</span>
+	<span class="n">fTime</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">TRUE</span> <span class="k">if</span> <span class="n">the</span> <span class="n">output</span> <span class="k">is</span> <span class="n">okay</span> <span class="k">to</span> <span class="k">use</span> <span class="nn">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span> <span class="n">Typically</span> <span class="n">the</span> <span class="n">output</span> <span class="k">is</span> <span class="n">zero</span> <span class="k">when</span> <span class="n">this</span> <span class="k">is</span> <span class="n">FALSE</span><span class="p">.</span>
+	<span class="n">bValid</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">bInit</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+	<span class="n">fbLocalTime</span><span class="o">:</span> <span class="n">FB_LocalSystemTime</span><span class="p">;</span>
+	<span class="n">fbGetTimeZone</span><span class="o">:</span> <span class="n">FB_GetTimeZoneInformation</span><span class="p">;</span>
+	<span class="n">fbTimeConv</span><span class="o">:</span> <span class="n">FB_TzSpecificLocalTimeToFileTime</span><span class="p">;</span>
+	<span class="n">fileTime</span><span class="o">:</span> <span class="n">T_FILETIME</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-unixtimestamp-st">
+<h3>FB_UnixTimeStamp: ST<a class="headerlink" href="#fb-unixtimestamp-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="k">IF</span> <span class="k">NOT</span> <span class="n">bInit</span> <span class="k">THEN</span>
+	<span class="n">bInit</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+	<span class="n">fbGetTimeZone</span><span class="p">(</span><span class="n">bExecute</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">,</span> <span class="n">tzInfo</span> <span class="o">=&gt;</span> <span class="n">fbTimeConv</span><span class="p">.</span><span class="n">tzInfo</span><span class="p">);</span>
+<span class="n">END_IF</span>
+<span class="k">IF</span> <span class="n">bExecute</span> <span class="k">THEN</span>
+	<span class="n">fbLocalTime</span><span class="p">(</span>
+		<span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span>
+		<span class="n">dwCycle</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+		<span class="n">bValid</span> <span class="o">=&gt;</span> <span class="n">bValid</span><span class="p">);</span>
+	<span class="k">IF</span> <span class="n">bValid</span> <span class="k">THEN</span>
+		<span class="n">fbTimeConv</span><span class="p">(</span>
+			<span class="k">in</span> <span class="o">:=</span> <span class="n">SYSTEMTIME_TO_FILETIME</span><span class="p">(</span><span class="n">fbLocalTime</span><span class="p">.</span><span class="n">systemTime</span><span class="p">),</span>
+			<span class="k">out</span> <span class="o">=&gt;</span> <span class="n">fileTime</span><span class="p">);</span>
+		<span class="n">iFull</span> <span class="o">:=</span> <span class="p">(</span><span class="n">SHL</span><span class="p">(</span><span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="p">.</span><span class="n">dwHighDateTime</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="p">.</span><span class="n">dwLowDateTime</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000</span> <span class="o">-</span> <span class="mi">11644473600000</span><span class="p">;</span>
+		<span class="n">fTime</span> <span class="o">:=</span> <span class="n">ULINT_TO_LREAL</span><span class="p">(</span><span class="n">iFull</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
+		<span class="n">iSeconds</span> <span class="o">:=</span> <span class="n">iFull</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
+		<span class="n">iMilliseconds</span> <span class="o">:=</span> <span class="n">iFull</span> <span class="k">MOD</span> <span class="mi">1000</span><span class="p">;</span>
+	<span class="n">END_IF</span>
+<span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-functions-fb-unixtimestampglobal-tcpou-tcplcobject">
+<h2>POUs/Functions/FB_UnixTimeStampGlobal.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-functions-fb-unixtimestampglobal-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-unixtimestampglobal-declaration">
+<h3>FB_UnixTimeStampGlobal: Declaration<a class="headerlink" href="#fb-unixtimestampglobal-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_UnixTimeStampGlobal</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">Runs</span> <span class="n">FB_UnixTimeStamp</span> <span class="k">and</span> <span class="n">stuffs</span> <span class="n">the</span> <span class="n">result</span> <span class="n">into</span> <span class="n">this</span> <span class="k">library</span><span class="na">&#39;s</span> <span class="n">GVL</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="k">If</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">we</span> <span class="n">will</span> <span class="n">update</span> <span class="n">the</span> <span class="n">output</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">fbTimeStamp</span><span class="o">:</span> <span class="n">FB_UnixTimeStamp</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-unixtimestampglobal-st">
+<h3>FB_UnixTimeStampGlobal: ST<a class="headerlink" href="#fb-unixtimestampglobal-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbTimeStamp</span><span class="p">(</span>
+	<span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bExecute</span><span class="p">,</span>
+	<span class="n">fTime</span> <span class="o">=&gt;</span> <span class="n">DefaultGlobals</span><span class="p">.</span><span class="n">fTimeStamp</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-functions-fb-xkoyoplcmodbus-tcpou-tcplcobject">
+<h2>POUs/Functions/FB_XKoyoPLCModbus.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-functions-fb-xkoyoplcmodbus-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-xkoyoplcmodbus-declaration">
+<h3>FB_XKoyoPLCModbus: Declaration<a class="headerlink" href="#fb-xkoyoplcmodbus-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>//Facilitates communication between Beckhoff and Koyo PLC over the network.
+FUNCTION_BLOCK FB_XKoyoPLCModbus
+VAR
+	fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils; //FB for reading the coils from the other PLC
+	anKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE; //Buffer for coil readbacks
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	ftReset	: F_TRIG; //Reset edge sensor
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	tonRetry : TON; //Retry timer
+	nIndex : INT; //Index for clearing the coil array
+END_VAR
+
+VAR_INPUT
+	i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
+	i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
+END_VAR
+
+VAR_OUTPUT
+	q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
+	q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
+	q_xError         : BOOL := FALSE; //Transaction or other error
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-xkoyoplcmodbus-st">
+<h3>FB_XKoyoPLCModbus: ST<a class="headerlink" href="#fb-xkoyoplcmodbus-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>(* Look ma&#39; no wires! *)
+(* A. Wallace, 2015-7-22 
+XKoyoPLCModbus
+
+Facilitates communication between Beckhoff and Koyo PLC over the network.
+
+Useful if you don&#39;t have time to run a wire. Fairly reliable.
+
+*)
+
+(* Modbus Info for Koyo
+Modbus Addresses for
+Koyo DL05/06/240/250/260/430/440/450 PLCs
+PLC Memory Type		| Modbus start address Decimal (octal) | Function codes
+Inputs (X)			  2048 (04000)							2
+Special Relays (SP)	  3072 (06000)							2
+Outputs (Y)			  2048 (04000)							1, 5, 15
+Control Relays (C)	  3072 (06000)							1, 5, 15
+Timer Contacts (T)	  6144 (014000)							1, 5, 15
+Counter Contacts (CT) 6400 (014400)							1, 5, 15
+Stage Status Bits (S) 6144 (012000)							1, 5, 15
+*)
+
+(* Begin code *)
+// Retry after some time
+tonRetry.IN := NOT fbKoyo_PLCInputCoilsRx.bBusy;
+tonRetry.PT := i_tRetryTime;
+tonRetry();
+
+ftReset(CLK:=fbKoyo_PLCInputCoilsRx.bBusy);
+ftReset();
+
+fbKoyo_PLCInputCoilsRx.bExecute := ftReset.Q OR tonRetry.Q;
+
+fbKoyo_PLCInputCoilsRx(sIPAddr:=&#39;i_sIPAddr&#39;, nTCPPort:=502, nQuantity:=32, nMBAddr:=8#6000, cbLength:=USINT_TO_UDINT(SIZEOF(anKoyo_PLC_CnBits)),  pDestAddr:=ADR(anKoyo_PLC_CnBits), tTimeout:=T#10S);
+
+//run some error code for modbus
+IF fbKoyo_PLCInputCoilsRx.bError THEN
+	//if there&#39;s a modbus error, set all incoming bits to zero
+	{analysis -41} //There are one-liners for resetting an array to zero but they don&#39;t comply with 61131
+	FOR nIndex := 0 TO USINT_TO_INT(SIZEOF(anKoyo_PLC_CnBits))-1 DO //starts at 0
+		anKoyo_PLC_CnBits[nIndex]:=0;
+	END_FOR
+	{analysis +41}
+	q_xError := TRUE;
+	
+ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead &gt; 0 THEN
+	fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
+	q_xNoPLCResponse:= FALSE;
+	q_xError := FALSE;
+
+//more error code cause we didn&#39;t manage to read anything	
+ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
+	q_xError := TRUE;
+	q_xNoPLCResponse:= TRUE;
+			
+END_IF
+
+q_anPLCResponse := anKoyo_PLC_CnBits;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-hardware-fb-analogoutput-tcpou-tcplcobject">
+<h2>POUs/Hardware/FB_AnalogOutput.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-hardware-fb-analogoutput-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-analogoutput-declaration">
+<h3>FB_AnalogOutput: Declaration<a class="headerlink" href="#fb-analogoutput-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_AnalogOutput</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">Converts</span> <span class="n">a</span> <span class="n">real</span> <span class="n">unit</span> <span class="n">value</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.,</span> <span class="n">volts</span><span class="p">)</span> <span class="k">to</span> <span class="n">the</span> <span class="kt">integer</span> <span class="n">needed</span> <span class="k">for</span> <span class="n">an</span> <span class="n">analog</span> <span class="n">output</span> <span class="n">terminal</span><span class="p">.</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">real</span> <span class="n">value</span> <span class="k">to</span> <span class="n">send</span> <span class="k">to</span> <span class="n">the</span> <span class="n">output</span>
+	<span class="n">fReal</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">maximum</span> <span class="n">allowed</span> <span class="n">real</span> <span class="n">value</span> <span class="k">for</span> <span class="n">the</span> <span class="n">connected</span> <span class="n">hardware</span>
+	<span class="n">fSafeMax</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">minimum</span> <span class="n">allowed</span> <span class="n">real</span> <span class="n">value</span> <span class="k">for</span> <span class="n">the</span> <span class="n">connected</span> <span class="n">hardware</span>
+	<span class="n">fSafeMin</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">number</span> <span class="k">of</span> <span class="n">bits</span> <span class="n">correlated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">max</span> <span class="n">output</span><span class="p">.</span> <span class="n">This</span> <span class="k">is</span> <span class="k">not</span> <span class="n">necessarily</span> <span class="n">the</span> <span class="n">resolution</span> <span class="n">parameter</span><span class="p">.</span>
+	<span class="n">iTermBits</span><span class="o">:</span> <span class="n">UINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">fReal</span> <span class="n">value</span> <span class="n">correlated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">max</span> <span class="n">output</span>
+	<span class="n">fTermMax</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">fReal</span> <span class="n">value</span> <span class="n">correlated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">min</span> <span class="n">output</span>
+	<span class="n">fTermMin</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="o">//</span> <span class="n">Connect</span> <span class="n">this</span> <span class="n">output</span> <span class="k">to</span> <span class="n">the</span> <span class="n">terminal</span>
+	<span class="n">iRaw</span> <span class="n">AT</span> <span class="o">%</span><span class="n">Q</span><span class="o">*:</span> <span class="n">INT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">fScale</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-analogoutput-st">
+<h3>FB_AnalogOutput: ST<a class="headerlink" href="#fb-analogoutput-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Set</span> <span class="n">the</span> <span class="n">scaling</span> <span class="n">from</span> <span class="n">real</span> <span class="k">to</span> <span class="n">raw</span>
+<span class="k">IF</span> <span class="n">fScale</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">AND</span> <span class="n">fTermMax</span> <span class="o">&gt;</span> <span class="n">fTermMin</span> <span class="k">THEN</span>
+	<span class="n">fScale</span> <span class="o">:=</span> <span class="p">(</span><span class="n">EXPT</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">iTermBits</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">fTermMax</span> <span class="o">-</span> <span class="n">fTermMin</span><span class="p">);</span>
+<span class="n">END_IF</span>
+
+<span class="o">//</span> <span class="n">Adjust</span> <span class="n">real</span> <span class="n">value</span> <span class="k">to</span> <span class="n">be</span> <span class="n">within</span> <span class="n">the</span> <span class="n">limits</span>
+<span class="n">fReal</span> <span class="o">:=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">fReal</span><span class="p">,</span> <span class="n">fSafeMax</span><span class="p">,</span> <span class="n">fTermMax</span><span class="p">);</span>
+<span class="n">fReal</span> <span class="o">:=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">fReal</span><span class="p">,</span> <span class="n">fSafeMin</span><span class="p">,</span> <span class="n">fTermMin</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">Scale</span> <span class="n">the</span> <span class="n">output</span> <span class="n">accordingly</span>
+<span class="n">iRaw</span> <span class="o">:=</span> <span class="n">LREAL_TO_INT</span><span class="p">((</span><span class="n">fReal</span> <span class="o">-</span> <span class="n">fTermMin</span><span class="p">)</span> <span class="o">*</span> <span class="n">fScale</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-hardware-fb-analoginput-tcpou-tcplcobject">
+<h2>POUs/Hardware/FB_AnalogInput.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-hardware-fb-analoginput-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-analoginput-declaration">
+<h3>FB_AnalogInput: Declaration<a class="headerlink" href="#fb-analoginput-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_AnalogInput</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">Converts</span> <span class="n">the</span> <span class="kt">integer</span> <span class="n">from</span> <span class="n">an</span> <span class="n">analog</span> <span class="n">input</span> <span class="n">terminal</span> <span class="k">to</span> <span class="n">a</span> <span class="n">real</span> <span class="n">unit</span> <span class="n">value</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.,</span> <span class="n">volts</span><span class="p">)</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="n">Connect</span> <span class="n">this</span> <span class="n">input</span> <span class="k">to</span> <span class="n">the</span> <span class="n">terminal</span>
+	<span class="n">iRaw</span> <span class="n">AT</span> <span class="o">%</span><span class="n">I</span><span class="o">*:</span> <span class="n">INT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">number</span> <span class="k">of</span> <span class="n">bits</span> <span class="n">correlated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">max</span> <span class="n">value</span><span class="p">.</span> <span class="n">This</span> <span class="k">is</span> <span class="k">not</span> <span class="n">necessarily</span> <span class="n">the</span> <span class="n">resolution</span> <span class="n">parameter</span><span class="p">.</span>
+	<span class="n">iTermBits</span><span class="o">:</span> <span class="n">UINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">fReal</span> <span class="n">value</span> <span class="n">correlated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">max</span> <span class="n">value</span>
+	<span class="n">fTermMax</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">fReal</span> <span class="n">value</span> <span class="n">correlated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">min</span> <span class="n">value</span>
+	<span class="n">fTermMin</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="o">//</span> <span class="n">The</span> <span class="n">real</span> <span class="n">value</span> <span class="n">read</span> <span class="n">from</span> <span class="n">the</span> <span class="n">output</span>
+	<span class="n">fReal</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">fScale</span><span class="o">:</span> <span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-analoginput-st">
+<h3>FB_AnalogInput: ST<a class="headerlink" href="#fb-analoginput-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="k">IF</span> <span class="n">fScale</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">AND</span> <span class="n">fTermMax</span> <span class="o">&gt;</span> <span class="n">fTermMin</span> <span class="k">THEN</span>
+	<span class="n">fScale</span> <span class="o">:=</span> <span class="p">(</span><span class="n">EXPT</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">iTermBits</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">fTermMax</span> <span class="o">-</span> <span class="n">fTermMin</span><span class="p">);</span>
+<span class="n">END_IF</span>
+<span class="k">IF</span> <span class="n">fScale</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span> <span class="k">THEN</span>
+	<span class="n">fReal</span> <span class="o">:=</span> <span class="n">iRaw</span> <span class="o">/</span> <span class="n">fScale</span> <span class="o">+</span> <span class="n">fTermMin</span><span class="p">;</span>
+<span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-hardware-fb-coe-fastread-tcpou-tcplcobject">
+<h2>POUs/Hardware/FB_CoE_FastRead.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-hardware-fb-coe-fastread-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-coe-fastread-declaration">
+<h3>FB_CoE_FastRead: Declaration<a class="headerlink" href="#fb-coe-fastread-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_CoE_FastRead</span>
+<span class="p">(</span><span class="o">*</span>
+	<span class="n">Utility</span> <span class="k">to</span> <span class="n">repeatedly</span> <span class="n">read</span> <span class="n">a</span> <span class="n">CoE</span> <span class="n">parameter</span>
+	<span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span> <span class="n">Zachary</span> <span class="n">Lentz</span>
+	
+	<span class="k">In</span> <span class="n">practice</span><span class="p">,</span> <span class="n">it</span><span class="na">&#39;s</span> <span class="n">impossible</span> <span class="k">to</span> <span class="n">read</span> <span class="n">most</span> <span class="n">CoE</span> <span class="n">parameters</span> <span class="n">every</span> <span class="n">cycle</span><span class="p">,</span>
+	<span class="n">but</span> <span class="n">this</span> <span class="k">is</span> <span class="n">a</span> <span class="n">best</span> <span class="n">effort</span> <span class="k">and</span> <span class="n">will</span> <span class="nn">work</span> <span class="k">if</span> <span class="n">the</span> <span class="n">data</span> <span class="k">is</span> <span class="n">available</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+	<span class="o">//</span> <span class="k">If</span> <span class="n">TRUE</span> <span class="n">we</span><span class="na">&#39;ll</span> <span class="n">attempt</span> <span class="n">a</span> <span class="n">CoE</span> <span class="n">read</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bExecute</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Link</span> <span class="n">this</span> <span class="k">to</span> <span class="n">your</span> <span class="n">terminal</span><span class="na">&#39;s</span> <span class="n">drive</span> <span class="n">reference</span> <span class="n">variables</span> <span class="n">under</span> <span class="n">InfoData</span><span class="p">.</span>
+	<span class="n">stPlcDriveRef</span> <span class="n">AT</span> <span class="o">%</span><span class="n">I</span><span class="o">*:</span> <span class="n">ST_PlcDriveRef</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Hexadecimal</span> <span class="n">index</span> <span class="k">of</span> <span class="n">CoE</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span> <span class="n">the</span> <span class="mi">8010</span> <span class="k">in</span> <span class="mi">8010</span><span class="o">:</span><span class="mi">12</span>
+	<span class="n">nIndex</span><span class="o">:</span> <span class="n">UINT</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Hexadecimal</span> <span class="n">subindex</span> <span class="k">of</span> <span class="n">CoE</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span> <span class="n">the</span> <span class="mi">12</span> <span class="k">in</span> <span class="mi">8010</span><span class="o">:</span><span class="mi">12</span>
+	<span class="n">nSubIndex</span><span class="o">:</span> <span class="n">BYTE</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Pointer</span> <span class="k">to</span> <span class="n">a</span> <span class="n">value</span> <span class="k">to</span> <span class="n">fill</span> <span class="k">with</span> <span class="n">the</span> <span class="n">result</span> <span class="k">of</span> <span class="n">the</span> <span class="n">read</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span> <span class="n">ADR</span><span class="p">(</span><span class="n">MyValue</span><span class="p">)</span>
+	<span class="n">pDstBuf</span><span class="o">:</span> <span class="n">PVOID</span><span class="p">;</span>
+	<span class="o">//</span> <span class="n">Data</span> <span class="n">size</span> <span class="k">of</span> <span class="n">pDstBuf</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">MyValue</span><span class="p">)</span>
+	<span class="n">cbBufLen</span><span class="o">:</span> <span class="n">UINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+	<span class="o">//</span> <span class="n">TRUE</span> <span class="k">if</span> <span class="n">the</span> <span class="n">value</span> <span class="n">was</span> <span class="n">updated</span> <span class="k">on</span> <span class="n">this</span> <span class="n">cycle</span><span class="p">.</span>
+	<span class="n">bNewValue</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+	<span class="n">fbRead</span><span class="o">:</span> <span class="n">FB_CoERead_ByDriveRef</span><span class="p">;</span>
+	<span class="n">stDriveRef</span><span class="o">:</span> <span class="n">ST_DriveRef</span><span class="p">;</span>
+	<span class="n">iLoop</span><span class="o">:</span> <span class="n">INT</span><span class="p">;</span>
+	<span class="n">bInnerExec</span><span class="o">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-coe-fastread-st">
+<h3>FB_CoE_FastRead: ST<a class="headerlink" href="#fb-coe-fastread-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>stDriveRef.sNetId := F_CreateAmsNetId(stPlcDriveRef.aNetId);
+stDriveRef.nSlaveAddr := stPlcDriveRef.nSlaveAddr;
+stDriveRef.nDriveNo := stPlcDriveRef.nDriveNo;
+stDriveRef.nDriveType := stPlcDriveRef.nDriveType;
+
+bNewValue := FALSE;
+IF bExecute THEN
+	// You need to do this block 3 times per cycle to have a chance at always getting a read
+	FOR iLoop:= 1 TO 3 DO
+		fbRead(
+			stDriveRef := stDriveRef,
+			nIndex := nIndex,
+			nSubIndex := nSubIndex,
+			pDstBuf := pDstBuf,
+			cbBufLen := cbBufLen,
+			bExecute := bInnerExec,
+			tTimeout := T#1s);
+			
+		IF bInnerExec AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
+			bInnerExec := FALSE;
+			bNewValue := TRUE;
+		ELSE
+			bInnerExec := TRUE;
+		END_IF
+	END_FOR
+END_IF
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-hardware-fb-el6-com-tcpou-tcplcobject">
+<h2>POUs/Hardware/FB_EL6_Com.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-hardware-fb-el6-com-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-el6-com-declaration">
+<h3>FB_EL6_Com: Declaration<a class="headerlink" href="#fb-el6-com-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_EL6_Com
+(*
+	Communicate with a serial device connected to an EL6XXX
+	2019-10-09 Zachary Lentz and Jackson Sheppard
+	
+	May contain assumptions about the device we wrote it for, potentially will need to be adjusted
+*)
+VAR_INPUT
+	// Command to send to the serial device
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: CMD
+		io: io
+	&#39;}
+	sCmd: STRING;
+	
+	// Pulse this to TRUE and back to FALSE when it&#39;s time to send
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: SEND
+		io: io
+	&#39;}
+	bSend: BOOL;
+	
+	// Any static prefix to add before every sent message
+	sSendPrefix: STRING;
+	// Any static suffix to add after every sent message
+	sSendSuffix: STRING;
+	// Any static prefix to strip off of every recieved message
+	sRecvPrefix: STRING;
+	// Any static suffic to strip off of every recieved message
+	sRecvSuffix: STRING;
+	tTimeout: TIME := T#1S;
+END_VAR
+VAR_IN_OUT
+	stIn_EL6: EL6inData22B;
+	stOut_EL6: EL6outData22B;
+END_VAR
+VAR_OUTPUT
+	// The response recieved from the serial device
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: RESP
+		io: input
+	&#39;}
+	sResponse: STRING;
+	
+	// This is set to TRUE after recieving a response
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: DONE
+		io: input
+	&#39;}
+	bDone: BOOL;
+	
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: ERR:SER
+		io: input
+	&#39;}
+	eSerialLineErrorID: ComError_t;
+	
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: ERR:SEND
+		io: input
+	&#39;}
+	eSendErrorID: ComError_t;
+	
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: ERR:RECV
+		io: input
+	&#39;}
+	eRecvErrorID: ComError_t;
+END_VAR
+VAR
+	// Communication Buffers
+	TxBuffer: ComBuffer;
+	RxBuffer: ComBuffer;
+	fbClearComBuffer: ClearComBuffer;
+	
+	// Parameters for PLC -&gt; EL6
+	fbEL6Ctrl: SerialLineControl;
+	bEL6CtrlError: BOOL;
+	eEL6CtrlErrorID: ComError_t;
+	
+	// Parameters for EL6 -&gt; Serial Device
+	fbSend: SendString;
+	bSendBusy: BOOL;
+	eLastSendErrorID: ComError_t;
+	fbReceive: ReceiveString;
+	sReceivedString: STRING;
+	sLastReceivedString: STRING;
+	bStringReceived: BOOL;
+	bReceiveBusy: BOOL;
+	bReceiveError: BOOL;
+	eReceiveErrorID: ComError_t;
+	bReceiveTimeout: BOOL;
+	nReceiveCounter: UDINT;
+	nSendCounter: UDINT;
+	sStringToSend: STRING;
+	fbFormatString: FB_FormatString;
+	
+	// Parameters for state-machine implementation
+	nStep: INT := 0;
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-el6-com-st">
+<h3>FB_EL6_Com: ST<a class="headerlink" href="#fb-el6-com-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbEL6Ctrl</span><span class="p">(</span>
+	<span class="n">Mode</span><span class="o">:=</span> <span class="n">SERIALLINEMODE_EL6_22B</span><span class="p">,</span> 
+	<span class="n">pComIn</span><span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">stIn_EL6</span><span class="p">),</span> 
+	<span class="n">pComOut</span><span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">stOut_EL6</span><span class="p">),</span> 
+	<span class="n">SizeComIn</span><span class="o">:=</span> <span class="n">UINT_TO_INT</span><span class="p">(</span><span class="n">SIZEOF</span><span class="p">(</span><span class="n">stIn_EL6</span><span class="p">)),</span> 
+	<span class="n">Error</span><span class="o">=&gt;</span> <span class="p">,</span> 
+	<span class="n">ErrorID</span><span class="o">=&gt;</span> <span class="n">eSerialLineErrorID</span><span class="p">,</span> 
+	<span class="n">TxBuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span> 
+	<span class="n">RxBuffer</span><span class="o">:=</span> <span class="n">RxBuffer</span> <span class="p">);</span>
+<span class="k">IF</span> <span class="n">fbEL6Ctrl</span><span class="p">.</span><span class="n">Error</span> <span class="k">THEN</span>
+	<span class="n">bEL6CtrlError</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+	<span class="n">eEL6CtrlErrorID</span> <span class="o">:=</span> <span class="n">fbEL6Ctrl</span><span class="p">.</span><span class="n">ErrorID</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="k">IF</span> <span class="n">bSend</span> <span class="k">THEN</span>
+	<span class="n">nStep</span> <span class="o">:=</span> <span class="mi">10</span><span class="p">;</span>
+	<span class="n">bSend</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+	<span class="n">bDone</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="o">//</span> <span class="n">Attempt</span> <span class="n">at</span> <span class="n">solution</span> <span class="n">that</span> <span class="n">sends</span> <span class="n">one</span> <span class="n">command</span> <span class="n">at</span> <span class="n">a</span> <span class="kt">time</span><span class="p">,</span> <span class="k">not</span> <span class="k">on</span> <span class="k">constant</span> <span class="k">loop</span>
+<span class="k">CASE</span> <span class="n">nStep</span> <span class="k">OF</span>
+	<span class="mi">0</span><span class="o">:</span>
+		<span class="p">;</span> <span class="o">//</span> <span class="n">idle</span>
+	<span class="mi">10</span><span class="o">:</span>
+		<span class="o">//</span> <span class="n">Clear</span> <span class="n">buffers</span> <span class="k">in</span> <span class="k">case</span> <span class="n">any</span> <span class="n">lingering</span> <span class="n">data</span>
+		<span class="n">fbClearComBuffer</span><span class="p">(</span><span class="k">Buffer</span><span class="o">:=</span><span class="n">TxBuffer</span><span class="p">);</span>
+		<span class="n">fbClearComBuffer</span><span class="p">(</span><span class="k">Buffer</span><span class="o">:=</span><span class="n">RxBuffer</span><span class="p">);</span>
+		<span class="o">//</span> <span class="n">Prepare</span> <span class="kt">string</span> <span class="k">to</span> <span class="n">send</span>
+		<span class="n">sStringToSend</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">sSendPrefix</span><span class="p">,</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">sCmd</span><span class="p">,</span> <span class="n">sSendSuffix</span><span class="p">));</span>
+		<span class="o">//</span> <span class="n">Send</span> <span class="kt">string</span>
+		<span class="n">fbSend</span><span class="p">(</span>	<span class="n">SendString</span><span class="o">:=</span> <span class="n">sStringToSend</span><span class="p">,</span>
+				<span class="n">TXbuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span>
+				<span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bSendBusy</span><span class="p">,</span>
+				<span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eSendErrorID</span><span class="p">);</span>
+		<span class="k">IF</span> <span class="n">fbSend</span><span class="p">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="k">THEN</span>
+			<span class="n">eLastSendErrorID</span> <span class="o">:=</span> <span class="n">fbSend</span><span class="p">.</span><span class="n">Error</span><span class="p">;</span>
+		<span class="k">ELSE</span>
+			<span class="n">nSendCounter</span> <span class="o">:=</span> <span class="n">nSendCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="n">END_IF</span>
+		<span class="n">nStep</span> <span class="o">:=</span> <span class="n">nStep</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+	<span class="mi">20</span><span class="o">:</span>
+		<span class="o">//</span> <span class="n">Finish</span> <span class="n">sending</span> <span class="kt">String</span>
+		<span class="k">IF</span> <span class="n">fbSend</span><span class="p">.</span><span class="n">Busy</span> <span class="k">THEN</span>
+			<span class="n">fbSend</span><span class="p">(</span>	<span class="n">SendString</span><span class="o">:=</span> <span class="n">sStringToSend</span><span class="p">,</span>
+					<span class="n">TXbuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span>
+					<span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bSendBusy</span><span class="p">,</span>
+					<span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eSendErrorID</span><span class="p">);</span>
+			<span class="k">IF</span> <span class="n">fbSend</span><span class="p">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="k">THEN</span>
+				<span class="n">eLastSendErrorID</span> <span class="o">:=</span> <span class="n">fbSend</span><span class="p">.</span><span class="n">Error</span><span class="p">;</span>
+			<span class="k">ELSE</span>
+				<span class="n">nSendCounter</span> <span class="o">:=</span> <span class="n">nSendCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+			<span class="n">END_IF</span>
+		<span class="k">ELSE</span>
+			<span class="n">nStep</span> <span class="o">:=</span> <span class="n">nStep</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+		<span class="n">END_IF</span>
+	<span class="mi">30</span><span class="o">:</span>
+		<span class="o">//</span> <span class="n">Get</span> <span class="n">Reply</span>
+		<span class="n">fbReceive</span><span class="p">(</span>
+			<span class="n">Prefix</span><span class="o">:=</span> <span class="n">sRecvPrefix</span><span class="p">,</span>
+			<span class="n">Suffix</span><span class="o">:=</span> <span class="n">sRecvSuffix</span><span class="p">,</span>
+			<span class="n">Timeout</span><span class="o">:=</span> <span class="n">tTimeout</span><span class="p">,</span>
+			<span class="n">ReceivedString</span><span class="o">:=</span> <span class="n">sReceivedString</span><span class="p">,</span>
+			<span class="n">RXbuffer</span><span class="o">:=</span> <span class="n">RxBuffer</span><span class="p">,</span>
+			<span class="n">StringReceived</span><span class="o">=&gt;</span> <span class="n">bStringReceived</span><span class="p">,</span>
+			<span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bReceiveBusy</span><span class="p">,</span>
+			<span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eRecvErrorID</span><span class="p">,</span>
+			<span class="n">RxTimeout</span><span class="o">=&gt;</span> <span class="n">bReceiveTimeout</span> <span class="p">);</span>
+		<span class="k">IF</span> <span class="n">fbReceive</span><span class="p">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="k">THEN</span>
+			<span class="n">eReceiveErrorID</span> <span class="o">:=</span> <span class="n">fbReceive</span><span class="p">.</span><span class="n">Error</span><span class="p">;</span>
+		<span class="n">END_IF</span>
+		<span class="k">IF</span> <span class="n">bStringReceived</span> <span class="k">THEN</span>
+			<span class="n">nReceiveCounter</span> <span class="o">:=</span> <span class="n">nReceiveCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+			<span class="o">//</span> <span class="n">Check</span> <span class="k">for</span> <span class="n">response</span>
+			<span class="k">IF</span> <span class="n">FIND</span><span class="p">(</span><span class="n">sReceivedString</span><span class="p">,</span> <span class="n">sStringToSend</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span> <span class="k">THEN</span>
+				<span class="n">sResponse</span> <span class="o">:=</span> <span class="n">sReceivedString</span><span class="p">;</span>
+				<span class="n">bDone</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+				<span class="n">nStep</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="n">END_IF</span>
+		<span class="n">END_IF</span>
+<span class="n">END_CASE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-hardware-fb-thermocouple-tcpou-tcplcobject">
+<h2>POUs/Hardware/FB_ThermoCouple.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-hardware-fb-thermocouple-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-thermocouple-declaration">
+<h3>FB_ThermoCouple: Declaration<a class="headerlink" href="#fb-thermocouple-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_ThermoCouple
+(*
+	Handles scaling and default diagnostics for thermocouple terminals
+	2019-10-09 Zachary Lentz
+*)
+VAR_INPUT
+	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
+	iScale: INT := 10;
+END_VAR
+VAR_OUTPUT
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STC:TEMP
+		io: input
+	&#39;}
+	fTemp: LREAL;
+	
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STC:CONN
+		io: input
+		field: ONAM Connected
+		field: ZNAM Disconnected
+	}
+	bConnected: BOOL;
+	
+	{attribute &#39;pytmc&#39; := &#39;
+		pv: STC:ERR
+		io: input
+	&#39;}
+	bError AT %I*: BOOL;
+	
+	bUnderrange AT %I*: BOOL;
+	bOverrange AT %I*: BOOL;
+END_VAR
+VAR
+	iRaw AT %I*: INT;
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-thermocouple-st">
+<h3>FB_ThermoCouple: ST<a class="headerlink" href="#fb-thermocouple-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">The</span> <span class="n">manual</span> <span class="n">states</span> <span class="n">that</span> <span class="n">we</span> <span class="n">are</span> <span class="n">disconnected</span> <span class="k">if</span> <span class="n">we</span> <span class="n">are</span> <span class="n">both</span> <span class="n">overrange</span> <span class="k">and</span> <span class="k">in</span> <span class="n">an</span> <span class="n">error</span> <span class="n">state</span>
+<span class="n">bConnected</span> <span class="o">:=</span> <span class="k">NOT</span> <span class="p">(</span><span class="n">bOverrange</span> <span class="k">AND</span> <span class="n">bError</span><span class="p">);</span>
+<span class="n">fTemp</span> <span class="o">:=</span> <span class="n">iRaw</span> <span class="o">/</span> <span class="n">iScale</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-fb-logger-tcpou-tcplcobject">
+<h2>POUs/Logger/FB_Logger.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-logger-fb-logger-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-logger-declaration">
+<h3>FB_Logger: Declaration<a class="headerlink" href="#fb-logger-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>(* Syslog Logger
+A. Wallace 2016-9-3
+
+This is used to pass PLC notification messeges to a syslog server.
+
+This POU constantly attempts to send out messages from the global buffer: GVL_Logger.fbLoggerBuffer.
+This buffer is filled by calling fbLogMessage.
+
+NOTE: FB_Logger must integrated into your project manually. It is recommended that you add it to its own 
+task.
+*)
+FUNCTION_BLOCK FB_Logger
+VAR_INPUT
+	i_xReset			:	BOOL := FALSE; //Closes the socket and attempts to open another
+END_VAR
+VAR
+	fbUDPSocket	        :	FB_ConnectionlessSocket; //Handles creation/deletion of the UDP socket
+	fbUDPSocketSend		:	FB_SocketUdpSendTo; //FB for sending the sOutgoingMesg
+	sOutgoingMesg		:	T_MaxString; //Outgoing message holder
+	stDiag				:	ST_FbDiagnostics; //Generic FB diagnostics, check here for insight into errors/ other FB events
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	rtReset				:	R_TRIG; //Reset sensor
+	fbGetSystemTime		:	FB_LocalSystemTime := (bEnable := TRUE); //Acquires system time as message is being sent
+	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := &#39;&#39;); //Acquires name of the PLC
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	ctuSentSomething	:	CTU := (PV := 100); //Diagnostic to indicate this thing is working. Increments with each successful send.
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	rtSocketSendErr		:	R_TRIG; //Socket send error sensor
+END_VAR
+VAR CONSTANT
+	cPSLogHost	: T_IPv4Addr := &#39;172.21.32.9&#39;; //syslog host
+	cnUdpSyslog	:	UDINT := 514; //syslog port
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-logger-st">
+<h3>FB_Logger: ST<a class="headerlink" href="#fb-logger-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">pBuffer</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">asLoggerMesgBuffer</span><span class="p">);</span> 
+<span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">cbBuffer</span><span class="o">:=</span> <span class="n">UINT_TO_UDINT</span><span class="p">(</span><span class="n">SIZEOF</span><span class="p">(</span><span class="n">asLoggerMesgBuffer</span><span class="p">));</span>
+
+<span class="n">fbGetSystemTime</span><span class="p">();</span> 
+<span class="k">IF</span> <span class="n">fbGetSystemTime</span><span class="p">.</span><span class="n">bValid</span> <span class="k">THEN</span>
+	<span class="n">gsCurrentTime</span> <span class="o">:=</span> <span class="n">SYSTEM_TIME_TO_RFC3339</span><span class="p">(</span><span class="n">fbGetSystemTime</span><span class="p">.</span><span class="n">systemTime</span><span class="p">);</span>
+<span class="k">ELSE</span>
+	<span class="n">gsCurrentTime</span> <span class="o">:=</span> <span class="n">csNILVALUE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">fbGetHostName</span><span class="p">();</span>
+<span class="k">IF</span> <span class="k">NOT</span> <span class="p">(</span><span class="n">fbGetHostName</span><span class="p">.</span><span class="n">bBusy</span> <span class="k">OR</span> <span class="n">fbGetHostName</span><span class="p">.</span><span class="n">bError</span><span class="p">)</span> <span class="k">THEN</span>
+	<span class="n">gsHostName</span> <span class="o">:=</span> <span class="n">fbGetHostName</span><span class="p">.</span><span class="n">sHostName</span><span class="p">;</span>
+<span class="k">ELSE</span>
+	<span class="n">gsHostName</span> <span class="o">:=</span> <span class="n">csNILVALUE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">rtReset</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">i_xReset</span><span class="p">);</span>
+<span class="k">IF</span> <span class="p">(</span><span class="n">rtReset</span><span class="p">.</span><span class="n">Q</span> <span class="k">AND</span> <span class="n">fbUDPSocket</span><span class="p">.</span><span class="n">bEnable</span><span class="p">)</span> <span class="k">OR</span> <span class="n">fbUDPSocket</span><span class="p">.</span><span class="n">bError</span> <span class="k">THEN</span>
+	<span class="n">fbUDPSocket</span><span class="p">(</span><span class="n">bEnable</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">);</span>
+<span class="n">END_IF</span>
+
+<span class="n">fbUDPSocket</span><span class="p">(</span>
+	<span class="n">nLocalPort</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
+	<span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span>
+	<span class="n">nMode</span> <span class="o">:=</span> <span class="n">CONNECT_MODE_ENABLEDBG</span><span class="p">,</span>
+<span class="p">);</span>
+
+<span class="k">IF</span> <span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bBusy</span> <span class="k">THEN</span>
+	<span class="n">fbUDPSocketSend</span><span class="p">();</span>
+	<span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bExecute</span> <span class="n">R</span><span class="o">=</span> <span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bBusy</span><span class="p">;</span>
+<span class="k">ELSIF</span> <span class="n">fbUDPSocket</span><span class="p">.</span><span class="n">eState</span> <span class="o">=</span> <span class="n">E_SocketConnectionlessState</span><span class="p">.</span><span class="n">eSOCKET_CREATED</span> <span class="k">THEN</span>
+	<span class="k">IF</span> <span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">nCount</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">THEN</span>
+		<span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">A_RemoveHead</span><span class="p">(</span><span class="n">getValue</span><span class="o">=&gt;</span><span class="n">sOutgoingMesg</span><span class="p">);</span>
+		<span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+		<span class="k">IF</span> <span class="n">sOutgoingMesg</span> <span class="o">&lt;&gt;</span> <span class="p">&#39;&#39;</span> <span class="k">THEN</span>
+			<span class="n">ctuSentSomething</span><span class="p">(</span><span class="n">CU</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">);</span>
+			<span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">pSrc</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">sOutgoingMesg</span><span class="p">);</span>
+			<span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">cbLen</span> <span class="o">:=</span> <span class="n">UINT_TO_UDINT</span><span class="p">(</span><span class="n">SIZEOF</span><span class="p">(</span><span class="n">sOutgoingMesg</span><span class="p">));</span>
+		<span class="n">END_IF</span>
+	<span class="n">END_IF</span>
+	
+	<span class="n">fbUDPSocketSend</span><span class="p">(</span>
+		<span class="n">hSocket</span> <span class="o">:=</span> <span class="n">fbUDPSocket</span><span class="p">.</span><span class="n">hSocket</span><span class="p">,</span>
+		<span class="n">sRemoteHost</span> <span class="o">:=</span> <span class="n">cPSLogHost</span><span class="p">,</span>
+		<span class="n">nRemotePort</span> <span class="o">:=</span> <span class="n">cnUdpSyslog</span><span class="p">,</span>
+	<span class="p">);</span>
+	<span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bExecute</span> <span class="n">R</span><span class="o">=</span> <span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bBusy</span><span class="p">;</span>
+	<span class="n">rtSocketSendErr</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">fbUDPSocketSend</span><span class="p">.</span><span class="n">bError</span><span class="p">);</span>
+<span class="n">END_IF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-fb-logmessage-tcpou-tcplcobject">
+<h2>POUs/Logger/FB_LogMessage.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-logger-fb-logmessage-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fb-logmessage-declaration">
+<h3>FB_LogMessage: Declaration<a class="headerlink" href="#fb-logmessage-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>// LogMessage
+// A Wallace, 18-4-12
+// Adds a message to the global queue to be sent to the syslog server
+(* 
+For reference, the logstash pattern SYSLOG5424LINE will be used to grok the generated syslog-5424 message.
+
+	 SYSLOG5424PRI &lt;%{NONNEGINT:syslog5424_pri}&gt;
+	 SYSLOG5424SD \[%{DATA}\]+
+	 SYSLOG5424BASE %{SYSLOG5424PRI}%{NONNEGINT:syslog5424_ver} +(?:%{TIMESTAMP_ISO8601:syslog5424_ts}|-) +(?:%{IPORHOST:syslog5424_host}|-) 
+					+(-|%{SYSLOG5424PRINTASCII:syslog5424_app}) +(-|%{SYSLOG5424PRINTASCII:syslog5424_proc}) 
+					+(-|%{SYSLOG5424PRINTASCII:syslog5424_msgid}) +(?:%{SYSLOG5424SD:syslog5424_sd}|-|)
+	 SYSLOG5424LINE %{SYSLOG5424BASE} +%{GREEDYDATA:syslog5424_msg}
+
+This could be summarized as:
+
+	&lt;PRI&gt; VER TIMESTAMP/- IPorHOST/- APP/- PROC/- MSGID/- SD/- MESSAGE
+
+where dash &#39;-&#39; is used as the &quot;nil value&quot; or `csNILVALUE` here.
+*)
+
+{attribute &#39;reflection&#39;}
+FUNCTION_BLOCK FB_LogMessage
+VAR_INPUT	
+	i_sMsg	:	STRING; //Message to send
+	i_eSevr	:	E_MesgSevr; //Message severity
+	i_eSubsystem	:	E_Subsystem; //In-lieu of App-name in the RFC-5424
+END_VAR
+VAR
+	fbFormatString		:	FB_FormatString; //String formatter
+	sPRIVAL				: 	T_MaxString := csNILVALUE; //Priority value
+	{attribute &#39;instance-path&#39;}
+	{attribute &#39;noinit&#39;}
+	sPID				: 	T_MaxString; //PID -&gt; changed to instance path
+	sSubsystem			: 	T_MaxString := csNILVALUE; //Type of subsystem for organizing in syslog later
+	nSyslogVer			: 	WORD := cnSyslogVer; //Version of syslog
+	sMsg				: 	T_MaxString := csNILVALUE; //Message to send
+	sMsgID				: 	T_MaxString := csNILVALUE; // Message ID
+END_VAR
+VAR CONSTANT
+	casSubsystems	:	ARRAY [0..5] OF STRING := [&#39;-&#39;, &#39;VACUUM&#39;, &#39;MPS&#39;, &#39;MOTION&#39;, &#39;FIELDBUS&#39;, &#39;SDS&#39;]; //LCLS defined subsystems for global logging
+	cnFacility: WORD := 20; // local4
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-logmessage-st">
+<h3>FB_LogMessage: ST<a class="headerlink" href="#fb-logmessage-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">putValue</span> <span class="o">:=</span> <span class="p">&#39;&#39;;</span>
+<span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">pBuffer</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">asLoggerMesgBuffer</span><span class="p">);</span> <span class="o">//</span><span class="n">Global</span> <span class="k">buffer</span> <span class="n">address</span>
+<span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">cbBuffer</span> <span class="o">:=</span> <span class="n">UINT_TO_UDINT</span><span class="p">(</span><span class="n">SIZEOF</span><span class="p">(</span><span class="n">asLoggerMesgBuffer</span><span class="p">));</span>
+
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">sFormat</span> <span class="o">:=</span> <span class="p">&#39;</span><span class="o">&lt;%</span><span class="n">s</span><span class="o">&gt;%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">-</span> <span class="o">%</span><span class="n">s</span><span class="p">&#39;;</span>
+
+<span class="n">sPRIVAL</span> <span class="o">:=</span> <span class="n">LEFT</span><span class="p">(</span> <span class="n">WORD_TO_STRING</span><span class="p">(</span><span class="n">cnFacility</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">i_eSevr</span><span class="p">),</span> <span class="mi">5</span><span class="p">);</span>
+<span class="n">sSubsystem</span> <span class="o">:=</span> <span class="n">casSubsystems</span><span class="p">[</span><span class="n">i_eSubsystem</span><span class="p">];</span>
+<span class="n">nSyslogVer</span> <span class="o">:=</span> <span class="n">cnSyslogVer</span><span class="p">;</span>
+<span class="n">sMsg</span> <span class="o">:=</span> <span class="n">i_sMsg</span><span class="p">;</span>
+
+<span class="o">//</span><span class="n">bad</span> <span class="n">language</span> <span class="n">ahead</span><span class="p">,</span> <span class="n">sorry</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg1</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">sPRIVAL</span><span class="p">);</span> 			<span class="o">//</span> <span class="o">&lt;</span><span class="n">PRI</span><span class="o">&gt;</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg2</span> <span class="o">:=</span> <span class="n">F_WORD</span><span class="p">(</span><span class="n">nSyslogVer</span><span class="p">);</span>			<span class="o">//</span> <span class="n">VER</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg3</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">gsCurrentTime</span><span class="p">);</span>		<span class="o">//</span> <span class="n">TIMESTAMP</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg4</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">gsHostName</span><span class="p">);</span>		<span class="o">//</span> <span class="n">IPorHOST</span><span class="o">/-</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg5</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">sSubsystem</span><span class="p">);</span>		<span class="o">//</span> <span class="n">APP</span><span class="o">/-</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg6</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">sPID</span><span class="p">);</span>				<span class="o">//</span> <span class="n">PROC</span><span class="o">/-</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg7</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">sMsgID</span><span class="p">);</span>			<span class="o">//</span> <span class="n">MSGID</span><span class="o">/-</span>
+<span class="n">fbFormatString</span><span class="p">.</span><span class="n">arg8</span> <span class="o">:=</span> <span class="n">F_STRING</span><span class="p">(</span><span class="n">sMsg</span><span class="p">);</span>				<span class="o">//</span> <span class="n">MESSAGE</span>
+<span class="n">fbFormatString</span><span class="p">(</span> <span class="n">sOut</span><span class="o">=&gt;</span><span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">putValue</span><span class="p">);</span>
+<span class="n">fbLoggerBuffer</span><span class="p">.</span><span class="n">A_AddTail</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-gvl-logger-tcgvl-tcplcobject">
+<h2>POUs/Logger/GVL_Logger.TcGVL (TcPlcObject)<a class="headerlink" href="#pous-logger-gvl-logger-tcgvl-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gvl-logger-declaration">
+<h3>GVL_Logger: Declaration<a class="headerlink" href="#gvl-logger-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>{attribute &#39;qualified only&#39;}
+//Global variables for logging to syslog
+VAR_GLOBAL CONSTANT
+	csNILVALUE	:	STRING(1) := &#39;-&#39;; //Syslog standard placeholder/ blank
+	{attribute &#39;analysis&#39; := &#39;-33&#39;} //This is used just below in decl. of asLoggerMesgBuffer
+	cnLoggerMesgArraySize : INT := 50; //Size of the Logger buffer
+	// Syslog Version
+	cnSyslogVer: WORD := 1; //Logger written to work with Syslog V1
+END_VAR
+VAR_GLOBAL
+	asLoggerMesgBuffer	:	ARRAY [0..cnLoggerMesgArraySize] OF T_MaxString; //Logger message buffer, FB_LogMessage puts messages in here for FB_Logger to send out
+	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
+	gsHostName	:	T_MaxString := csNILVALUE; //Hostname used for log messages
+	{analysis -33}
+	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
+	{analysis +33}
+	fbLoggerBuffer 			:	FB_StringRingBuffer; //For working with the Logger message buffer
+	
+	//Note: FB_Logger is not declared here as it needs to be integrated into each project manually. See FB comment for more info.
+END_VAR
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-duts-e-mesgsevr-tcdut-tcplcobject">
+<h2>POUs/Logger/DUTs/E_MesgSevr.TcDUT (TcPlcObject)<a class="headerlink" href="#pous-logger-duts-e-mesgsevr-tcdut-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="e-mesgsevr-declaration">
+<h3>E_MesgSevr: Declaration<a class="headerlink" href="#e-mesgsevr-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>//Syslog message severities
+{attribute &#39;flags&#39;}
+TYPE E_MesgSevr :
+(
+	Emergency := 0, //system is unusable
+	Alert	:= 1,	//action must be taken immediately
+	Critical:= 2,	//critical conditions
+	Error	:= 3,	//error conditions
+	Warning	:= 4,	//warning conditions
+	Notice	:= 5,	//normal but significant condition
+	Info	:= 6,	//informational messages
+	Debug	:= 7	//debug-level messages
+) WORD;
+END_TYPE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-duts-e-messengerstate-tcdut-tcplcobject">
+<h2>POUs/Logger/DUTs/E_MessengerState.TcDUT (TcPlcObject)<a class="headerlink" href="#pous-logger-duts-e-messengerstate-tcdut-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="e-messengerstate-declaration">
+<h3>E_MessengerState: Declaration<a class="headerlink" href="#e-messengerstate-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">State</span> <span class="k">of</span> <span class="n">the</span> <span class="n">FB_Logger</span>
+<span class="k">TYPE</span> <span class="n">E_MessengerState</span> <span class="o">:</span>
+<span class="p">(</span>
+	<span class="n">Init</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">//</span><span class="n">Messenger</span> <span class="k">is</span> <span class="k">not</span> <span class="n">yet</span> <span class="n">initialized</span>
+	<span class="n">CreateSocket</span>	<span class="o">:=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">//</span><span class="n">Messenger</span> <span class="k">is</span> <span class="n">opening</span> <span class="n">the</span> <span class="n">connection</span> <span class="k">to</span> <span class="n">the</span> <span class="n">syslog</span> <span class="n">server</span>
+	<span class="n">Active</span>	<span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="o">//</span><span class="n">Messenger</span> <span class="k">is</span> <span class="n">running</span><span class="p">,</span> <span class="n">shipping</span> <span class="n">messages</span> <span class="k">to</span> <span class="n">syslog</span>
+	<span class="n">CloseSocket</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">,</span> <span class="o">//</span><span class="n">Messenger</span> <span class="k">is</span> <span class="n">closing</span> <span class="n">the</span> <span class="n">connection</span> <span class="k">to</span> <span class="n">the</span> <span class="n">syslog</span> <span class="n">server</span>
+	<span class="n">Err</span>	<span class="o">:=</span> <span class="mi">10</span> <span class="o">//</span><span class="n">Messenger</span> <span class="n">has</span> <span class="n">hit</span> <span class="n">some</span> <span class="n">error</span><span class="p">.</span> <span class="n">Check</span> <span class="n">diagnostics</span> <span class="n">structure</span> <span class="k">in</span> <span class="n">the</span> <span class="n">FB</span><span class="p">,</span> <span class="n">this</span> <span class="n">always</span> <span class="n">goes</span> <span class="n">back</span> <span class="k">to</span> <span class="n">Init</span><span class="p">.</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-duts-e-subsystem-tcdut-tcplcobject">
+<h2>POUs/Logger/DUTs/E_Subsystem.TcDUT (TcPlcObject)<a class="headerlink" href="#pous-logger-duts-e-subsystem-tcdut-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="e-subsystem-declaration">
+<h3>E_Subsystem: Declaration<a class="headerlink" href="#e-subsystem-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">LCLS</span> <span class="n">Defined</span> <span class="n">subsystems</span><span class="p">,</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">these</span> <span class="n">correspond</span> <span class="k">with</span> <span class="n">casSubsystems</span> <span class="k">in</span> <span class="n">FB_LogMessage</span>
+<span class="k">TYPE</span> <span class="n">E_Subsystem</span> <span class="o">:</span>
+<span class="p">(</span>
+	<span class="n">NILVALUE</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">//</span><span class="n">Undefined</span> <span class="n">system</span>
+	<span class="n">VACUUM</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">//</span><span class="n">Vacuum</span> <span class="n">control</span> <span class="n">system</span>
+	<span class="n">MPS</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="o">//</span><span class="n">Machine</span> <span class="n">protection</span> <span class="n">system</span>
+	<span class="n">MOTION</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">,</span> <span class="o">//</span><span class="n">Motion</span> <span class="n">control</span> <span class="n">systems</span>
+	<span class="n">FIELDBUS</span> <span class="o">:=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">networks</span>
+	<span class="n">SDS</span> <span class="o">:=</span> <span class="mi">5</span> <span class="o">//</span><span class="n">Sample</span> <span class="n">delivery</span> <span class="n">system</span>
+<span class="p">)</span><span class="n">WORD</span><span class="p">;</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pous-logger-system-time-to-rfc3339-tcpou-tcplcobject">
+<h2>POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU (TcPlcObject)<a class="headerlink" href="#pous-logger-system-time-to-rfc3339-tcpou-tcplcobject" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="system-time-to-rfc3339-declaration">
+<h3>SYSTEM_TIME_TO_RFC3339: Declaration<a class="headerlink" href="#system-time-to-rfc3339-declaration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span>//Converts Beckhoff PLC SYSTEMTIME to RFC3339 time format as a string
+{attribute &#39;naming&#39; := &#39;omit&#39;}
+{attribute &#39;analysis&#39; := &#39;-23&#39;}
+FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
+VAR_INPUT
+	{attribute &#39;naming&#39; := &#39;omit&#39;}
+	tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
+END_VAR
+VAR
+END_VAR
+</pre></div>
+</div>
+</div>
+<div class="section" id="system-time-to-rfc3339-st">
+<h3>SYSTEM_TIME_TO_RFC3339: ST<a class="headerlink" href="#system-time-to-rfc3339-st" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="n">SYSTEM_TIME_TO_RFC3339</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">REPLACE</span><span class="p">(</span><span class="n">SYSTEMTIME_TO_STRING</span><span class="p">(</span><span class="n">tCurrentTime</span><span class="p">),</span> <span class="na">&#39;T</span><span class="p">&#39;,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="sc">&#39;Z&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="symbols">
+<h2>Symbols<a class="headerlink" href="#symbols" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="boxes">
+<h2>Boxes<a class="headerlink" href="#boxes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="nc-axes">
+<h2>NC axes<a class="headerlink" href="#nc-axes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="pragma-lint-results">
+<h2>Pragma lint results<a class="headerlink" href="#pragma-lint-results" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span><span class="n">pytmc</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">pragmalint</span><span class="p">:</span><span class="n">Linter</span> <span class="n">error</span><span class="p">:</span> 
+<span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_ThermoCouple</span><span class="o">.</span><span class="n">TcPOU</span><span class="p">:</span><span class="n">line</span> <span class="mi">17</span><span class="p">:</span>     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;</span>
+    		<span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">CONN</span>
+    		<span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+    		<span class="n">field</span><span class="p">:</span> <span class="n">ONAM</span> <span class="n">Connected</span>
+    		<span class="n">field</span><span class="p">:</span> <span class="n">ZNAM</span> <span class="n">Disconnected</span>
+    	<span class="p">}</span>
+<span class="n">INFO</span><span class="p">:</span><span class="n">pytmc</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">pragmalint</span><span class="p">:</span><span class="n">Total</span> <span class="n">pragmas</span> <span class="n">found</span><span class="p">:</span> <span class="mi">43</span> <span class="n">Total</span> <span class="n">linter</span> <span class="n">errors</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">PLC</span> <span class="n">Project</span> <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">LCLSGeneral</span>
+<span class="o">============================</span>
+
+
+<span class="n">Data</span> <span class="n">types</span><span class="o">/</span><span class="n">Misc</span><span class="o">/</span><span class="n">ST_FbDiagnostics</span><span class="o">.</span><span class="n">TcDUT</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">----------------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">ST_FbDiagnostics</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">2</span> <span class="n">pragmas</span>
+
+
+<span class="n">Data</span> <span class="n">types</span><span class="o">/</span><span class="n">Misc</span><span class="o">/</span><span class="n">ST_System</span><span class="o">.</span><span class="n">TcDUT</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">---------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">ST_System</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">1</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span><span class="n">FB_BasicStats</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">-------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_BasicStats</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">11</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_EcatDiag</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">----------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_EcatDiag</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">3</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_Index</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">-------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_Index</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">2</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Functions</span><span class="o">/</span><span class="n">FB_XKoyoPLCModbus</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">----------------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_XKoyoPLCModbus</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">2</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_EL6_Com</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">--------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_EL6_Com</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">7</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Hardware</span><span class="o">/</span><span class="n">FB_ThermoCouple</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">-------------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_ThermoCouple</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">3</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">FB_Logger</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">-----------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_Logger</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">3</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">FB_LogMessage</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">---------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">FB_LogMessage</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">3</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">GVL_Logger</span><span class="o">.</span><span class="n">TcGVL</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">GVL_Logger</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">2</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">DUTs</span><span class="o">/</span><span class="n">E_MesgSevr</span><span class="o">.</span><span class="n">TcDUT</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">-----------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">E_MesgSevr</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">1</span> <span class="n">pragmas</span>
+
+
+<span class="n">POUs</span><span class="o">/</span><span class="n">Logger</span><span class="o">/</span><span class="n">SYSTEM_TIME_TO_RFC3339</span><span class="o">.</span><span class="n">TcPOU</span> <span class="p">(</span><span class="n">TcPlcObject</span><span class="p">)</span>
+<span class="o">------------------------------------------------------</span>
+
+    <span class="o">-</span> <span class="n">SYSTEM_TIME_TO_RFC3339</span><span class="p">:</span> <span class="n">Declaration</span> <span class="o">-</span> <span class="mi">3</span> <span class="n">pragmas</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pcdshub/lcls-twincat-general</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PLC Project (1): LCLSGeneral</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-types-misc-st-ecdevice-tcdut-tcplcobject">Data types/Misc/ST_EcDevice.TcDUT (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-types-misc-st-fbdiagnostics-tcdut-tcplcobject">Data types/Misc/ST_FbDiagnostics.TcDUT (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-types-misc-st-system-tcdut-tcplcobject">Data types/Misc/ST_System.TcDUT (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gvls-defaultglobals-tcgvl-tcplcobject">GVLs/DefaultGlobals.TcGVL (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-data-fb-basicstats-tcpou-tcplcobject">POUs/Data/FB_BasicStats.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-data-fb-databuffer-tcpou-tcplcobject">POUs/Data/FB_DataBuffer.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-data-fb-lrealbuffer-tcpou-tcplcobject">POUs/Data/FB_LREALBuffer.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-data-fb-timestampbuffer-tcpou-tcplcobject">POUs/Data/FB_TimeStampBuffer.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-data-fb-timestampbufferglobal-tcpou-tcplcobject">POUs/Data/FB_TimeStampBufferGlobal.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-functions-fb-ecatdiag-tcpou-tcplcobject">POUs/Functions/FB_EcatDiag.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-functions-fb-index-tcpou-tcplcobject">POUs/Functions/FB_Index.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-functions-fb-unixtimestamp-tcpou-tcplcobject">POUs/Functions/FB_UnixTimeStamp.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-functions-fb-unixtimestampglobal-tcpou-tcplcobject">POUs/Functions/FB_UnixTimeStampGlobal.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-functions-fb-xkoyoplcmodbus-tcpou-tcplcobject">POUs/Functions/FB_XKoyoPLCModbus.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-hardware-fb-analogoutput-tcpou-tcplcobject">POUs/Hardware/FB_AnalogOutput.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-hardware-fb-analoginput-tcpou-tcplcobject">POUs/Hardware/FB_AnalogInput.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-hardware-fb-coe-fastread-tcpou-tcplcobject">POUs/Hardware/FB_CoE_FastRead.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-hardware-fb-el6-com-tcpou-tcplcobject">POUs/Hardware/FB_EL6_Com.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-hardware-fb-thermocouple-tcpou-tcplcobject">POUs/Hardware/FB_ThermoCouple.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-fb-logger-tcpou-tcplcobject">POUs/Logger/FB_Logger.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-fb-logmessage-tcpou-tcplcobject">POUs/Logger/FB_LogMessage.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-gvl-logger-tcgvl-tcplcobject">POUs/Logger/GVL_Logger.TcGVL (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-duts-e-mesgsevr-tcdut-tcplcobject">POUs/Logger/DUTs/E_MesgSevr.TcDUT (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-duts-e-messengerstate-tcdut-tcplcobject">POUs/Logger/DUTs/E_MessengerState.TcDUT (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-duts-e-subsystem-tcdut-tcplcobject">POUs/Logger/DUTs/E_Subsystem.TcDUT (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pous-logger-system-time-to-rfc3339-tcpou-tcplcobject">POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU (TcPlcObject)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#symbols">Symbols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#boxes">Boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nc-axes">NC axes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#links">Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pragma-lint-results">Pragma lint results</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to pcdshub/lcls-twincat-general’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, SLAC National Accelerator Laboratory.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/LCLSGeneral.tsproj.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
