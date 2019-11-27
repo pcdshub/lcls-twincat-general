@@ -4,23 +4,35 @@
     <Declaration><![CDATA[{attribute 'qualified only'}
 //Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
-	csNILVALUE	:	STRING(1) := '-'; //Syslog standard placeholder/ blank
-	{attribute 'analysis' := '-33'} //This is used just below in decl. of asLoggerMesgBuffer
-	cnLoggerMesgArraySize : INT := 50; //Size of the Logger buffer
-	// Syslog Version
-	cnSyslogVer: WORD := 1; //Logger written to work with Syslog V1
-END_VAR
-VAR_GLOBAL
-	asLoggerMesgBuffer	:	ARRAY [0..cnLoggerMesgArraySize] OF T_MaxString; //Logger message buffer, FB_LogMessage puts messages in here for FB_Logger to send out
-	gsCurrentTime	:	T_MaxString := csNILVALUE; //For timestamping messages
-	gsHostName	:	T_MaxString := csNILVALUE; //Hostname used for log messages
-	{analysis -33}
-	fbLogMessage : FB_LogMessage; //Instantiated here to be used everywhere
-	{analysis +33}
-	fbLoggerBuffer 			:	FB_StringRingBuffer; //For working with the Logger message buffer
+	(* Note: this is a temporary host *)
+		
+	{attribute 'pytmc' := '
+		pv: @(IOC):LCLSGeneral:LogHost
+		io: io
+		field: DESC The log host IP address
+	'}
+	cLogHost		:	STRING(15)	:= '172.21.148.142';
 	
-	//Note: FB_Logger is not declared here as it needs to be integrated into each project manually. See FB comment for more info.
+	{attribute 'pytmc' := '
+		pv: @(IOC):LCLSGeneral:LogPort
+		io: io
+		field: DESC The log host UDP port
+	'}
+	iLogPort		:	UINT		:= 50000;
 END_VAR
-]]></Declaration>
+
+VAR_GLOBAL
+	sPlcHostname	:	STRING		:= 'unknown';
+	
+	(* Ref: https://infosys.beckhoff.com/english.php?content=../content/1033/tcpipserver/html/TcPlcLibTcpIp_FB_SocketUdpSendTo.htm
+		TODO: Activate the "Replace constants" option in the
+		TwinCAT PLC Control->"Project->Options...->Build" dialog window. 
+	*)
+	TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
+	
+	{analysis -33}
+	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
+	{analysis +33}
+END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

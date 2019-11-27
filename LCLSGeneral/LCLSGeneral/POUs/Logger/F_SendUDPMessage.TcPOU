@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_SendUDPMessage" Id="{6df3303a-af20-4404-b690-e252d379813c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_SendUDPMessage : HRESULT
+VAR_INPUT
+	sMessage			:	POINTER TO STRING;
+	fbSocket			:	REFERENCE TO FB_ConnectionlessSocket;
+	sHost				:	STRING;
+	iPort				:	UINT;
+END_VAR
+
+VAR
+	fbSend				:	FB_SocketUdpSendTo;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF sMessage <> 0 AND __ISVALIDREF(fbSocket) THEN
+	fbSend.hSocket		:= fbSocket.hSocket;
+	fbSend.sRemoteHost	:= sHost;
+	fbSend.nRemotePort	:= iPort;
+	fbSend.pSrc 		:= sMessage;
+	fbSend.cbLen		:= LEN2(sMessage);
+	fbSend.bExecute	 	:= TRUE;
+	fbSend();
+	
+	fbSend.bExecute 	R= fbSend.bBusy;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
