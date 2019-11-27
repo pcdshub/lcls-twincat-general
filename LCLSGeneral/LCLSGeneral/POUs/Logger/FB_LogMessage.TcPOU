@@ -4,9 +4,10 @@
     <Declaration><![CDATA[{attribute 'reflection'}
 FUNCTION_BLOCK FB_LogMessage
 VAR_INPUT
-	sMsg			: T_MaxString; 		// Message to send
+	sMsg			: T_MaxString; 					// Message to send
 	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
-	eSubsystem		: E_Subsystem; 		// Subsystem TODO
+	eSubsystem		: E_Subsystem; 					// Subsystem
+	sJson			: T_MaxString	:= '{}';		// JSON to add to the message
 END_VAR
 
 VAR_OUTPUT
@@ -27,8 +28,7 @@ VAR
 	{attribute 'instance-path'} 
     {attribute 'noinit'} 
 	sPath				:	T_MaxString;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized AND NOT bInitFailed THEN
 	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
@@ -108,6 +108,13 @@ hr := fbMessage.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInf
 // This is where the message text gets appended:
 fbMessage.ipArguments.Clear();
 fbMessage.ipArguments.AddString(sMsg);
+
+IF LEN(sJson) = 0 THEN
+	// Ensure there's a valid JSON string here
+	sJson := '{}';
+END_IF
+
+fbMessage.SetJsonAttribute(sJson);
 
 // For a final format of:
 // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
