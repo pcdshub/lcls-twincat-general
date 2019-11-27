@@ -13,15 +13,17 @@ VAR
 	fbSend				:	FB_SocketUdpSendTo;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbSend.hSocket		:= fbSocket.hSocket;
-fbSend.sRemoteHost	:= sHost;
-fbSend.nRemotePort	:= iPort;
-fbSend.pSrc 		:= sMessage;
-fbSend.cbLen		:= LEN2(sMessage);
-fbSend.bExecute	 	:= TRUE;
-fbSend();
-
-fbSend.bExecute 	R= fbSend.bBusy;]]></ST>
+      <ST><![CDATA[IF sMessage <> 0 AND __ISVALIDREF(fbSocket) THEN
+	fbSend.hSocket		:= fbSocket.hSocket;
+	fbSend.sRemoteHost	:= sHost;
+	fbSend.nRemotePort	:= iPort;
+	fbSend.pSrc 		:= sMessage;
+	fbSend.cbLen		:= LEN2(sMessage);
+	fbSend.bExecute	 	:= TRUE;
+	fbSend();
+	
+	fbSend.bExecute 	R= fbSend.bBusy;
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

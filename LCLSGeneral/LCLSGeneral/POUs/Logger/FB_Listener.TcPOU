@@ -212,22 +212,32 @@ END_FOR]]></ST>
 VAR_INPUT
 	sMessage		:	POINTER TO STRING;
 END_VAR
-]]></Declaration>
+
+VAR
+	sLogStr			:	T_MaxString;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[(* For subclasses to override, if necessary *)
+IF sMessage = 0 THEN
+	RETURN;
+END_IF
 
 // Optionally log it to Visual Studio's message list
 IF bLogToVisualStudio THEN
+	 // Keep the message length under 255 (extended string function for LEFT/MID do not exist)
+	STRNCPY(ADR(sLogStr), sMessage, MIN(220, SIZEOF(sLogStr)));
 	ADSLOGSTR(
 		msgCtrlMask := ADSLOG_MSGTYPE_HINT, 
 		msgFmtStr   := '[Logger JSON Debug] %s', 
-		strArg      := LEFT(sMessage^, 250 - 20) // Keep the message length under 255
+		strArg      := sLogStr
 	); 
 END_IF
 
-// And send it along to logstash
-F_SendUDPMessage(sMessage:=sMessage, fbSocket:=fbSocket^, 
-				 sHost:=GVL_Logger.cLogHost, iPort:=GVL_Logger.iLogPort);]]></ST>
+IF fbSocket <> 0 THEN
+	// And send it along to logstash
+	F_SendUDPMessage(sMessage:=sMessage, fbSocket:=fbSocket^, 
+					 sHost:=GVL_Logger.cLogHost, iPort:=GVL_Logger.iLogPort);
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="StoreEvent" Id="{c1d8e249-ad0d-4737-b8d8-b6acc7f0d62c}">
@@ -245,6 +255,8 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF fbEvent.eSeverity < eMinSeverity THEN
 	// Ignore all messages below the minimum severity
+	RETURN;
+ELSIF NOT __ISVALIDREF(fbEvent) THEN
 	RETURN;
 END_IF
 

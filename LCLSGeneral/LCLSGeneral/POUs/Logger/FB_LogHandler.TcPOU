@@ -55,7 +55,7 @@ VAR
 		
 	fbSocket	   		:	FB_ConnectionlessSocket;
 	
-	nI: UINT;
+	nI					:	UINT;
 END_VAR
 
 VAR CONSTANT
