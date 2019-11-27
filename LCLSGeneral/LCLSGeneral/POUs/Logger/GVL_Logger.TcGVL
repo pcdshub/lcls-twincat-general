@@ -4,7 +4,20 @@
     <Declaration><![CDATA[{attribute 'qualified only'}
 //Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
-	cLogHost		:	T_IPv4Addr	:= '172.21.148.141';
+	(* Note: this is a temporary host *)
+		
+	{attribute 'pytmc' := '
+		pv: @(IOC):LCLSGeneral:LogHost
+		io: io
+		field: DESC The log host IP address
+	'}
+	cLogHost		:	STRING(15)	:= '172.21.148.142';
+	
+	{attribute 'pytmc' := '
+		pv: @(IOC):LCLSGeneral:LogPort
+		io: io
+		field: DESC The log host UDP port
+	'}
 	iLogPort		:	UINT		:= 50000;
 END_VAR
 
