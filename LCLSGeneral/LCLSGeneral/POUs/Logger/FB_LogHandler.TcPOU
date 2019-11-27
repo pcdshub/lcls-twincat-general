@@ -105,8 +105,7 @@ FOR nI := 0 TO nNumListeners - 1 DO
 	fbListener REF= fbListeners[nI]^;
 	fbListener.Execute();
 	fbListener.PublishEvents();
-END_FOR
-]]></ST>
+END_FOR]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

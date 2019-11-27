@@ -155,13 +155,16 @@ StoreEvent(fbEvent, eEventType:=E_LogEventType.MessageSent);]]></ST>
     <Method Name="PublishEvents" Id="{1115676e-addb-46ec-b8e8-a33da372678d}">
       <Declaration><![CDATA[METHOD PublishEvents : HRESULT
 VAR
-	fbJson				:	FB_JsonSaxWriter;
-	fbJsonDataType		:	FB_JsonReadWriteDataType;
-	sJsonDoc			:	STRING(10000);
 	nEvent				:	UINT;
 	stPendingEvent		:	REFERENCE TO ST_PendingEvent;
 	stEventInfo			:	REFERENCE TO ST_EventInfo;
 	fbRequestEventText	:	REFERENCE TO FB_RequestEventText;
+END_VAR
+
+VAR_INST
+	fbJson				:	FB_JsonSaxWriter;
+	fbJsonDataType		:	FB_JsonReadWriteDataType;
+	sJsonDoc			:	STRING(10000);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nPendingEvents = 0 THEN
@@ -201,8 +204,7 @@ FOR nEvent := 0 TO nMaxEvents - 1 DO
 	stPendingEvent.bInUse 	:= FALSE;
 	nEventIdx 				:= nEvent;
 	
-END_FOR
-]]></ST>
+END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="SendMessage" Id="{0ecc6e61-3b01-495c-b716-85e32b493cb3}">
