@@ -67,7 +67,7 @@ STRUCT
 		pv: Source
 		io: i
 	'}
-	source		:	 T_MaxString;
+	source		:	 STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1);
 	
 	{attribute 'pytmc' := '
 		pv: EventType
