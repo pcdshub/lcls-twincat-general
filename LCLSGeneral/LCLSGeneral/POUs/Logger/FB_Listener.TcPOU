@@ -104,6 +104,27 @@ ELSE
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <Property Name="LogToVisualStudio" Id="{e44fed4e-ab41-44aa-babb-83d5524e2738}">
+      <Declaration><![CDATA[PROPERTY PUBLIC LogToVisualStudio : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{7014778a-8e7f-4086-92a6-b27eb8c1aa6d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LogToVisualStudio := bLogToVisualStudio;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{99657c84-9170-4c55-af03-3bb953873ecc}">
+        <Declaration><![CDATA[VAR
+	bValue : BOOL;
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.bLogToVisualStudio := bValue;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="OnAlarmCleared" Id="{036602cd-44fc-40d2-99e6-e6b033452290}">
       <Declaration><![CDATA[METHOD OnAlarmCleared
 VAR_INPUT

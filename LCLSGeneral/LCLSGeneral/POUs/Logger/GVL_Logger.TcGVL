@@ -11,14 +11,14 @@ VAR_GLOBAL CONSTANT
 		io: io
 		field: DESC The log host IP address
 	'}
-	cLogHost		:	STRING(15)	:= '172.21.148.142';
+	cLogHost		:	STRING(15)	:= '172.21.149.39';
 	
 	{attribute 'pytmc' := '
 		pv: @(IOC):LCLSGeneral:LogPort
 		io: io
 		field: DESC The log host UDP port
 	'}
-	iLogPort		:	UINT		:= 50000;
+	iLogPort		:	UINT		:= 54321;
 END_VAR
 
 VAR_GLOBAL
