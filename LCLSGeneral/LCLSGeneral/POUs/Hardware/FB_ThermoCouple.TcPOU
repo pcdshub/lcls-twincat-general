@@ -40,7 +40,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
 bConnected := NOT (bOverrange AND bError);
-fTemp := iRaw / iScale;]]></ST>
+fTemp := INT_TO_LREAL(iRaw) / iScale;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
