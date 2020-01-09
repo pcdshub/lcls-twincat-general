@@ -102,10 +102,10 @@
     <Compile Include="POUs\Hardware\FB_ThermoCouple.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Logger\DUTs\E_LogEventType.TcDUT">
+    <Compile Include="POUs\Logger\DUTs\E_LogEventType_WC.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Logger\DUTs\ST_EventInfo.TcDUT">
+    <Compile Include="POUs\Logger\DUTs\ST_LoggingEventInfo_WC.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Logger\DUTs\ST_PendingEvent.TcDUT">
@@ -177,11 +177,6 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="LCLSGeneral.tmc">
-      <SubType>Content</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <PlaceholderResolution Include="Tc3_EventLogger">
       <Resolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
@@ -190,7 +185,14 @@
     </PlaceholderResolution>
   </ItemGroup>
   <ItemGroup>
+    <PinnedGlobalDataType Include="E_LogEventType" />
     <PinnedGlobalDataType Include="ST_LCLSGeneralEventClass" />
+    <PinnedGlobalDataType Include="ST_LoggingEventInfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LCLSGeneral.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

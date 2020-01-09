@@ -51,7 +51,7 @@ VAR
 	{attribute 'pytmc' := '
 		pv: Log
 	'}
-	stEventInfo 		:	REFERENCE TO ST_EventInfo;
+	stEventInfo 		:	REFERENCE TO ST_LoggingEventInfo;
 
 	stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
 	ipMessageConfig		:	ITcEventFilterConfig;
@@ -178,7 +178,7 @@ StoreEvent(fbEvent, eEventType:=E_LogEventType.MessageSent);]]></ST>
 VAR
 	nEvent				:	UINT;
 	stPendingEvent		:	REFERENCE TO ST_PendingEvent;
-	stEventInfo			:	REFERENCE TO ST_EventInfo;
+	stEventInfo			:	REFERENCE TO ST_LoggingEventInfo;
 	fbRequestEventText	:	REFERENCE TO FB_RequestEventText;
 END_VAR
 
@@ -214,7 +214,7 @@ FOR nEvent := 0 TO nMaxEvents - 1 DO
 		
 		// Generate the JSON message
 		fbJson.ResetDocument();
-		fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_EventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
+		fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_LoggingEventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
 		fbJson.CopyDocument(sJsonDoc, SIZEOF(sJsonDoc));
 		
 		SendMessage(sMessage:=ADR(sJsonDoc));
@@ -270,7 +270,7 @@ END_VAR
 
 VAR
 	stPendingEvent	:	REFERENCE TO ST_PendingEvent;
-	stEventInfo		:	REFERENCE TO ST_EventInfo;
+	stEventInfo		:	REFERENCE TO ST_LoggingEventInfo;
 	nFailures		:	UINT := 0;
 END_VAR]]></Declaration>
       <Implementation>

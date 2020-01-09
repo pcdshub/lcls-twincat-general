@@ -7,7 +7,7 @@ STRUCT
 	{attribute 'pytmc' := '
 		pv:
 	'}
-	stEventInfo			:	ST_EventInfo;
+	stEventInfo			:	ST_LoggingEventInfo;
 	bInUse				:	BOOL;
 	fbRequestEventText	:	FB_RequestEventText;
 	
