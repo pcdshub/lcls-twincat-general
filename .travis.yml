@@ -5,8 +5,20 @@ env:
   global:
     - secure: "Tg/4UYEVxvqrizpw4qNeuGKY3A1h4pHvuvqnEe3vFPsEAiaMWcWorzn5M1LqjZxhQXCHsujTtlk22gKzSbZ6Rc4/5xFibv7hPCtM50XznDypg2QQzodboJgcJErH5k3tOkJkxvjw3Q3piPc75BDQuVTKSZVZhYXhtiIWsIfGf4y2h3LvflRzSU52Nd8hkyJhSy3OUFeDeqMxpFsH1Iu0nIj5W9pZivxILa/A+ymxhP4HVPUhy9lb9jQSvVrBWzsddxA75gcZyhvXi5HlYbifDB96jtrXeJMS1iLYlK1LHen8DoplUtALcDeN/Xk3/uLfcfXfdSa2nwuKgrvnFP1n04uTdBgx8vj4EYgIDlLxdWExwb8va7ianh0930aQfGAKnxEQkpeZfAjqyYxKXpYetHyKyylnCMYetY2iokdgARexZCt5K3VL5yzzHV0cGzVOkrybpyt+InYqsVY1hDOqjJzTz6g+Nzf0wHbupXOVrZz9Z4FFcYWc1ZvktWiTnkCdt19Qh8Y4ei7wdQ0Mc3HxxNIykdu3HGifo9uXrBnKcTd5TkWF+BLTCh0KaFv6gJ5MBeLh35MK1qzzPqHtDv72PGrkVDKRm+Za2gUY2O4m66T+TAOjKz18Vpn6BcWpMU3KXWvO/ylrt4qka89tWVNVAvqFlp5MIOLJJz0UTLClbpk="
 
-install:
-  - git clone --depth 1 git://github.com/pcdshub/pcds-ci-helpers.git
+matrix:
+  include:
+    - name: Project summary
+      python: 3.7
+      env: TWINCAT_SUMMARY=1
+    - name: Pragma linting
+      python: 3.7
+      env: TWINCAT_PRAGMALINT=1
+    - name: Documentation building
+      python: 3.7
+      env: TWINCAT_BUILD_DOCS=1
 
-script:
-  - bash pcds-ci-helpers/travis/tc3_linter.sh
+install:
+  # Import the helper scripts
+  - git clone --depth 1 git://github.com/pcdshub/pcds-ci-helpers.git
+  # Start the helper-script initialization + run based on environment variables
+  - source pcds-ci-helpers/travis/init.sh
