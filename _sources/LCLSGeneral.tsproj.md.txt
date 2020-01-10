@@ -1,43 +1,44 @@
 PLC Project (1): LCLSGeneral
 ============================
 
-    Project path: /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/LCLSGeneral.plcproj
-    TMC path:     /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/LCLSGeneral.tmc
+    Project root: /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral
+    Project path: LCLSGeneral/LCLSGeneral.plcproj
+    TMC path:     LCLSGeneral/LCLSGeneral.tmc
     AMS ID:       
     IP Address:    (* based on AMS ID)
     Port:         851
 
     Source files:
-        1.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/Data types/Misc/ST_EcDevice.TcDUT
-        2.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/Data types/Misc/ST_FbDiagnostics.TcDUT
-        3.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/Data types/Misc/ST_System.TcDUT
-        4.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/GVLs/DefaultGlobals.TcGVL
-        5.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_BasicStats.TcPOU
-        6.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_DataBuffer.TcPOU
-        7.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_LREALBuffer.TcPOU
-        8.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
-        9.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
-        10.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
-        11.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_Index.TcPOU
-        12.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
-        13.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
-        14.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
-        15.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Functions/F_ConvertTicksToUnixTimestamp.TcPOU
-        16.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
-        17.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
-        18.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
-        19.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
-        20.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
-        21.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/E_LogEventType.TcDUT
-        22.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/ST_EventInfo.TcDUT
-        23.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
-        24.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
-        25.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
-        26.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
-        27.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
-        28.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
-        29.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
-        30.) /home/travis/build/pcdshub/lcls-twincat-general/LCLSGeneral/LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
+        1.) LCLSGeneral/Data types/Misc/ST_EcDevice.TcDUT
+        2.) LCLSGeneral/Data types/Misc/ST_FbDiagnostics.TcDUT
+        3.) LCLSGeneral/Data types/Misc/ST_System.TcDUT
+        4.) LCLSGeneral/GVLs/DefaultGlobals.TcGVL
+        5.) LCLSGeneral/POUs/Data/FB_BasicStats.TcPOU
+        6.) LCLSGeneral/POUs/Data/FB_DataBuffer.TcPOU
+        7.) LCLSGeneral/POUs/Data/FB_LREALBuffer.TcPOU
+        8.) LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
+        9.) LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
+        10.) LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
+        11.) LCLSGeneral/POUs/Functions/FB_Index.TcPOU
+        12.) LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
+        13.) LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
+        14.) LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
+        15.) LCLSGeneral/POUs/Functions/F_ConvertTicksToUnixTimestamp.TcPOU
+        16.) LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
+        17.) LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
+        18.) LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
+        19.) LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
+        20.) LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
+        21.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
+        22.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
+        23.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
+        24.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
+        25.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
+        26.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
+        27.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
+        28.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
+        29.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
+        30.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
 
     GVLs:
         1.) DefaultGlobals
@@ -1265,19 +1266,19 @@ END_VAR
 ```vhdl
 // The manual states that we are disconnected if we are both overrange and in an error state
 bConnected := NOT (bOverrange AND bError);
-fTemp := iRaw / iScale;
+fTemp := INT_TO_LREAL(iRaw) / iScale;
 ```
 
 
-POUs/Logger/DUTs/E_LogEventType.TcDUT (TcPlcObject)
----------------------------------------------------
+POUs/Logger/DUTs/E_LogEventType_WC.TcDUT (TcPlcObject)
+------------------------------------------------------
 
-### E_LogEventType: Declaration
+### E_LogEventType_WC: Declaration
 
 ```vhdl
 {attribute 'qualified_only'}
 {attribute 'strict'}
-TYPE E_LogEventType :
+TYPE E_LogEventType_WC :
 (
 	AlarmCleared 	:= 0,
 	AlarmConfirmed 	:= 1,
@@ -1285,20 +1286,30 @@ TYPE E_LogEventType :
 	MessageSent 	:= 3
 );
 END_TYPE
+
+(* Note: this is the working copy version that is automatically made a
+   global type when pinning ST_LoggingEventInfo *)
 ```
 
 
-POUs/Logger/DUTs/ST_EventInfo.TcDUT (TcPlcObject)
--------------------------------------------------
+POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT (TcPlcObject)
+-----------------------------------------------------------
 
-### ST_EventInfo: Declaration
+### ST_LoggingEventInfo_WC: Declaration
 
 ```vhdl
-TYPE ST_EventInfo :
+TYPE ST_LoggingEventInfo_WC :
 STRUCT
 	(* 
 		Message or Alarm{Cleared,Confirmed,Raised} event information
 		
+		** Working copy - to be used for the pinned ST_LoggingEventInfo **
+		* The process for updating this type is as follows:
+			1. Copy this structure and rename to ST_LoggingEventInfo
+			2. Remove the working copy notes section
+			3. Pin the global data type  
+		** End of working copy information **
+ 
 		Note that elements here do not follow the usual Hungarian notation / 
 		variable-type-prefixing naming convention due to the member names being
 		used directly in the generation of the JSON document.
@@ -1354,13 +1365,17 @@ STRUCT
 		pv: Message
 		io: i
 	'}
-	msg			:	 T_MaxString;
-
+	msg				: STRING(255);	 
+	// This is actually: T_MaxString
+	// which has been expanded due to requirements for pinning global data types.
+	
 	{attribute 'pytmc' := '
 		pv: Source
 		io: i
 	'}
-	source		:	 STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1);
+	source			: STRING(255);	 
+	// This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
+	// which has been expanded due to requirements for pinning global data types.
 	
 	{attribute 'pytmc' := '
 		pv: EventType
@@ -1399,7 +1414,7 @@ STRUCT
 	{attribute 'pytmc' := '
 		pv:
 	'}
-	stEventInfo			:	ST_EventInfo;
+	stEventInfo			:	ST_LoggingEventInfo;
 	bInUse				:	BOOL;
 	fbRequestEventText	:	FB_RequestEventText;
 	
@@ -1464,7 +1479,7 @@ VAR
 	{attribute 'pytmc' := '
 		pv: Log
 	'}
-	stEventInfo 		:	REFERENCE TO ST_EventInfo;
+	stEventInfo 		:	REFERENCE TO ST_LoggingEventInfo;
 
 	stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
 	ipMessageConfig		:	ITcEventFilterConfig;
@@ -1520,6 +1535,39 @@ ELSE
 	Configure 	:= 0;
 	bConfigured := TRUE;
 END_IF
+```
+
+### FB_Listener.LogToVisualStudio: Declaration
+
+```vhdl
+PROPERTY PUBLIC LogToVisualStudio : BOOL
+```
+
+### FB_Listener.LogToVisualStudio.Get: Declaration
+
+```vhdl
+VAR
+END_VAR
+```
+
+### FB_Listener.LogToVisualStudio.Get: ST
+
+```vhdl
+LogToVisualStudio := bLogToVisualStudio;
+```
+
+### FB_Listener.LogToVisualStudio.Set: Declaration
+
+```vhdl
+VAR
+	bValue : BOOL;
+END_VAR
+```
+
+### FB_Listener.LogToVisualStudio.Set: ST
+
+```vhdl
+THIS^.bLogToVisualStudio := bValue;
 ```
 
 ### FB_Listener.OnAlarmCleared: Declaration
@@ -1597,7 +1645,7 @@ METHOD PublishEvents : HRESULT
 VAR
 	nEvent				:	UINT;
 	stPendingEvent		:	REFERENCE TO ST_PendingEvent;
-	stEventInfo			:	REFERENCE TO ST_EventInfo;
+	stEventInfo			:	REFERENCE TO ST_LoggingEventInfo;
 	fbRequestEventText	:	REFERENCE TO FB_RequestEventText;
 END_VAR
 
@@ -1637,7 +1685,7 @@ FOR nEvent := 0 TO nMaxEvents - 1 DO
 		
 		// Generate the JSON message
 		fbJson.ResetDocument();
-		fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_EventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
+		fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_LoggingEventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
 		fbJson.CopyDocument(sJsonDoc, SIZEOF(sJsonDoc));
 		
 		SendMessage(sMessage:=ADR(sJsonDoc));
@@ -1701,7 +1749,7 @@ END_VAR
 
 VAR
 	stPendingEvent	:	REFERENCE TO ST_PendingEvent;
-	stEventInfo		:	REFERENCE TO ST_EventInfo;
+	stEventInfo		:	REFERENCE TO ST_LoggingEventInfo;
 	nFailures		:	UINT := 0;
 END_VAR
 ```
@@ -1760,16 +1808,7 @@ POUs/Logger/FB_LogHandler.TcPOU (TcPlcObject)
 ```vhdl
 FUNCTION_BLOCK FB_LogHandler
 VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
-
-VAR
 	
-	bInitialized	:	BOOL	:= FALSE;
-	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
-	bHostnameSet	:	BOOL	:= FALSE;
-
 	{attribute 'pytmc' := '
 		pv: ADS
 	'}
@@ -1799,6 +1838,16 @@ VAR
 		pv: LCLS
 	'}
 	fbLCLSListener 	: FB_Listener;	
+
+END_VAR
+VAR_OUTPUT
+END_VAR
+
+VAR
+	
+	bInitialized	:	BOOL	:= FALSE;
+	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
+	bHostnameSet	:	BOOL	:= FALSE;
 
 	fbListener		:	REFERENCE TO FB_Listener;
 	fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
@@ -2060,14 +2109,14 @@ VAR_GLOBAL CONSTANT
 		io: io
 		field: DESC The log host IP address
 	'}
-	cLogHost		:	STRING(15)	:= '172.21.148.142';
+	cLogHost		:	STRING(15)	:= '172.21.149.39';
 	
 	{attribute 'pytmc' := '
 		pv: @(IOC):LCLSGeneral:LogPort
 		io: io
 		field: DESC The log host UDP port
 	'}
-	iLogPort		:	UINT		:= 50000;
+	iLogPort		:	UINT		:= 54321;
 END_VAR
 
 VAR_GLOBAL
@@ -2208,16 +2257,16 @@ POUs/Hardware/FB_ThermoCouple.TcPOU (TcPlcObject)
     - FB_ThermoCouple: Declaration - 3 pragmas
 
 
-POUs/Logger/DUTs/E_LogEventType.TcDUT (TcPlcObject)
----------------------------------------------------
+POUs/Logger/DUTs/E_LogEventType_WC.TcDUT (TcPlcObject)
+------------------------------------------------------
 
-    - E_LogEventType: Declaration - 2 pragmas
+    - E_LogEventType_WC: Declaration - 2 pragmas
 
 
-POUs/Logger/DUTs/ST_EventInfo.TcDUT (TcPlcObject)
--------------------------------------------------
+POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT (TcPlcObject)
+-----------------------------------------------------------
 
-    - ST_EventInfo: Declaration - 10 pragmas
+    - ST_LoggingEventInfo_WC: Declaration - 10 pragmas
 
 
 POUs/Logger/DUTs/ST_PendingEvent.TcDUT (TcPlcObject)
