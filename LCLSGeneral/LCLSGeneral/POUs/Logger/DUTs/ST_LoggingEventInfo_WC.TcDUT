@@ -1,11 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
-  <DUT Name="ST_EventInfo" Id="{91686bb0-81a3-47a0-8e20-449823cce7f0}">
-    <Declaration><![CDATA[TYPE ST_EventInfo :
+  <DUT Name="ST_LoggingEventInfo_WC" Id="{c7089d6f-7fa7-426b-9d50-1a010ea23a13}">
+    <Declaration><![CDATA[TYPE ST_LoggingEventInfo_WC :
 STRUCT
 	(* 
 		Message or Alarm{Cleared,Confirmed,Raised} event information
 		
+		** Working copy - to be used for the pinned ST_LoggingEventInfo **
+		* The process for updating this type is as follows:
+			1. Copy this structure and rename to ST_LoggingEventInfo
+			2. Remove the working copy notes section
+			3. Pin the global data type  
+		** End of working copy information **
+ 
 		Note that elements here do not follow the usual Hungarian notation / 
 		variable-type-prefixing naming convention due to the member names being
 		used directly in the generation of the JSON document.
@@ -61,13 +68,17 @@ STRUCT
 		pv: Message
 		io: i
 	'}
-	msg			:	 T_MaxString;
-
+	msg				: STRING(255);	 
+	// This is actually: T_MaxString
+	// which has been expanded due to requirements for pinning global data types.
+	
 	{attribute 'pytmc' := '
 		pv: Source
 		io: i
 	'}
-	source		:	 STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1);
+	source			: STRING(255);	 
+	// This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
+	// which has been expanded due to requirements for pinning global data types.
 	
 	{attribute 'pytmc' := '
 		pv: EventType
