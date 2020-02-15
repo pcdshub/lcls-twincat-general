@@ -7,11 +7,11 @@
     <title>PLC Project (1): LCLSGeneral &#8212; pcdshub/lcls-twincat-general  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="LCLSGeneral.tmc" href="LCLSGeneral.tmc.html" />
@@ -1854,6 +1854,7 @@ VAR
 	
 	bInitialized	:	BOOL	:= FALSE;
 	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := &#39;&#39;); //Acquires name of the PLC
+    fbGetAdapterIP : FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := &#39;&#39;); // Acquire IP of the correct adapter
 	bHostnameSet	:	BOOL	:= FALSE;
 
 	fbListener		:	REFERENCE TO FB_Listener;
@@ -1869,6 +1870,10 @@ VAR
 	fbSocket	   		:	FB_ConnectionlessSocket;
 	
 	nI					:	UINT;
+    
+    SocketEnable : BOOL;
+    
+    bAdapterSet : BOOL;
 END_VAR
 
 VAR CONSTANT
@@ -1894,6 +1899,7 @@ END_VAR
 	<span class="n">fbListeners</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbTcSystemListener</span><span class="p">);</span>
 	<span class="n">fbListeners</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbWindowsListener</span><span class="p">);</span>
 	<span class="n">fbListeners</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbLCLSListener</span><span class="p">);</span>
+    
 <span class="n">END_IF</span> 
 	
 <span class="k">IF</span> <span class="k">NOT</span> <span class="n">bHostnameSet</span> <span class="k">THEN</span>
@@ -1901,6 +1907,15 @@ END_VAR
 	<span class="k">IF</span> <span class="k">NOT</span> <span class="p">(</span><span class="n">fbGetHostName</span><span class="p">.</span><span class="n">bBusy</span> <span class="k">OR</span> <span class="n">fbGetHostName</span><span class="p">.</span><span class="n">bError</span><span class="p">)</span> <span class="k">THEN</span>
 		<span class="n">GVL_Logger</span><span class="p">.</span><span class="n">sPlcHostname</span> <span class="o">:=</span> <span class="n">fbGetHostName</span><span class="p">.</span><span class="n">sHostName</span><span class="p">;</span>
 		<span class="n">bHostnameSet</span> 			<span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+	<span class="n">END_IF</span>
+<span class="n">END_IF</span>
+
+<span class="k">IF</span> <span class="k">NOT</span> <span class="n">bAdapterSet</span> <span class="k">THEN</span>
+    <span class="n">fbGetAdapterIP</span><span class="p">();</span>
+    <span class="k">IF</span> <span class="k">NOT</span> <span class="p">(</span><span class="n">fbGetAdapterIP</span><span class="p">.</span><span class="n">bBusy</span> <span class="k">or</span> <span class="n">fbGetAdapterIP</span><span class="p">.</span><span class="n">bError</span><span class="p">)</span> <span class="k">THEN</span>
+        <span class="n">fbSocket</span><span class="p">.</span><span class="n">sLocalHost</span> <span class="o">:=</span> <span class="n">fbGetAdapterIP</span><span class="p">.</span><span class="n">arrAdapters</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">sIpAddr</span><span class="p">;</span>
+        <span class="n">SocketEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">bAdapterSet</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
 	<span class="n">END_IF</span>
 <span class="n">END_IF</span>
 
@@ -1913,7 +1928,7 @@ END_VAR
 
 <span class="n">fbSocket</span><span class="p">(</span>
 	<span class="n">nLocalPort</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span>
-	<span class="n">bEnable</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">,</span>
+	<span class="n">bEnable</span><span class="o">:=</span><span class="n">SocketEnable</span><span class="p">,</span>
 	<span class="n">nMode</span><span class="o">:=</span><span class="n">CONNECT_MODE_ENABLEDBG</span><span class="p">,</span>
 <span class="p">);</span>
 
@@ -2385,7 +2400,7 @@ END_VAR
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -2402,7 +2417,7 @@ END_VAR
       &copy;2019, SLAC National Accelerator Laboratory.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

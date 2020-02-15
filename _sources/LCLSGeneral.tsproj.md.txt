@@ -1847,6 +1847,7 @@ VAR
 	
 	bInitialized	:	BOOL	:= FALSE;
 	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
+    fbGetAdapterIP : FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := ''); // Acquire IP of the correct adapter
 	bHostnameSet	:	BOOL	:= FALSE;
 
 	fbListener		:	REFERENCE TO FB_Listener;
@@ -1862,6 +1863,10 @@ VAR
 	fbSocket	   		:	FB_ConnectionlessSocket;
 	
 	nI					:	UINT;
+    
+    SocketEnable : BOOL;
+    
+    bAdapterSet : BOOL;
 END_VAR
 
 VAR CONSTANT
@@ -1887,6 +1892,7 @@ IF NOT bInitialized THEN
 	fbListeners[3] := ADR(fbTcSystemListener);
 	fbListeners[4] := ADR(fbWindowsListener);
 	fbListeners[5] := ADR(fbLCLSListener);
+    
 END_IF 
 	
 IF NOT bHostnameSet THEN
@@ -1894,6 +1900,15 @@ IF NOT bHostnameSet THEN
 	IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
 		GVL_Logger.sPlcHostname := fbGetHostName.sHostName;
 		bHostnameSet 			:= TRUE;
+	END_IF
+END_IF
+
+IF NOT bAdapterSet THEN
+    fbGetAdapterIP();
+    IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
+        fbSocket.sLocalHost := fbGetAdapterIP.arrAdapters[1].sIpAddr;
+        SocketEnable := TRUE;
+        bAdapterSet := TRUE;
 	END_IF
 END_IF
 
@@ -1906,7 +1921,7 @@ END_IF
 
 fbSocket(
 	nLocalPort:=0,
-	bEnable:=TRUE,
+	bEnable:=SocketEnable,
 	nMode:=CONNECT_MODE_ENABLEDBG,
 );
 
