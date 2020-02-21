@@ -1244,7 +1244,7 @@ VAR_OUTPUT
 		io: input
 		field: ONAM Connected
 		field: ZNAM Disconnected
-	}
+	'}
 	bConnected: BOOL;
 	
 	{attribute 'pytmc' := '
@@ -2212,14 +2212,7 @@ Links
 Pragma lint results
 -------------------
 ```
-ERROR:pytmc.bin.pragmalint:Linter error: 
-POUs/Hardware/FB_ThermoCouple.TcPOU:line 17:     {attribute 'pytmc' := '
-    		pv: STC:CONN
-    		io: input
-    		field: ONAM Connected
-    		field: ZNAM Disconnected
-    	}
-INFO:pytmc.bin.pragmalint:Total pragmas found: 67 Total linter errors: 1
+INFO:pytmc.bin.pragmalint:Total pragmas found: 67 Total linter errors: 0
 PLC Project (1): LCLSGeneral
 ============================
 
