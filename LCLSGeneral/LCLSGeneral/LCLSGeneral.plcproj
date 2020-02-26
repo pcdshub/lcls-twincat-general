@@ -63,6 +63,9 @@
     <Compile Include="POUs\Data\FB_LREALBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Data\FB_LREALFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>

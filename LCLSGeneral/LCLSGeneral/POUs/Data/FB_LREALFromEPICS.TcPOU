@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_LREALFromEPICS" Id="{1404ab4d-b135-464e-bd7c-11d3ea997668}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Function block to link an analog value from EPICS to an LREAL on the PLC
+
+Usage:
+
+	{attribute 'pytmc' := '
+		pv: INTERNAL:RECORD
+		link: PV:NAME:TO:LINK:TO
+	'}
+	fbLinkedValue1 : FB_LREALFromEPICS;
+	
+Such that when PV:NAME:TO:LINK:TO changes in EPICS, the INTERNAL:RECORD will be used to
+push a value through to the PLC with this function block. 
+
+As this block takes care of IOC heartbeat signals and monitors the link and value severity,
+the end-user should then only have to look at `.bValid` and `.fValue`. These are guaranteed to
+be up-to-date and valid within `tTimeout` seconds.
+*)
+
+FUNCTION_BLOCK FB_LREALFromEPICS
+
+VAR_OUTPUT
+	bValid				: BOOL;
+	fValue				: LREAL;
+END_VAR
+
+VAR
+	iValueInvalidate	: POINTER TO ULINT;
+	tonValueTimeout		: TON;
+	tonSeverityTimeout	: TON;
+	
+	fLastValidValue 	: LREAL;
+	iLastValidSeverity 	: INT;
+	
+	{attribute 'pytmc' := '
+		pv: EPICSLink
+		link:
+		field: DESC Internal variable used to monitor EPICS PV in PLC
+	'}
+	fPLCInternalValue : LREAL;
+
+	// Use special link syntax for now to get EPICSLink.SEVR here:
+	{attribute 'pytmc' := '
+		pv: EPICSLink:LinkSeverity
+		link: *EPICSLink.SEVR
+		field: DESC Internal variable used to monitor EPICS PV severity in PLC
+	'}
+	iPLCInternalSeverity : INT;
+
+END_VAR
+VAR CONSTANT
+	tTimeout			: TIME := T#2S;
+	NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[iValueInvalidate := ADR(fPLCInternalValue);
+
+IF iPLCInternalSeverity <> -1 THEN
+	// New severity value
+	iLastValidSeverity := iPLCInternalSeverity;
+	iPLCInternalSeverity := -1;
+	
+ 	// Reset the timer
+	tonSeverityTimeout(IN:=FALSE);
+	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+END_IF
+
+IF iValueInvalidate^ <> NAN_VALUE THEN
+	// New value from EPICS
+	fLastValidValue 	:= fPLCInternalValue;
+	iValueInvalidate^	:= NAN_VALUE;
+	
+	// Reset the timer
+	tonValueTimeout(IN:=FALSE);
+	tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+END_IF
+
+tonValueTimeout();
+tonSeverityTimeout();
+bValid := (NOT tonValueTimeout.Q) AND 
+		  (NOT tonSeverityTimeout.Q) AND 
+		  (iLastValidSeverity = 0);
+fValue := fLastValidValue;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
