@@ -2120,14 +2120,14 @@ VAR_GLOBAL CONSTANT
 	(* Note: this is a temporary host *)
 		
 	{attribute 'pytmc' := '
-		pv: @(IOC):LCLSGeneral:LogHost
+		pv: @(PREFIX)LCLSGeneral:LogHost
 		io: io
 		field: DESC The log host IP address
 	'}
 	cLogHost		:	STRING(15)	:= '172.21.149.39';
 	
 	{attribute 'pytmc' := '
-		pv: @(IOC):LCLSGeneral:LogPort
+		pv: @(PREFIX)LCLSGeneral:LogPort
 		io: io
 		field: DESC The log host UDP port
 	'}

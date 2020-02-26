@@ -2124,14 +2124,14 @@ VAR_GLOBAL CONSTANT
 	(* Note: this is a temporary host *)
 		
 	{attribute &#39;pytmc&#39; := &#39;
-		pv: @(IOC):LCLSGeneral:LogHost
+		pv: @(PREFIX)LCLSGeneral:LogHost
 		io: io
 		field: DESC The log host IP address
 	&#39;}
 	cLogHost		:	STRING(15)	:= &#39;172.21.149.39&#39;;
 	
 	{attribute &#39;pytmc&#39; := &#39;
-		pv: @(IOC):LCLSGeneral:LogPort
+		pv: @(PREFIX)LCLSGeneral:LogPort
 		io: io
 		field: DESC The log host UDP port
 	&#39;}
@@ -2410,7 +2410,7 @@ END_VAR
       &copy;2019, SLAC National Accelerator Laboratory.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
