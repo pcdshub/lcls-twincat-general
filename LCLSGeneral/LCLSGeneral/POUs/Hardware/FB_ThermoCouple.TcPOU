@@ -3,7 +3,7 @@
   <POU Name="FB_ThermoCouple" Id="{cc00895a-0264-4382-820e-9cfa9062e545}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ThermoCouple
 (*
-	Handles scaling and default diagnostics for thermocouple terminals
+	Deprecated as of 2020-03-02, please use FB_TempSensor instead
 	2019-10-09 Zachary Lentz
 *)
 VAR_INPUT
