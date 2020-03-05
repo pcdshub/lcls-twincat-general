@@ -34,7 +34,7 @@ VAR_OUTPUT
         field: ONAM True
         field: ZNAM False
     '}
-    bError AT %I*: BOOL;
+    bError AT %I*: BOOL := TRUE;
 
     bUnderrange AT %I*: BOOL;
     bOverrange AT %I*: BOOL;
