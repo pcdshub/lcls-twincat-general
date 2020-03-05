@@ -6,6 +6,7 @@
 	Deprecated as of 2020-03-02, please use FB_TempSensor instead
 	2019-10-09 Zachary Lentz
 *)
+{warning 'Function Block FB_ThermoCouple is deprecated and may be removed in a future release'}
 VAR_INPUT
 	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
 	iScale: INT := 10;
