@@ -16,29 +16,30 @@ PLC Project (1): LCLSGeneral
         5.) LCLSGeneral/POUs/Data/FB_BasicStats.TcPOU
         6.) LCLSGeneral/POUs/Data/FB_DataBuffer.TcPOU
         7.) LCLSGeneral/POUs/Data/FB_LREALBuffer.TcPOU
-        8.) LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
-        9.) LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
-        10.) LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
-        11.) LCLSGeneral/POUs/Functions/FB_Index.TcPOU
-        12.) LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
-        13.) LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
-        14.) LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
-        15.) LCLSGeneral/POUs/Functions/F_ConvertTicksToUnixTimestamp.TcPOU
-        16.) LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
-        17.) LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
-        18.) LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
-        19.) LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
-        20.) LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
-        21.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
-        22.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
-        23.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
-        24.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
-        25.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
-        26.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
-        27.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
-        28.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
-        29.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
-        30.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
+        8.) LCLSGeneral/POUs/Data/FB_LREALFromEPICS.TcPOU
+        9.) LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
+        10.) LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
+        11.) LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
+        12.) LCLSGeneral/POUs/Functions/FB_Index.TcPOU
+        13.) LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
+        14.) LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
+        15.) LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
+        16.) LCLSGeneral/POUs/Functions/F_ConvertTicksToUnixTimestamp.TcPOU
+        17.) LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
+        18.) LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
+        19.) LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
+        20.) LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
+        21.) LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
+        22.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
+        23.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
+        24.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
+        25.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
+        26.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
+        27.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
+        28.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
+        29.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
+        30.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
+        31.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
 
     POUs:
         1.) FB_AnalogInput
@@ -50,18 +51,19 @@ PLC Project (1): LCLSGeneral
         7.) FB_EcatDiag
         8.) FB_Index
         9.) FB_LREALBuffer
-        10.) FB_Listener
-        11.) FB_LogHandler
-        12.) FB_LogMessage
-        13.) FB_ThermoCouple
-        14.) FB_TimeStampBuffer
-        15.) FB_TimeStampBufferGlobal
-        16.) FB_UnixTimeStamp
-        17.) FB_UnixTimeStampGlobal
-        18.) FB_XKoyoPLCModbus
-        19.) F_ConvertTicksToUnixTimestamp
-        20.) F_SendUDPMessage
-        21.) SYSTEM_TIME_TO_RFC3339
+        10.) FB_LREALFromEPICS
+        11.) FB_Listener
+        12.) FB_LogHandler
+        13.) FB_LogMessage
+        14.) FB_ThermoCouple
+        15.) FB_TimeStampBuffer
+        16.) FB_TimeStampBufferGlobal
+        17.) FB_UnixTimeStamp
+        18.) FB_UnixTimeStampGlobal
+        19.) FB_XKoyoPLCModbus
+        20.) F_ConvertTicksToUnixTimestamp
+        21.) F_SendUDPMessage
+        22.) SYSTEM_TIME_TO_RFC3339
 
     GVLs:
         1.) DefaultGlobals
@@ -1107,6 +1109,99 @@ END_FUNCTION_BLOCK
 ```
 
 
+POU: FB_LREALFromEPICS
+----------------------
+
+File: LCLSGeneral/POUs/Data/FB_LREALFromEPICS.TcPOU
+
+```vhdl
+(*
+Function block to link an analog value from EPICS to an LREAL on the PLC
+
+Usage:
+
+	{attribute 'pytmc' := '
+		pv: INTERNAL:RECORD
+		link: PV:NAME:TO:LINK:TO
+	'}
+	fbLinkedValue1 : FB_LREALFromEPICS;
+	
+Such that when PV:NAME:TO:LINK:TO changes in EPICS, the INTERNAL:RECORD will be used to
+push a value through to the PLC with this function block. 
+
+As this block takes care of IOC heartbeat signals and monitors the link and value severity,
+the end-user should then only have to look at `.bValid` and `.fValue`. These are guaranteed to
+be up-to-date and valid within `tTimeout` seconds.
+*)
+
+FUNCTION_BLOCK FB_LREALFromEPICS
+
+VAR_OUTPUT
+	bValid				: BOOL;
+	fValue				: LREAL;
+END_VAR
+
+VAR
+	iValueInvalidate	: POINTER TO ULINT;
+	tonValueTimeout		: TON;
+	tonSeverityTimeout	: TON;
+	
+	fLastValidValue 	: LREAL;
+	iLastValidSeverity 	: INT;
+	
+	{attribute 'pytmc' := '
+		pv: EPICSLink
+		link:
+		field: DESC Internal variable used to monitor EPICS PV in PLC
+	'}
+	fPLCInternalValue : LREAL;
+
+	// Use special link syntax for now to get EPICSLink.SEVR here:
+	{attribute 'pytmc' := '
+		pv: EPICSLink:LinkSeverity
+		link: *EPICSLink.SEVR
+		field: DESC Internal variable used to monitor EPICS PV severity in PLC
+	'}
+	iPLCInternalSeverity : INT;
+
+END_VAR
+VAR CONSTANT
+	tTimeout			: TIME := T#2S;
+	NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
+END_VAR
+iValueInvalidate := ADR(fPLCInternalValue);
+
+IF iPLCInternalSeverity <> -1 THEN
+	// New severity value
+	iLastValidSeverity := iPLCInternalSeverity;
+	iPLCInternalSeverity := -1;
+	
+ 	// Reset the timer
+	tonSeverityTimeout(IN:=FALSE);
+	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+END_IF
+
+IF iValueInvalidate^ <> NAN_VALUE THEN
+	// New value from EPICS
+	fLastValidValue 	:= fPLCInternalValue;
+	iValueInvalidate^	:= NAN_VALUE;
+	
+	// Reset the timer
+	tonValueTimeout(IN:=FALSE);
+	tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+END_IF
+
+tonValueTimeout();
+tonSeverityTimeout();
+bValid := (NOT tonValueTimeout.Q) AND 
+		  (NOT tonSeverityTimeout.Q) AND 
+		  (iLastValidSeverity = 0);
+fValue := fLastValidValue;
+
+END_FUNCTION_BLOCK
+```
+
+
 POU: FB_Listener
 ----------------
 
@@ -1845,7 +1940,7 @@ Links
 Pragma lint results
 -------------------
 ```
-INFO:pytmc.bin.pragmalint:Total pragmas found: 67 Total linter errors: 0
+INFO:pytmc.bin.pragmalint:Total pragmas found: 70 Total linter errors: 0
 PLC Project (1): LCLSGeneral
 ============================
 
@@ -1866,6 +1961,12 @@ POUs/Data/FB_BasicStats.TcPOU (TcPlcObject)
 -------------------------------------------
 
     - FB_BasicStats: Declaration - 11 pragmas
+
+
+POUs/Data/FB_LREALFromEPICS.TcPOU (TcPlcObject)
+-----------------------------------------------
+
+    - FB_LREALFromEPICS: Declaration - 3 pragmas
 
 
 POUs/Functions/FB_EcatDiag.TcPOU (TcPlcObject)
