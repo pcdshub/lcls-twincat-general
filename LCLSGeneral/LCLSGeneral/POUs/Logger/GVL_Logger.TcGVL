@@ -4,14 +4,21 @@
     <Declaration><![CDATA[{attribute 'qualified only'}
 //Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
-	(* Note: this is a temporary host *)
-		
+	(*
+	Using the IP address directly avoids DNS configuration issues.
+	While we may want to address this in the future, for now the static IP
+	will suffice:
+
+	$ nslookup ctl-logsrv01
+	Name:   ctl-logsrv01.pcdsn
+	Address: 172.21.32.36
+	*)
 	{attribute 'pytmc' := '
 		pv: @(PREFIX)LCLSGeneral:LogHost
 		io: io
 		field: DESC The log host IP address
 	'}
-	cLogHost		:	STRING(15)	:= '172.21.149.39';
+	cLogHost		:	STRING(15)	:= '172.21.32.36';
 	
 	{attribute 'pytmc' := '
 		pv: @(PREFIX)LCLSGeneral:LogPort
