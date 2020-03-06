@@ -8,8 +8,8 @@
     2020-03-02 Zachary Lentz
 *)
 VAR_INPUT
-    // Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
-    iScale: INT := 10;
+    // Resolution parameter from the Beckhoff docs. Default is 0.1 for 0.1 degree resolution
+    fResolution: LREAL := 0.1;
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -45,11 +45,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
 bConnected := NOT (bOverrange AND bError);
-IF iScale > 0 THEN // Guard against div by 0
-    fTemp := INT_TO_LREAL(iRaw) / iScale;
-ELSE
-    fTemp := -999; // Obviously fake temperature
-END_IF]]></ST>
+fTemp := INT_TO_LREAL(iRaw) * fResolution;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
