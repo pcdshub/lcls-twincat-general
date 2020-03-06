@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_TempSensor" Id="{d7de6be9-251a-4df0-a4bb-4330b01e3329}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TempSensor
+(*
+    Handles scaling and default diagnostics for temperature sensors,
+    such as thermocouples, RTDs, and others.
+    2020-03-02 Zachary Lentz
+*)
+VAR_INPUT
+    // Resolution parameter from the Beckhoff docs. Default is 0.1 for 0.1 degree resolution
+    fResolution: LREAL := 0.1;
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: TEMP
+        io: input
+        field: EGU C
+        field: PREC 2
+    '}
+    fTemp: LREAL;
+
+    {attribute 'pytmc' := '
+        pv: CONN
+        io: input
+        field: ONAM Connected
+        field: ZNAM Disconnected
+    '}
+    bConnected: BOOL;
+
+    {attribute 'pytmc' := '
+        pv: ERR
+        io: input
+        field: ONAM True
+        field: ZNAM False
+    '}
+    bError AT %I*: BOOL := TRUE;
+
+    bUnderrange AT %I*: BOOL;
+    bOverrange AT %I*: BOOL;
+END_VAR
+VAR
+    iRaw AT %I*: INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
+bConnected := NOT (bOverrange AND bError);
+fTemp := INT_TO_LREAL(iRaw) * fResolution;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

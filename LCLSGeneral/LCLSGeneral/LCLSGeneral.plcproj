@@ -105,6 +105,9 @@
     <Compile Include="POUs\Hardware\FB_ThermoCouple.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Hardware\FB_TempSensor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Logger\DUTs\E_LogEventType_WC.TcDUT">
       <SubType>Code</SubType>
     </Compile>
