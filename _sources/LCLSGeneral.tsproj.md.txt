@@ -30,16 +30,17 @@ PLC Project (1): LCLSGeneral
         19.) LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
         20.) LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
         21.) LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
-        22.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
-        23.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
-        24.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
-        25.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
-        26.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
-        27.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
-        28.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
-        29.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
-        30.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
-        31.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
+        22.) LCLSGeneral/POUs/Hardware/FB_TempSensor.TcPOU
+        23.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
+        24.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
+        25.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
+        26.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
+        27.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
+        28.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
+        29.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
+        30.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
+        31.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
+        32.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
 
     POUs:
         1.) FB_AnalogInput
@@ -55,15 +56,16 @@ PLC Project (1): LCLSGeneral
         11.) FB_Listener
         12.) FB_LogHandler
         13.) FB_LogMessage
-        14.) FB_ThermoCouple
-        15.) FB_TimeStampBuffer
-        16.) FB_TimeStampBufferGlobal
-        17.) FB_UnixTimeStamp
-        18.) FB_UnixTimeStampGlobal
-        19.) FB_XKoyoPLCModbus
-        20.) F_ConvertTicksToUnixTimestamp
-        21.) F_SendUDPMessage
-        22.) SYSTEM_TIME_TO_RFC3339
+        14.) FB_TempSensor
+        15.) FB_ThermoCouple
+        16.) FB_TimeStampBuffer
+        17.) FB_TimeStampBufferGlobal
+        18.) FB_UnixTimeStamp
+        19.) FB_UnixTimeStampGlobal
+        20.) FB_XKoyoPLCModbus
+        21.) F_ConvertTicksToUnixTimestamp
+        22.) F_SendUDPMessage
+        23.) SYSTEM_TIME_TO_RFC3339
 
     GVLs:
         1.) DefaultGlobals
@@ -1546,6 +1548,61 @@ END_FUNCTION_BLOCK
 ```
 
 
+POU: FB_TempSensor
+------------------
+
+File: LCLSGeneral/POUs/Hardware/FB_TempSensor.TcPOU
+
+```vhdl
+FUNCTION_BLOCK FB_TempSensor
+(*
+    Handles scaling and default diagnostics for temperature sensors,
+    such as thermocouples, RTDs, and others.
+    2020-03-02 Zachary Lentz
+*)
+VAR_INPUT
+    // Resolution parameter from the Beckhoff docs. Default is 0.1 for 0.1 degree resolution
+    fResolution: LREAL := 0.1;
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: TEMP
+        io: input
+        field: EGU C
+        field: PREC 2
+    '}
+    fTemp: LREAL;
+
+    {attribute 'pytmc' := '
+        pv: CONN
+        io: input
+        field: ONAM Connected
+        field: ZNAM Disconnected
+    '}
+    bConnected: BOOL;
+
+    {attribute 'pytmc' := '
+        pv: ERR
+        io: input
+        field: ONAM True
+        field: ZNAM False
+    '}
+    bError AT %I*: BOOL := TRUE;
+
+    bUnderrange AT %I*: BOOL;
+    bOverrange AT %I*: BOOL;
+END_VAR
+VAR
+    iRaw AT %I*: INT;
+END_VAR
+// The manual states that we are disconnected if we are both overrange and in an error state
+bConnected := NOT (bOverrange AND bError);
+fTemp := INT_TO_LREAL(iRaw) * fResolution;
+
+END_FUNCTION_BLOCK
+```
+
+
 POU: FB_ThermoCouple
 --------------------
 
@@ -1554,9 +1611,10 @@ File: LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
 ```vhdl
 FUNCTION_BLOCK FB_ThermoCouple
 (*
-	Handles scaling and default diagnostics for thermocouple terminals
+	Deprecated as of 2020-03-02, please use FB_TempSensor instead
 	2019-10-09 Zachary Lentz
 *)
+{warning 'Function Block FB_ThermoCouple is deprecated and may be removed in a future release'}
 VAR_INPUT
 	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
 	iScale: INT := 10;
@@ -1940,7 +1998,7 @@ Links
 Pragma lint results
 -------------------
 ```
-INFO:pytmc.bin.pragmalint:Total pragmas found: 70 Total linter errors: 0
+INFO:pytmc.bin.pragmalint:Total pragmas found: 73 Total linter errors: 0
 PLC Project (1): LCLSGeneral
 ============================
 
@@ -1997,6 +2055,12 @@ POUs/Hardware/FB_ThermoCouple.TcPOU (TcPlcObject)
 -------------------------------------------------
 
     - FB_ThermoCouple: Declaration - 3 pragmas
+
+
+POUs/Hardware/FB_TempSensor.TcPOU (TcPlcObject)
+-----------------------------------------------
+
+    - FB_TempSensor: Declaration - 3 pragmas
 
 
 POUs/Logger/DUTs/E_LogEventType_WC.TcDUT (TcPlcObject)
