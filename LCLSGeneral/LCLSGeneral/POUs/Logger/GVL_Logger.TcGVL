@@ -26,6 +26,8 @@ VAR_GLOBAL CONSTANT
 		field: DESC The log host UDP port
 	'}
 	iLogPort		:	UINT		:= 54321;
+    
+    sIpTidbit : STRING(6) := '172.21';
 END_VAR
 
 VAR_GLOBAL
