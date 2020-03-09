@@ -63,6 +63,8 @@ VAR
     SocketEnable : BOOL;
     
     bAdapterSet : BOOL;
+    
+    ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
 END_VAR
 
 VAR CONSTANT
@@ -106,8 +108,8 @@ IF NOT bAdapterSet THEN
                 bAdapterSet := TRUE;
                 EXIT;
             END_IF
-		END_FOR
-	END_IF
+        END_FOR
+    END_IF
 END_IF
 
 (* Ensure the socket is ready for when JSON documents are emitted *)
@@ -115,7 +117,12 @@ rtReset(CLK:=bReset);
 
 IF (rtReset.Q AND fbSocket.bEnable) OR fbSocket.bError THEN
 	fbSocket(bEnable:=FALSE);
+    ctuSocketError(RESET:=TRUE);
 END_IF
+
+// Disable fbSocket if too many errors occur
+ctuSocketError(CU:=fbSocket.bError, RESET:=FALSE);
+SocketEnable R= ctuSocketError.Q;
 
 fbSocket(
 	nLocalPort:=0,
