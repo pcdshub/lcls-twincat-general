@@ -362,6 +362,8 @@ VAR_GLOBAL CONSTANT
 		field: DESC The log host UDP port
 	&#39;}
 	iLogPort		:	UINT		:= 54321;
+    
+    sIpTidbit : STRING(6) := &#39;172.21&#39;;
 END_VAR
 
 VAR_GLOBAL
@@ -1301,6 +1303,7 @@ VAR
 	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := &#39;&#39;); //Acquires name of the PLC
     fbGetAdapterIP : FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := &#39;&#39;); // Acquire IP of the correct adapter
 	bHostnameSet	:	BOOL	:= FALSE;
+    idxPortFind : UDINT;
 
 	fbListener		:	REFERENCE TO FB_Listener;
 	fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
@@ -1353,9 +1356,15 @@ END_IF
 IF NOT bAdapterSet THEN
     fbGetAdapterIP();
     IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
-        fbSocket.sLocalHost := fbGetAdapterIP.arrAdapters[1].sIpAddr;
-        SocketEnable := TRUE;
-        bAdapterSet := TRUE;
+        FOR idxPortFind := 0 TO MAX_LOCAL_ADAPTERS DO
+            IF FIND(fbGetAdapterIP.arrAdapters[idxPortFind].sIpAddr,
+               GVL_Logger.sIpTidbit) &lt;&gt; 0 THEN
+                fbSocket.sLocalHost := fbGetAdapterIP.arrAdapters[idxPortFind].sIpAddr;
+                SocketEnable := TRUE;
+                bAdapterSet := TRUE;
+                EXIT;
+            END_IF
+		END_FOR
 	END_IF
 END_IF
 
