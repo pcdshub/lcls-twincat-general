@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_EcMasterDevState" Id="{d5474f70-6d59-4084-94cf-4911c3abc999}">
+    <Declaration><![CDATA[TYPE ST_EcMasterDevState :
+STRUCT
+	eEcState	 		: E_EcCommState;
+	nReserved			: ARRAY [0..2] OF UINT;
+
+	bLinkError			: BOOL;
+	bResetRequired		: BOOL;
+	bMissFrmRedMode		: BOOL;
+	bWatchdogTriggerd	: BOOL;
+	bDriverNotFound		: BOOL;
+	bResetActive		: BOOL;
+	bAtLeastOneNotInOp	: BOOL;
+	bDcNotInSync		: BOOL;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

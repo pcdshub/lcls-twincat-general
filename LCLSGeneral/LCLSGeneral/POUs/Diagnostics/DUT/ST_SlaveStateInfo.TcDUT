@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_SlaveStateInfo" Id="{4cfcab85-b0f2-49f6-bb38-fcb7f6633131}">
+    <Declaration><![CDATA[TYPE ST_SlaveStateInfo :
+STRUCT
+	nIndex 			: DINT;
+	sName 			: STRING; 		(* name of slave given in System Manager *)
+	sType 			: STRING;		(* type of slave, e.g. EK1100*)
+	nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
+	bDiagData		: BOOL;			(* DiagData in Slave State *)
+	stPortCRCErrors	: ST_EcCrcErrorEx;(* Slave CRC-Errors, separate for each Port *)
+	nSumCRCErrors	: UDINT;		(* Slave CRC-Errors, sum of all Ports *)
+	stState 		: ST_SlaveState;(* EtherCAT State and Link state*)
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
