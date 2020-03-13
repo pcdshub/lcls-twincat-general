@@ -1271,7 +1271,7 @@ VAR_INPUT
 	{attribute &#39;pytmc&#39; := &#39;
 		pv: Router
 	&#39;}
-	fbTcRouterListener : FB_Listener;	
+	fbTcRouterListener : FB_Listener;
 	
 	{attribute &#39;pytmc&#39; := &#39;
 		pv: RTime
@@ -1300,6 +1300,9 @@ END_VAR
 VAR
 	
 	bInitialized	:	BOOL	:= FALSE;
+	bReadyToLog		: 	BOOL	:= FALSE;
+	rtFirstLog		: 	R_TRIG;
+	
 	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := &#39;&#39;); //Acquires name of the PLC
     fbGetAdapterIP : FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := &#39;&#39;); // Acquire IP of the correct adapter
 	bHostnameSet	:	BOOL	:= FALSE;
@@ -1380,6 +1383,15 @@ fbSocket(
 	bEnable:=SocketEnable,
 	nMode:=CONNECT_MODE_ENABLEDBG,
 );
+
+bReadyToLog := (bAdapterSet AND bHostnameSet AND bInitialized AND 
+                fbSocket.bEnable AND NOT fbSocket.bError);
+rtFirstLog(CLK:=bReadyToLog);
+
+IF rtFirstLog.Q THEN
+    fbRootLogger(sMsg:=&quot;Logging system online&quot;, eSevr:=TcEventSeverity.Info,
+                 eSubsystem:=E_Subsystem.NILVALUE);
+END_IF
 
 (* Poke all of the listeners *)
 FOR nI := 0 TO nNumListeners - 1 DO
