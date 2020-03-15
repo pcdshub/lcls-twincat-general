@@ -52,7 +52,7 @@ fbEtherCATFrameDiag(
 	wReqZeroMask 	:= wReqZeroMask,
 	bFrameWcStateOK	=> bFrameWcStateOK
 );
-bAllFrameWcStatesOK := bFrameWcStateOK AND FAST.bFrameWcStateOK;
+bAllFrameWcStatesOK := bFrameWcStateOK;
 
 (*************************************** EtherCAT Diag *********************************************)
 (* generate Net Id *)
