@@ -163,8 +163,13 @@ CASE iState OF
 	M_GetScannedSlaveName();
 
 10: (* Log diagnostics *)
-    DiagnosticJson();
-    fbLogger(sMsg:='EtherCAT Diagnostic complete', eSevr:=TcEventSeverity.Info);
+    (* I can't get the fbJsonDataType to actually convert the slave info 
+    structures. I just get nulls. Either I am doing this wrong, or when 
+    the symbol parser encounters datatypes it can't deal with it nulls
+    the whole thing. I'll keep this code commented out until someone figures
+    out how to deal with parsing the slave structs into the json payload *)
+    // DiagnosticJson();
+    // fbLogger(sMsg:='EtherCAT Diagnostic complete', eSevr:=TcEventSeverity.Info);
     iState := iState + 1;    
     
 11:	(* DONE *)
