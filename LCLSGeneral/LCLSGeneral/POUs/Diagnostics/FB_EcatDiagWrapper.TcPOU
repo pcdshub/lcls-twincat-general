@@ -18,7 +18,8 @@ END_VAR
 VAR
     
     (* ******************* EtherCAT Frame ***************************** *)
-	fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic 
+	fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^Frm1WcState'} 
 	wFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
 	wReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
 	bFrameWcStateOK			: BOOL;				// this frame is OK 
@@ -29,7 +30,7 @@ VAR
 	(* cyclic variables from EtherCAT Master *)
     {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^SlaveCount'}
 	nEcMasterSlaveCount AT %I* 	: UINT;			// link to SlaveCount of EtherCAT Master (Inputs)
-    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^DevState'}
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^DevState'}
 	nEcMasterDevState AT %I* 	: UINT;			// link to DevState of EtherCAT Master (Inputs)
     {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^DevId'}
 	nEcMasterDeviceId AT %I*	: UINT;			// link to DevID of EtherCAT Master (InfoData)
