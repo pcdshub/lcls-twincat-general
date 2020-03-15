@@ -131,7 +131,7 @@ bReadyToLog := (bAdapterSet AND bHostnameSet AND bInitialized AND
 rtFirstLog(CLK:=bReadyToLog);
 
 IF rtFirstLog.Q THEN
-    fbRootLogger(sMsg:="Logging system online", eSevr:=TcEventSeverity.Info,
+    fbRootLogger(sMsg:='Logging system online', eSevr:=TcEventSeverity.Info,
                  eSubsystem:=E_Subsystem.NILVALUE);
 END_IF
 

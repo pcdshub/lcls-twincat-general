@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_EcatDiagWrapper" Id="{ae68027c-9136-4dab-b887-f964a869ea04}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EcatDiagWrapper
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+    bAllFrameWcStatesOK		: BOOL;				// all frames are OK
+    bEtherCATOK				: BOOL;				// no problem on EtherCAT
+	bFrameWcStateError		: BOOL;				// at least one fram with error
+	bSlaveCountError		: BOOL;				// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
+	bMasterDevStateError	: BOOL;				// EtherCAT master device state signals error
+	stMasterDevState		: ST_EcMasterDevState; // device state split to a structure
+	bBusy					: BOOL;				// diagnostic FB is busy
+	bError					: BOOL;				// diagnostic FB has an error
+	iErrorID				: UDINT;			// error ID of diagnostic FB
+END_VAR
+VAR
+    
+    (* ******************* EtherCAT Frame ***************************** *)
+	fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic 
+	wFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
+	wReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
+	bFrameWcStateOK			: BOOL;				// this frame is OK 
+
+    (* ******************* EtherCAT Diag ***************************** *)
+    fbEtherCATDiag			: FB_EtherCATDiag;	// deep EtherCAT diagnostic
+
+	(* cyclic variables from EtherCAT Master *)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^SlaveCount'}
+	nEcMasterSlaveCount AT %I* 	: UINT;			// link to SlaveCount of EtherCAT Master (Inputs)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^DevState'}
+	nEcMasterDevState AT %I* 	: UINT;			// link to DevState of EtherCAT Master (Inputs)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^DevId'}
+	nEcMasterDeviceId AT %I*	: UINT;			// link to DevID of EtherCAT Master (InfoData)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^AmsNetId'}
+	arrEcMasterNetId AT %I* 	: T_AmsNetIdArr;// link to NetID of EtherCAT Master (InfoData)
+	sEcMasterNetId  			: T_AmsNetId := '';
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^CfgSlaveCount'}
+	nEcMasterSlaveCountCfg AT %I* 	: UINT;		// link to CfgSlaveCount of EtherCAT Master (InfoData)
+
+	(* general variables *)
+	arrDiagSlaveInfo 			: ARRAY [0..3] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves 
+	arrDiagSlaveInfoScanned		: ARRAY [0..3] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves  
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+(*************************************** Frame Diag *********************************************)
+fbEtherCATFrameDiag(
+	wFrmXWcState 	:= wFrmXWcState,
+	wReqZeroMask 	:= wReqZeroMask,
+	bFrameWcStateOK	=> bFrameWcStateOK
+);
+bAllFrameWcStatesOK := bFrameWcStateOK AND FAST.bFrameWcStateOK;
+
+(*************************************** EtherCAT Diag *********************************************)
+(* generate Net Id *)
+sEcMasterNetId := F_CreateAmsNetId(nIds := arrEcMasterNetId);
+fbEtherCATDiag(
+	sIPCNetID			:= '',
+	sMasterNetID		:= sEcMasterNetId,
+	nMasterDevID		:= nEcMasterDeviceId,
+	nSlaveCount			:= nEcMasterSlaveCount,
+	nSlaveCountCfg		:= nEcMasterSlaveCountCfg,
+	nMasterDevState		:= nEcMasterDevState,
+	bAllFrameWcStatesOK	:= bAllFrameWcStatesOK,
+	tTimeout			:= T#5s,
+	arrDiagSlaveInfo	:= arrDiagSlaveInfo,
+	arrDiagSlaveInfoScanned	:= arrDiagSlaveInfoScanned,
+	bEtherCATOK			=> bEtherCATOK,
+	bFrameWcStateError	=> bFrameWcStateError,
+	bSlaveCountError	=> bSlaveCountError,
+	bMasterDevStateError=> bMasterDevStateError,
+	stMasterDevState	=> stMasterDevState,
+	bBusy				=> bBusy,
+	bError				=> bError,
+	iErrorID			=> iErrorID
+);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_EcatDiag" Id="{04266cc1-1752-4ae8-b692-47df0663f314}" SpecialFunc="None">
     <Declaration><![CDATA[(* 
 Ecat bus diagnostic tool
@@ -18,21 +18,22 @@ FUNCTION_BLOCK FB_EcatDiag
 VAR_INPUT
 	{attribute 'naming' := 'omit'}
 	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
-	i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
+    i_eSubsystem : E_Subsystem := E_SubSystem.FIELDBUS; // Change to your subsystem (MPS, VACUUM, MOTION, etc).
+	i_xFirstPass: BOOL := TRUE; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
 END_VAR
 VAR_OUTPUT
 	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
-	q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
+	q_anTermStates: ARRAY[1..MAX_ECAT_TERMS] OF BYTE; //ECAT State of terminals in the bus
 	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
 	q_nMasterState: WORD; // The Device State of the Master
 	q_sMasterState:STRING; //State of the ECAT master
-	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
+	q_astEcConfSlaveInfo :  ARRAY[1..MAX_ECAT_TERMS] OF ST_EcDevice; //State of all ECAT slaves in the bus
 	q_nSlaves: UINT; // the Number of the connected Slaves
 END_VAR
 VAR
 	sNetId: T_AmsNetId; //NetId string
-	astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
-	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
+	astTermStates: ARRAY[1..MAX_ECAT_TERMS] OF ST_EcSlaveState; //ECAT Slave States Buffer
+	astEcConfSlaveInfo: ARRAY[1..MAX_ECAT_TERMS] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
 	fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates 
 	
 	fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
@@ -42,6 +43,17 @@ VAR
 	{attribute 'naming' := 'omit'}
 	ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
 	nIterator: INT; //Generic iterator placeholder
+    
+    // Logging components
+    fbLogger : FB_LogMessage := (eSubsystem:=i_eSubsystem);
+    fbJson : FB_JsonSaxWriter;
+    // // Triggers
+    tAllSlavesGoodLog : F_TRIG;
+    
+    
+END_VAR
+VAR CONSTANT
+    MAX_ECAT_TERMS : UINT := 256; 
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -65,12 +77,29 @@ FOR nIterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
 	IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
 		q_xAllSlaveStatesGood := FALSE;
 	END_IF
+    IF q_anTermStates[nIterator] <> astTermStates[nIterator].deviceState THEN
+        // Log message
+        fbJson.StartObject();
+        fbJson.AddKey('ecat_');
+	END_IF
 	q_anTermStates[nIterator] := astTermStates[nIterator].deviceState;
 	q_astEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
 	q_astEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
 	q_astEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
+    
+    // Logging
+    // Need to trigger on any change
+    
 	
 END_FOR
+END_IF
+
+// Log all slave states good
+tAllSlavesGoodLog(CLK:=q_xAllSlaveStatesGood);
+IF tAllSlavesGoodLog.Q THEN
+    fbLogger.sMsg := 'EtherCAT network just went down';
+    fbLogger.eSevr := TcEventSeverity.Critical;
+    fbLogger();
 END_IF
 
 // Read the EtherCAT state of the master. If the call is successful, 
@@ -101,9 +130,5 @@ END_IF
 
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_EcatDiag">
-      <LineId Id="856" Count="53" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

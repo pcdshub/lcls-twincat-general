@@ -104,6 +104,9 @@
     <Compile Include="POUs\Diagnostics\FB_EtherCATDiag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Diagnostics\FB_EtherCATFrameDiag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
