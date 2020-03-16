@@ -47,7 +47,7 @@ VAR
     // Logging components
     fbLogger : FB_LogMessage := (eSubsystem:=i_eSubsystem);
     fbJson : FB_JsonSaxWriter;
-    // // Triggers
+    // Triggers
     tAllSlavesGoodLog : F_TRIG;
     
     
