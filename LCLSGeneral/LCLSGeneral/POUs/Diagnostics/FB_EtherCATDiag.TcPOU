@@ -34,6 +34,7 @@ VAR
 	bAllFrameWcStatesOKPrev		: BOOL;
 	bDiagReq					: BOOL := TRUE;
 	I							: UDINT;
+    P							: UDINT;
     
     arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
     arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned;
@@ -493,37 +494,19 @@ IF NOT fbGetTopologyData.BUSY THEN
 		iDiagIndex[1] := 0;
 		iDiagIndex[2] := 0;
 		iDiagIndex[ESC_MAX_PORTS] := 0;
-
-		(* find slaves on PortB of first slave with diag *)
-		IF iDiagPort[1] <> 0 THEN
+        
+        (* find slaves on PortB-D of first slave with diag *)
+        FOR P := 0 TO ESC_MAX_PORTS DO
+            IF iDiagPort[P] <> 0 THEN
 			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[1] THEN
-					iDiagIndex[1] := UDINT_TO_UINT(I);
+				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[P] THEN
+					iDiagIndex[P] := UDINT_TO_UINT(I);
 					EXIT;
 				END_IF
 			END_FOR
 		END_IF
-
-		(* find slaves on PortC of first slave with diag *)
-		IF iDiagPort[2] <> 0 THEN
-			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[2] THEN
-					iDiagIndex[2] := UDINT_TO_UINT(I);
-					EXIT;
-				END_IF
-			END_FOR
-		END_IF
-
-		(* find slaves on PortD of first slave with diag *)
-		IF iDiagPort[ESC_MAX_PORTS] <> 0 THEN
-			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[ESC_MAX_PORTS] THEN
-					iDiagIndex[ESC_MAX_PORTS] := UDINT_TO_UINT(I);
-					EXIT;
-				END_IF
-			END_FOR
-		END_IF
-	END_IF
+		END_FOR
+    END_IF
 
 	iIdx := 0;
 	iState := E_EcatDiagState.ScanSlaves;
