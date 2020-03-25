@@ -31,7 +31,6 @@
   <ItemGroup>
     <Folder Include="Data types" />
     <Folder Include="Data types\Misc" />
-    <Folder Include="Diagnostics" />
     <Folder Include="GVLs" />
     <Folder Include="POUs" />
     <Folder Include="POUs\Diagnostics\DUT" />
@@ -75,6 +74,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBufferGlobal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_EcatDiagState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\E_EcCommState.TcDUT">

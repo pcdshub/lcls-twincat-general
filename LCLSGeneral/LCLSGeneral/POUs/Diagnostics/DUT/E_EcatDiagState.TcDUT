@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="E_EcatDiagState" Id="{ea5bfb7d-3579-4b8e-b049-2c6788da170b}">
+    <Declaration><![CDATA[TYPE E_EcatDiagState :
+(
+	Idle := 0,
+    GetSlaveAddresses := 1,
+    GetSlaveStates := 2,
+    GetTopoDataLen := 3,
+    GetTopoData := 4,
+    ScanSlaves := 5,
+    GetSlaveIdentity := 6,
+    GetSlaveName := 7,
+    GetScannedSlaveName := 8,
+    LogDiagnostics := 9,
+    Done := 8000
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

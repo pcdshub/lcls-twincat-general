@@ -28,13 +28,16 @@ VAR_IN_OUT
 	arrDiagSlaveInfoScanned		: ARRAY [0..3] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
 END_VAR
 VAR
-	iState						: INT;
+	iState						: E_EcatDiagState;
 	nMasterDevStatePrev			: WORD;
 	bSlaveCountErrorPrev		: BOOL;
 	bAllFrameWcStatesOKPrev		: BOOL;
 	bDiagReq					: BOOL := TRUE;
 	I							: UDINT;
-
+    
+    arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
+    arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned;
+    
 	(* -- Get Slave Addresses *)
 	fbGetSlaveAddresses 		: FB_EcGetAllSlaveAddr;
 	arrSlaveAddresses 			: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF UINT;
@@ -67,8 +70,7 @@ VAR
 	fbGetSlaveName 				: IOF_GetBoxNameByAddr;
 	strName						: STRING;
 
-	arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
-	arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned;
+	
     
     // Logging components
     fbLogger : FB_LogMessage := (eSubsystem := eSubsystem);
@@ -102,12 +104,12 @@ END_IF
 
 (* acyclic diag *)
 CASE iState OF
-0: (* IDLE *)
+E_EcatDiagState.Idle: (* IDLE *)
 	IF bDiagReq THEN				// diag requested
 		bDiagReq := FALSE;
 
 		IF sMasterNetID <> '' AND sMasterNetID <> '0.0.0.0.0.0' THEN
-			iState := iState + 1;	// execute diag
+			iState := E_EcatDiagState.GetSlaveAddresses;	// execute diag
 			bBusy := TRUE;
 		ELSE
 			bError := TRUE;
@@ -138,31 +140,31 @@ CASE iState OF
 		END_IF
 	END_IF
 
-1: (* get adresses *)
+E_EcatDiagState.GetSlaveAddresses: (* get adresses *)
 	M_GetSlaveAdresses();
 
-2: (* get states *)
+E_EcatDiagState.GetSlaveStates: (* get states *)
 	M_GetSlaveStates();
 
-3:	(* get topology data length *)
+E_EcatDiagState.GetTopoDataLen:	(* get topology data length *)
 	M_GetTopoDataLen();
 
-4:	(* get topology data *)
+E_EcatDiagState.GetTopoData:	(* get topology data *)
 	M_GetTopoData();
 
-5:	(* scan slaves *)
+E_EcatDiagState.ScanSlaves:	(* scan slaves *)
 	M_ScanSlaves();
 
-6:	(* get identity *)
+E_EcatDiagState.GetSlaveIdentity:	(* get identity *)
 	M_GetSlaveIdentity();
 
-7:	(* get name *)
+E_EcatDiagState.GetSlaveName:	(* get name *)
 	M_GetSlaveName();
 
-8:	(* get scanned name *)
+E_EcatDiagState.GetScannedSlaveName:	(* get scanned name *)
 	M_GetScannedSlaveName();
 
-10: (* Log diagnostics *)
+E_EcatDiagState.LogDiagnostics: (* Log diagnostics *)
     (* I can't get the fbJsonDataType to actually convert the slave info 
     structures. I just get nulls. Either I am doing this wrong, or when 
     the symbol parser encounters datatypes it can't deal with it nulls
@@ -170,9 +172,9 @@ CASE iState OF
     out how to deal with parsing the slave structs into the json payload *)
     // DiagnosticJson();
     // fbLogger(sMsg:='EtherCAT Diagnostic complete', eSevr:=TcEventSeverity.Info);
-    iState := iState + 1;    
+    iState := E_EcatDiagState.Done;    
     
-11:	(* DONE *)
+E_EcatDiagState.Done:	(* DONE *)
 	bBusy := FALSE;
 	iState := 0;
 
@@ -304,10 +306,10 @@ IF NOT fbGetSlaveName.BUSY THEN
 
 	IF iIdx < 3 THEN
 		iIdx := iIdx + 1;
-		iState := iState - 2;
+		iState := E_EcatDiagState.GetSlaveIdentity;
 	ELSE
 		iIdx := 0;
-		iState := 10;
+		iState := E_EcatDiagState.Done;
 
 		FOR I := 0 TO 3 DO
 			IF iDiagPort[I] <> 0 THEN
@@ -343,7 +345,7 @@ IF NOT fbGetSlaveAddresses.bBusy THEN
 			arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
 		END_FOR
 	END_IF
-	iState := iState + 1;
+	iState := GetSlaveStates;
 END_IF
 ]]></ST>
       </Implementation>
@@ -367,7 +369,7 @@ IF NOT fbGetSlaveIdentity.bBusy THEN
 			arrSlaveInfo[iDiagIndex[iIdx]].sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
 		END_IF
 	END_IF
-	iState := iState + 1;
+	iState := E_EcatDiagState.GetSlaveName;
 END_IF
 ]]></ST>
       </Implementation>
@@ -392,7 +394,7 @@ IF NOT fbGetSlaveName.BUSY THEN
 		END_IF
 	END_IF
 
-	iState := iState + 1;
+	iState := E_EcatDiagState.GetScannedSlaveName;
 END_IF
 ]]></ST>
       </Implementation>
@@ -451,13 +453,13 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
 	END_IF
 
 	IF arrSlaveInfo[iDiagIndex[0]].bDiagData THEN
-		iState := iState + 1;
+		iState := E_EcatDiagState.GetTopoDataLen;
 	ELSE
 		FOR I := 0 TO 3 DO
 			MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
 			MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
 		END_FOR
-		iState := 10;
+		iState := E_EcatDiagState.Done;
 	END_IF
 END_IF
 ]]></ST>
@@ -522,7 +524,7 @@ IF NOT fbGetTopologyData.BUSY THEN
 	END_IF
 
 	iIdx := 0;
-	iState := iState + 1;
+	iState := E_EcatDiagState.ScanSlaves;
 END_IF
 ]]></ST>
       </Implementation>
@@ -543,7 +545,7 @@ END_IF
 IF NOT fbGetTopologyData.BUSY THEN
 	fbGetTopologyData(READ := FALSE);
 
-	iState := iState + 1;
+	iState := E_EcatDiagState.GetTopoData;
 END_IF
 ]]></ST>
       </Implementation>
@@ -560,13 +562,15 @@ END_IF
 
 IF NOT fbEcGetScannedSlaves.bBusy THEN
 	fbEcGetScannedSlaves(bExecute := FALSE);
-	iState := iState + 1;
-
+	
 	IF fbEcGetScannedSlaves.bError THEN
 		nScannedSlaves := 0;
 	ELSE
 		nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
 	END_IF
+    
+    iState := E_EcatDiagState.GetSlaveIdentity;
+    
 END_IF
 ]]></ST>
       </Implementation>
