@@ -41,8 +41,8 @@ VAR
 	nEcMasterSlaveCountCfg AT %I* 	: UINT;		// link to CfgSlaveCount of EtherCAT Master (InfoData)
 
 	(* general variables *)
-	arrDiagSlaveInfo 			: ARRAY [0..3] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves 
-	arrDiagSlaveInfoScanned		: ARRAY [0..3] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves  
+	arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves 
+	arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves  
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -24,8 +24,8 @@ VAR_OUTPUT
 	iErrorID					: UDINT;		// FB error ID
 END_VAR
 VAR_IN_OUT
-	arrDiagSlaveInfo 			: ARRAY [0..3] OF ST_SlaveStateInfo;		// read in info from configured slaves
-	arrDiagSlaveInfoScanned		: ARRAY [0..3] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
+	arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info from configured slaves
+	arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
 END_VAR
 VAR
 	iState						: E_EcatDiagState;
@@ -53,8 +53,8 @@ VAR
 	arrTopologyData				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_TopologyData;
 
 	(* -- Check Topology *)
-	iDiagIndex					: ARRAY [0..3] OF UINT;
-	iDiagPort					: ARRAY [0..3] OF UINT;
+	iDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+	iDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
 	iIdx						: DINT;
 
 	(* -- Scan Slaves *)
@@ -80,7 +80,9 @@ VAR
     tFrameWcStateError : R_TRIG;
     tMasterError : R_TRIG;
     jsonIdx : UINT;
-END_VAR]]></Declaration>
+END_VAR
+
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 (* cyclic diag *)
@@ -304,14 +306,14 @@ IF NOT fbGetSlaveName.BUSY THEN
 		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentType := FALSE;
 	END_IF
 
-	IF iIdx < 3 THEN
+	IF iIdx < ESC_MAX_PORTS THEN
 		iIdx := iIdx + 1;
 		iState := E_EcatDiagState.GetSlaveIdentity;
 	ELSE
 		iIdx := 0;
 		iState := E_EcatDiagState.Done;
 
-		FOR I := 0 TO 3 DO
+		FOR I := 0 TO ESC_MAX_PORTS DO
 			IF iDiagPort[I] <> 0 THEN
 				arrDiagSlaveInfo[I] := arrSlaveInfo[iDiagIndex[I]];
 				arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[iDiagIndex[I]];
@@ -415,7 +417,7 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
 
 	IF NOT fbGetAllSlaveStates.bError THEN
 		IF iNumOfSlavesRead = nSlaveCountCfg THEN
-			FOR I := 0 TO 3 DO
+			FOR I := 0 TO ESC_MAX_PORTS DO
 				iDiagIndex[I] := 0;
 			END_FOR
 
@@ -455,7 +457,7 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
 	IF arrSlaveInfo[iDiagIndex[0]].bDiagData THEN
 		iState := E_EcatDiagState.GetTopoDataLen;
 	ELSE
-		FOR I := 0 TO 3 DO
+		FOR I := 0 TO ESC_MAX_PORTS DO
 			MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
 			MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
 		END_FOR
@@ -485,12 +487,12 @@ IF NOT fbGetTopologyData.BUSY THEN
 		iDiagPort[0] := arrTopologyData[iDiagIndex[0]].iOwnPhysicalAddr;
 		iDiagPort[1] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portB;
 		iDiagPort[2] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portC;
-		iDiagPort[3] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portD;
+		iDiagPort[ESC_MAX_PORTS] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portD;
 
 		(* clear diag index  *)
 		iDiagIndex[1] := 0;
 		iDiagIndex[2] := 0;
-		iDiagIndex[3] := 0;
+		iDiagIndex[ESC_MAX_PORTS] := 0;
 
 		(* find slaves on PortB of first slave with diag *)
 		IF iDiagPort[1] <> 0 THEN
@@ -513,10 +515,10 @@ IF NOT fbGetTopologyData.BUSY THEN
 		END_IF
 
 		(* find slaves on PortD of first slave with diag *)
-		IF iDiagPort[3] <> 0 THEN
+		IF iDiagPort[ESC_MAX_PORTS] <> 0 THEN
 			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[3] THEN
-					iDiagIndex[3] := UDINT_TO_UINT(I);
+				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[ESC_MAX_PORTS] THEN
+					iDiagIndex[ESC_MAX_PORTS] := UDINT_TO_UINT(I);
 					EXIT;
 				END_IF
 			END_FOR
