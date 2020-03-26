@@ -8,7 +8,7 @@
 	eEcState_BOOT 		:= 3,
 	eEcState_SAFEOP 	:= 4,
 	eEcState_OP 		:= 8
-);
+) UDINT;
 END_TYPE]]></Declaration>
   </DUT>
 </TcPlcObject>

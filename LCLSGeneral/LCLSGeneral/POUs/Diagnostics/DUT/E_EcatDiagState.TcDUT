@@ -6,7 +6,7 @@
 	Idle := 0,
     GetSlaveAddresses := 1,
     GetSlaveStates := 2,
-    GetTopoDataLen := ESC_MAX_PORTS,
+    GetTopoDataLen := 3,
     GetTopoData := 4,
     ScanSlaves := 5,
     GetSlaveIdentity := 6,
