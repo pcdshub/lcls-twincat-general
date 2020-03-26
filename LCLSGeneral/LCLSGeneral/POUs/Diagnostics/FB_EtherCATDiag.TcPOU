@@ -37,8 +37,8 @@ VAR
     P							: UDINT;
     
     arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
-    arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned;
-    
+    rSlaveInfo  :   REFERENCE TO ST_SlaveStateInfo;
+
 	(* -- Get Slave Addresses *)
 	fbGetSlaveAddresses 		: FB_EcGetAllSlaveAddr;
 	arrSlaveAddresses 			: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF UINT;
@@ -55,12 +55,15 @@ VAR
 
 	(* -- Check Topology *)
 	iDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+    rDiagIndex  :   REFERENCE TO UINT;    
 	iDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+    rDiagPort   :   REFERENCE TO UINT;
 	iIdx						: DINT;
 
 	(* -- Scan Slaves *)
 	fbEcGetScannedSlaves		: FB_EcGetScannedSlaves;
-	arrScannedSlaveInfo			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveScannedData;
+	arrScannedSlaveInfo			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveScannedData; // what...
+    rScannedSlaveInfo   :   REFERENCE TO ST_EcSlaveScannedData;
 	nScannedSlaves				: UINT;
 
 	(* -- Get Slave Identities *)
@@ -69,6 +72,8 @@ VAR
 
 	(* -- Get Slave Names *)
 	fbGetSlaveName 				: IOF_GetBoxNameByAddr;
+    arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned; // the F
+    rSlaveInfoScanned   :   REFERENCE TO ST_SlaveStateInfoScanned;
 	strName						: STRING;
 
 	
@@ -259,10 +264,14 @@ nMasterDevStatePrev 				:= nMasterDevState;
     </Action>
     <Action Name="M_GetScannedSlaveName" Id="{b8516cb6-a50d-4847-8ef9-760658b0a4c9}">
       <Implementation>
-        <ST><![CDATA[fbGetSlaveName(
+        <ST><![CDATA[
+rSlaveInfoScanned REF= arrSlaveInfoScanned[rDiagIndex];
+rScannedSlaveInfo REF= arrScannedSlaveInfo[rDiagIndex];
+
+fbGetSlaveName(
 	NETID		:= sIPCNetId,
 	DEVICEID	:= nMasterDevID,
-	BOXADDR		:= arrScannedSlaveInfo[iDiagIndex[iIdx]].nAddr,
+	BOXADDR		:= rScannedSlaveInfo.nAddr,
 	START		:= TRUE,
 	TMOUT		:= tTimeout,
 	BOXNAME		=> strName
@@ -272,44 +281,44 @@ IF NOT fbGetSlaveName.BUSY THEN
 	fbGetSlaveName(START:= FALSE);
 
 	(* add scanned info *)
-	arrSlaveInfoScanned[iDiagIndex[iIdx]].nIndex 	:= iDiagIndex[iIdx] + 1;
-	IF arrScannedSlaveInfo[iDiagIndex[iIdx]].nAddr <> 0 THEN
+	rSlaveInfoScanned.nIndex 	:= rDiagIndex + 1;
+	IF rScannedSlaveInfo.nAddr <> 0 THEN
 		IF NOT fbGetSlaveName.ERR THEN
-			arrSlaveInfoScanned[iDiagIndex[iIdx]].sName := strName;
+			rSlaveInfoScanned.sName := strName;
 		END_IF
 	ELSE
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].sType		:= '';
+		rSlaveInfoScanned.sType		:= '';
 	END_IF
 
-	IF (iDiagIndex[iIdx] < nScannedSlaves) THEN
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].sType		:= F_ConvProductCodeToString(arrScannedSlaveInfo[iDiagIndex[iIdx]].stSlaveIdentity);
+	IF (rDiagIndex < nScannedSlaves) THEN
+		rSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
 	ELSE
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].sType		:= '';
+		rSlaveInfoScanned.sType		:= '';
 	END_IF
 
-	arrSlaveInfoScanned[iDiagIndex[iIdx]].nECAddr	:= arrScannedSlaveInfo[iDiagIndex[iIdx]].nAddr;
+	rSlaveInfoScanned.nECAddr	:= rScannedSlaveInfo.nAddr;
 
-	IF arrSlaveInfoScanned[iDiagIndex[iIdx]].sName <> arrSlaveInfo[iDiagIndex[iIdx]].sName THEN
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentName := TRUE;
+	IF rSlaveInfoScanned.sName <> rSlaveInfo.sName THEN
+		rSlaveInfoScanned.bDifferentName := TRUE;
 	ELSE
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentName := FALSE;
+		rSlaveInfoScanned.bDifferentName := FALSE;
 	END_IF
 
-	IF arrSlaveInfoScanned[iDiagIndex[iIdx]].nECAddr <> arrSlaveInfo[iDiagIndex[iIdx]].nECAddr THEN
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentAddr := TRUE;
+	IF rSlaveInfoScanned.nECAddr <> rSlaveInfo.nECAddr THEN
+		rSlaveInfoScanned.bDifferentAddr := TRUE;
 	ELSE
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentAddr := FALSE;
+		rSlaveInfoScanned.bDifferentAddr := FALSE;
 	END_IF
 
-	IF arrSlaveInfoScanned[iDiagIndex[iIdx]].sType <> arrSlaveInfo[iDiagIndex[iIdx]].sType THEN
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentType := TRUE;
+	IF rSlaveInfoScanned.sType <> rSlaveInfo.sType THEN
+		rSlaveInfoScanned.bDifferentType := TRUE;
 	ELSE
-		arrSlaveInfoScanned[iDiagIndex[iIdx]].bDifferentType := FALSE;
+		rSlaveInfoScanned.bDifferentType := FALSE;
 	END_IF
 
 	IF iIdx < ESC_MAX_PORTS THEN
 		iIdx := iIdx + 1;
-		iState := E_EcatDiagState.GetSlaveIdentity;
+		iState := E_EcatDiagState.GetSlaveIdentity; // loop back
 	ELSE
 		iIdx := 0;
 		iState := E_EcatDiagState.Done;
@@ -325,8 +334,6 @@ IF NOT fbGetSlaveName.BUSY THEN
 		END_FOR
 	END_IF
 END_IF
-
-
 ]]></ST>
       </Implementation>
     </Action>
@@ -355,9 +362,15 @@ END_IF
     </Action>
     <Action Name="M_GetSlaveIdentity" Id="{6436ec18-e4f4-4415-8713-025490e22c62}">
       <Implementation>
-        <ST><![CDATA[fbGetSlaveIdentity(
+        <ST><![CDATA[
+rDiagIndex REF= iDiagIndex[iIdx];
+rDiagPort REF= iDiagPort[iIdx];
+
+rSlaveInfo REF= arrSlaveInfo[rDiagIndex];
+
+fbGetSlaveIdentity(
 	sNetId		:= sMasterNetID,
-	nSlaveAddr	:= arrSlaveInfo[iDiagIndex[iIdx]].nECAddr,
+	nSlaveAddr	:= rSlaveInfo.nECAddr,
 	bExecute	:= TRUE,
 	tTimeout	:= tTimeout,
 	identity	=> stIdentity
@@ -367,9 +380,9 @@ IF NOT fbGetSlaveIdentity.bBusy THEN
 	fbGetSlaveIdentity(bExecute:= FALSE);
 
 	IF NOT fbGetSlaveIdentity.bError THEN
-		IF iDiagPort[iIdx] <> 0 THEN
-			arrSlaveInfo[iDiagIndex[iIdx]].nIndex	:= iDiagIndex[iIdx] + 1;
-			arrSlaveInfo[iDiagIndex[iIdx]].sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
+		IF rDiagPort <> 0 THEN
+			rSlaveInfo.nIndex	:= rDiagIndex + 1;
+			rSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
 		END_IF
 	END_IF
 	iState := E_EcatDiagState.GetSlaveName;
@@ -382,7 +395,7 @@ END_IF
         <ST><![CDATA[fbGetSlaveName(
 	NETID		:= sIPCNetId,
 	DEVICEID	:= nMasterDevID,
-	BOXADDR		:= arrSlaveInfo[iDiagIndex[iIdx]].nECAddr,
+	BOXADDR		:= rSlaveInfo.nECAddr,
 	START		:= TRUE,
 	TMOUT		:= tTimeout,
 	BOXNAME		=> strName
@@ -392,8 +405,8 @@ IF NOT fbGetSlaveName.BUSY THEN
 	fbGetSlaveName(START:= FALSE);
 
 	IF NOT fbGetSlaveName.ERR THEN
-		IF iDiagPort[iIdx] <> 0 THEN
-			arrSlaveInfo[iDiagIndex[iIdx]].sName 	:= strName;
+		IF rDiagPort <> 0 THEN
+			rSlaveInfo.sName 	:= strName;
 		END_IF
 	END_IF
 
