@@ -178,8 +178,8 @@ E_EcatDiagState.LogDiagnostics: (* Log diagnostics *)
     the symbol parser encounters datatypes it can't deal with it nulls
     the whole thing. I'll keep this code commented out until someone figures
     out how to deal with parsing the slave structs into the json payload *)
-    // DiagnosticJson();
-    // fbLogger(sMsg:='EtherCAT Diagnostic complete', eSevr:=TcEventSeverity.Info);
+    DiagnosticJson();
+    fbLogger(sMsg:='EtherCAT Diagnostic complete', eSevr:=TcEventSeverity.Info);
     iState := E_EcatDiagState.Done;    
     
 E_EcatDiagState.Done:	(* DONE *)
@@ -321,7 +321,7 @@ IF NOT fbGetSlaveName.BUSY THEN
 		iState := E_EcatDiagState.GetSlaveIdentity; // loop back
 	ELSE
 		iIdx := 0;
-		iState := E_EcatDiagState.Done;
+		iState := E_EcatDiagState.LogDiagnostics;
 
 		FOR I := 0 TO ESC_MAX_PORTS DO
 			IF aiDiagPort[I] <> 0 THEN
