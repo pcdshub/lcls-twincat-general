@@ -54,10 +54,10 @@ VAR
 	arrTopologyData				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_TopologyData;
 
 	(* -- Check Topology *)
-	iDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
-    rDiagIndex  :   REFERENCE TO UINT;    
-	iDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
-    rDiagPort   :   REFERENCE TO UINT;
+	aiDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+    iDiagIndex : UINT;    
+	aiDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+    iDiagPort : UINT;
 	iIdx						: DINT;
 
 	(* -- Scan Slaves *)
@@ -127,7 +127,7 @@ E_EcatDiagState.Idle: (* IDLE *)
 		bEtherCATOK := FALSE;
 	ELSE
 		// check for changes in idle
-		IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[iDiagIndex[0]].bDiagData) THEN
+		IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
 			bEtherCATOK := FALSE;
 			bDiagReq := TRUE;//new error --> diag requested    
 		ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
@@ -141,7 +141,7 @@ E_EcatDiagState.Idle: (* IDLE *)
 			bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
 			bEtherCATOK := FALSE;
 			bDiagReq := TRUE;// frame error change detected --> diag required
-		ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[iDiagIndex[0]].bDiagData) THEN
+		ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
 			bEtherCATOK := FALSE;
 		ELSE
 			bEtherCATOK := TRUE;
@@ -265,8 +265,8 @@ nMasterDevStatePrev 				:= nMasterDevState;
     <Action Name="M_GetScannedSlaveName" Id="{b8516cb6-a50d-4847-8ef9-760658b0a4c9}">
       <Implementation>
         <ST><![CDATA[
-rSlaveInfoScanned REF= arrSlaveInfoScanned[rDiagIndex];
-rScannedSlaveInfo REF= arrScannedSlaveInfo[rDiagIndex];
+rSlaveInfoScanned REF= arrSlaveInfoScanned[aiDiagIndex[iIdx]];
+rScannedSlaveInfo REF= arrScannedSlaveInfo[aiDiagIndex[iIdx]];
 
 fbGetSlaveName(
 	NETID		:= sIPCNetId,
@@ -281,7 +281,7 @@ IF NOT fbGetSlaveName.BUSY THEN
 	fbGetSlaveName(START:= FALSE);
 
 	(* add scanned info *)
-	rSlaveInfoScanned.nIndex 	:= rDiagIndex + 1;
+	rSlaveInfoScanned.nIndex 	:= iDiagIndex + 1;
 	IF rScannedSlaveInfo.nAddr <> 0 THEN
 		IF NOT fbGetSlaveName.ERR THEN
 			rSlaveInfoScanned.sName := strName;
@@ -290,7 +290,7 @@ IF NOT fbGetSlaveName.BUSY THEN
 		rSlaveInfoScanned.sType		:= '';
 	END_IF
 
-	IF (rDiagIndex < nScannedSlaves) THEN
+	IF (iDiagIndex < nScannedSlaves) THEN
 		rSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
 	ELSE
 		rSlaveInfoScanned.sType		:= '';
@@ -324,9 +324,9 @@ IF NOT fbGetSlaveName.BUSY THEN
 		iState := E_EcatDiagState.Done;
 
 		FOR I := 0 TO ESC_MAX_PORTS DO
-			IF iDiagPort[I] <> 0 THEN
-				arrDiagSlaveInfo[I] := arrSlaveInfo[iDiagIndex[I]];
-				arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[iDiagIndex[I]];
+			IF aiDiagPort[I] <> 0 THEN
+				arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
+				arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
 			ELSE
 				MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
 				MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
@@ -363,10 +363,10 @@ END_IF
     <Action Name="M_GetSlaveIdentity" Id="{6436ec18-e4f4-4415-8713-025490e22c62}">
       <Implementation>
         <ST><![CDATA[
-rDiagIndex REF= iDiagIndex[iIdx];
-rDiagPort REF= iDiagPort[iIdx];
+iDiagIndex := aiDiagIndex[iIdx];
+iDiagPort := aiDiagPort[iIdx];
 
-rSlaveInfo REF= arrSlaveInfo[rDiagIndex];
+rSlaveInfo REF= arrSlaveInfo[iDiagIndex];
 
 fbGetSlaveIdentity(
 	sNetId		:= sMasterNetID,
@@ -380,8 +380,8 @@ IF NOT fbGetSlaveIdentity.bBusy THEN
 	fbGetSlaveIdentity(bExecute:= FALSE);
 
 	IF NOT fbGetSlaveIdentity.bError THEN
-		IF rDiagPort <> 0 THEN
-			rSlaveInfo.nIndex	:= rDiagIndex + 1;
+		IF aiDiagPort[iIdx] <> 0 THEN
+			rSlaveInfo.nIndex	:= aiDiagIndex[iIdx] + 1;
 			rSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
 		END_IF
 	END_IF
@@ -405,7 +405,7 @@ IF NOT fbGetSlaveName.BUSY THEN
 	fbGetSlaveName(START:= FALSE);
 
 	IF NOT fbGetSlaveName.ERR THEN
-		IF rDiagPort <> 0 THEN
+		IF iDiagPort <> 0 THEN
 			rSlaveInfo.sName 	:= strName;
 		END_IF
 	END_IF
@@ -432,7 +432,7 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
 	IF NOT fbGetAllSlaveStates.bError THEN
 		IF iNumOfSlavesRead = nSlaveCountCfg THEN
 			FOR I := 0 TO ESC_MAX_PORTS DO
-				iDiagIndex[I] := 0;
+				aiDiagIndex[I] := 0;
 			END_FOR
 
 			(* split slave state and link state *)
@@ -457,10 +457,10 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
 
 				IF arrSlaveInfo[I].bDiagData THEN
 					IF (I=0) THEN
-						iDiagIndex[0] := 0;
+						aiDiagIndex[0] := 0;
 					ELSE
-						IF (iDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
-							iDiagIndex[0] :=  UDINT_TO_UINT(I);
+						IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
+							aiDiagIndex[0] :=  UDINT_TO_UINT(I);
 						END_IF
 					END_IF
 				END_IF
@@ -468,7 +468,7 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
 		END_IF
 	END_IF
 
-	IF arrSlaveInfo[iDiagIndex[0]].bDiagData THEN
+	IF arrSlaveInfo[aiDiagIndex[0]].bDiagData THEN
 		iState := E_EcatDiagState.GetTopoDataLen;
 	ELSE
 		FOR I := 0 TO ESC_MAX_PORTS DO
@@ -498,22 +498,22 @@ IF NOT fbGetTopologyData.BUSY THEN
 	fbGetTopologyData(READ := FALSE);
 
 	IF NOT fbGetTopologyData.ERR THEN
-		iDiagPort[0] := arrTopologyData[iDiagIndex[0]].iOwnPhysicalAddr;
-		iDiagPort[1] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portB;
-		iDiagPort[2] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portC;
-		iDiagPort[ESC_MAX_PORTS] := arrTopologyData[iDiagIndex[0]].stPhysicalAddr.portD;
+		aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
+		aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
+		aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
+		aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
 
 		(* clear diag index  *)
-		iDiagIndex[1] := 0;
-		iDiagIndex[2] := 0;
-		iDiagIndex[ESC_MAX_PORTS] := 0;
+		aiDiagIndex[1] := 0;
+		aiDiagIndex[2] := 0;
+		aiDiagIndex[ESC_MAX_PORTS] := 0;
         
         (* find slaves on PortB-D of first slave with diag *)
         FOR P := 0 TO ESC_MAX_PORTS DO
-            IF iDiagPort[P] <> 0 THEN
+            IF aiDiagPort[P] <> 0 THEN
 			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-				IF arrTopologyData[I].iOwnPhysicalAddr = iDiagPort[P] THEN
-					iDiagIndex[P] := UDINT_TO_UINT(I);
+				IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
+					aiDiagIndex[P] := UDINT_TO_UINT(I);
 					EXIT;
 				END_IF
 			END_FOR
