@@ -241,7 +241,7 @@ fbJson.EndArray();
 
 
 fbJson.EndObject();
-fbLogger.sJson := fbJson.GetDocument();
+fbJson.CopyDocument(fbLogger.sJson, SIZEOF(fbLogger.sJson));
 fbJson.ResetDocument();]]></ST>
       </Implementation>
     </Action>
