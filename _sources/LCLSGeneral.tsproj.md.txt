@@ -13,34 +13,46 @@ PLC Project (1): LCLSGeneral
         2.) LCLSGeneral/Data types/Misc/ST_FbDiagnostics.TcDUT
         3.) LCLSGeneral/Data types/Misc/ST_System.TcDUT
         4.) LCLSGeneral/GVLs/DefaultGlobals.TcGVL
-        5.) LCLSGeneral/POUs/Data/FB_BasicStats.TcPOU
-        6.) LCLSGeneral/POUs/Data/FB_DataBuffer.TcPOU
-        7.) LCLSGeneral/POUs/Data/FB_LREALBuffer.TcPOU
-        8.) LCLSGeneral/POUs/Data/FB_LREALFromEPICS.TcPOU
-        9.) LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
-        10.) LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
-        11.) LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
-        12.) LCLSGeneral/POUs/Functions/FB_Index.TcPOU
-        13.) LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
-        14.) LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
-        15.) LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
-        16.) LCLSGeneral/POUs/Functions/F_ConvertTicksToUnixTimestamp.TcPOU
-        17.) LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
-        18.) LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
-        19.) LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
-        20.) LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
-        21.) LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
-        22.) LCLSGeneral/POUs/Hardware/FB_TempSensor.TcPOU
-        23.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
-        24.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
-        25.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
-        26.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
-        27.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
-        28.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
-        29.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
-        30.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
-        31.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
-        32.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
+        5.) LCLSGeneral/GVLs/Global_Variables_EtherCAT.TcGVL
+        6.) LCLSGeneral/POUs/Data/FB_BasicStats.TcPOU
+        7.) LCLSGeneral/POUs/Data/FB_DataBuffer.TcPOU
+        8.) LCLSGeneral/POUs/Data/FB_LREALBuffer.TcPOU
+        9.) LCLSGeneral/POUs/Data/FB_LREALFromEPICS.TcPOU
+        10.) LCLSGeneral/POUs/Data/FB_TimeStampBuffer.TcPOU
+        11.) LCLSGeneral/POUs/Data/FB_TimeStampBufferGlobal.TcPOU
+        12.) LCLSGeneral/POUs/Diagnostics/DUT/E_EcatDiagState.TcDUT
+        13.) LCLSGeneral/POUs/Diagnostics/DUT/E_EcCommState.TcDUT
+        14.) LCLSGeneral/POUs/Diagnostics/DUT/ST_EcMasterDevState.TcDUT
+        15.) LCLSGeneral/POUs/Diagnostics/DUT/ST_PortAddr.TcDUT
+        16.) LCLSGeneral/POUs/Diagnostics/DUT/ST_SlaveState.TcDUT
+        17.) LCLSGeneral/POUs/Diagnostics/DUT/ST_SlaveStateInfo.TcDUT
+        18.) LCLSGeneral/POUs/Diagnostics/DUT/ST_SlaveStateInfoScanned.TcDUT
+        19.) LCLSGeneral/POUs/Diagnostics/DUT/ST_TopologyData.TcDUT
+        20.) LCLSGeneral/POUs/Diagnostics/FB_EcatDiagWrapper.TcPOU
+        21.) LCLSGeneral/POUs/Diagnostics/FB_EtherCATDiag.TcPOU
+        22.) LCLSGeneral/POUs/Diagnostics/FB_EtherCATFrameDiag.TcPOU
+        23.) LCLSGeneral/POUs/Functions/FB_EcatDiag.TcPOU
+        24.) LCLSGeneral/POUs/Functions/FB_Index.TcPOU
+        25.) LCLSGeneral/POUs/Functions/FB_UnixTimeStamp.TcPOU
+        26.) LCLSGeneral/POUs/Functions/FB_UnixTimeStampGlobal.TcPOU
+        27.) LCLSGeneral/POUs/Functions/FB_XKoyoPLCModbus.TcPOU
+        28.) LCLSGeneral/POUs/Functions/F_ConvertTicksToUnixTimestamp.TcPOU
+        29.) LCLSGeneral/POUs/Hardware/FB_AnalogOutput.TcPOU
+        30.) LCLSGeneral/POUs/Hardware/FB_AnalogInput.TcPOU
+        31.) LCLSGeneral/POUs/Hardware/FB_CoE_FastRead.TcPOU
+        32.) LCLSGeneral/POUs/Hardware/FB_EL6_Com.TcPOU
+        33.) LCLSGeneral/POUs/Hardware/FB_ThermoCouple.TcPOU
+        34.) LCLSGeneral/POUs/Hardware/FB_TempSensor.TcPOU
+        35.) LCLSGeneral/POUs/Logger/DUTs/E_LogEventType_WC.TcDUT
+        36.) LCLSGeneral/POUs/Logger/DUTs/ST_LoggingEventInfo_WC.TcDUT
+        37.) LCLSGeneral/POUs/Logger/DUTs/ST_PendingEvent.TcDUT
+        38.) LCLSGeneral/POUs/Logger/FB_Listener.TcPOU
+        39.) LCLSGeneral/POUs/Logger/FB_LogHandler.TcPOU
+        40.) LCLSGeneral/POUs/Logger/FB_LogMessage.TcPOU
+        41.) LCLSGeneral/POUs/Logger/F_SendUDPMessage.TcPOU
+        42.) LCLSGeneral/POUs/Logger/GVL_Logger.TcGVL
+        43.) LCLSGeneral/POUs/Logger/DUTs/E_Subsystem.TcDUT
+        44.) LCLSGeneral/POUs/Logger/SYSTEM_TIME_TO_RFC3339.TcPOU
 
     POUs:
         1.) FB_AnalogInput
@@ -50,26 +62,72 @@ PLC Project (1): LCLSGeneral
         5.) FB_DataBuffer
         6.) FB_EL6_Com
         7.) FB_EcatDiag
-        8.) FB_Index
-        9.) FB_LREALBuffer
-        10.) FB_LREALFromEPICS
-        11.) FB_Listener
-        12.) FB_LogHandler
-        13.) FB_LogMessage
-        14.) FB_TempSensor
-        15.) FB_ThermoCouple
-        16.) FB_TimeStampBuffer
-        17.) FB_TimeStampBufferGlobal
-        18.) FB_UnixTimeStamp
-        19.) FB_UnixTimeStampGlobal
-        20.) FB_XKoyoPLCModbus
-        21.) F_ConvertTicksToUnixTimestamp
-        22.) F_SendUDPMessage
-        23.) SYSTEM_TIME_TO_RFC3339
+        8.) FB_EcatDiagWrapper
+        9.) FB_EtherCATDiag
+        10.) FB_EtherCATFrameDiag
+        11.) FB_Index
+        12.) FB_LREALBuffer
+        13.) FB_LREALFromEPICS
+        14.) FB_Listener
+        15.) FB_LogHandler
+        16.) FB_LogMessage
+        17.) FB_TempSensor
+        18.) FB_ThermoCouple
+        19.) FB_TimeStampBuffer
+        20.) FB_TimeStampBufferGlobal
+        21.) FB_UnixTimeStamp
+        22.) FB_UnixTimeStampGlobal
+        23.) FB_XKoyoPLCModbus
+        24.) F_ConvertTicksToUnixTimestamp
+        25.) F_SendUDPMessage
+        26.) SYSTEM_TIME_TO_RFC3339
 
     GVLs:
         1.) DefaultGlobals
         2.) GVL_Logger
+        3.) Global_Variables_EtherCAT
+
+DUT: E_EcCommState
+------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/E_EcCommState.TcDUT
+
+```vhdl
+TYPE E_EcCommState : (
+	eEcState_UNDEFINED 	:= 0,
+	eEcState_INIT 		:= 1,
+	eEcState_PREOP 		:= 2,
+	eEcState_BOOT 		:= 3,
+	eEcState_SAFEOP 	:= 4,
+	eEcState_OP 		:= 8
+) UDINT;
+END_TYPE
+```
+
+
+DUT: E_EcatDiagState
+--------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/E_EcatDiagState.TcDUT
+
+```vhdl
+TYPE E_EcatDiagState :
+(
+	Idle := 0,
+    GetSlaveAddresses := 1,
+    GetSlaveStates := 2,
+    GetTopoDataLen := 3,
+    GetTopoData := 4,
+    ScanSlaves := 5,
+    GetSlaveIdentity := 6,
+    GetSlaveName := 7,
+    GetScannedSlaveName := 8,
+    LogDiagnostics := 9,
+    Done := 8000
+);
+END_TYPE
+```
+
 
 DUT: E_LogEventType_WC
 ----------------------
@@ -128,6 +186,30 @@ STRUCT
 	nAddrr: WORD; //EtherCAT slave address
 	sType: STRING; //EtherCAT slave type
 	sName:STRING; //EtherCAT slave name
+END_STRUCT
+END_TYPE
+```
+
+
+DUT: ST_EcMasterDevState
+------------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/ST_EcMasterDevState.TcDUT
+
+```vhdl
+TYPE ST_EcMasterDevState :
+STRUCT
+	eEcState	 		: E_EcCommState;
+	nReserved			: ARRAY [0..2] OF UINT;
+
+	bLinkError			: BOOL;
+	bResetRequired		: BOOL;
+	bMissFrmRedMode		: BOOL;
+	bWatchdogTriggerd	: BOOL;
+	bDriverNotFound		: BOOL;
+	bResetActive		: BOOL;
+	bAtLeastOneNotInOp	: BOOL;
+	bDcNotInSync		: BOOL;
 END_STRUCT
 END_TYPE
 ```
@@ -287,6 +369,93 @@ END_TYPE
 ```
 
 
+DUT: ST_PortAddr
+----------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/ST_PortAddr.TcDUT
+
+```vhdl
+TYPE ST_PortAddr :
+STRUCT
+	portA : UINT;
+	portB : UINT;
+	portC : UINT;
+	portD : UINT;
+END_STRUCT
+END_TYPE
+```
+
+
+DUT: ST_SlaveState
+------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/ST_SlaveState.TcDUT
+
+```vhdl
+TYPE ST_SlaveState :
+STRUCT
+	(* slave state *)
+	eEcState 		: E_EcCommState;
+	nReserved		: UINT;
+	bError			: BOOL;
+	bInvalidVPRS	: BOOL;
+	nReserved2		: UINT;
+
+	(* link state *)
+	bNoCommToSlave	: BOOL;
+	bLinkError		: BOOL;
+	bMissingLink	: BOOL;
+	bUnexpectedLink	: BOOL;
+	bPortA			: BOOL;
+	bPortB			: BOOL;
+	bPortC			: BOOL;
+	bPortD			: BOOL;
+END_STRUCT
+END_TYPE
+```
+
+
+DUT: ST_SlaveStateInfo
+----------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/ST_SlaveStateInfo.TcDUT
+
+```vhdl
+TYPE ST_SlaveStateInfo :
+STRUCT
+	nIndex 			: DINT;
+	sName 			: STRING; 		(* name of slave given in System Manager *)
+	sType 			: STRING;		(* type of slave, e.g. EK1100*)
+	nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
+	bDiagData		: BOOL;			(* DiagData in Slave State *)
+	stPortCRCErrors	: ST_EcCrcErrorEx;(* Slave CRC-Errors, separate for each Port *)
+	nSumCRCErrors	: UDINT;		(* Slave CRC-Errors, sum of all Ports *)
+	stState 		: ST_SlaveState;(* EtherCAT State and Link state*)
+END_STRUCT
+END_TYPE
+```
+
+
+DUT: ST_SlaveStateInfoScanned
+-----------------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/ST_SlaveStateInfoScanned.TcDUT
+
+```vhdl
+TYPE ST_SlaveStateInfoScanned :
+STRUCT
+	nIndex 			: DINT;
+	sName 			: STRING; 		(* name of slave given in System Manager *)
+	sType 			: STRING;		(* type of slave, e.g. EK1100*)
+	nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
+	bDifferentName	: BOOL;			(* Name of Scanned configuration differs from Configured configuration *)
+	bDifferentType	: BOOL;			(* Type Of Scanned configuration differs from Configured configuration *)
+	bDifferentAddr	: BOOL;			(* EcAddress of Scanned configuration differs from Configured configuration *)
+END_STRUCT
+END_TYPE
+```
+
+
 DUT: ST_System
 --------------
 
@@ -305,6 +474,25 @@ STRUCT
 	{attribute 'naming' := 'omit'}
 	I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
 
+END_STRUCT
+END_TYPE
+```
+
+
+DUT: ST_TopologyData
+--------------------
+
+File: LCLSGeneral/POUs/Diagnostics/DUT/ST_TopologyData.TcDUT
+
+```vhdl
+TYPE ST_TopologyData :
+STRUCT
+	iOwnPhysicalAddr 	: UINT;
+	iOwnAutoIncAddr		: UINT;
+	stPhysicalAddr		: ST_PortAddr;
+	stAutoIncAddr		: ST_PortAddr;
+	iPortDelay			: ARRAY [0..2] OF UDINT; (* EC_AD, EC_DB, EC_BC *)
+	iReserved			: ARRAY [0..7] OF UDINT;
 END_STRUCT
 END_TYPE
 ```
@@ -372,6 +560,19 @@ VAR_GLOBAL
 	{analysis -33}
 	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
 	{analysis +33}
+END_VAR
+```
+
+
+GVL: Global_Variables_EtherCAT
+------------------------------
+
+File: LCLSGeneral/GVLs/Global_Variables_EtherCAT.TcGVL
+
+```vhdl
+VAR_GLOBAL CONSTANT
+	iSLAVEADDR_ARR_SIZE	: UDINT := 256;
+    ESC_MAX_PORTS : UINT := 3; // Maximum number of ports (4) on ESC
 END_VAR
 ```
 
@@ -1032,6 +1233,726 @@ END_FUNCTION_BLOCK
 ```
 
 
+POU: FB_EcatDiagWrapper
+-----------------------
+
+File: LCLSGeneral/POUs/Diagnostics/FB_EcatDiagWrapper.TcPOU
+
+```vhdl
+FUNCTION_BLOCK FB_EcatDiagWrapper
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+    bAllFrameWcStatesOK		: BOOL;				// all frames are OK
+    bEtherCATOK				: BOOL;				// no problem on EtherCAT
+	bFrameWcStateError		: BOOL;				// at least one fram with error
+	bSlaveCountError		: BOOL;				// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
+	bMasterDevStateError	: BOOL;				// EtherCAT master device state signals error
+	stMasterDevState		: ST_EcMasterDevState; // device state split to a structure
+	bBusy					: BOOL;				// diagnostic FB is busy
+	bError					: BOOL;				// diagnostic FB has an error
+	iErrorID				: UDINT;			// error ID of diagnostic FB
+END_VAR
+VAR
+    
+    (* ******************* EtherCAT Frame ***************************** *)
+	fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^Frm1WcState'} 
+	wFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
+	wReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
+	bFrameWcStateOK			: BOOL;				// this frame is OK 
+
+    (* ******************* EtherCAT Diag ***************************** *)
+    fbEtherCATDiag			: FB_EtherCATDiag;	// deep EtherCAT diagnostic
+
+	(* cyclic variables from EtherCAT Master *)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^SlaveCount'}
+	nEcMasterSlaveCount AT %I* 	: UINT;			// link to SlaveCount of EtherCAT Master (Inputs)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^DevState'}
+	nEcMasterDevState AT %I* 	: UINT;			// link to DevState of EtherCAT Master (Inputs)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^DevId'}
+	nEcMasterDeviceId AT %I*	: UINT;			// link to DevID of EtherCAT Master (InfoData)
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^AmsNetId'}
+	arrEcMasterNetId AT %I* 	: T_AmsNetIdArr;// link to NetID of EtherCAT Master (InfoData)
+	sEcMasterNetId  			: T_AmsNetId := '';
+    {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^CfgSlaveCount'}
+	nEcMasterSlaveCountCfg AT %I* 	: UINT;		// link to CfgSlaveCount of EtherCAT Master (InfoData)
+
+	(* general variables *)
+	arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves 
+	arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves  
+END_VAR
+(*************************************** Frame Diag *********************************************)
+fbEtherCATFrameDiag(
+	wFrmXWcState 	:= wFrmXWcState,
+	wReqZeroMask 	:= wReqZeroMask,
+	bFrameWcStateOK	=> bFrameWcStateOK
+);
+bAllFrameWcStatesOK := bFrameWcStateOK;
+
+(*************************************** EtherCAT Diag *********************************************)
+(* generate Net Id *)
+sEcMasterNetId := F_CreateAmsNetId(nIds := arrEcMasterNetId);
+fbEtherCATDiag(
+	sIPCNetID			:= '',
+	sMasterNetID		:= sEcMasterNetId,
+	nMasterDevID		:= nEcMasterDeviceId,
+	nSlaveCount			:= nEcMasterSlaveCount,
+	nSlaveCountCfg		:= nEcMasterSlaveCountCfg,
+	nMasterDevState		:= nEcMasterDevState,
+	bAllFrameWcStatesOK	:= bAllFrameWcStatesOK,
+	tTimeout			:= T#5s,
+	arrDiagSlaveInfo	:= arrDiagSlaveInfo,
+	arrDiagSlaveInfoScanned	:= arrDiagSlaveInfoScanned,
+	bEtherCATOK			=> bEtherCATOK,
+	bFrameWcStateError	=> bFrameWcStateError,
+	bSlaveCountError	=> bSlaveCountError,
+	bMasterDevStateError=> bMasterDevStateError,
+	stMasterDevState	=> stMasterDevState,
+	bBusy				=> bBusy,
+	bError				=> bError,
+	iErrorID			=> iErrorID
+);
+
+END_FUNCTION_BLOCK
+```
+
+
+POU: FB_EtherCATDiag
+--------------------
+
+File: LCLSGeneral/POUs/Diagnostics/FB_EtherCATDiag.TcPOU
+
+```vhdl
+FUNCTION_BLOCK FB_EtherCATDiag
+VAR_INPUT
+	sIPCNetID					: T_AmsNetId; 	// AmsNetId of the IPC 
+	sMasterNetID				: T_AmsNetId; 	// AmsNetId of the EtherCAT master device 
+	nMasterDevID				: UINT;			// Device ID of EtherCAT master
+	nSlaveCount 				: UINT;			// current slave count
+	nSlaveCountCfg 				: UINT;			// configured slave count
+	nMasterDevState				: WORD;			// device state of EtherCAT Master
+	bAllFrameWcStatesOK			: BOOL;			// all FrameWcState OK?
+	tTimeout					: TIME := T#5S; // ads timeout
+    eSubSystem : E_Subsystem := E_Subsystem.FIELDBUS; // Subsystem, change to (MPS, VACUUM, MOTION, etc)
+END_VAR
+VAR_OUTPUT
+	bEtherCATOK					: BOOL;			// no problem on EtherCAT
+	bFrameWcStateError			: BOOL;			// error in at least one frame
+	bSlaveCountError			: BOOL;			// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
+	bMasterDevStateError		: BOOL;			// error in master device state
+	stMasterDevState			: ST_EcMasterDevState; // splitted master device state
+	bBusy						: BOOL;			// FB busy
+	bError						: BOOL;			// FB with error
+	iErrorID					: UDINT;		// FB error ID
+END_VAR
+VAR_IN_OUT
+	arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info from configured slaves
+	arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
+END_VAR
+VAR
+	iState						: E_EcatDiagState;
+	nMasterDevStatePrev			: WORD;
+	bSlaveCountErrorPrev		: BOOL;
+	bAllFrameWcStatesOKPrev		: BOOL;
+	bDiagReq					: BOOL := TRUE;
+	I							: UDINT;
+    P							: UDINT;
+    
+    arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
+    rSlaveInfo  :   REFERENCE TO ST_SlaveStateInfo;
+
+	(* -- Get Slave Addresses *)
+	fbGetSlaveAddresses 		: FB_EcGetAllSlaveAddr;
+	arrSlaveAddresses 			: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF UINT;
+	iNumOfSlavesRead			: UINT;
+
+	(* -- Get Slave States *)
+	fbGetAllSlaveStates			: FB_EcGetAllSlaveStates;
+	arrSlaveStates 				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveState;
+
+	(* -- Get Topology Data *)
+	iTopologyData				: UDINT;
+	fbGetTopologyData			: ADSREAD;
+	arrTopologyData				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_TopologyData;
+
+	(* -- Check Topology *)
+	aiDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+    iDiagIndex : UINT;    
+	aiDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+    iDiagPort : UINT;
+	iIdx						: DINT;
+
+	(* -- Scan Slaves *)
+	fbEcGetScannedSlaves		: FB_EcGetScannedSlaves;
+	arrScannedSlaveInfo			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveScannedData; // what...
+    rScannedSlaveInfo   :   REFERENCE TO ST_EcSlaveScannedData;
+	nScannedSlaves				: UINT;
+
+	(* -- Get Slave Identities *)
+	fbGetSlaveIdentity			: FB_EcGetSlaveIdentity;
+	stIdentity 					: ST_EcSlaveIdentity;
+
+	(* -- Get Slave Names *)
+	fbGetSlaveName 				: IOF_GetBoxNameByAddr;
+    arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned; // the F
+    rSlaveInfoScanned   :   REFERENCE TO ST_SlaveStateInfoScanned;
+	strName						: STRING;
+
+	
+    
+    // Logging components
+    fbLogger : FB_LogMessage := (eSubsystem := eSubsystem);
+    
+    fbJson : FB_JsonSaxWriter;
+    fbJsonDataType : FB_JsonReadWriteDataType;
+    rDiagSlaveInfo : REFERENCE TO ST_SlaveStateInfo;
+    aDiagJson : ARRAY [0..iSLAVEADDR_ARR_SIZE] OF T_MaxString;
+    tEtherCATOK : F_TRIG;
+    tFrameWcStateError : R_TRIG;
+    tMasterError : R_TRIG;
+    jsonIdx : UINT;
+    test : T_MaxString;
+END_VAR
+(* cyclic diag *)
+bFrameWcStateError := NOT bAllFrameWcStatesOK;
+
+bSlaveCountError := (nSlaveCount <> nSlaveCountCfg) OR (nSlaveCount = 0);
+IF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
+	bSlaveCountErrorPrev := bSlaveCountError;
+	bDiagReq := TRUE; // slave count error change detected --> diag required
+END_IF
+
+IF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
+	bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
+	bDiagReq := TRUE; // frame error change detected --> diag required
+END_IF
+
+IF (nMasterDevState <> nMasterDevStatePrev) THEN
+	M_CheckMasterDevState();
+	bDiagReq := TRUE; // devstate change detected --> diag required
+END_IF
+
+(* acyclic diag *)
+CASE iState OF
+E_EcatDiagState.Idle: (* IDLE *)
+	IF bDiagReq THEN				// diag requested
+		bDiagReq := FALSE;
+
+		IF sMasterNetID <> '' AND sMasterNetID <> '0.0.0.0.0.0' THEN
+			iState := E_EcatDiagState.GetSlaveAddresses;	// execute diag
+			bBusy := TRUE;
+		ELSE
+			bError := TRUE;
+			iErrorID := 7;
+		END_IF
+
+		bEtherCATOK := FALSE;
+	ELSE
+		// check for changes in idle
+		IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+			bEtherCATOK := FALSE;
+			bDiagReq := TRUE;//new error --> diag requested    
+		ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
+			bSlaveCountErrorPrev := bSlaveCountError;
+			bEtherCATOK := FALSE;
+			bDiagReq := TRUE;// slave count error change detected --> diag required
+		ELSIF (nMasterDevState <> nMasterDevStatePrev) THEN
+			bEtherCATOK := FALSE;
+			bDiagReq := TRUE;// devstate change detected --> diag required
+		ELSIF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
+			bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
+			bEtherCATOK := FALSE;
+			bDiagReq := TRUE;// frame error change detected --> diag required
+		ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+			bEtherCATOK := FALSE;
+		ELSE
+			bEtherCATOK := TRUE;
+		END_IF
+	END_IF
+
+E_EcatDiagState.GetSlaveAddresses: (* get adresses *)
+	M_GetSlaveAdresses();
+
+E_EcatDiagState.GetSlaveStates: (* get states *)
+	M_GetSlaveStates();
+
+E_EcatDiagState.GetTopoDataLen:	(* get topology data length *)
+	M_GetTopoDataLen();
+
+E_EcatDiagState.GetTopoData:	(* get topology data *)
+	M_GetTopoData();
+
+E_EcatDiagState.ScanSlaves:	(* scan slaves *)
+	M_ScanSlaves();
+
+E_EcatDiagState.GetSlaveIdentity:	(* get identity *)
+	M_GetSlaveIdentity();
+
+E_EcatDiagState.GetSlaveName:	(* get name *)
+	M_GetSlaveName();
+
+E_EcatDiagState.GetScannedSlaveName:	(* get scanned name *)
+	M_GetScannedSlaveName();
+
+E_EcatDiagState.LogDiagnostics: (* Log diagnostics *)
+    (* I can't get the fbJsonDataType to actually convert the slave info 
+    structures. I just get nulls. Either I am doing this wrong, or when 
+    the symbol parser encounters datatypes it can't deal with it nulls
+    the whole thing. I'll keep this code commented out until someone figures
+    out how to deal with parsing the slave structs into the json payload *)
+    
+    IF jsonIdx < iNumOfSlavesRead - 1 THEN
+        jsonIdx := jsonIdx + 1;
+        rDiagSlaveInfo REF= arrSlaveInfo[jsonIdx];
+        DiagnosticJson();
+        fbLogger(sMsg:=CONCAT('Diag Results: ', rDiagSlaveInfo.sName), 
+                eSevr:=TcEventSeverity.Info);
+    ELSE
+        jsonIdx := 0;
+        iState := E_EcatDiagState.Done;    
+	END_IF
+        
+    
+E_EcatDiagState.Done:	(* DONE *)
+	bBusy := FALSE;
+	iState := 0;
+
+END_CASE
+
+// Log messages
+tEtherCATOK(CLK:=bEtherCATOK);
+IF tEtherCATOK.Q THEN
+    fbLogger(sMsg:='EtherCAT failure, starting diagnostic', eSevr:=TcEventSeverity.Critical, sJson:='');
+END_IF
+
+tFrameWcStateError(CLK:=bFrameWcStateError);
+IF tFrameWcStateError.Q THEN
+    fbLogger(sMsg:='Working Counter Frame Error: error in at least one frame', eSevr:=TcEventSeverity.Error, sJson:='');
+END_IF
+
+tMasterError(CLK:=bMasterDevStateError);
+IF tMasterError.Q THEN
+    fbJson.StartObject();
+    fbJson.AddKey('ecMstrDiag');
+        fbJson.StartObject();
+        fbJson.AddKey('ecat_master_bAtLeastOneNotInOp');
+        fbJson.AddBool(stMasterDevState.bAtLeastOneNotInOp);
+        fbJson.AddKey('ecat_master_bDcNotInSync');
+        fbJson.AddBool(stMasterDevState.bDcNotInSync);
+        fbJson.AddKey('ecat_master_bDriverNotFound');
+        fbJson.AddBool(stMasterDevState.bDriverNotFound);
+        fbJson.AddKey('ecat_master_bLinkError');
+        fbJson.AddBool(stMasterDevState.bLinkError);
+        fbJson.AddKey('ecat_master_bMissFrmRedMode');
+        fbJson.AddBool(stMasterDevState.bMissFrmRedMode);
+        fbJson.AddKey('ecat_master_bResetActive');
+        fbJson.AddBool(stMasterDevState.bResetActive);
+        fbJson.AddKey('ecat_master_bResetRequired');
+        fbJson.AddBool(stMasterDevState.bResetRequired);
+        fbJson.AddKey('ecat_master_bWatchdogTriggerd');
+        fbJson.AddBool(stMasterDevState.bWatchdogTriggerd);
+        fbJson.AddKey('ecat_master_eEcState');
+        fbJson.AddUdint(stMasterDevState.eEcState);
+        fbJson.EndObject();
+    fbJson.EndObject();
+    fbLogger(sMsg:='Master error', eSevr:=TcEventSeverity.Critical, sJson:=fbJson.GetDocument());
+    fbJson.ResetDocument();
+END_IF
+
+END_FUNCTION_BLOCK
+ACTION DiagnosticJson:
+fbJson.StartObject();
+    fbJson.AddKey('ecSlvDiag');
+    fbJson.StartObject();    
+    //    fbJson.AddKey('nIndex');
+    //    fbJson.AddDint(rDiagSlaveInfo.nIndex);
+        
+    //    fbJson.AddKey('sName');
+    //    fbJson.AddString(rDiagSlaveInfo.sName);
+        
+        fbJson.AddKey('Typ');
+        fbJson.AddString(rDiagSlaveInfo.sType);
+        
+        fbJson.AddKey('Adr');
+        fbJson.AddUdint(rDiagSlaveInfo.nECAddr);
+        
+    //    fbJson.AddKey('bDiagData');
+    //    fbJson.AddBool(rDiagSlaveInfo.bDiagData);
+        (*
+        fbJson.AddKey('stPortCRCErrors');
+        fbjson.StartObject();
+        fbJson.AddKey('portA');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portA);
+        fbJson.AddKey('portB');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portB);
+        fbJson.AddKey('portC');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portC);
+        fbJson.AddKey('portD');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portD);
+        fbJson.EndObject();
+    *)    
+        fbJson.AddKey('SumCRCErr');
+        fbjson.AddUdint(rDiagSlaveInfo.nSumCRCErrors);
+        
+        fbJson.AddKey('EcSt');
+        fbJson.AddUdint(rDiagSlaveInfo.stState.eEcState);
+    //        fbJson.AddKey('nReserved');
+    //        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved);
+        fbJson.AddKey('Err');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bError);
+        fbJson.AddKey('InvldVPRS');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bInvalidVPRS);
+    //        fbJson.AddKey('nReserved2');
+    //        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved2);
+        fbJson.AddKey('NoComm');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bNoCommToSlave);
+        fbJson.AddKey('LnkErr');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bLinkError);
+        fbJson.AddKey('MissLnk');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bMissingLink);
+        fbJson.AddKey('UnexLnk');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bUnexpectedLink);
+        fbJson.AddKey('A');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortA);
+        fbJson.AddKey('B');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortB);
+        fbJson.AddKey('C');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortC);
+        fbJson.AddKey('D');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortD);
+        
+    fbJson.EndObject();
+fbJson.EndObject();
+
+fbJson.CopyDocument(fbLogger.sJson, SIZEOF(fbLogger.sJson));
+fbJson.ResetDocument();
+END_ACTION
+ACTION M_CheckMasterDevState:
+(* check master errors based on devstate *)
+bMasterDevStateError 				:= nMasterDevState <> 0;
+stMasterDevState.bLinkError 		:= ((nMasterDevState AND 16#000F) = 1) OR ((nMasterDevState AND 16#000F) = 4);
+stMasterDevState.bResetRequired 	:= ((nMasterDevState AND 16#000F) = 2) OR ((nMasterDevState AND 16#FFF0) = 16#10);
+stMasterDevState.bMissFrmRedMode 	:= (nMasterDevState AND 16#000F) = 8;
+stMasterDevState.bWatchdogTriggerd 	:= (nMasterDevState AND 16#20) = 16#20;
+stMasterDevState.bDriverNotFound 	:= (nMasterDevState AND 16#40) = 16#40;
+stMasterDevState.bResetActive 		:= (nMasterDevState AND 16#80) = 16#80;
+stMasterDevState.bAtLeastOneNotInOp := ((nMasterDevState AND 16#100) = 16#100) OR ((nMasterDevState AND 16#200) = 16#200) OR
+										((nMasterDevState AND 16#400) = 16#400) OR ((nMasterDevState AND 16#800) = 16#800);
+stMasterDevState.bDcNotInSync 		:= (nMasterDevState AND 16#1000) = 16#1000;
+nMasterDevStatePrev 				:= nMasterDevState;
+END_ACTION
+ACTION M_GetScannedSlaveName:
+rSlaveInfoScanned REF= arrSlaveInfoScanned[aiDiagIndex[iIdx]];
+rScannedSlaveInfo REF= arrScannedSlaveInfo[aiDiagIndex[iIdx]];
+
+fbGetSlaveName(
+	NETID		:= sIPCNetId,
+	DEVICEID	:= nMasterDevID,
+	BOXADDR		:= rScannedSlaveInfo.nAddr,
+	START		:= TRUE,
+	TMOUT		:= tTimeout,
+	BOXNAME		=> strName
+);
+
+IF NOT fbGetSlaveName.BUSY THEN
+	fbGetSlaveName(START:= FALSE);
+
+	(* add scanned info *)
+	rSlaveInfoScanned.nIndex 	:= iDiagIndex + 1;
+	IF rScannedSlaveInfo.nAddr <> 0 THEN
+		IF NOT fbGetSlaveName.ERR THEN
+			rSlaveInfoScanned.sName := strName;
+		END_IF
+	ELSE
+		rSlaveInfoScanned.sType		:= '';
+	END_IF
+
+	IF (iDiagIndex < nScannedSlaves) THEN
+		rSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
+	ELSE
+		rSlaveInfoScanned.sType		:= '';
+	END_IF
+
+	rSlaveInfoScanned.nECAddr	:= rScannedSlaveInfo.nAddr;
+
+	IF rSlaveInfoScanned.sName <> rSlaveInfo.sName THEN
+		rSlaveInfoScanned.bDifferentName := TRUE;
+	ELSE
+		rSlaveInfoScanned.bDifferentName := FALSE;
+	END_IF
+
+	IF rSlaveInfoScanned.nECAddr <> rSlaveInfo.nECAddr THEN
+		rSlaveInfoScanned.bDifferentAddr := TRUE;
+	ELSE
+		rSlaveInfoScanned.bDifferentAddr := FALSE;
+	END_IF
+
+	IF rSlaveInfoScanned.sType <> rSlaveInfo.sType THEN
+		rSlaveInfoScanned.bDifferentType := TRUE;
+	ELSE
+		rSlaveInfoScanned.bDifferentType := FALSE;
+	END_IF
+
+	IF iIdx < ESC_MAX_PORTS THEN
+		iIdx := iIdx + 1;
+		iState := E_EcatDiagState.GetSlaveIdentity; // loop back
+	ELSE
+		iIdx := 0;
+		iState := E_EcatDiagState.LogDiagnostics;
+
+		FOR I := 0 TO ESC_MAX_PORTS DO
+			IF aiDiagPort[I] <> 0 THEN
+				arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
+				arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
+			ELSE
+				MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
+				MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+			END_IF
+		END_FOR
+	END_IF
+END_IF
+END_ACTION
+ACTION M_GetSlaveAdresses:
+fbGetSlaveAddresses(
+	sNetId		:= sMasterNetID,
+	pAddrBuf	:= ADR(arrSlaveAddresses),
+	cbBufLen	:= SIZEOF(arrSlaveAddresses),
+	bExecute	:= TRUE,
+	tTimeout	:= tTimeout,
+	nSlaves		=> iNumOfSlavesRead
+);
+
+IF NOT fbGetSlaveAddresses.bBusy THEN
+	fbGetSlaveAddresses(bExecute:= FALSE);
+	IF NOT fbGetSlaveAddresses.bError THEN
+		FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+			arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
+		END_FOR
+	END_IF
+	iState := GetSlaveStates;
+END_IF
+END_ACTION
+ACTION M_GetSlaveIdentity:
+iDiagIndex := aiDiagIndex[iIdx];
+iDiagPort := aiDiagPort[iIdx];
+
+rSlaveInfo REF= arrSlaveInfo[iDiagIndex];
+
+fbGetSlaveIdentity(
+	sNetId		:= sMasterNetID,
+	nSlaveAddr	:= rSlaveInfo.nECAddr,
+	bExecute	:= TRUE,
+	tTimeout	:= tTimeout,
+	identity	=> stIdentity
+);
+
+IF NOT fbGetSlaveIdentity.bBusy THEN
+	fbGetSlaveIdentity(bExecute:= FALSE);
+
+	IF NOT fbGetSlaveIdentity.bError THEN
+		IF aiDiagPort[iIdx] <> 0 THEN
+			rSlaveInfo.nIndex	:= aiDiagIndex[iIdx] + 1;
+			rSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
+		END_IF
+	END_IF
+	iState := E_EcatDiagState.GetSlaveName;
+END_IF
+END_ACTION
+ACTION M_GetSlaveName:
+fbGetSlaveName(
+	NETID		:= sIPCNetId,
+	DEVICEID	:= nMasterDevID,
+	BOXADDR		:= rSlaveInfo.nECAddr,
+	START		:= TRUE,
+	TMOUT		:= tTimeout,
+	BOXNAME		=> strName
+);
+
+IF NOT fbGetSlaveName.BUSY THEN
+	fbGetSlaveName(START:= FALSE);
+
+	IF NOT fbGetSlaveName.ERR THEN
+		IF iDiagPort <> 0 THEN
+			rSlaveInfo.sName 	:= strName;
+		END_IF
+	END_IF
+
+	iState := E_EcatDiagState.GetScannedSlaveName;
+END_IF
+END_ACTION
+ACTION M_GetSlaveStates:
+fbGetAllSlaveStates(
+	sNetId		:= sMasterNetID,
+	pStateBuf	:= ADR(arrSlaveStates),
+	cbBufLen	:= SIZEOF(arrSlaveStates),
+	bExecute	:= TRUE,
+	tTimeout	:= tTimeout,
+	nSlaves		=> iNumOfSlavesRead
+);
+
+IF NOT fbGetAllSlaveStates.bBusy THEN
+	fbGetAllSlaveStates(bExecute:= FALSE);
+
+	IF NOT fbGetAllSlaveStates.bError THEN
+		IF iNumOfSlavesRead = nSlaveCountCfg THEN
+			FOR I := 0 TO ESC_MAX_PORTS DO
+				aiDiagIndex[I] := 0;
+			END_FOR
+
+			(* split slave state and link state *)
+			FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+				(* slave state*)
+				arrSlaveInfo[I].stState.eEcState 		:= arrSlaveStates[I].deviceState AND 16#0F;
+				arrSlaveInfo[I].stState.bError 			:= arrSlaveStates[I].deviceState.4;
+				arrSlaveInfo[I].stState.bInvalidVPRS 	:= arrSlaveStates[I].deviceState.5;
+				(* link state *)
+				arrSlaveInfo[I].stState.bNoCommToSlave 	:= arrSlaveStates[I].linkState.0;
+				arrSlaveInfo[I].stState.bLinkError 		:= arrSlaveStates[I].linkState.1;
+				arrSlaveInfo[I].stState.bMissingLink 	:= arrSlaveStates[I].linkState.2;
+				arrSlaveInfo[I].stState.bUnexpectedLink := arrSlaveStates[I].linkState.3;
+				arrSlaveInfo[I].stState.bPortA 			:= arrSlaveStates[I].linkState.4;
+				arrSlaveInfo[I].stState.bPortB 			:= arrSlaveStates[I].linkState.5;
+				arrSlaveInfo[I].stState.bPortC 			:= arrSlaveStates[I].linkState.6;
+				arrSlaveInfo[I].stState.bPortD 			:= arrSlaveStates[I].linkState.7;
+				(* DiagData *)
+				arrSlaveInfo[I].bDiagData	:= ((arrSlaveStates[I].deviceState AND 16#F0) <> 0) OR
+					(((arrSlaveStates[I].deviceState AND 16#0F) > 0) AND ((arrSlaveStates[I].deviceState AND 16#0F) < 8)) OR
+					(arrSlaveStates[I].linkState <> 0);
+
+				IF arrSlaveInfo[I].bDiagData THEN
+					IF (I=0) THEN
+						aiDiagIndex[0] := 0;
+					ELSE
+						IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
+							aiDiagIndex[0] :=  UDINT_TO_UINT(I);
+						END_IF
+					END_IF
+				END_IF
+			END_FOR
+		END_IF
+	END_IF
+
+	IF arrSlaveInfo[aiDiagIndex[0]].bDiagData THEN
+		iState := E_EcatDiagState.GetTopoDataLen;
+	ELSE
+		FOR I := 0 TO ESC_MAX_PORTS DO
+			MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
+			MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+		END_FOR
+		iState := E_EcatDiagState.Done;
+	END_IF
+END_IF
+END_ACTION
+ACTION M_GetTopoData:
+fbGetTopologyData(
+	NETID	:= sMasterNetID,
+	PORT	:= 16#FFFF,
+	IDXGRP	:= 16#22,
+	IDXOFFS	:= 0,
+	LEN		:= iTopologyData*SIZEOF(arrTopologyData[0]),
+	DESTADDR:= ADR(arrTopologyData),
+	READ	:= TRUE,
+	TMOUT	:= tTimeout,
+);
+
+IF NOT fbGetTopologyData.BUSY THEN
+	fbGetTopologyData(READ := FALSE);
+
+	IF NOT fbGetTopologyData.ERR THEN
+		aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
+		aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
+		aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
+		aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
+
+		(* clear diag index  *)
+		aiDiagIndex[1] := 0;
+		aiDiagIndex[2] := 0;
+		aiDiagIndex[ESC_MAX_PORTS] := 0;
+        
+        (* find slaves on PortB-D of first slave with diag *)
+        FOR P := 0 TO ESC_MAX_PORTS DO
+            IF aiDiagPort[P] <> 0 THEN
+			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
+				IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
+					aiDiagIndex[P] := UDINT_TO_UINT(I);
+					EXIT;
+				END_IF
+			END_FOR
+		END_IF
+		END_FOR
+    END_IF
+
+	iIdx := 0;
+	iState := E_EcatDiagState.ScanSlaves;
+END_IF
+END_ACTION
+ACTION M_GetTopoDataLen:
+fbGetTopologyData(
+	NETID	:= sMasterNetID,
+	PORT	:= 16#FFFF,
+	IDXGRP	:= EC_ADS_IGRP_MASTER_COUNT_SLAVE,
+	IDXOFFS	:= EC_ADS_IOFFS_MASTER_COUNT_SLAVE,
+	LEN		:= SIZEOF(iTopologyData),
+	DESTADDR:= ADR(iTopologyData),
+	READ	:= TRUE,
+	TMOUT	:= tTimeout,
+);
+
+IF NOT fbGetTopologyData.BUSY THEN
+	fbGetTopologyData(READ := FALSE);
+
+	iState := E_EcatDiagState.GetTopoData;
+END_IF
+END_ACTION
+ACTION M_ScanSlaves:
+fbEcGetScannedSlaves(
+	bExecute				:= TRUE,
+	sNetId					:= sMasterNetID,
+	pArrEcScannedSlaveInfo	:= ADR(arrScannedSlaveInfo),
+	cbBufLen				:= SIZEOF(arrScannedSlaveInfo),
+	tTimeout				:= tTimeout
+);
+
+IF NOT fbEcGetScannedSlaves.bBusy THEN
+	fbEcGetScannedSlaves(bExecute := FALSE);
+	
+	IF fbEcGetScannedSlaves.bError THEN
+		nScannedSlaves := 0;
+	ELSE
+		nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
+	END_IF
+    
+    iState := E_EcatDiagState.GetSlaveIdentity;
+    
+END_IF
+END_ACTION
+```
+
+
+POU: FB_EtherCATFrameDiag
+-------------------------
+
+File: LCLSGeneral/POUs/Diagnostics/FB_EtherCATFrameDiag.TcPOU
+
+```vhdl
+FUNCTION_BLOCK FB_EtherCATFrameDiag
+VAR_INPUT
+	wFrmXWcState 		: WORD;				// FrmXWcState
+	wReqZeroMask 		: WORD := 16#FFFF;	// mask, bit TRUE: require wFrmXWcState.bit = FALSE, bit FALSE: ignore wFrmXWcState.bit *)
+END_VAR
+VAR_OUTPUT
+	bFrameWcStateOK		: BOOL;				// result of fram state check
+END_VAR
+VAR
+END_VAR
+(* mask out ignored error bits and compare result against 0 *)
+bFrameWcStateOK := ((wFrmXWcState AND wReqZeroMask) = 0);
+
+END_FUNCTION_BLOCK
+```
+
+
 POU: FB_Index
 -------------
 
@@ -1419,7 +2340,7 @@ bReadyToLog := (bAdapterSet AND bHostnameSet AND bInitialized AND
 rtFirstLog(CLK:=bReadyToLog);
 
 IF rtFirstLog.Q THEN
-    fbRootLogger(sMsg:="Logging system online", eSevr:=TcEventSeverity.Info,
+    fbRootLogger(sMsg:='Logging system online', eSevr:=TcEventSeverity.Info,
                  eSubsystem:=E_Subsystem.NILVALUE);
 END_IF
 
@@ -2019,7 +2940,7 @@ Links
 Pragma lint results
 -------------------
 ```
-INFO:pytmc.bin.pragmalint:Total pragmas found: 73 Total linter errors: 0
+INFO:pytmc.bin.pragmalint:Total pragmas found: 79 Total linter errors: 0
 PLC Project (1): LCLSGeneral
 ============================
 
@@ -2046,6 +2967,12 @@ POUs/Data/FB_LREALFromEPICS.TcPOU (TcPlcObject)
 -----------------------------------------------
 
     - FB_LREALFromEPICS: Declaration - 3 pragmas
+
+
+POUs/Diagnostics/FB_EcatDiagWrapper.TcPOU (TcPlcObject)
+-------------------------------------------------------
+
+    - FB_EcatDiagWrapper: Declaration - 6 pragmas
 
 
 POUs/Functions/FB_EcatDiag.TcPOU (TcPlcObject)
