@@ -2210,6 +2210,10 @@ VAR
     SocketEnable : BOOL;
     
     bAdapterSet : BOOL;
+    
+    ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
+    
+    tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
 END_VAR
 
 VAR CONSTANT
@@ -2252,16 +2256,23 @@ IF NOT bAdapterSet THEN
                 bAdapterSet := TRUE;
                 EXIT;
             END_IF
-		END_FOR
-	END_IF
+        END_FOR
+    END_IF
 END_IF
 
 (* Ensure the socket is ready for when JSON documents are emitted *)
 rtReset(CLK:=bReset);
 
-IF (rtReset.Q AND fbSocket.bEnable) OR fbSocket.bError THEN
+IF (rtReset.Q AND fbSocket.bEnable) THEN
 	fbSocket(bEnable:=FALSE);
 END_IF
+
+// Disable fbSocket if too many errors occur
+ctuSocketError(CU:=fbSocket.bError, RESET:=tRetryConnection.Q OR rtReset.Q);
+SocketEnable R= ctuSocketError.Q;
+// Retry an hour later
+tRetryConnection(IN:=ctuSocketError.Q);
+SocketEnable S= tRetryConnection.Q OR rtReset.Q;
 
 fbSocket(
 	nLocalPort:=0,
