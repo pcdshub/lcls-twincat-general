@@ -31,14 +31,15 @@
   <ItemGroup>
     <Folder Include="Data types" />
     <Folder Include="Data types\Misc" />
-    <Folder Include="Diagnostics" />
     <Folder Include="GVLs" />
     <Folder Include="POUs" />
+    <Folder Include="POUs\Diagnostics\DUT" />
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
     <Folder Include="POUs\Logger\DUTs" />
     <Folder Include="POUs\Data" />
     <Folder Include="POUs\Hardware" />
+    <Folder Include="POUs\Diagnostics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
@@ -53,6 +54,9 @@
     <Compile Include="GVLs\DefaultGlobals.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="GVLs\Global_Variables_EtherCAT.TcGVL">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_BasicStats.TcPOU">
       <SubType>Code</SubType>
@@ -70,6 +74,39 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBufferGlobal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_EcatDiagState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_EcCommState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\ST_EcMasterDevState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\ST_PortAddr.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\ST_SlaveState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\ST_SlaveStateInfo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\ST_SlaveStateInfoScanned.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\ST_TopologyData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\FB_EcatDiagWrapper.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\FB_EtherCATDiag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\FB_EtherCATFrameDiag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
@@ -145,6 +182,10 @@
       <DefaultResolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_EtherCAT</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_IoFunctions">
+      <DefaultResolution>Tc2_IoFunctions, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_IoFunctions</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_ModbusSrv">
       <DefaultResolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_ModbusSrv</Namespace>
@@ -183,11 +224,38 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderResolution Include="Tc2_EtherCAT">
+      <Resolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_IoFunctions">
+      <Resolution>Tc2_IoFunctions, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_ModbusSrv">
+      <Resolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_SerialCom">
+      <Resolution>Tc2_SerialCom, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Standard">
+      <Resolution>Tc2_Standard, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_System">
+      <Resolution>Tc2_System, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_TcpIp">
+      <Resolution>Tc2_TcpIp, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Utilities">
+      <Resolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
     <PlaceholderResolution Include="Tc3_EventLogger">
       <Resolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
     <PlaceholderResolution Include="Tc3_JsonXml">
       <Resolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_Module">
+      <Resolution>Tc3_Module, * (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
   </ItemGroup>
   <ItemGroup>
