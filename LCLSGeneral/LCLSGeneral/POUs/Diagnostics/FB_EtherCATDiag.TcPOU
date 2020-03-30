@@ -232,7 +232,7 @@ END_IF
     <Action Name="DiagnosticJson" Id="{0fd17872-19c7-46b0-99a6-f83e877544e3}">
       <Implementation>
         <ST><![CDATA[fbJson.StartObject();
-fbJson.AddKey('ecat_master_diag');
+fbJson.AddKey('ecat_diag');
 
 fbJson.StartArray();
 FOR jsonIdx := 0 to nScannedSlaves DO
@@ -253,51 +253,51 @@ FOR jsonIdx := 0 to nScannedSlaves DO
     
     fbJson.AddKey('bDiagData');
     fbJson.AddBool(rDiagSlaveInfo.bDiagData);
-    (*
+    
     fbJson.AddKey('stPortCRCErrors');
     fbjson.StartObject();
-    fbJson.AddKey('portA');
-    fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portA);
-    fbJson.AddKey('portB');
-    fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portB);
-    fbJson.AddKey('portC');
-    fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portC);
-    fbJson.AddKey('portD');
-    fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portD);
+        fbJson.AddKey('portA');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portA);
+        fbJson.AddKey('portB');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portB);
+        fbJson.AddKey('portC');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portC);
+        fbJson.AddKey('portD');
+        fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portD);
     fbJson.EndObject();
-    *)
+    
     fbJson.AddKey('nSumCRCErrors');
     fbjson.AddUdint(rDiagSlaveInfo.nSumCRCErrors);
     
     fbJson.AddKey('stState');
     fbJson.StartObject();
     
-    fbJson.AddKey('eEcState ');
-    fbJson.AddUdint(rDiagSlaveInfo.stState.eEcState);
-    fbJson.AddKey('nReserved');
-    fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved);
-    fbJson.AddKey('bError');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bError);
-    fbJson.AddKey('bInvalidVPRS');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bInvalidVPRS);
-    fbJson.AddKey('nReserved2');
-    fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved2);
-    fbJson.AddKey('bNoCommToSlave');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bNoCommToSlave);
-    fbJson.AddKey('bLinkError');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bLinkError);
-    fbJson.AddKey('bMissingLink');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bMissingLink);
-    fbJson.AddKey('bUnexpectedLink');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bUnexpectedLink);
-    fbJson.AddKey('bPortA');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bPortA);
-    fbJson.AddKey('bPortB');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bPortB);
-    fbJson.AddKey('bPortC');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bPortC);
-    fbJson.AddKey('bPortD');
-    fbJson.AddBool(rDiagSlaveInfo.stState.bPortD);
+        fbJson.AddKey('eEcState ');
+        fbJson.AddUdint(rDiagSlaveInfo.stState.eEcState);
+        fbJson.AddKey('nReserved');
+        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved);
+        fbJson.AddKey('bError');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bError);
+        fbJson.AddKey('bInvalidVPRS');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bInvalidVPRS);
+        fbJson.AddKey('nReserved2');
+        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved2);
+        fbJson.AddKey('bNoCommToSlave');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bNoCommToSlave);
+        fbJson.AddKey('bLinkError');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bLinkError);
+        fbJson.AddKey('bMissingLink');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bMissingLink);
+        fbJson.AddKey('bUnexpectedLink');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bUnexpectedLink);
+        fbJson.AddKey('bPortA');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortA);
+        fbJson.AddKey('bPortB');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortB);
+        fbJson.AddKey('bPortC');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortC);
+        fbJson.AddKey('bPortD');
+        fbJson.AddBool(rDiagSlaveInfo.stState.bPortD);
 
     fbJson.EndObject();
 
