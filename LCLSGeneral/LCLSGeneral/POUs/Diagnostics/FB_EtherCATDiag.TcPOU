@@ -247,11 +247,11 @@ END_IF
         <ST><![CDATA[fbJson.StartObject();
     fbJson.AddKey('ecSlvDiag');
     fbJson.StartObject();    
-    //    fbJson.AddKey('nIndex');
-    //    fbJson.AddDint(rDiagSlaveInfo.nIndex);
+        fbJson.AddKey('nIndex');
+        fbJson.AddDint(rDiagSlaveInfo.nIndex);
         
-    //    fbJson.AddKey('sName');
-    //    fbJson.AddString(rDiagSlaveInfo.sName);
+        fbJson.AddKey('sName');
+        fbJson.AddString(rDiagSlaveInfo.sName);
         
         fbJson.AddKey('Typ');
         fbJson.AddString(rDiagSlaveInfo.sType);
@@ -259,9 +259,9 @@ END_IF
         fbJson.AddKey('Adr');
         fbJson.AddUdint(rDiagSlaveInfo.nECAddr);
         
-    //    fbJson.AddKey('bDiagData');
-    //    fbJson.AddBool(rDiagSlaveInfo.bDiagData);
-        (*
+        fbJson.AddKey('bDiagData');
+        fbJson.AddBool(rDiagSlaveInfo.bDiagData);
+
         fbJson.AddKey('stPortCRCErrors');
         fbjson.StartObject();
         fbJson.AddKey('portA');
@@ -273,20 +273,20 @@ END_IF
         fbJson.AddKey('portD');
         fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portD);
         fbJson.EndObject();
-    *)    
+    
         fbJson.AddKey('SumCRCErr');
         fbjson.AddUdint(rDiagSlaveInfo.nSumCRCErrors);
         
         fbJson.AddKey('EcSt');
         fbJson.AddUdint(rDiagSlaveInfo.stState.eEcState);
-    //        fbJson.AddKey('nReserved');
-    //        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved);
+        fbJson.AddKey('nReserved');
+        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved);
         fbJson.AddKey('Err');
         fbJson.AddBool(rDiagSlaveInfo.stState.bError);
         fbJson.AddKey('InvldVPRS');
         fbJson.AddBool(rDiagSlaveInfo.stState.bInvalidVPRS);
-    //        fbJson.AddKey('nReserved2');
-    //        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved2);
+        fbJson.AddKey('nReserved2');
+        fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved2);
         fbJson.AddKey('NoComm');
         fbJson.AddBool(rDiagSlaveInfo.stState.bNoCommToSlave);
         fbJson.AddKey('LnkErr');
