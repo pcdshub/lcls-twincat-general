@@ -7,7 +7,7 @@ VAR_INPUT
 	sMsg			: T_MaxString; 					// Message to send
 	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
 	eSubsystem		: E_Subsystem; 					// Subsystem
-	sJson			: T_MaxString	:= '{}';		// JSON to add to the message
+	sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
 END_VAR
 
 VAR_OUTPUT
