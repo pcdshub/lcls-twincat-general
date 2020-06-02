@@ -9,7 +9,8 @@ TYPE E_Subsystem :
 	MPS := 2, //Machine protection system
 	MOTION := 3, //Motion control systems
 	FIELDBUS := 4, //EtherCAT networks
-	SDS := 5 //Sample delivery system
+	SDS := 5, //Sample delivery system
+	OPTICS := 6 //Optics control system
 )WORD;
 END_TYPE
 ]]></Declaration>
