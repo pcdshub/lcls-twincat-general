@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>PLC Project (1): LCLSGeneral &#8212; pcdshub/lcls-twincat-general  documentation</title>
@@ -186,7 +186,8 @@ END_TYPE
 	<span class="n">MPS</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="o">//</span><span class="n">Machine</span> <span class="n">protection</span> <span class="n">system</span>
 	<span class="n">MOTION</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">,</span> <span class="o">//</span><span class="n">Motion</span> <span class="n">control</span> <span class="n">systems</span>
 	<span class="n">FIELDBUS</span> <span class="o">:=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">//</span><span class="n">EtherCAT</span> <span class="n">networks</span>
-	<span class="n">SDS</span> <span class="o">:=</span> <span class="mi">5</span> <span class="o">//</span><span class="n">Sample</span> <span class="n">delivery</span> <span class="n">system</span>
+	<span class="n">SDS</span> <span class="o">:=</span> <span class="mi">5</span><span class="p">,</span> <span class="o">//</span><span class="n">Sample</span> <span class="n">delivery</span> <span class="n">system</span>
+	<span class="n">OPTICS</span> <span class="o">:=</span> <span class="mi">6</span> <span class="o">//</span><span class="n">Optics</span> <span class="n">control</span> <span class="n">system</span>
 <span class="p">)</span><span class="n">WORD</span><span class="p">;</span>
 <span class="n">END_TYPE</span>
 </pre></div>
@@ -2401,7 +2402,8 @@ CASE eSubsystem OF
 	E_Subsystem.MOTION: 	sSubsystemSource := &#39;/Motion&#39;;
 	E_Subsystem.MPS: 		sSubsystemSource := &#39;/MPS&#39;;
 	E_Subsystem.SDS: 		sSubsystemSource := &#39;/SDS&#39;;
-	E_Subsystem.VACUUM:		sSubsystemSource := &#39;/Vacuum&#39;;	
+	E_Subsystem.VACUUM:		sSubsystemSource := &#39;/Vacuum&#39;;
+	E_Subsystem.OPTICS:     sSubsystemSource := &#39;/Optics&#39;;
 	ELSE
 		sSubsystemSource := &#39;/Unknown&#39;;
 END_CASE
@@ -3087,7 +3089,7 @@ END_FUNCTION
       &copy;2019, SLAC National Accelerator Laboratory.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

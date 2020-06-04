@@ -165,7 +165,8 @@ TYPE E_Subsystem :
 	MPS := 2, //Machine protection system
 	MOTION := 3, //Motion control systems
 	FIELDBUS := 4, //EtherCAT networks
-	SDS := 5 //Sample delivery system
+	SDS := 5, //Sample delivery system
+	OPTICS := 6 //Optics control system
 )WORD;
 END_TYPE
 ```
@@ -2470,7 +2471,8 @@ CASE eSubsystem OF
 	E_Subsystem.MOTION: 	sSubsystemSource := '/Motion';
 	E_Subsystem.MPS: 		sSubsystemSource := '/MPS';
 	E_Subsystem.SDS: 		sSubsystemSource := '/SDS';
-	E_Subsystem.VACUUM:		sSubsystemSource := '/Vacuum';	
+	E_Subsystem.VACUUM:		sSubsystemSource := '/Vacuum';
+	E_Subsystem.OPTICS:     sSubsystemSource := '/Optics';
 	ELSE
 		sSubsystemSource := '/Unknown';
 END_CASE
