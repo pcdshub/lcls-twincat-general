@@ -57,6 +57,16 @@ VAR
 	ipMessageConfig		:	ITcEventFilterConfig;
 	fbSocket			:	POINTER TO FB_ConnectionlessSocket;
 	bConfigured			:	BOOL	:= FALSE;
+    
+    // Circuit breaker parameters
+    // Adjust these to capture a chain of log messages
+    // but trip if there are too many for too long.
+    
+    nEventTripThreshold : UINT := 300; // Rate, events/10seconds
+    nEventTripPeriod : TIME := T#10s; // If log events exceed the threshold for this long, trip
+    nTripResetPeriod : TIME := T#10m; // Time for auto-reset
+    bEnableAutoReset : BOOL := TRUE;
+    bTripped    :    BOOL; // Listener is tripped and won't emit messages
 END_VAR
 
 VAR_IN_OUT
@@ -65,7 +75,7 @@ END_VAR
 
 VAR CONSTANT
 	// The maximum number of events allowed *per-cycle*
-	nMaxEvents			:	UINT := 10;
+	nMaxEvents			:	UINT := 10;  
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -180,16 +190,58 @@ VAR
 	stPendingEvent		:	REFERENCE TO ST_PendingEvent;
 	stEventInfo			:	REFERENCE TO ST_LoggingEventInfo;
 	fbRequestEventText	:	REFERENCE TO FB_RequestEventText;
+    
+    idx                 :   UINT;
+    nTotalEvents       :   UINT;
 END_VAR
 
 VAR_INST
 	fbJson				:	FB_JsonSaxWriter;
 	fbJsonDataType		:	FB_JsonReadWriteDataType;
 	sJsonDoc			:	STRING(10000);
+    
+
+    nAccumulatedEvents : UINT := 0;
+    aAccumulator : ARRAY [0..nAccWidth] OF UINT;
+    nAccIdx : UINT;
+    tonAccTimer : TON;
+    tonAutoTripReset : TON; 
+    
+END_VAR
+VAR CONSTANT
+    nAccWidth : UINT := 10;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF nPendingEvents = 0 THEN
-	RETURN;
+        <ST><![CDATA[
+nAccumulatedEvents := nAccumulatedEvents + nPendingEvents;
+
+tonAccTimer(
+    IN := NOT tonAccTimer.Q,
+    PT := nEventTripPeriod);
+    
+IF tonAccTimer.Q THEN
+    aAccumulator[nAccIdx] := nAccumulatedEvents;
+    nAccIdx := nAccIdx + 1 MOD nAccWidth;
+END_IF
+
+FOR idx := 0 to nAccWidth DO
+    nTotalEvents := nTotalEvents + aAccumulator[idx];
+END_FOR
+
+bTripped S= nTotalEvents > nEventTripThreshold;
+tonAutoTripReset(
+    IN := bTripped AND bEnableAutoReset,
+    PT := nTripResetPeriod);
+    
+IF tonAutoTripReset.Q THEN
+    bTripped := FALSE;
+    FOR idx := 0 to nAccWidth DO
+        aAccumulator[idx] := 0;
+	END_FOR
+END_IF
+
+IF nPendingEvents = 0 or bTripped THEN
+	RETURN;   
 END_IF
 
 FOR nEvent := 0 TO nMaxEvents - 1 DO
