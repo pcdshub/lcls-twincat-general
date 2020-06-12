@@ -42,6 +42,10 @@ VAR_GLOBAL
 	{analysis -33}
 	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
 	{analysis +33}
+    
+    bTrickleTripped :   BOOL; // Global trickle trip flag
+    nGlobAccEvents : UDINT; // Global log message count
+    nTrickleThreshold : UDINT := 2;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

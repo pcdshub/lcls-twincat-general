@@ -70,6 +70,10 @@ VAR
     ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
     
     tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
+    
+    tonTrickleBreaker : TON := (PT := T#10s);
+    tofTrickleBreaker : TOF := (PT := T#10s);
+    bTripCon : BOOL;
 END_VAR
 
 VAR CONSTANT
@@ -145,6 +149,15 @@ IF rtFirstLog.Q THEN
     fbRootLogger(sMsg:='Logging system online', eSevr:=TcEventSeverity.Info,
                  eSubsystem:=E_Subsystem.NILVALUE);
 END_IF
+
+// Global log circuit breaker
+// Trip if the ton and toff fire
+bTripCon := GVL_Logger.nGlobAccEvents > GVL_Logger.nTrickleThreshold;
+tonTrickleBreaker(IN:=bTripCon);
+tofTrickleBreaker(IN:=bTripCon);
+GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND tofTrickleBreaker.Q;
+
+GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle
 
 (* Poke all of the listeners *)
 FOR nI := 0 TO nNumListeners - 1 DO

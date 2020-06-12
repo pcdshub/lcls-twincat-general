@@ -35,12 +35,14 @@ VAR
     tonAccTimer : TON;
     tonAutoTripReset : TON; 
     
-    nEventTripThreshold : UINT := 50; // Rate, events/period
+    nLocalTripThreshold : UINT := 50; // Local rate for this breaker, events/period
+    nTrickleTripThreshold : UINT := 10; // Trickle trip, activated by global threshold
     nEventTripPeriod : TIME := T#10s; // If log events exceed the threshold for this long, trip
     nTripResetPeriod : TIME := T#10m; // Time for auto-reset
     bEnableAutoReset : BOOL := TRUE;
     bTripped    :    BOOL; // Listener is tripped and won't emit messages
     bResetBreaker : BOOL;
+    rtTripped : R_TRIG;
       
     idx                 :   UINT;
     nTotalEvents       :   UINT;
@@ -94,6 +96,47 @@ END_IF
 IF bInitFailed THEN
 	RETURN;
 END_IF
+
+
+///////////////////////////////////////
+// Log message circuit breaker
+
+    nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
+    GVL_Logger.nGlobAccEvents
+    
+    tonAccTimer(
+        IN := NOT tonAccTimer.Q,
+        PT := nEventTripPeriod);
+        
+    IF tonAccTimer.Q THEN
+        aAccumulator[nAccIdx] := nAccumulatedEvents;
+        nAccIdx := nAccIdx + 1 MOD nAccWidth;
+    END_IF
+    
+    FOR idx := 0 to nAccWidth DO
+        nTotalEvents := nTotalEvents + aAccumulator[idx];
+    END_FOR
+    
+    IF GVL_LOGGER.bTrickleTripped THEN
+        bTripped S= nTotalEvents > nTrickleTripThreshold;
+    ELSE
+        bTripped S= nTotalEvents > nLocalTripThreshold;
+	END_IF
+        
+    tonAutoTripReset(
+        IN := bTripped AND bEnableAutoReset,
+        PT := nTripResetPeriod);
+        
+    IF tonAutoTripReset.Q OR bResetBreaker THEN
+        bTripped := FALSE;
+        FOR idx := 0 to nAccWidth DO
+            aAccumulator[idx] := 0;
+        END_FOR
+    END_IF
+ 
+///////////////////////////////////////////////////////////
+
+
 	
 // Map the message severity to the LCLSGeneralEventClass:
 CASE eSevr OF
@@ -127,7 +170,13 @@ hr := fbMessage.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInf
 
 // This is where the message text gets appended:
 fbMessage.ipArguments.Clear();
-fbMessage.ipArguments.AddString(sMsg);
+
+IF bTripped THEN
+   fbMessage.ipArguments.AddString('Logging circuit breaker tripped, this will be the last message from this element for a while...');
+ELSE
+    fbMessage.ipArguments.AddString(sMsg); 
+END_IF
+
 
 IF LEN(sJson) = 0 THEN
 	// Ensure there's a valid JSON string here
@@ -138,40 +187,8 @@ fbMessage.SetJsonAttribute(sJson);
 
 // For a final format of:
 // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
-
-///////////////////////////////////////
-// Log message circuit breaker
-
-    nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
-    
-    tonAccTimer(
-        IN := NOT tonAccTimer.Q,
-        PT := nEventTripPeriod);
-        
-    IF tonAccTimer.Q THEN
-        aAccumulator[nAccIdx] := nAccumulatedEvents;
-        nAccIdx := nAccIdx + 1 MOD nAccWidth;
-    END_IF
-    
-    FOR idx := 0 to nAccWidth DO
-        nTotalEvents := nTotalEvents + aAccumulator[idx];
-    END_FOR
-    
-    bTripped S= nTotalEvents > nEventTripThreshold;
-    tonAutoTripReset(
-        IN := bTripped AND bEnableAutoReset,
-        PT := nTripResetPeriod);
-        
-    IF tonAutoTripReset.Q OR bResetBreaker THEN
-        bTripped := FALSE;
-        FOR idx := 0 to nAccWidth DO
-            aAccumulator[idx] := 0;
-        END_FOR
-    END_IF
-///////////////////////////////////////////////////////////
-
-
-IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND NOT bTripped THEN
+rtTripped(CLK:=bTripped);
+IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND (NOT bTripped OR rtTripped.Q) THEN
 	hr := fbMessage.Send(0);
 END_IF
 
