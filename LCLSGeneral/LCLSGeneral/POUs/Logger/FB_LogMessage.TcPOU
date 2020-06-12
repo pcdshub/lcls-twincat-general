@@ -28,6 +28,25 @@ VAR
 	{attribute 'instance-path'} 
     {attribute 'noinit'} 
 	sPath				:	T_MaxString;
+    
+    nAccumulatedEvents : UINT := 0;
+    aAccumulator : ARRAY [0..nAccWidth] OF UINT;
+    nAccIdx : UINT;
+    tonAccTimer : TON;
+    tonAutoTripReset : TON; 
+    
+    nEventTripThreshold : UINT := 50; // Rate, events/period
+    nEventTripPeriod : TIME := T#10s; // If log events exceed the threshold for this long, trip
+    nTripResetPeriod : TIME := T#10m; // Time for auto-reset
+    bEnableAutoReset : BOOL := TRUE;
+    bTripped    :    BOOL; // Listener is tripped and won't emit messages
+    bResetBreaker : BOOL;
+      
+    idx                 :   UINT;
+    nTotalEvents       :   UINT;
+END_VAR
+VAR CONSTANT
+    nAccWidth : UINT := 10;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized AND NOT bInitFailed THEN
@@ -120,7 +139,39 @@ fbMessage.SetJsonAttribute(sJson);
 // For a final format of:
 // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
 
-IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel THEN
+///////////////////////////////////////
+// Log message circuit breaker
+
+    nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
+    
+    tonAccTimer(
+        IN := NOT tonAccTimer.Q,
+        PT := nEventTripPeriod);
+        
+    IF tonAccTimer.Q THEN
+        aAccumulator[nAccIdx] := nAccumulatedEvents;
+        nAccIdx := nAccIdx + 1 MOD nAccWidth;
+    END_IF
+    
+    FOR idx := 0 to nAccWidth DO
+        nTotalEvents := nTotalEvents + aAccumulator[idx];
+    END_FOR
+    
+    bTripped S= nTotalEvents > nEventTripThreshold;
+    tonAutoTripReset(
+        IN := bTripped AND bEnableAutoReset,
+        PT := nTripResetPeriod);
+        
+    IF tonAutoTripReset.Q OR bResetBreaker THEN
+        bTripped := FALSE;
+        FOR idx := 0 to nAccWidth DO
+            aAccumulator[idx] := 0;
+        END_FOR
+    END_IF
+///////////////////////////////////////////////////////////
+
+
+IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND NOT bTripped THEN
 	hr := fbMessage.Send(0);
 END_IF
 

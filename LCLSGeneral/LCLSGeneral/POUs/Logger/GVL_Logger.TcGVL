@@ -38,7 +38,7 @@ VAR_GLOBAL
 		TwinCAT PLC Control->"Project->Options...->Build" dialog window. 
 	*)
 	TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
-	
+    
 	{analysis -33}
 	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
 	{analysis +33}
