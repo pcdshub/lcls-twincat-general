@@ -35,12 +35,22 @@ VAR
     tonAccTimer : TON;
     tonAutoTripReset : TON; 
     
-    nLocalTripThreshold : UINT := 50; // Local rate for this breaker, events/period
-    nTrickleTripThreshold : UINT := 10; // Trickle trip, activated by global threshold
-    nEventTripPeriod : TIME := T#10s; // If log events exceed the threshold for this long, trip
-    nTripResetPeriod : TIME := T#10m; // Time for auto-reset
+    nLocalTripThreshold : UINT := GVL_Logger.nLocalTripThreshold; // Local rate for this breaker, events/period
+    nTrickleTripThreshold : UINT := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
+    nEventTripPeriod : TIME := GVL_Logger.nEventTripPeriod; // If log events exceed the threshold for this long, trip
+    nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
     bEnableAutoReset : BOOL := TRUE;
-    bTripped    :    BOOL; // Listener is tripped and won't emit messages
+    {attribute 'pytmc' := '
+		pv: Tripped
+		io: i
+		field: DESC Log message FB tripped
+	'}
+    bTripped    :    BOOL; // Won't emit messages if true
+    {attribute 'pytmc' := '
+		pv: Reset
+		io: o
+		field: DESC Rising-edge reset of trip
+	'}
     bResetBreaker : BOOL;
     rtTripped : R_TRIG;
       
@@ -102,7 +112,7 @@ END_IF
 // Log message circuit breaker
 
     nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
-    GVL_Logger.nGlobAccEvents
+    GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
     
     tonAccTimer(
         IN := NOT tonAccTimer.Q,

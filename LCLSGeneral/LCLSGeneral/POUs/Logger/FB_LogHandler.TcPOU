@@ -71,13 +71,14 @@ VAR
     
     tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
     
-    tonTrickleBreaker : TON := (PT := T#10s);
-    tofTrickleBreaker : TOF := (PT := T#10s);
+    tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
+    DisarmCounter   : UINT :=DisarmCount; 
     bTripCon : BOOL;
 END_VAR
 
 VAR CONSTANT
 	nNumListeners		:	UINT	:= 6;
+    DisarmCount : UINT :=5; // # number of cycles to permit below threshold condition
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized THEN 
@@ -151,11 +152,27 @@ IF rtFirstLog.Q THEN
 END_IF
 
 // Global log circuit breaker
-// Trip if the ton and toff fire
+(*
+Logic explanation
+We want to trip if there is a constant stream of messages being emitted by this PLC. We also
+only want the noisy offenders to trip. To target them we set a global trickle tripped flag
+using this logic here. Then each individual FB_LogMessage evaluates itself to see if it's 
+sending a message too frequently (ie. it's being called to often).
+
+This logic is attempting to implement the following:
+1. Trip if the total events exceeds the nTrickleThreshold for >10s
+2. Sustain the timer if the event count drops for a handful of cycles since usually a cycle amounts to 10ms, losing a few
+should not stop the trickle timer.
+*)
 bTripCon := GVL_Logger.nGlobAccEvents > GVL_Logger.nTrickleThreshold;
-tonTrickleBreaker(IN:=bTripCon);
-tofTrickleBreaker(IN:=bTripCon);
-GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND tofTrickleBreaker.Q;
+IF NOT bTripCon THEN
+    DisarmCounter := MIN(DisarmCounter - 1, 0);
+ELSE
+    DisarmCounter := DisarmCount;
+END_IF
+
+tonTrickleBreaker(IN:=bTripCon or DisarmCounter>0);
+GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND bTripCon;
 
 GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle
 

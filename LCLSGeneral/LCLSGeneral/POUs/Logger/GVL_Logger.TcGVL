@@ -28,6 +28,16 @@ VAR_GLOBAL CONSTANT
 	iLogPort		:	UINT		:= 54321;
     
     sIpTidbit : STRING(6) := '172.21';
+   
+    // Log message circuit breaker configuration 
+    
+    // Initialization constants
+    nLocalTripThreshold : UINT := 50; // Local rate for this breaker, events/period
+    nLocalTrickleTripThreshold : UINT := 10; // Trickle trip, activated by global threshold
+    nEventTripPeriod : TIME := T#10s; // If log events exceed the threshold for this long, trip
+    nTripResetPeriod : TIME := T#10m; // Time for auto-reset
+    
+    nTrickleTripTime : TIME := T#10s;
 END_VAR
 
 VAR_GLOBAL
@@ -43,9 +53,20 @@ VAR_GLOBAL
 	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
 	{analysis +33}
     
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
+		io: i
+		field: DESC Tripped by overall log count
+	'}
     bTrickleTripped :   BOOL; // Global trickle trip flag
+    
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)LCLSGeneral:LogPort
+		io: i
+		field: DESC Total log messages on the last cycle
+	'}
     nGlobAccEvents : UDINT; // Global log message count
-    nTrickleThreshold : UDINT := 2;
+    nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the 
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
