@@ -8,10 +8,10 @@ env:
     - TWINCAT_STYLE_EXCLUDE=
 
 # Uncomment this block if you would like to make a test an allowed failure
-#jobs:
-#  allow_failures:
-#    - name: "Style Check"
-#    - name: "Pre-commit Checks"
+jobs:
+  allow_failures:
+    - name: "Style Check"
+    - name: "Pre-commit Checks"
 
 import:
   - pcdshub/pcds-ci-helpers:travis/shared_configs/twincat/standard.yml
