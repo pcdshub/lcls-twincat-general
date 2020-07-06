@@ -1,0 +1,86 @@
+
+Data Types
+----------
+
+
+          
+ST_LoggingEventInfo
+^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):EventClass_RBV
+      - waveform
+      - TwinCAT Event class
+      - | io: input
+
+
+    * - $(PREFIX):EventType_RBV
+      - mbbi
+      - The event type
+      - | io: input
+
+
+    * - $(PREFIX):Hostname_RBV
+      - waveform
+      - PLC Hostname
+      - | io: input
+
+
+    * - $(PREFIX):Message_RBV
+      - waveform
+      - $(SYMBOL).msg
+      - | io: input
+
+
+    * - $(PREFIX):MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):MessageJSON_RBV
+      - waveform
+      - Metadata with the message
+      - | io: input
+
+
+    * - $(PREFIX):Schema_RBV
+      - waveform
+      - Schema string
+      - | io: input
+
+
+    * - $(PREFIX):Severity_RBV
+      - mbbi
+      - TcEventSeverity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Source_RBV
+      - waveform
+      - $(SYMBOL).source
+      - | io: input
+
+
+    * - $(PREFIX):Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+                   
+Database Records
+----------------
+
+No records defined.

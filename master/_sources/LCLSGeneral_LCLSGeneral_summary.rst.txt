@@ -1,0 +1,34 @@
+
+Settings
+--------
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Setting
+      - Value
+      - Description
+    * - AMS Net ID
+      - 
+      -
+    * - Target IP address
+      - 
+      - Based on AMS Net ID by convention
+    * - AMS Port
+      - 851
+      -
+
+.. _LCLSGeneral_pragmas:
+
+Pragmas
+-------
+
+Total pragmas found: 79
+Total linter errors: 0
+
+
+Symbols
+-------
+
+
