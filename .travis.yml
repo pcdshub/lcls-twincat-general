@@ -10,6 +10,7 @@ env:
 # Uncomment this block if you would like to make a test an allowed failure
 jobs:
   allow_failures:
+    - name: "Project Summary"
     - name: "Style Check"
     - name: "Pre-commit Checks"
 
