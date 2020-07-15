@@ -61,7 +61,7 @@ VAR_GLOBAL
     bTrickleTripped :   BOOL; // Global trickle trip flag
     
     {attribute 'pytmc' := '
-		pv: @(PREFIX)LCLSGeneral:LogPort
+		pv: @(PREFIX)LCLSGeneral:LogMessageCount
 		io: i
 		field: DESC Total log messages on the last cycle
 	'}
