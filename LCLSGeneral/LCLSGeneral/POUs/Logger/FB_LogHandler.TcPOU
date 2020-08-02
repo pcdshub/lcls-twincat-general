@@ -166,7 +166,7 @@ should not stop the trickle timer.
 *)
 bTripCon := GVL_Logger.nGlobAccEvents > GVL_Logger.nTrickleThreshold;
 IF NOT bTripCon THEN
-    DisarmCounter := MIN(DisarmCounter - 1, 0);
+    DisarmCounter := MAX(DisarmCounter - 1, 0);
 ELSE
     DisarmCounter := DisarmCount;
 END_IF
