@@ -78,7 +78,7 @@ END_VAR
 
 VAR CONSTANT
 	nNumListeners		:	UINT	:= 6;
-    DisarmCount : UINT :=5; // # number of cycles to permit below threshold condition
+    DisarmCountDefault : UINT :=5; // # number of cycles to permit below threshold condition
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized THEN 
@@ -166,7 +166,7 @@ should not stop the trickle timer.
 *)
 bTripCon := GVL_Logger.nGlobAccEvents > GVL_Logger.nTrickleThreshold;
 IF NOT bTripCon THEN
-    DisarmCounter := MIN(DisarmCounter - 1, 0);
+    DisarmCounter := MAX(DisarmCounter - 1, 0);
 ELSE
     DisarmCounter := DisarmCount;
 END_IF
