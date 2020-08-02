@@ -72,7 +72,7 @@ VAR
     tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
     
     tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
-    DisarmCounter   : UINT :=DisarmCount; 
+    DisarmCounter   : UINT := DisarmCountDefault; 
     bTripCon : BOOL;
 END_VAR
 
@@ -151,7 +151,18 @@ IF rtFirstLog.Q THEN
                  eSubsystem:=E_Subsystem.NILVALUE);
 END_IF
 
-// Global log circuit breaker
+CircuitBreaker();
+
+(* Poke all of the listeners *)
+FOR nI := 0 TO nNumListeners - 1 DO
+	fbListener REF= fbListeners[nI]^;
+	fbListener.Execute();
+	fbListener.PublishEvents();
+END_FOR]]></ST>
+    </Implementation>
+    <Action Name="CircuitBreaker" Id="{507d90b1-d1d6-4cc3-b632-e6c3c5e13942}">
+      <Implementation>
+        <ST><![CDATA[// Global log circuit breaker
 (*
 Logic explanation
 We want to trip if there is a constant stream of messages being emitted by this PLC. We also
@@ -168,20 +179,15 @@ bTripCon := GVL_Logger.nGlobAccEvents > GVL_Logger.nTrickleThreshold;
 IF NOT bTripCon THEN
     DisarmCounter := MAX(DisarmCounter - 1, 0);
 ELSE
-    DisarmCounter := DisarmCount;
+    DisarmCounter := DisarmCountDefault;
 END_IF
 
 tonTrickleBreaker(IN:=bTripCon or DisarmCounter>0);
+
 GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND bTripCon;
 
-GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle
-
-(* Poke all of the listeners *)
-FOR nI := 0 TO nNumListeners - 1 DO
-	fbListener REF= fbListeners[nI]^;
-	fbListener.Execute();
-	fbListener.PublishEvents();
-END_FOR]]></ST>
-    </Implementation>
+GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle]]></ST>
+      </Implementation>
+    </Action>
   </POU>
 </TcPlcObject>

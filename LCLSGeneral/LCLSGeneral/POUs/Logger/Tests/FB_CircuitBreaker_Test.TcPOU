@@ -34,10 +34,16 @@ VAR
 END_VAR
 VAR_INST
     fbLog : FB_LogMessage;
+
+    //Auto reset test
+    tonAutoResetTest : TON;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[ResetCircuitBreakerGlobals();
 
+(* In this scenario, a logger trips off because it has been called too many times
+in one cycle, leading to a large excess of messages.
+*)
 TEST('LocalTrip');
     FOR idx := 0 TO GVL_LOGGER.nLocalTripThreshold DO
         fbLog.CircuitBreaker();
@@ -46,6 +52,18 @@ TEST('LocalTrip');
     AssertTrue(fbLog.bLocalTripped AND NOT fbLog.bLocalTrickleTripped,
         'Only local trip should occur in these conditions');
 TEST_FINISHED();
+
+(* Test that the CB resets itself after a cooldown period *)
+TEST('AutoReset');
+    tonAutoResetTest(IN:=TRUE, PT:=fbLog.nTripResetPeriod + T#1s);
+    IF tonAutoResetTest.Q THEN
+        
+        fbLog.CircuitBreaker();
+        
+        
+        
+	END_IF
+    
 
 ]]></ST>
       </Implementation>

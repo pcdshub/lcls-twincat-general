@@ -14,6 +14,7 @@ VAR_INPUT
     nTrickleTripThreshold : UINT := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
     nEventTripPeriod : TIME := GVL_Logger.nEventTripPeriod; // If log events exceed the threshold for this long, trip
     nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
+    bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset
 END_VAR
 
 VAR_OUTPUT
@@ -35,30 +36,39 @@ VAR
     {attribute 'noinit'} 
 	sPath				:	T_MaxString;
     
-    nAccumulatedEvents : UINT := 0;
-    aAccumulator : ARRAY [0..nAccWidth] OF UINT;
-    nAccIdx : UINT;
-    tonAccTimer : TON;
-    tonAutoTripReset : TON; 
-    bLocalTrickleTripped : BOOL;
-    bLocalTripped : BOOL;
-    bEnableAutoReset : BOOL := TRUE;
-    {attribute 'pytmc' := '
-		pv: Tripped
-		io: i
-		field: DESC Log message FB tripped
-	'}
-    bTripped    :    BOOL; // Won't emit messages if true
-    {attribute 'pytmc' := '
-		pv: Reset
-		io: o
-		field: DESC Rising-edge reset of trip
-	'}
-    bResetBreaker : BOOL;
-    rtTripped : R_TRIG;
+    // Circuit breaker
+    ///////////////////////////////
+        nTotalEvents       :   UINT;
+        
+        nAccumulatedEvents : UINT := 0;
+        aAccumulator : ARRAY [0..nAccWidth] OF UINT;
+        nAccIdx : UINT;
+        tonAccTimer : TON;
+        
+        tonAutoTripReset : TON;
+ 
+        bLocalTrickleTripped : BOOL;
+        bLocalTripped : BOOL;
+
+        {attribute 'pytmc' := '
+            pv: Tripped
+            io: i
+            field: DESC Log message FB tripped
+        '}
+        bTripped    :    BOOL; // Won't emit messages if true
+        {attribute 'pytmc' := '
+            pv: Reset
+            io: o
+            field: DESC Rising-edge reset of trip
+        '}
+        bResetBreaker : BOOL;
+        rtResetBreaker : R_TRIG;
+        
+        rtTripped : R_TRIG;
+    ////////////////////////////////////////////
       
     idx                 :   UINT;
-    nTotalEvents       :   UINT;
+    
 END_VAR
 VAR CONSTANT
     nAccWidth : UINT := 10;
@@ -181,6 +191,23 @@ END_IF]]></ST>
     <Action Name="CircuitBreaker" Id="{e49ad5c6-bab2-45f9-a152-f716dee29a1a}">
       <Implementation>
         <ST><![CDATA[
+tonAutoTripReset(IN:=FALSE);
+
+tonAutoTripReset(
+    IN := bTripped AND bEnableAutoReset,
+    PT := nTripResetPeriod);
+    
+rtResetBreaker(CLK:=bResetBreaker);
+    
+IF tonAutoTripReset.Q OR rtResetBreaker.Q THEN
+    bLocalTrickleTripped := FALSE;
+    bLocalTripped := FALSE;
+    bTripped := FALSE;
+    FOR idx := 0 to nAccWidth DO
+        aAccumulator[idx] := 0;
+    END_FOR
+END_IF
+
 nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
 GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
 
@@ -209,16 +236,7 @@ END_IF
 bTripped S= bLocalTrickleTripped OR bLocalTripped;
 rtTripped(CLK:=bTripped);
 
-tonAutoTripReset(
-    IN := bTripped AND bEnableAutoReset,
-    PT := nTripResetPeriod);
-    
-IF tonAutoTripReset.Q OR bResetBreaker THEN
-    bTripped := FALSE;
-    FOR idx := 0 to nAccWidth DO
-        aAccumulator[idx] := 0;
-    END_FOR
-END_IF]]></ST>
+]]></ST>
       </Implementation>
     </Action>
   </POU>
