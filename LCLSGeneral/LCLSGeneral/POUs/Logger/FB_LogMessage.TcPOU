@@ -8,6 +8,12 @@ VAR_INPUT
 	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
 	eSubsystem		: E_Subsystem; 					// Subsystem
 	sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
+    
+    //Circuit breaker settings
+    nLocalTripThreshold : UINT := GVL_Logger.nLocalTripThreshold; // Local rate for this breaker, events/period
+    nTrickleTripThreshold : UINT := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
+    nEventTripPeriod : TIME := GVL_Logger.nEventTripPeriod; // If log events exceed the threshold for this long, trip
+    nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
 END_VAR
 
 VAR_OUTPUT
@@ -34,11 +40,8 @@ VAR
     nAccIdx : UINT;
     tonAccTimer : TON;
     tonAutoTripReset : TON; 
-    
-    nLocalTripThreshold : UINT := GVL_Logger.nLocalTripThreshold; // Local rate for this breaker, events/period
-    nTrickleTripThreshold : UINT := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
-    nEventTripPeriod : TIME := GVL_Logger.nEventTripPeriod; // If log events exceed the threshold for this long, trip
-    nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
+    bLocalTrickleTripped : BOOL;
+    bLocalTripped : BOOL;
     bEnableAutoReset : BOOL := TRUE;
     {attribute 'pytmc' := '
 		pv: Tripped
@@ -111,38 +114,7 @@ END_IF
 ///////////////////////////////////////
 // Log message circuit breaker
 
-    nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
-    GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
-    
-    tonAccTimer(
-        IN := NOT tonAccTimer.Q,
-        PT := nEventTripPeriod);
-        
-    IF tonAccTimer.Q THEN
-        aAccumulator[nAccIdx] := nAccumulatedEvents;
-        nAccIdx := nAccIdx + 1 MOD nAccWidth;
-    END_IF
-    
-    FOR idx := 0 to nAccWidth DO
-        nTotalEvents := nTotalEvents + aAccumulator[idx];
-    END_FOR
-    
-    IF GVL_LOGGER.bTrickleTripped THEN
-        bTripped S= nTotalEvents > nTrickleTripThreshold;
-    ELSE
-        bTripped S= nTotalEvents > nLocalTripThreshold;
-	END_IF
-        
-    tonAutoTripReset(
-        IN := bTripped AND bEnableAutoReset,
-        PT := nTripResetPeriod);
-        
-    IF tonAutoTripReset.Q OR bResetBreaker THEN
-        bTripped := FALSE;
-        FOR idx := 0 to nAccWidth DO
-            aAccumulator[idx] := 0;
-        END_FOR
-    END_IF
+CircuitBreaker();
  
 ///////////////////////////////////////////////////////////
 
@@ -181,9 +153,9 @@ hr := fbMessage.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInf
 // This is where the message text gets appended:
 fbMessage.ipArguments.Clear();
 
-IF bTripped THEN
+IF rtTripped.Q THEN
    fbMessage.ipArguments.AddString('Logging circuit breaker tripped, this will be the last message from this element for a while...');
-ELSE
+ELSIF NOT bTripped THEN
     fbMessage.ipArguments.AddString(sMsg); 
 END_IF
 
@@ -197,7 +169,7 @@ fbMessage.SetJsonAttribute(sJson);
 
 // For a final format of:
 // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
-rtTripped(CLK:=bTripped);
+// We want to send 1 more message when we trip
 IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND (NOT bTripped OR rtTripped.Q) THEN
 	hr := fbMessage.Send(0);
 END_IF
@@ -206,5 +178,48 @@ IF FAILED(hr) THEN
 	hrLastInternalError := hr;
 END_IF]]></ST>
     </Implementation>
+    <Action Name="CircuitBreaker" Id="{e49ad5c6-bab2-45f9-a152-f716dee29a1a}">
+      <Implementation>
+        <ST><![CDATA[
+nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
+GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
+
+tonAccTimer(
+    IN := NOT tonAccTimer.Q,
+    PT := nEventTripPeriod);
+    
+IF tonAccTimer.Q THEN
+    aAccumulator[nAccIdx] := nAccumulatedEvents;
+    nAccIdx := nAccIdx + 1 MOD nAccWidth;
+END_IF
+
+nTotalEvents := 0;
+FOR idx := 0 to nAccWidth DO
+    nTotalEvents := nTotalEvents + aAccumulator[idx];
+END_FOR
+// Also accumulate the current batch (before it's recorded)
+nTotalEvents := nTotalEvents + nAccumulatedEvents;
+
+IF GVL_LOGGER.bTrickleTripped THEN
+    bLocalTrickleTripped S= nTotalEvents > nTrickleTripThreshold;
+ELSE
+    bLocalTripped S= nTotalEvents > nLocalTripThreshold;
+END_IF
+
+bTripped S= bLocalTrickleTripped OR bLocalTripped;
+rtTripped(CLK:=bTripped);
+
+tonAutoTripReset(
+    IN := bTripped AND bEnableAutoReset,
+    PT := nTripResetPeriod);
+    
+IF tonAutoTripReset.Q OR bResetBreaker THEN
+    bTripped := FALSE;
+    FOR idx := 0 to nAccWidth DO
+        aAccumulator[idx] := 0;
+    END_FOR
+END_IF]]></ST>
+      </Implementation>
+    </Action>
   </POU>
 </TcPlcObject>

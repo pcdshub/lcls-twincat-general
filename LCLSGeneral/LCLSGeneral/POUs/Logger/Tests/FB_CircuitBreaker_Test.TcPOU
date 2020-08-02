@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_CircuitBreaker_Test" Id="{5e87281d-9fdb-4ef5-acce-a04e585b28ee}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_CircuitBreaker_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SingleBadLogger();
+DeathByManySmall();]]></ST>
+    </Implementation>
+    <Method Name="DeathByManySmall" Id="{16c5f3eb-2b6e-4010-9205-02c2d0e7536b}">
+      <Declaration><![CDATA[METHOD DeathByManySmall
+VAR_INPUT
+END_VAR
+VAR
+
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SingleBadLogger" Id="{f5c98f80-0db1-4516-a281-6aaf1f206004}">
+      <Declaration><![CDATA[METHOD SingleBadLogger
+VAR_INPUT
+END_VAR
+VAR
+    idx : UINT;
+END_VAR
+VAR_INST
+    fbLog : FB_LogMessage;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ResetCircuitBreakerGlobals();
+
+TEST('LocalTrip');
+    FOR idx := 0 TO GVL_LOGGER.nLocalTripThreshold DO
+        fbLog.CircuitBreaker();
+	END_FOR
+    
+    AssertTrue(fbLog.bLocalTripped AND NOT fbLog.bLocalTrickleTripped,
+        'Only local trip should occur in these conditions');
+TEST_FINISHED();
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
