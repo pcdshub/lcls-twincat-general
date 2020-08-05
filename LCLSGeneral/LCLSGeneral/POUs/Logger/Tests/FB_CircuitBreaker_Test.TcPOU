@@ -31,7 +31,7 @@ VAR_INST
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('ManySmall');
-//TODO: Unfinished, was going to create a condition where
+// Create a condition where
 // a few loggers did their thing, while keeping under the
 // local logging rate limit until the global trickle trip
 // was triggered. Then verify only those loggers that
