@@ -128,6 +128,9 @@
     <Compile Include="POUs\Functions\F_ConvertTicksToUnixTimestamp.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Functions\TIME_TO_100NS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_AnalogOutput.TcPOU">
       <SubType>Code</SubType>
     </Compile>

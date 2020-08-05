@@ -71,6 +71,7 @@ VAR
     
     tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
     
+    tofTrickleBreakerPre : TOF := (PT:=T#1s);
     tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
     DisarmCounter   : UINT := DisarmCountDefault; 
     bTripCon : BOOL;
@@ -175,14 +176,10 @@ This logic is attempting to implement the following:
 2. Sustain the timer if the event count drops for a handful of cycles since usually a cycle amounts to 10ms, losing a few
 should not stop the trickle timer.
 *)
-bTripCon := GVL_Logger.nGlobAccEvents > GVL_Logger.nTrickleThreshold;
-IF NOT bTripCon THEN
-    DisarmCounter := MAX(DisarmCounter - 1, 0);
-ELSE
-    DisarmCounter := DisarmCountDefault;
-END_IF
+bTripCon := GVL_Logger.nGlobAccEvents >0;
 
-tonTrickleBreaker(IN:=bTripCon or DisarmCounter>0);
+tofTrickleBreakerPre(IN:=bTripCon);
+tonTrickleBreaker(IN:=tofTrickleBreakerPre.Q);
 
 GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND bTripCon;
 

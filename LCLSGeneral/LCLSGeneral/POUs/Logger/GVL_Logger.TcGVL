@@ -32,9 +32,9 @@ VAR_GLOBAL CONSTANT
     // Log message circuit breaker configuration 
     
     // Initialization constants
-    nLocalTripThreshold : UINT := 50; // Local rate for this breaker, events/period
-    nLocalTrickleTripThreshold : UINT := 10; // Trickle trip, activated by global threshold
-    nEventTripPeriod : TIME := T#10s; // If log events exceed the threshold for this long, trip
+    nLocalTripThreshold : TIME := T#1ms; // Minimum time between logs
+    nMinTimeViolationAcceptable : UINT := 5; // Maximum number of times the minimum time above can be violated before a trip
+    nLocalTrickleTripThreshold : TIME := T#100ms; // Trickle trip, activated by global threshold (units: 100ns)
     nTripResetPeriod : TIME := T#10m; // Time for auto-reset
     
     nTrickleTripTime : TIME := T#10s;

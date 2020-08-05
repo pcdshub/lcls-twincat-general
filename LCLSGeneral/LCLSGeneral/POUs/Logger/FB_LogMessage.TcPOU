@@ -10,9 +10,9 @@ VAR_INPUT
 	sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
     
     //Circuit breaker settings
-    nLocalTripThreshold : UINT := GVL_Logger.nLocalTripThreshold; // Local rate for this breaker, events/period
+    nMinTimeViolationAcceptable : UINT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
+    nLocalTripThreshold : ULINT := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
     nTrickleTripThreshold : UINT := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
-    nEventTripPeriod : TIME := GVL_Logger.nEventTripPeriod; // If log events exceed the threshold for this long, trip
     nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
     bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset
 END_VAR
@@ -23,6 +23,8 @@ END_VAR
 VAR
 	bInitialized		:	BOOL := FALSE;
 	bInitFailed			:	BOOL := FALSE;
+    fbGetCurTaskIdx  : GETCURTASKINDEX;
+    nCycleTime : ULINT;
 	sSubsystemSource	:	STRING;
 	fbMessage			:	REFERENCE TO FB_TcMessage;
 	fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
@@ -38,14 +40,20 @@ VAR
     
     // Circuit breaker
     ///////////////////////////////
-        nTotalEvents       :   UINT;
+        nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod 
         
         nAccumulatedEvents : UINT := 0;
         aAccumulator : ARRAY [0..nAccWidth] OF UINT;
         nAccIdx : UINT;
         tonAccTimer : TON;
         
-        tonAutoTripReset : TON;
+        nTimesViolated : UINT;
+        
+        LastCallTime : ULINT;
+        CurrentCallTime : ULINT;
+        DeltaSinceLastCall : ULINT;
+        
+        tAutoTripReset : TOF;
  
         bLocalTrickleTripped : BOOL;
         bLocalTripped : BOOL;
@@ -75,6 +83,10 @@ VAR CONSTANT
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized AND NOT bInitFailed THEN
+    
+    fbGetCurTaskIdx();
+    nCycleTime := _TaskInfo[fbGetCurTaskIdx.index].CycleTime;
+
 	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
 	IF FAILED(hr) THEN
 		bInitFailed := TRUE;
@@ -125,6 +137,7 @@ END_IF
 // Log message circuit breaker
 
 CircuitBreaker();
+IF bTripped THEN RETURN; END_IF
  
 ///////////////////////////////////////////////////////////
 
@@ -191,49 +204,44 @@ END_IF]]></ST>
     <Action Name="CircuitBreaker" Id="{e49ad5c6-bab2-45f9-a152-f716dee29a1a}">
       <Implementation>
         <ST><![CDATA[
-tonAutoTripReset(IN:=FALSE);
-
-tonAutoTripReset(
+tAutoTripReset(
     IN := bTripped AND bEnableAutoReset,
     PT := nTripResetPeriod);
     
 rtResetBreaker(CLK:=bResetBreaker);
     
-IF tonAutoTripReset.Q OR rtResetBreaker.Q THEN
+IF tAutoTripReset.Q OR rtResetBreaker.Q THEN
     bLocalTrickleTripped := FALSE;
     bLocalTripped := FALSE;
     bTripped := FALSE;
+    nTimesViolated := 0;
     FOR idx := 0 to nAccWidth DO
         aAccumulator[idx] := 0;
     END_FOR
 END_IF
 
-nAccumulatedEvents := nAccumulatedEvents + 1; //every time FB_LogMessage is called, it is producing a message
 GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
 
-tonAccTimer(
-    IN := NOT tonAccTimer.Q,
-    PT := nEventTripPeriod);
-    
-IF tonAccTimer.Q THEN
-    aAccumulator[nAccIdx] := nAccumulatedEvents;
-    nAccIdx := nAccIdx + 1 MOD nAccWidth;
+CurrentCallTime := F_GetTaskTime();
+DeltaSinceLastCall := CurrentCallTime - LastCallTime;
+LastCallTime := CurrentCallTime;
+
+IF DeltaSinceLastCall < TIME_TO_100NS(nLocalTripThreshold) THEN
+    nTimesViolated := nTimesViolated + 1;
+ELSE
+    nTimesViolated := MAX(nTimesViolated - 1, 0);
 END_IF
 
-nTotalEvents := 0;
-FOR idx := 0 to nAccWidth DO
-    nTotalEvents := nTotalEvents + aAccumulator[idx];
-END_FOR
-// Also accumulate the current batch (before it's recorded)
-nTotalEvents := nTotalEvents + nAccumulatedEvents;
+
 
 IF GVL_LOGGER.bTrickleTripped THEN
-    bLocalTrickleTripped S= nTotalEvents > nTrickleTripThreshold;
+    bLocalTrickleTripped S= DeltaSinceLastCall < nTrickleTripThreshold;
 ELSE
-    bLocalTripped S= nTotalEvents > nLocalTripThreshold;
+    bLocalTripped S= nTimesViolated > nMinTimeViolationAcceptable;
 END_IF
 
-bTripped S= bLocalTrickleTripped OR bLocalTripped;
+bTripped S= (bLocalTrickleTripped AND GVL_Logger.bTrickleTripped) 
+            OR bLocalTripped;
 rtTripped(CLK:=bTripped);
 
 ]]></ST>
