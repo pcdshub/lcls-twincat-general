@@ -23,14 +23,38 @@ VAR
 END_VAR
 VAR_INST
     fbLogNoisy : FB_LogMessage;
-    fbLogNice : FB_LogMessage;
+    tNoisy : TON := (PT:=T#50ms); //50ms is > the local trip threshold default of 1ms
+    fbLogNice : FB_LogMessage := (nTrickleTripThreshold:=T#2s);
+    tNice : TON := (PT:=T#5s);
+    tTrickle : TON := (PT:= GVL_Logger.nTrickleTripTime + T#1s);
+    fbLogHandler : FB_LogHandler;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('ManySmall');
+//TODO: Unfinished, was going to create a condition where
+// a few loggers did their thing, while keeping under the
+// local logging rate limit until the global trickle trip
+// was triggered. Then verify only those loggers that
+// were just a little too noisy, would trip off, while others stayed up.
 
-fbLogNoisy.CircuitBreaker();
+fbLogHandler.CircuitBreaker();
 
-IF TRUE THEN
+// Call this guy every 50ms or so.
+tNoisy(IN := NOT tNoisy.Q);
+IF tNoisy.Q THEN
+    fbLogNoisy.CircuitBreaker();
+END_IF
+
+// Call this guy every 5s or so
+tNice(IN := NOT tNoisy.Q);
+IF tNice.Q THEN
+    fbLogNice.CircuitBreaker();
+END_IF
+
+tTrickle(IN:=TRUE);
+IF tTrickle.Q THEN
+    AssertTrue(fbLogNoisy.bLocalTrickleTripped AND NOT fbLogNice.bLocalTrickleTripped,
+            'Only Noisy should be tripped.');
     TEST_FINISHED_NAMED('ManySmall');
 END_IF]]></ST>
       </Implementation>

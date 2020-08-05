@@ -73,7 +73,7 @@ VAR
     
     tofTrickleBreakerPre : TOF := (PT:=T#1s);
     tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
-    DisarmCounter   : UINT := DisarmCountDefault; 
+    DisarmCounter   : INT := DisarmCountDefault; 
     bTripCon : BOOL;
 END_VAR
 

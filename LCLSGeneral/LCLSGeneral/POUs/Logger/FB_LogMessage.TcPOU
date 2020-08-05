@@ -11,8 +11,8 @@ VAR_INPUT
     
     //Circuit breaker settings
     nMinTimeViolationAcceptable : UINT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
-    nLocalTripThreshold : ULINT := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
-    nTrickleTripThreshold : UINT := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
+    nLocalTripThreshold : TIME := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
+    nTrickleTripThreshold : TIME := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
     nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
     bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset
 END_VAR
@@ -47,7 +47,7 @@ VAR
         nAccIdx : UINT;
         tonAccTimer : TON;
         
-        nTimesViolated : UINT;
+        nTimesViolated : INT;
         
         LastCallTime : ULINT;
         CurrentCallTime : ULINT;
@@ -235,7 +235,7 @@ END_IF
 
 
 IF GVL_LOGGER.bTrickleTripped THEN
-    bLocalTrickleTripped S= DeltaSinceLastCall < nTrickleTripThreshold;
+    bLocalTrickleTripped S= DeltaSinceLastCall < TIME_TO_100NS(nTrickleTripThreshold);
 ELSE
     bLocalTripped S= nTimesViolated > nMinTimeViolationAcceptable;
 END_IF
