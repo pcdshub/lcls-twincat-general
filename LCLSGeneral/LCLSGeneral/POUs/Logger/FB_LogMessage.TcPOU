@@ -10,11 +10,11 @@ VAR_INPUT
 	sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
     
     //Circuit breaker settings
-    nMinTimeViolationAcceptable : UINT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
+    nMinTimeViolationAcceptable : INT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
     nLocalTripThreshold : TIME := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
-    nTrickleTripThreshold : TIME := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold
+    nTrickleTripThreshold : TIME := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold, should be >> LocalTripThreshold
     nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
-    bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset
+    bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset (true by default)
 END_VAR
 
 VAR_OUTPUT
@@ -41,19 +41,14 @@ VAR
     // Circuit breaker
     ///////////////////////////////
         nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod 
-        
-        nAccumulatedEvents : UINT := 0;
-        aAccumulator : ARRAY [0..nAccWidth] OF UINT;
-        nAccIdx : UINT;
-        tonAccTimer : TON;
-        
         nTimesViolated : INT;
         
         LastCallTime : ULINT;
         CurrentCallTime : ULINT;
         DeltaSinceLastCall : ULINT;
         
-        tAutoTripReset : TOF;
+        WhenTripsCleared : ULINT;
+        ftTrippedReleased : F_TRIG;
  
         bLocalTrickleTripped : BOOL;
         bLocalTripped : BOOL;
@@ -137,7 +132,7 @@ END_IF
 // Log message circuit breaker
 
 CircuitBreaker();
-IF bTripped THEN RETURN; END_IF
+IF bTripped AND NOT rtTripped.Q THEN RETURN; END_IF // Pass on the first one to deliver the message we're going silent
  
 ///////////////////////////////////////////////////////////
 
@@ -204,44 +199,38 @@ END_IF]]></ST>
     <Action Name="CircuitBreaker" Id="{e49ad5c6-bab2-45f9-a152-f716dee29a1a}">
       <Implementation>
         <ST><![CDATA[
-tAutoTripReset(
-    IN := bTripped AND bEnableAutoReset,
-    PT := nTripResetPeriod);
-    
-rtResetBreaker(CLK:=bResetBreaker);
-    
-IF tAutoTripReset.Q OR rtResetBreaker.Q THEN
-    bLocalTrickleTripped := FALSE;
-    bLocalTripped := FALSE;
-    bTripped := FALSE;
-    nTimesViolated := 0;
-    FOR idx := 0 to nAccWidth DO
-        aAccumulator[idx] := 0;
-    END_FOR
-END_IF
-
 GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
 
 CurrentCallTime := F_GetTaskTime();
 DeltaSinceLastCall := CurrentCallTime - LastCallTime;
 LastCallTime := CurrentCallTime;
+    
+ftTrippedReleased(CLK:=bLocalTripped OR bLocalTrickleTripped);
+IF ftTrippedReleased.Q THEN
+    WhenTripsCleared := CurrentCallTime;
+END_IF
+rtResetBreaker(CLK:=bResetBreaker OR
+                bEnableAutoReset AND (CurrentCallTime - WhenTripsCleared > TIME_TO_100NS(nTripResetPeriod)) );
+    
+IF rtResetBreaker.Q THEN
+    bLocalTrickleTripped := FALSE;
+    bLocalTripped := FALSE;
+    bTripped := FALSE;
+    nTimesViolated := 0;
+END_IF
+
+bResetBreaker := FALSE;
+
 
 IF DeltaSinceLastCall < TIME_TO_100NS(nLocalTripThreshold) THEN
     nTimesViolated := nTimesViolated + 1;
-ELSE
-    nTimesViolated := MAX(nTimesViolated - 1, 0);
 END_IF
 
+bLocalTripped S= nTimesViolated > nMinTimeViolationAcceptable;
 
+bLocalTrickleTripped := DeltaSinceLastCall < TIME_TO_100NS(nTrickleTripThreshold) AND GVL_LOGGER.bTrickleTripped;
 
-IF GVL_LOGGER.bTrickleTripped THEN
-    bLocalTrickleTripped S= DeltaSinceLastCall < TIME_TO_100NS(nTrickleTripThreshold);
-ELSE
-    bLocalTripped S= nTimesViolated > nMinTimeViolationAcceptable;
-END_IF
-
-bTripped S= (bLocalTrickleTripped AND GVL_Logger.bTrickleTripped) 
-            OR bLocalTripped;
+bTripped S= bLocalTrickleTripped OR bLocalTripped;
 rtTripped(CLK:=bTripped);
 
 ]]></ST>

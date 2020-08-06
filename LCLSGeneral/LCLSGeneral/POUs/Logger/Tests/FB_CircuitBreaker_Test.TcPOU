@@ -11,9 +11,46 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[SingleBadLogger();
-DeathByManySmall();]]></ST>
+      <ST><![CDATA[AutoReset();
+SingleBadLogger();
+DeathByManySmall();
+]]></ST>
     </Implementation>
+    <Method Name="AutoReset" Id="{44b1b2f0-71a2-4aa9-8511-faaf8e5dd638}">
+      <Declaration><![CDATA[METHOD AutoReset
+VAR_INPUT
+END_VAR
+VAR_INST
+    fbLog : FB_LogMessage := (
+        bEnableAutoReset:=TRUE,
+        nTripResetPeriod := T#5s);
+
+    //Auto reset test
+    tonAutoResetTest : TON;
+    
+    Init : BOOL := TRUE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* Test that the CB resets itself after a cooldown period *)
+TEST('AutoReset');
+IF Init THEN
+    WRITE_PROTECTED_BOOL(ADR(fbLog.bTripped), TRUE);
+    fbLog.CircuitBreaker();
+END_IF
+
+tonAutoResetTest(IN:=fbLog.bTripped, PT:=T#6s);
+
+IF tonAutoResetTest.Q THEN
+    
+    fbLog.CircuitBreaker();
+    
+    AssertFalse(fbLog.bTripped,
+        'Circuit breaker should be reset automatically');
+    
+    TEST_FINISHED_NAMED('AutoReset');    
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="DeathByManySmall" Id="{16c5f3eb-2b6e-4010-9205-02c2d0e7536b}">
       <Declaration><![CDATA[METHOD DeathByManySmall
 VAR_INPUT
@@ -70,9 +107,6 @@ VAR_INST
     fbLog : FB_LogMessage := (
         bEnableAutoReset:=TRUE,
         nTripResetPeriod := T#5s);
-
-    //Auto reset test
-    tonAutoResetTest : TON;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[ResetCircuitBreakerGlobals();
@@ -81,7 +115,7 @@ END_VAR]]></Declaration>
 in one cycle, leading to a large excess of messages.
 *)
 TEST('LocalFastTrip');
-    FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
+    FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 2 DO
         fbLog.CircuitBreaker();
 	END_FOR
     
@@ -89,18 +123,7 @@ TEST('LocalFastTrip');
         'Only local trip should occur in these conditions');
 TEST_FINISHED();
 
-(* Test that the CB resets itself after a cooldown period *)
-TEST('AutoReset');
-tonAutoResetTest(IN:=TRUE, PT:=fbLog.nTripResetPeriod + T#1s);
-IF tonAutoResetTest.Q THEN
-    
-    fbLog.CircuitBreaker();
-    
-    AssertFalse(fbLog.bTripped,
-        'Circuit breaker should be reset automatically');
-    
-    TEST_FINISHED_NAMED('AutoReset');    
-END_IF
+
     
 
 ]]></ST>
