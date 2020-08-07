@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_CircuitBreaker_Test" Id="{5e87281d-9fdb-4ef5-acce-a04e585b28ee}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_CircuitBreaker_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[AutoReset();
+SingleBadLogger();
+DeathByManySmall();
+]]></ST>
+    </Implementation>
+    <Method Name="AutoReset" Id="{44b1b2f0-71a2-4aa9-8511-faaf8e5dd638}">
+      <Declaration><![CDATA[METHOD AutoReset
+VAR_INPUT
+END_VAR
+VAR_INST
+    fbLog : FB_LogMessage := (
+        bEnableAutoReset:=TRUE,
+        nTripResetPeriod := T#5s);
+
+    //Auto reset test
+    tonAutoResetTest : TON;
+    
+    Init : BOOL := TRUE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* Test that the CB resets itself after a cooldown period *)
+TEST('AutoReset');
+IF Init THEN
+    fbLog.CircuitBreaker();
+    WRITE_PROTECTED_BOOL(ADR(fbLog.bTripped), TRUE);
+    WRITE_PROTECTED_BOOL(ADR(fbLog.bLocalTripped), TRUE);
+    fbLog.CircuitBreaker();
+    fbLog.CircuitBreaker();
+    Init := FALSE;
+END_IF
+
+tonAutoResetTest(IN:=NOT Init, PT:=T#6s);
+
+IF tonAutoResetTest.Q THEN
+    
+    fbLog.CircuitBreaker();
+    
+    AssertFalse(fbLog.bTripped,
+        'Circuit breaker should be reset automatically');
+    
+    TEST_FINISHED_NAMED('AutoReset');    
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DeathByManySmall" Id="{16c5f3eb-2b6e-4010-9205-02c2d0e7536b}">
+      <Declaration><![CDATA[METHOD DeathByManySmall
+VAR_INPUT
+END_VAR
+VAR
+
+END_VAR
+VAR_INST
+    fbLogNoisy : FB_LogMessage;
+    tNoisy : TON := (PT:=T#50ms); //50ms is > the local trip threshold default of 1ms
+    fbLogNice : FB_LogMessage := (nTrickleTripThreshold:=T#2s);
+    tNice : TON := (PT:=T#5s);
+    tTrickle : TON := (PT:= GVL_Logger.nTrickleTripTime + T#1s);
+    fbLogHandler : FB_LogHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('ManySmall');
+// Create a condition where
+// a few loggers did their thing, while keeping under the
+// local logging rate limit until the global trickle trip
+// was triggered. Then verify only those loggers that
+// were just a little too noisy, would trip off, while others stayed up.
+
+fbLogHandler.CircuitBreaker();
+
+// Call this guy every 50ms or so.
+tNoisy(IN := NOT tNoisy.Q);
+IF tNoisy.Q THEN
+    fbLogNoisy.CircuitBreaker();
+END_IF
+
+// Call this guy every 5s or so
+tNice(IN := NOT tNoisy.Q);
+IF tNice.Q THEN
+    fbLogNice.CircuitBreaker();
+END_IF
+
+tTrickle(IN:=TRUE);
+IF tTrickle.Q THEN
+    AssertTrue(fbLogNoisy.bLocalTrickleTripped AND NOT fbLogNice.bLocalTrickleTripped,
+            'Only Noisy should be tripped.');
+    TEST_FINISHED_NAMED('ManySmall');
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SingleBadLogger" Id="{f5c98f80-0db1-4516-a281-6aaf1f206004}">
+      <Declaration><![CDATA[METHOD SingleBadLogger
+VAR_INPUT
+END_VAR
+VAR
+    idx : UINT;
+END_VAR
+VAR_INST
+    fbLog : FB_LogMessage := (
+        bEnableAutoReset:=TRUE,
+        nTripResetPeriod := T#5s);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ResetCircuitBreakerGlobals();
+
+(* In this scenario, a logger trips off because it has been called too many times
+in one cycle, leading to a large excess of messages.
+*)
+TEST('LocalFastTrip');
+    FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
+        fbLog.CircuitBreaker();
+	END_FOR
+    
+    AssertTrue(fbLog.bLocalTripped AND NOT fbLog.bLocalTrickleTripped,
+        'Only local trip should occur in these conditions');
+TEST_FINISHED();
+
+
+    
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

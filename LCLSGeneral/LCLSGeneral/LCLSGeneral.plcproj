@@ -40,6 +40,7 @@
     <Folder Include="POUs\Data" />
     <Folder Include="POUs\Hardware" />
     <Folder Include="POUs\Diagnostics" />
+    <Folder Include="POUs\Logger\Tests" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
@@ -127,6 +128,9 @@
     <Compile Include="POUs\Functions\F_ConvertTicksToUnixTimestamp.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Functions\TIME_TO_100NS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_AnalogOutput.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -176,6 +180,18 @@
     <Compile Include="POUs\Logger\SYSTEM_TIME_TO_RFC3339.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Logger\Tests\FB_CircuitBreaker_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Logger\Tests\ResetCircuitBreakerGlobals.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\RUN_TESTS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Task_3.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="Tc2_EtherCAT">
@@ -222,6 +238,10 @@
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="TcUnit">
+      <DefaultResolution>TcUnit, * (www.tcunit.org)</DefaultResolution>
+      <Namespace>TcUnit</Namespace>
+    </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
     <PlaceholderResolution Include="Tc2_EtherCAT">
@@ -256,6 +276,9 @@
     </PlaceholderResolution>
     <PlaceholderResolution Include="Tc3_Module">
       <Resolution>Tc3_Module, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="TcUnit">
+      <Resolution>TcUnit, * (www.tcunit.org)</Resolution>
     </PlaceholderResolution>
   </ItemGroup>
   <ItemGroup>
