@@ -126,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-analoginput">FB_AnalogInput</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-analogoutput">FB_AnalogOutput</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-basicstats">FB_BasicStats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-circuitbreaker-test">FB_CircuitBreaker_Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-coe-fastread">FB_CoE_FastRead</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-databuffer">FB_DataBuffer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ecatdiag">FB_EcatDiag</a></li>
@@ -146,7 +147,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-unixtimestamp">FB_UnixTimeStamp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-unixtimestampglobal">FB_UnixTimeStampGlobal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-xkoyoplcmodbus">FB_XKoyoPLCModbus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resetcircuitbreakerglobals">ResetCircuitBreakerGlobals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-tests">RUN_TESTS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#system-time-to-rfc3339">SYSTEM_TIME_TO_RFC3339</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#time-to-100ns">TIME_TO_100NS</a></li>
 </ul>
 </li>
 </ul>
@@ -620,6 +624,16 @@ VAR_GLOBAL CONSTANT
     iLogPort                :       UINT            := 54321;
 
     sIpTidbit : STRING(6) := &#39;172.21&#39;;
+
+    // Log message circuit breaker configuration
+
+    // Initialization constants for circuit breakers
+    nLocalTripThreshold : TIME := T#1ms; // Minimum time between log messages
+    nMinTimeViolationAcceptable : INT := 5; // Trip if `nLocalTripThreshold` exceeded `nMinTimeViolationAcceptable` times
+    nLocalTrickleTripThreshold : TIME := T#100ms; // Default trickle trip, activated by global threshold
+    nTrickleTripTime : TIME := T#10s; // Default time for log-handler to recognize a trickle overload condition, many log-message FB occasionally creating a message
+    // such that every PLC cycle is emitting a message (this is considered to be too much).
+    nTripResetPeriod : TIME := T#10m; // Default time for CB auto-reset
 END_VAR
 
 VAR_GLOBAL
@@ -634,6 +648,21 @@ VAR_GLOBAL
     {analysis -33}
     fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
     {analysis +33}
+
+    {attribute &#39;pytmc&#39; := &#39;
+            pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
+            io: i
+            field: DESC Tripped by overall log count
+    &#39;}
+    bTrickleTripped :   BOOL; // Global trickle trip flag
+
+    {attribute &#39;pytmc&#39; := &#39;
+            pv: @(PREFIX)LCLSGeneral:LogMessageCount
+            io: i
+            field: DESC Total log messages on the last cycle
+    &#39;}
+    nGlobAccEvents : UDINT; // Global log message count
+    nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the
 END_VAR
 </pre></div>
 </div>
@@ -899,6 +928,24 @@ END_VAR
             <span class="n">END_IF</span>
     <span class="n">END_IF</span>
 <span class="n">END_IF</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-circuitbreaker-test">
+<h2>FB_CircuitBreaker_Test<a class="headerlink" href="#fb-circuitbreaker-test" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;call_after_init&#39;</span><span class="p">}</span>
+<span class="n">FUNCTION_BLOCK</span> <span class="n">FB_CircuitBreaker_Test</span> <span class="n">EXTENDS</span> <span class="n">TcUnit</span><span class="o">.</span><span class="n">FB_TestSuite</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">AutoReset</span><span class="p">();</span>
+<span class="n">SingleBadLogger</span><span class="p">();</span>
+<span class="n">DeathByManySmall</span><span class="p">();</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
@@ -2129,6 +2176,8 @@ END_ACTION
     <span class="n">ipMessageConfig</span>         <span class="p">:</span>       <span class="n">ITcEventFilterConfig</span><span class="p">;</span>
     <span class="n">fbSocket</span>                        <span class="p">:</span>       <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">FB_ConnectionlessSocket</span><span class="p">;</span>
     <span class="n">bConfigured</span>                     <span class="p">:</span>       <span class="n">BOOL</span>    <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+
+
 <span class="n">END_VAR</span>
 
 <span class="n">VAR_IN_OUT</span>
@@ -2216,10 +2265,16 @@ END_ACTION
     <span class="n">ctuSocketError</span> <span class="p">:</span> <span class="n">CTU</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PV</span><span class="o">:=</span><span class="mi">3</span><span class="p">);</span> <span class="o">//</span> <span class="n">Circuit</span> <span class="n">breaker</span> <span class="k">for</span> <span class="n">socket</span> <span class="n">errors</span><span class="o">.</span> <span class="mi">3</span> <span class="n">errors</span> <span class="n">before</span> <span class="n">it</span> <span class="n">stops</span><span class="o">.</span>
 
     <span class="n">tRetryConnection</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#1h); // Retry after an hour</span>
+
+    <span class="n">tofTrickleBreakerPre</span> <span class="p">:</span> <span class="n">TOF</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#1s);</span>
+    <span class="n">tonTrickleBreaker</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nTrickleTripTime</span><span class="p">);</span>
+    <span class="n">DisarmCounter</span>   <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="n">DisarmCountDefault</span><span class="p">;</span>
+    <span class="n">bTripCon</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 
 <span class="n">VAR</span> <span class="n">CONSTANT</span>
     <span class="n">nNumListeners</span>           <span class="p">:</span>       <span class="n">UINT</span>    <span class="o">:=</span> <span class="mi">6</span><span class="p">;</span>
+    <span class="n">DisarmCountDefault</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span><span class="mi">5</span><span class="p">;</span> <span class="o">//</span> <span class="c1"># number of cycles to permit below threshold condition</span>
 <span class="n">END_VAR</span>
 <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInitialized</span> <span class="n">THEN</span>
     <span class="n">bInitialized</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -2283,13 +2338,15 @@ END_ACTION
 <span class="p">);</span>
 
 <span class="n">bReadyToLog</span> <span class="o">:=</span> <span class="p">(</span><span class="n">bAdapterSet</span> <span class="n">AND</span> <span class="n">bHostnameSet</span> <span class="n">AND</span> <span class="n">bInitialized</span> <span class="n">AND</span>
-                <span class="n">fbSocket</span><span class="o">.</span><span class="n">bEnable</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">bError</span><span class="p">);</span>
+                <span class="n">fbSocket</span><span class="o">.</span><span class="n">bEnable</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">bError</span> <span class="n">AND</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">eState</span> <span class="o">=</span> <span class="n">E_SocketConnectionlessState</span><span class="o">.</span><span class="n">eSOCKET_CREATED</span><span class="p">);</span>
 <span class="n">rtFirstLog</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bReadyToLog</span><span class="p">);</span>
 
 <span class="n">IF</span> <span class="n">rtFirstLog</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
     <span class="n">fbRootLogger</span><span class="p">(</span><span class="n">sMsg</span><span class="o">:=</span><span class="s1">&#39;Logging system online&#39;</span><span class="p">,</span> <span class="n">eSevr</span><span class="o">:=</span><span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Info</span><span class="p">,</span>
                  <span class="n">eSubsystem</span><span class="o">:=</span><span class="n">E_Subsystem</span><span class="o">.</span><span class="n">NILVALUE</span><span class="p">);</span>
 <span class="n">END_IF</span>
+
+<span class="n">CircuitBreaker</span><span class="p">();</span>
 
 <span class="p">(</span><span class="o">*</span> <span class="n">Poke</span> <span class="nb">all</span> <span class="n">of</span> <span class="n">the</span> <span class="n">listeners</span> <span class="o">*</span><span class="p">)</span>
 <span class="n">FOR</span> <span class="n">nI</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">nNumListeners</span> <span class="o">-</span> <span class="mi">1</span> <span class="n">DO</span>
@@ -2299,6 +2356,29 @@ END_ACTION
 <span class="n">END_FOR</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
+<span class="n">ACTION</span> <span class="n">CircuitBreaker</span><span class="p">:</span>
+<span class="o">//</span> <span class="n">Global</span> <span class="n">log</span> <span class="n">circuit</span> <span class="n">breaker</span>
+<span class="p">(</span><span class="o">*</span>
+<span class="n">Logic</span> <span class="n">explanation</span>
+<span class="n">We</span> <span class="n">want</span> <span class="n">to</span> <span class="n">trip</span> <span class="k">if</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">constant</span> <span class="n">stream</span> <span class="n">of</span> <span class="n">messages</span> <span class="n">being</span> <span class="n">emitted</span> <span class="n">by</span> <span class="n">this</span> <span class="n">PLC</span><span class="o">.</span> <span class="n">We</span> <span class="n">also</span>
+<span class="n">only</span> <span class="n">want</span> <span class="n">the</span> <span class="n">noisy</span> <span class="n">offenders</span> <span class="n">to</span> <span class="n">trip</span><span class="o">.</span> <span class="n">To</span> <span class="n">target</span> <span class="n">them</span> <span class="n">we</span> <span class="nb">set</span> <span class="n">a</span> <span class="k">global</span> <span class="n">trickle</span> <span class="n">tripped</span> <span class="n">flag</span>
+<span class="n">using</span> <span class="n">this</span> <span class="n">logic</span> <span class="n">here</span><span class="o">.</span> <span class="n">Then</span> <span class="n">each</span> <span class="n">individual</span> <span class="n">FB_LogMessage</span> <span class="n">evaluates</span> <span class="n">itself</span> <span class="n">to</span> <span class="n">see</span> <span class="k">if</span> <span class="n">it</span><span class="s1">&#39;s</span>
+<span class="n">sending</span> <span class="n">a</span> <span class="n">message</span> <span class="n">too</span> <span class="n">frequently</span> <span class="p">(</span><span class="n">ie</span><span class="o">.</span> <span class="n">it</span><span class="s1">&#39;s being called to often).</span>
+
+<span class="n">This</span> <span class="n">logic</span> <span class="ow">is</span> <span class="n">attempting</span> <span class="n">to</span> <span class="n">implement</span> <span class="n">the</span> <span class="n">following</span><span class="p">:</span>
+<span class="mf">1.</span> <span class="n">Trip</span> <span class="k">if</span> <span class="n">the</span> <span class="n">total</span> <span class="n">events</span> <span class="n">exceeds</span> <span class="n">the</span> <span class="n">nTrickleThreshold</span> <span class="k">for</span> <span class="o">&gt;</span><span class="mi">10</span><span class="n">s</span>
+<span class="mf">2.</span> <span class="n">Sustain</span> <span class="n">the</span> <span class="n">timer</span> <span class="k">if</span> <span class="n">the</span> <span class="n">event</span> <span class="n">count</span> <span class="n">drops</span> <span class="k">for</span> <span class="n">a</span> <span class="n">handful</span> <span class="n">of</span> <span class="n">cycles</span> <span class="n">since</span> <span class="n">usually</span> <span class="n">a</span> <span class="n">cycle</span> <span class="n">amounts</span> <span class="n">to</span> <span class="mi">10</span><span class="n">ms</span><span class="p">,</span> <span class="n">losing</span> <span class="n">a</span> <span class="n">few</span>
+<span class="n">should</span> <span class="ow">not</span> <span class="n">stop</span> <span class="n">the</span> <span class="n">trickle</span> <span class="n">timer</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">bTripCon</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="n">tofTrickleBreakerPre</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">bTripCon</span><span class="p">);</span>
+<span class="n">tonTrickleBreaker</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">tofTrickleBreakerPre</span><span class="o">.</span><span class="n">Q</span><span class="p">);</span>
+
+<span class="n">GVL_Logger</span><span class="o">.</span><span class="n">bTrickleTripped</span> <span class="n">S</span><span class="o">=</span> <span class="n">tonTrickleBreaker</span><span class="o">.</span><span class="n">Q</span> <span class="n">AND</span> <span class="n">bTripCon</span><span class="p">;</span>
+
+<span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">reset</span> <span class="n">the</span> <span class="n">count</span> <span class="k">for</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">cycle</span>
+<span class="n">END_ACTION</span>
 </pre></div>
 </div>
 </div>
@@ -2311,6 +2391,13 @@ END_ACTION
     <span class="n">eSevr</span>                   <span class="p">:</span> <span class="n">TcEventSeverity</span>       <span class="o">:=</span> <span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Verbose</span><span class="p">;</span>
     <span class="n">eSubsystem</span>              <span class="p">:</span> <span class="n">E_Subsystem</span><span class="p">;</span>                                  <span class="o">//</span> <span class="n">Subsystem</span>
     <span class="n">sJson</span>                   <span class="p">:</span> <span class="n">STRING</span><span class="p">(</span><span class="mi">7000</span><span class="p">)</span>  <span class="o">:=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">;</span>                <span class="o">//</span> <span class="n">JSON</span> <span class="n">to</span> <span class="n">add</span> <span class="n">to</span> <span class="n">the</span> <span class="n">message</span>
+
+    <span class="o">//</span><span class="n">Circuit</span> <span class="n">breaker</span> <span class="n">settings</span>
+    <span class="n">nMinTimeViolationAcceptable</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nMinTimeViolationAcceptable</span><span class="p">;</span> <span class="o">//</span> <span class="n">How</span> <span class="n">many</span> <span class="n">times</span> <span class="n">the</span> <span class="nb">min</span><span class="o">.</span> <span class="n">time</span> <span class="n">can</span> <span class="n">be</span> <span class="n">violated</span> <span class="n">before</span> <span class="n">the</span> <span class="n">CB</span> <span class="n">trips</span>
+    <span class="n">nLocalTripThreshold</span> <span class="p">:</span> <span class="n">TIME</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nLocalTripThreshold</span><span class="p">;</span> <span class="o">//</span> <span class="n">Minimum</span> <span class="n">time</span> <span class="n">between</span> <span class="n">calls</span> <span class="n">allowed</span><span class="p">,</span> <span class="n">pairs</span> <span class="k">with</span> <span class="n">nMinTimeViolationAcceptable</span>
+    <span class="n">nTrickleTripThreshold</span> <span class="p">:</span> <span class="n">TIME</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nLocalTrickleTripThreshold</span><span class="p">;</span> <span class="o">//</span> <span class="n">Trickle</span> <span class="n">trip</span><span class="p">,</span> <span class="n">activated</span> <span class="n">by</span> <span class="k">global</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">should</span> <span class="n">be</span> <span class="o">&gt;&gt;</span> <span class="n">LocalTripThreshold</span>
+    <span class="n">nTripResetPeriod</span> <span class="p">:</span> <span class="n">TIME</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nTripResetPeriod</span><span class="p">;</span> <span class="o">//</span> <span class="n">Time</span> <span class="k">for</span> <span class="n">auto</span><span class="o">-</span><span class="n">reset</span>
+    <span class="n">bEnableAutoReset</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span> <span class="o">//</span><span class="n">Enable</span> <span class="n">circuit</span> <span class="n">breaker</span> <span class="n">auto</span><span class="o">-</span><span class="n">reset</span> <span class="p">(</span><span class="n">true</span> <span class="n">by</span> <span class="n">default</span><span class="p">)</span>
 <span class="n">END_VAR</span>
 
 <span class="n">VAR_OUTPUT</span>
@@ -2319,6 +2406,8 @@ END_ACTION
 <span class="n">VAR</span>
     <span class="n">bInitialized</span>            <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
     <span class="n">bInitFailed</span>                     <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+    <span class="n">fbGetCurTaskIdx</span>  <span class="p">:</span> <span class="n">GETCURTASKINDEX</span><span class="p">;</span>
+    <span class="n">nCycleTime</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
     <span class="n">sSubsystemSource</span>        <span class="p">:</span>       <span class="n">STRING</span><span class="p">;</span>
     <span class="n">fbMessage</span>                       <span class="p">:</span>       <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
     <span class="n">fbMessages</span>                      <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">4</span><span class="p">]</span> <span class="n">OF</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
@@ -2327,12 +2416,50 @@ END_ACTION
     <span class="n">hr</span>                                      <span class="p">:</span>       <span class="n">HRESULT</span><span class="p">;</span>
     <span class="n">hrLastInternalError</span> <span class="p">:</span>   <span class="n">HRESULT</span><span class="p">;</span>
     <span class="n">eTraceLevel</span>             <span class="p">:</span>       <span class="n">TcEventSeverity</span> <span class="o">:=</span> <span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Verbose</span><span class="p">;</span>
+    <span class="n">bFirstCall</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;instance-path&#39;</span><span class="p">}</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;noinit&#39;</span><span class="p">}</span>
     <span class="n">sPath</span>                           <span class="p">:</span>       <span class="n">T_MaxString</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">Circuit</span> <span class="n">breaker</span>
+    <span class="o">///////////////////////////////</span>
+        <span class="n">nTotalEvents</span>       <span class="p">:</span>   <span class="n">UINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">events</span> <span class="n">accumulated</span> <span class="n">over</span> <span class="n">the</span> <span class="n">last</span> <span class="n">nAccWidth</span><span class="o">*</span><span class="n">nEventTripPeriod</span>
+        <span class="n">nTimesViolated</span> <span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
+
+        <span class="n">LastCallTime</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
+        <span class="n">CurrentCallTime</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
+        <span class="n">DeltaSinceLastCall</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
+
+        <span class="n">WhenTripsCleared</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
+        <span class="n">ftTrippedReleased</span> <span class="p">:</span> <span class="n">F_TRIG</span><span class="p">;</span>
+
+        <span class="n">bLocalTrickleTripped</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+        <span class="n">bLocalTripped</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+            <span class="n">pv</span><span class="p">:</span> <span class="n">Tripped</span>
+            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+            <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Log</span> <span class="n">message</span> <span class="n">FB</span> <span class="n">tripped</span>
+        <span class="s1">&#39;}</span>
+        <span class="n">bTripped</span>    <span class="p">:</span>    <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="n">Won</span><span class="s1">&#39;t emit messages if true</span>
+        <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+            <span class="n">pv</span><span class="p">:</span> <span class="n">Reset</span>
+            <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
+            <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Rising</span><span class="o">-</span><span class="n">edge</span> <span class="n">reset</span> <span class="n">of</span> <span class="n">trip</span>
+        <span class="s1">&#39;}</span>
+        <span class="n">bResetBreaker</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+        <span class="n">rtResetBreaker</span> <span class="p">:</span> <span class="n">R_TRIG</span><span class="p">;</span>
+
+        <span class="n">rtTripped</span> <span class="p">:</span> <span class="n">R_TRIG</span><span class="p">;</span>
+    <span class="o">////////////////////////////////////////////</span>
+
 <span class="n">END_VAR</span>
 <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInitialized</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">bInitFailed</span> <span class="n">THEN</span>
+
+    <span class="n">fbGetCurTaskIdx</span><span class="p">();</span>
+    <span class="n">nCycleTime</span> <span class="o">:=</span> <span class="n">_TaskInfo</span><span class="p">[</span><span class="n">fbGetCurTaskIdx</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">CycleTime</span><span class="p">;</span>
+
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>
             <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -2378,6 +2505,17 @@ END_ACTION
     <span class="n">RETURN</span><span class="p">;</span>
 <span class="n">END_IF</span>
 
+
+<span class="o">///////////////////////////////////////</span>
+<span class="o">//</span> <span class="n">Log</span> <span class="n">message</span> <span class="n">circuit</span> <span class="n">breaker</span>
+
+<span class="n">CircuitBreaker</span><span class="p">();</span>
+<span class="n">IF</span> <span class="n">bTripped</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">rtTripped</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span> <span class="n">RETURN</span><span class="p">;</span> <span class="n">END_IF</span> <span class="o">//</span> <span class="n">Pass</span> <span class="n">on</span> <span class="n">the</span> <span class="n">first</span> <span class="n">one</span> <span class="n">to</span> <span class="n">deliver</span> <span class="n">the</span> <span class="n">message</span> <span class="n">we</span><span class="s1">&#39;re going silent</span>
+
+<span class="o">///////////////////////////////////////////////////////////</span>
+
+
+
 <span class="o">//</span> <span class="n">Map</span> <span class="n">the</span> <span class="n">message</span> <span class="n">severity</span> <span class="n">to</span> <span class="n">the</span> <span class="n">LCLSGeneralEventClass</span><span class="p">:</span>
 <span class="n">CASE</span> <span class="n">eSevr</span> <span class="n">OF</span>
     <span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Verbose</span><span class="p">:</span>        <span class="n">fbMessage</span> <span class="n">REF</span><span class="o">=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="o">.</span><span class="n">nEventId</span><span class="p">];</span>
@@ -2410,7 +2548,13 @@ END_ACTION
 
 <span class="o">//</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">where</span> <span class="n">the</span> <span class="n">message</span> <span class="n">text</span> <span class="n">gets</span> <span class="n">appended</span><span class="p">:</span>
 <span class="n">fbMessage</span><span class="o">.</span><span class="n">ipArguments</span><span class="o">.</span><span class="n">Clear</span><span class="p">();</span>
-<span class="n">fbMessage</span><span class="o">.</span><span class="n">ipArguments</span><span class="o">.</span><span class="n">AddString</span><span class="p">(</span><span class="n">sMsg</span><span class="p">);</span>
+
+<span class="n">IF</span> <span class="n">rtTripped</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+   <span class="n">fbMessage</span><span class="o">.</span><span class="n">ipArguments</span><span class="o">.</span><span class="n">AddString</span><span class="p">(</span><span class="s1">&#39;Logging circuit breaker tripped, this will be the last message from this element for a while...&#39;</span><span class="p">);</span>
+<span class="n">ELSIF</span> <span class="n">NOT</span> <span class="n">bTripped</span> <span class="n">THEN</span>
+    <span class="n">fbMessage</span><span class="o">.</span><span class="n">ipArguments</span><span class="o">.</span><span class="n">AddString</span><span class="p">(</span><span class="n">sMsg</span><span class="p">);</span>
+<span class="n">END_IF</span>
+
 
 <span class="n">IF</span> <span class="n">LEN</span><span class="p">(</span><span class="n">sJson</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">THEN</span>
     <span class="o">//</span> <span class="n">Ensure</span> <span class="n">there</span><span class="s1">&#39;s a valid JSON string here</span>
@@ -2421,8 +2565,8 @@ END_ACTION
 
 <span class="o">//</span> <span class="n">For</span> <span class="n">a</span> <span class="n">final</span> <span class="nb">format</span> <span class="n">of</span><span class="p">:</span>
 <span class="o">//</span> <span class="s1">&#39;Path.to.FB_LogMessage/Subsystem&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">Unknown</span><span class="p">,</span><span class="n">Error</span><span class="p">,</span><span class="ne">Warning</span><span class="p">,</span><span class="n">Verbose</span><span class="p">}</span> <span class="p">(</span><span class="n">message</span><span class="p">)</span>
-
-<span class="n">IF</span> <span class="n">NOT</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">AND</span> <span class="n">fbMessage</span><span class="o">.</span><span class="n">eSeverity</span> <span class="o">&gt;=</span> <span class="n">eTraceLevel</span> <span class="n">THEN</span>
+<span class="o">//</span> <span class="n">We</span> <span class="n">want</span> <span class="n">to</span> <span class="n">send</span> <span class="mi">1</span> <span class="n">more</span> <span class="n">message</span> <span class="n">when</span> <span class="n">we</span> <span class="n">trip</span>
+<span class="n">IF</span> <span class="n">NOT</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">AND</span> <span class="n">fbMessage</span><span class="o">.</span><span class="n">eSeverity</span> <span class="o">&gt;=</span> <span class="n">eTraceLevel</span> <span class="n">AND</span> <span class="p">(</span><span class="n">NOT</span> <span class="n">bTripped</span> <span class="n">OR</span> <span class="n">rtTripped</span><span class="o">.</span><span class="n">Q</span><span class="p">)</span> <span class="n">THEN</span>
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessage</span><span class="o">.</span><span class="n">Send</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="n">END_IF</span>
 
@@ -2431,6 +2575,48 @@ END_ACTION
 <span class="n">END_IF</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
+<span class="n">ACTION</span> <span class="n">CircuitBreaker</span><span class="p">:</span>
+<span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="n">CurrentCallTime</span> <span class="o">:=</span> <span class="n">F_GetTaskTime</span><span class="p">();</span>
+<span class="n">IF</span> <span class="n">bFirstCall</span> <span class="n">THEN</span>
+    <span class="n">DeltaSinceLastCall</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#FFFF_FFFF;</span>
+    <span class="n">bFirstCall</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">ELSE</span>
+   <span class="n">DeltaSinceLastCall</span> <span class="o">:=</span> <span class="n">CurrentCallTime</span> <span class="o">-</span> <span class="n">LastCallTime</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">LastCallTime</span> <span class="o">:=</span> <span class="n">CurrentCallTime</span><span class="p">;</span>
+
+<span class="n">ftTrippedReleased</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bLocalTripped</span> <span class="n">OR</span> <span class="n">bLocalTrickleTripped</span><span class="p">);</span>
+<span class="n">IF</span> <span class="n">ftTrippedReleased</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+    <span class="n">WhenTripsCleared</span> <span class="o">:=</span> <span class="n">CurrentCallTime</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="n">rtResetBreaker</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bResetBreaker</span> <span class="n">OR</span>
+                <span class="n">bEnableAutoReset</span> <span class="n">AND</span> <span class="p">(</span><span class="n">CurrentCallTime</span> <span class="o">-</span> <span class="n">WhenTripsCleared</span> <span class="o">&gt;</span> <span class="n">TIME_TO_100NS</span><span class="p">(</span><span class="n">nTripResetPeriod</span><span class="p">))</span> <span class="p">);</span>
+
+<span class="n">IF</span> <span class="n">rtResetBreaker</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+   <span class="o">//</span> <span class="n">bLocalTrickleTripped</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+    <span class="o">//</span><span class="n">bLocalTripped</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+    <span class="n">bTripped</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+    <span class="o">//</span><span class="n">nTimesViolated</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">bResetBreaker</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+
+<span class="n">IF</span> <span class="n">DeltaSinceLastCall</span> <span class="o">&lt;</span> <span class="n">TIME_TO_100NS</span><span class="p">(</span><span class="n">nLocalTripThreshold</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">nTimesViolated</span> <span class="o">:=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">nTimesViolated</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nMinTimeViolationAcceptable</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">ELSE</span>
+    <span class="n">nTimesViolated</span> <span class="o">:=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">nTimesViolated</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="n">END_IF</span>
+
+<span class="n">bLocalTripped</span> <span class="o">:=</span> <span class="n">nTimesViolated</span> <span class="o">&gt;</span> <span class="n">nMinTimeViolationAcceptable</span><span class="p">;</span>
+
+<span class="n">bLocalTrickleTripped</span> <span class="o">:=</span> <span class="n">DeltaSinceLastCall</span> <span class="o">&lt;</span> <span class="n">TIME_TO_100NS</span><span class="p">(</span><span class="n">nTrickleTripThreshold</span><span class="p">)</span> <span class="n">AND</span> <span class="n">GVL_LOGGER</span><span class="o">.</span><span class="n">bTrickleTripped</span><span class="p">;</span>
+
+<span class="n">bTripped</span> <span class="n">S</span><span class="o">=</span> <span class="n">bLocalTrickleTripped</span> <span class="n">OR</span> <span class="n">bLocalTripped</span><span class="p">;</span>
+<span class="n">rtTripped</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bTripped</span><span class="p">);</span>
+<span class="n">END_ACTION</span>
 </pre></div>
 </div>
 </div>
@@ -2885,6 +3071,32 @@ END_FUNCTION_BLOCK
 </pre></div>
 </div>
 </div>
+<div class="section" id="resetcircuitbreakerglobals">
+<h2>ResetCircuitBreakerGlobals<a class="headerlink" href="#resetcircuitbreakerglobals" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">ResetCircuitBreakerGlobals</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">GVL_Logger</span><span class="o">.</span><span class="n">bTrickleTripped</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-tests">
+<h2>RUN_TESTS<a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROGRAM</span> <span class="n">RUN_TESTS</span>
+<span class="n">VAR</span>
+    <span class="n">CbTest</span>    <span class="p">:</span>    <span class="n">FB_CircuitBreaker_Test</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">TcUnit</span><span class="o">.</span><span class="n">RUN</span><span class="p">();</span>
+
+<span class="n">END_PROGRAM</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="system-time-to-rfc3339">
 <h2>SYSTEM_TIME_TO_RFC3339<a class="headerlink" href="#system-time-to-rfc3339" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Converts</span> <span class="n">Beckhoff</span> <span class="n">PLC</span> <span class="n">SYSTEMTIME</span> <span class="n">to</span> <span class="n">RFC3339</span> <span class="n">time</span> <span class="nb">format</span> <span class="k">as</span> <span class="n">a</span> <span class="n">string</span>
@@ -2898,6 +3110,20 @@ END_FUNCTION_BLOCK
 <span class="n">VAR</span>
 <span class="n">END_VAR</span>
 <span class="n">SYSTEM_TIME_TO_RFC3339</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">REPLACE</span><span class="p">(</span><span class="n">SYSTEMTIME_TO_STRING</span><span class="p">(</span><span class="n">tCurrentTime</span><span class="p">),</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="s1">&#39;Z&#39;</span><span class="p">);</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="time-to-100ns">
+<h2>TIME_TO_100NS<a class="headerlink" href="#time-to-100ns" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">TIME_TO_100NS</span> <span class="p">:</span> <span class="n">ULINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">nTime</span> <span class="p">:</span> <span class="n">TIME</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">TIME_TO_100NS</span> <span class="o">:=</span> <span class="n">TIME_TO_ULINT</span><span class="p">(</span><span class="n">nTime</span><span class="p">)</span><span class="o">*</span><span class="mi">10000</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION</span>
 </pre></div>

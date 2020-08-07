@@ -446,6 +446,16 @@ GVL_Logger
     	iLogPort		:	UINT		:= 54321;
         
         sIpTidbit : STRING(6) := '172.21';
+       
+        // Log message circuit breaker configuration 
+        
+        // Initialization constants for circuit breakers
+        nLocalTripThreshold : TIME := T#1ms; // Minimum time between log messages
+        nMinTimeViolationAcceptable : INT := 5; // Trip if `nLocalTripThreshold` exceeded `nMinTimeViolationAcceptable` times
+        nLocalTrickleTripThreshold : TIME := T#100ms; // Default trickle trip, activated by global threshold
+        nTrickleTripTime : TIME := T#10s; // Default time for log-handler to recognize a trickle overload condition, many log-message FB occasionally creating a message
+        // such that every PLC cycle is emitting a message (this is considered to be too much).
+        nTripResetPeriod : TIME := T#10m; // Default time for CB auto-reset
     END_VAR
 
     VAR_GLOBAL
@@ -456,10 +466,25 @@ GVL_Logger
     		TwinCAT PLC Control->"Project->Options...->Build" dialog window. 
     	*)
     	TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
-    	
+        
     	{analysis -33}
     	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
     	{analysis +33}
+        
+        {attribute 'pytmc' := '
+    		pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
+    		io: i
+    		field: DESC Tripped by overall log count
+    	'}
+        bTrickleTripped :   BOOL; // Global trickle trip flag
+        
+        {attribute 'pytmc' := '
+    		pv: @(PREFIX)LCLSGeneral:LogMessageCount
+    		io: i
+    		field: DESC Total log messages on the last cycle
+    	'}
+        nGlobAccEvents : UDINT; // Global log message count
+        nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the 
     END_VAR
 
 
@@ -736,6 +761,26 @@ FB_BasicStats
     		END_IF
     	END_IF
     END_IF
+
+    END_FUNCTION_BLOCK
+
+
+FB_CircuitBreaker_Test
+^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_CircuitBreaker_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    AutoReset();
+    SingleBadLogger();
+    DeathByManySmall();
 
     END_FUNCTION_BLOCK
 
@@ -1984,6 +2029,8 @@ FB_Listener
     	ipMessageConfig		:	ITcEventFilterConfig;
     	fbSocket			:	POINTER TO FB_ConnectionlessSocket;
     	bConfigured			:	BOOL	:= FALSE;
+        
+
     END_VAR
 
     VAR_IN_OUT
@@ -1992,7 +2039,7 @@ FB_Listener
 
     VAR CONSTANT
     	// The maximum number of events allowed *per-cycle*
-    	nMaxEvents			:	UINT := 10;
+    	nMaxEvents			:	UINT := 10;  
     END_VAR
 
 
@@ -2073,10 +2120,16 @@ FB_LogHandler
         ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
         
         tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
+        
+        tofTrickleBreakerPre : TOF := (PT:=T#1s);
+        tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
+        DisarmCounter   : INT := DisarmCountDefault; 
+        bTripCon : BOOL;
     END_VAR
 
     VAR CONSTANT
     	nNumListeners		:	UINT	:= 6;
+        DisarmCountDefault : UINT :=5; // # number of cycles to permit below threshold condition
     END_VAR
     IF NOT bInitialized THEN 
     	bInitialized := TRUE;
@@ -2140,13 +2193,15 @@ FB_LogHandler
     );
 
     bReadyToLog := (bAdapterSet AND bHostnameSet AND bInitialized AND 
-                    fbSocket.bEnable AND NOT fbSocket.bError);
+                    fbSocket.bEnable AND NOT fbSocket.bError AND fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED);
     rtFirstLog(CLK:=bReadyToLog);
 
     IF rtFirstLog.Q THEN
         fbRootLogger(sMsg:='Logging system online', eSevr:=TcEventSeverity.Info,
                      eSubsystem:=E_Subsystem.NILVALUE);
     END_IF
+
+    CircuitBreaker();
 
     (* Poke all of the listeners *)
     FOR nI := 0 TO nNumListeners - 1 DO
@@ -2156,6 +2211,29 @@ FB_LogHandler
     END_FOR
 
     END_FUNCTION_BLOCK
+    ACTION CircuitBreaker:
+    // Global log circuit breaker
+    (*
+    Logic explanation
+    We want to trip if there is a constant stream of messages being emitted by this PLC. We also
+    only want the noisy offenders to trip. To target them we set a global trickle tripped flag
+    using this logic here. Then each individual FB_LogMessage evaluates itself to see if it's 
+    sending a message too frequently (ie. it's being called to often).
+
+    This logic is attempting to implement the following:
+    1. Trip if the total events exceeds the nTrickleThreshold for >10s
+    2. Sustain the timer if the event count drops for a handful of cycles since usually a cycle amounts to 10ms, losing a few
+    should not stop the trickle timer.
+    *)
+    bTripCon := GVL_Logger.nGlobAccEvents >0;
+
+    tofTrickleBreakerPre(IN:=bTripCon);
+    tonTrickleBreaker(IN:=tofTrickleBreakerPre.Q);
+
+    GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND bTripCon;
+
+    GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle
+    END_ACTION
 
 
 FB_LogMessage
@@ -2170,6 +2248,13 @@ FB_LogMessage
     	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
     	eSubsystem		: E_Subsystem; 					// Subsystem
     	sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
+        
+        //Circuit breaker settings
+        nMinTimeViolationAcceptable : INT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
+        nLocalTripThreshold : TIME := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
+        nTrickleTripThreshold : TIME := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold, should be >> LocalTripThreshold
+        nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
+        bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset (true by default)
     END_VAR
 
     VAR_OUTPUT
@@ -2178,6 +2263,8 @@ FB_LogMessage
     VAR
     	bInitialized		:	BOOL := FALSE;
     	bInitFailed			:	BOOL := FALSE;
+        fbGetCurTaskIdx  : GETCURTASKINDEX;
+        nCycleTime : ULINT;
     	sSubsystemSource	:	STRING;
     	fbMessage			:	REFERENCE TO FB_TcMessage;
     	fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
@@ -2186,12 +2273,50 @@ FB_LogMessage
     	hr 					:	HRESULT;
     	hrLastInternalError :	HRESULT;
     	eTraceLevel 		:	TcEventSeverity := TcEventSeverity.Verbose;
+        bFirstCall : BOOL := TRUE;
     	
     	{attribute 'instance-path'} 
         {attribute 'noinit'} 
     	sPath				:	T_MaxString;
+        
+        // Circuit breaker
+        ///////////////////////////////
+            nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod 
+            nTimesViolated : INT;
+            
+            LastCallTime : ULINT;
+            CurrentCallTime : ULINT;
+            DeltaSinceLastCall : ULINT;
+            
+            WhenTripsCleared : ULINT;
+            ftTrippedReleased : F_TRIG;
+     
+            bLocalTrickleTripped : BOOL;
+            bLocalTripped : BOOL;
+
+            {attribute 'pytmc' := '
+                pv: Tripped
+                io: i
+                field: DESC Log message FB tripped
+            '}
+            bTripped    :    BOOL; // Won't emit messages if true
+            {attribute 'pytmc' := '
+                pv: Reset
+                io: o
+                field: DESC Rising-edge reset of trip
+            '}
+            bResetBreaker : BOOL;
+            rtResetBreaker : R_TRIG;
+            
+            rtTripped : R_TRIG;
+        ////////////////////////////////////////////
+
     END_VAR
     IF NOT bInitialized AND NOT bInitFailed THEN
+        
+        fbGetCurTaskIdx();
+        nCycleTime := _TaskInfo[fbGetCurTaskIdx.index].CycleTime;
+
     	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
     	IF FAILED(hr) THEN
     		bInitFailed := TRUE;
@@ -2236,6 +2361,17 @@ FB_LogMessage
     IF bInitFailed THEN
     	RETURN;
     END_IF
+
+
+    ///////////////////////////////////////
+    // Log message circuit breaker
+
+    CircuitBreaker();
+    IF bTripped AND NOT rtTripped.Q THEN RETURN; END_IF // Pass on the first one to deliver the message we're going silent
+     
+    ///////////////////////////////////////////////////////////
+
+
     	
     // Map the message severity to the LCLSGeneralEventClass:
     CASE eSevr OF
@@ -2269,7 +2405,13 @@ FB_LogMessage
 
     // This is where the message text gets appended:
     fbMessage.ipArguments.Clear();
-    fbMessage.ipArguments.AddString(sMsg);
+
+    IF rtTripped.Q THEN
+       fbMessage.ipArguments.AddString('Logging circuit breaker tripped, this will be the last message from this element for a while...');
+    ELSIF NOT bTripped THEN
+        fbMessage.ipArguments.AddString(sMsg); 
+    END_IF
+
 
     IF LEN(sJson) = 0 THEN
     	// Ensure there's a valid JSON string here
@@ -2280,8 +2422,8 @@ FB_LogMessage
 
     // For a final format of:
     // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
-
-    IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel THEN
+    // We want to send 1 more message when we trip
+    IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND (NOT bTripped OR rtTripped.Q) THEN
     	hr := fbMessage.Send(0);
     END_IF
 
@@ -2290,6 +2432,48 @@ FB_LogMessage
     END_IF
 
     END_FUNCTION_BLOCK
+    ACTION CircuitBreaker:
+    GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
+
+    CurrentCallTime := F_GetTaskTime();
+    IF bFirstCall THEN
+        DeltaSinceLastCall := 16#FFFF_FFFF;
+        bFirstCall := FALSE;
+    ELSE
+       DeltaSinceLastCall := CurrentCallTime - LastCallTime; 
+    END_IF
+
+    LastCallTime := CurrentCallTime;
+
+    ftTrippedReleased(CLK:=bLocalTripped OR bLocalTrickleTripped);
+    IF ftTrippedReleased.Q THEN
+        WhenTripsCleared := CurrentCallTime;
+    END_IF
+    rtResetBreaker(CLK:=bResetBreaker OR
+                    bEnableAutoReset AND (CurrentCallTime - WhenTripsCleared > TIME_TO_100NS(nTripResetPeriod)) );
+        
+    IF rtResetBreaker.Q THEN
+       // bLocalTrickleTripped := FALSE;
+        //bLocalTripped := FALSE;
+        bTripped := FALSE;
+        //nTimesViolated := 0;
+    END_IF
+
+    bResetBreaker := FALSE;
+
+    IF DeltaSinceLastCall < TIME_TO_100NS(nLocalTripThreshold) THEN
+        nTimesViolated := MIN(nTimesViolated + 1, nMinTimeViolationAcceptable+1);
+    ELSE
+        nTimesViolated := MAX(nTimesViolated - 1, 0); 
+    END_IF
+
+    bLocalTripped := nTimesViolated > nMinTimeViolationAcceptable;
+
+    bLocalTrickleTripped := DeltaSinceLastCall < TIME_TO_100NS(nTrickleTripThreshold) AND GVL_LOGGER.bTrickleTripped;
+
+    bTripped S= bLocalTrickleTripped OR bLocalTripped;
+    rtTripped(CLK:=bTripped);
+    END_ACTION
 
 
 FB_LREALBuffer
@@ -2761,6 +2945,36 @@ FB_XKoyoPLCModbus
     END_FUNCTION_BLOCK
 
 
+ResetCircuitBreakerGlobals
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION ResetCircuitBreakerGlobals : BOOL
+    VAR_INPUT
+    END_VAR
+    VAR
+    END_VAR
+    GVL_Logger.bTrickleTripped := FALSE;
+    GVL_Logger.nGlobAccEvents := 0;
+
+    END_FUNCTION
+
+
+RUN_TESTS
+^^^^^^^^^
+
+::
+
+    PROGRAM RUN_TESTS
+    VAR
+        CbTest    :    FB_CircuitBreaker_Test;
+    END_VAR
+    TcUnit.RUN();
+
+    END_PROGRAM
+
+
 SYSTEM_TIME_TO_RFC3339
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2777,6 +2991,22 @@ SYSTEM_TIME_TO_RFC3339
     VAR
     END_VAR
     SYSTEM_TIME_TO_RFC3339 := CONCAT(REPLACE(SYSTEMTIME_TO_STRING(tCurrentTime), 'T', 1, 11), 'Z');
+
+    END_FUNCTION
+
+
+TIME_TO_100NS
+^^^^^^^^^^^^^
+
+::
+
+    FUNCTION TIME_TO_100NS : ULINT
+    VAR_INPUT
+        nTime : TIME;
+    END_VAR
+    VAR
+    END_VAR
+    TIME_TO_100NS := TIME_TO_ULINT(nTime)*10000;
 
     END_FUNCTION
 
