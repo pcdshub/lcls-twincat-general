@@ -33,6 +33,7 @@ VAR
 	hr 					:	HRESULT;
 	hrLastInternalError :	HRESULT;
 	eTraceLevel 		:	TcEventSeverity := TcEventSeverity.Verbose;
+    bFirstCall : BOOL := TRUE;
 	
 	{attribute 'instance-path'} 
     {attribute 'noinit'} 
@@ -69,12 +70,7 @@ VAR
         
         rtTripped : R_TRIG;
     ////////////////////////////////////////////
-      
-    idx                 :   UINT;
-    
-END_VAR
-VAR CONSTANT
-    nAccWidth : UINT := 10;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized AND NOT bInitFailed THEN
@@ -202,9 +198,15 @@ END_IF]]></ST>
 GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
 
 CurrentCallTime := F_GetTaskTime();
-DeltaSinceLastCall := CurrentCallTime - LastCallTime;
+IF bFirstCall THEN
+    DeltaSinceLastCall := 16#FFFF_FFFF;
+    bFirstCall := FALSE;
+ELSE
+   DeltaSinceLastCall := CurrentCallTime - LastCallTime; 
+END_IF
+
 LastCallTime := CurrentCallTime;
-    
+
 ftTrippedReleased(CLK:=bLocalTripped OR bLocalTrickleTripped);
 IF ftTrippedReleased.Q THEN
     WhenTripsCleared := CurrentCallTime;
@@ -213,20 +215,21 @@ rtResetBreaker(CLK:=bResetBreaker OR
                 bEnableAutoReset AND (CurrentCallTime - WhenTripsCleared > TIME_TO_100NS(nTripResetPeriod)) );
     
 IF rtResetBreaker.Q THEN
-    bLocalTrickleTripped := FALSE;
-    bLocalTripped := FALSE;
+   // bLocalTrickleTripped := FALSE;
+    //bLocalTripped := FALSE;
     bTripped := FALSE;
-    nTimesViolated := 0;
+    //nTimesViolated := 0;
 END_IF
 
 bResetBreaker := FALSE;
 
-
 IF DeltaSinceLastCall < TIME_TO_100NS(nLocalTripThreshold) THEN
-    nTimesViolated := nTimesViolated + 1;
+    nTimesViolated := MIN(nTimesViolated + 1, nMinTimeViolationAcceptable+1);
+ELSE
+    nTimesViolated := MAX(nTimesViolated - 1, 0); 
 END_IF
 
-bLocalTripped S= nTimesViolated > nMinTimeViolationAcceptable;
+bLocalTripped := nTimesViolated > nMinTimeViolationAcceptable;
 
 bLocalTrickleTripped := DeltaSinceLastCall < TIME_TO_100NS(nTrickleTripThreshold) AND GVL_LOGGER.bTrickleTripped;
 

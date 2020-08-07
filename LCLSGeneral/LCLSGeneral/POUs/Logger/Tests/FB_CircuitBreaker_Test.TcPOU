@@ -34,11 +34,15 @@ END_VAR]]></Declaration>
         <ST><![CDATA[(* Test that the CB resets itself after a cooldown period *)
 TEST('AutoReset');
 IF Init THEN
-    WRITE_PROTECTED_BOOL(ADR(fbLog.bTripped), TRUE);
     fbLog.CircuitBreaker();
+    WRITE_PROTECTED_BOOL(ADR(fbLog.bTripped), TRUE);
+    WRITE_PROTECTED_BOOL(ADR(fbLog.bLocalTripped), TRUE);
+    fbLog.CircuitBreaker();
+    fbLog.CircuitBreaker();
+    Init := FALSE;
 END_IF
 
-tonAutoResetTest(IN:=fbLog.bTripped, PT:=T#6s);
+tonAutoResetTest(IN:=NOT Init, PT:=T#6s);
 
 IF tonAutoResetTest.Q THEN
     
@@ -115,7 +119,7 @@ END_VAR]]></Declaration>
 in one cycle, leading to a large excess of messages.
 *)
 TEST('LocalFastTrip');
-    FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 2 DO
+    FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
         fbLog.CircuitBreaker();
 	END_FOR
     
