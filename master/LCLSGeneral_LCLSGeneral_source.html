@@ -2406,8 +2406,6 @@ END_ACTION
 <span class="n">VAR</span>
     <span class="n">bInitialized</span>            <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
     <span class="n">bInitFailed</span>                     <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
-    <span class="n">fbGetCurTaskIdx</span>  <span class="p">:</span> <span class="n">GETCURTASKINDEX</span><span class="p">;</span>
-    <span class="n">nCycleTime</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
     <span class="n">sSubsystemSource</span>        <span class="p">:</span>       <span class="n">STRING</span><span class="p">;</span>
     <span class="n">fbMessage</span>                       <span class="p">:</span>       <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
     <span class="n">fbMessages</span>                      <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">4</span><span class="p">]</span> <span class="n">OF</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
@@ -2456,9 +2454,6 @@ END_ACTION
 
 <span class="n">END_VAR</span>
 <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInitialized</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">bInitFailed</span> <span class="n">THEN</span>
-
-    <span class="n">fbGetCurTaskIdx</span><span class="p">();</span>
-    <span class="n">nCycleTime</span> <span class="o">:=</span> <span class="n">_TaskInfo</span><span class="p">[</span><span class="n">fbGetCurTaskIdx</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">CycleTime</span><span class="p">;</span>
 
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>

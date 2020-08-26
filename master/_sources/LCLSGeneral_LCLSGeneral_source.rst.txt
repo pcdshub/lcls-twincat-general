@@ -2263,8 +2263,6 @@ FB_LogMessage
     VAR
     	bInitialized		:	BOOL := FALSE;
     	bInitFailed			:	BOOL := FALSE;
-        fbGetCurTaskIdx  : GETCURTASKINDEX;
-        nCycleTime : ULINT;
     	sSubsystemSource	:	STRING;
     	fbMessage			:	REFERENCE TO FB_TcMessage;
     	fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
@@ -2313,9 +2311,6 @@ FB_LogMessage
 
     END_VAR
     IF NOT bInitialized AND NOT bInitFailed THEN
-        
-        fbGetCurTaskIdx();
-        nCycleTime := _TaskInfo[fbGetCurTaskIdx.index].CycleTime;
 
     	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
     	IF FAILED(hr) THEN
