@@ -1,0 +1,1120 @@
+
+Data Types
+----------
+
+
+     
+FB_Listener
+^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):Log:EventClass_RBV
+      - waveform
+      - TwinCAT Event class
+      - | io: input
+
+
+    * - $(PREFIX):Log:EventType_RBV
+      - mbbi
+      - The event type
+      - | io: input
+
+
+    * - $(PREFIX):Log:Hostname_RBV
+      - waveform
+      - PLC Hostname
+      - | io: input
+
+
+    * - $(PREFIX):Log:Message_RBV
+      - waveform
+      - $(SYMBOL).stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):Log:MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):Log:MessageJSON_RBV
+      - waveform
+      - Metadata with the message
+      - | io: input
+
+
+    * - $(PREFIX):Log:Schema_RBV
+      - waveform
+      - Schema string
+      - | io: input
+
+
+    * - $(PREFIX):Log:Severity_RBV
+      - mbbi
+      - TcEventSeverity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Log:Source_RBV
+      - waveform
+      - $(SYMBOL).stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):Log:Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+    * - $(PREFIX):LogToVisualStudio
+      - bo
+      - $(SYMBOL).bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):MessagesSent_RBV
+      - longin
+      - $(SYMBOL).nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):MinSeverity
+      - mbbo
+      - $(SYMBOL).eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).eMinSeverity
+      - | io: output
+
+
+ 
+FB_LogHandler
+^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):ADS:AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).fbTcAdsListener.nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):ADS:AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).fbTcAdsListener.nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):ADS:AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).fbTcAdsListener.nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:EventClass_RBV
+      - waveform
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.event_class
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:EventType_RBV
+      - mbbi
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.event_type
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:Hostname_RBV
+      - waveform
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.plc
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:Message_RBV
+      - waveform
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:MessageJSON_RBV
+      - waveform
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.json
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:Schema_RBV
+      - waveform
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.schema
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:Severity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.severity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):ADS:Log:Source_RBV
+      - waveform
+      - $(SYMBOL).fbTcAdsListener.stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):ADS:Log:Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+    * - $(PREFIX):ADS:LogToVisualStudio
+      - bo
+      - $(SYMBOL).fbTcAdsListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):ADS:LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).fbTcAdsListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):ADS:MessagesSent_RBV
+      - longin
+      - $(SYMBOL).fbTcAdsListener.nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):ADS:MinSeverity
+      - mbbo
+      - $(SYMBOL).fbTcAdsListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):ADS:MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcAdsListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):LCLS:AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).fbLCLSListener.nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).fbLCLSListener.nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).fbLCLSListener.nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:EventClass_RBV
+      - waveform
+      - $(SYMBOL).fbLCLSListener.stEventInfo.event_class
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:EventType_RBV
+      - mbbi
+      - $(SYMBOL).fbLCLSListener.stEventInfo.event_type
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:Hostname_RBV
+      - waveform
+      - PLC Hostname
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:Message_RBV
+      - waveform
+      - $(SYMBOL).fbLCLSListener.stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:MessageJSON_RBV
+      - waveform
+      - $(SYMBOL).fbLCLSListener.stEventInfo.json
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:Schema_RBV
+      - waveform
+      - $(SYMBOL).fbLCLSListener.stEventInfo.schema
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:Severity_RBV
+      - mbbi
+      - $(SYMBOL).fbLCLSListener.stEventInfo.severity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):LCLS:Log:Source_RBV
+      - waveform
+      - $(SYMBOL).fbLCLSListener.stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:Log:Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:LogToVisualStudio
+      - bo
+      - $(SYMBOL).fbLCLSListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):LCLS:LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).fbLCLSListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):LCLS:MessagesSent_RBV
+      - longin
+      - $(SYMBOL).fbLCLSListener.nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):LCLS:MinSeverity
+      - mbbo
+      - $(SYMBOL).fbLCLSListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):LCLS:MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).fbLCLSListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):Router:AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).fbTcRouterListener.nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):Router:AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).fbTcRouterListener.nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):Router:AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).fbTcRouterListener.nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:EventClass_RBV
+      - waveform
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.event_class
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:EventType_RBV
+      - mbbi
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.event_type
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:Hostname_RBV
+      - waveform
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.plc
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:Message_RBV
+      - waveform
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:MessageID_RBV
+      - longin
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.id
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:MessageJSON_RBV
+      - waveform
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.json
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:Schema_RBV
+      - waveform
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.schema
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:Severity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.severity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Router:Log:Source_RBV
+      - waveform
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):Router:Log:Timestamp_RBV
+      - ai
+      - $(SYMBOL).fbTcRouterListener.stEventInfo.ts
+      - | io: input
+
+
+    * - $(PREFIX):Router:LogToVisualStudio
+      - bo
+      - $(SYMBOL).fbTcRouterListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):Router:LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).fbTcRouterListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):Router:MessagesSent_RBV
+      - longin
+      - $(SYMBOL).fbTcRouterListener.nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):Router:MinSeverity
+      - mbbo
+      - $(SYMBOL).fbTcRouterListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):Router:MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcRouterListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):RTime:AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).fbTcRTimeListener.nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):RTime:AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).fbTcRTimeListener.nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):RTime:AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).fbTcRTimeListener.nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:EventClass_RBV
+      - waveform
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.event_class
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:EventType_RBV
+      - mbbi
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.event_type
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:Hostname_RBV
+      - waveform
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.plc
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:Message_RBV
+      - waveform
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:MessageID_RBV
+      - longin
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.id
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:MessageJSON_RBV
+      - waveform
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.json
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:Schema_RBV
+      - waveform
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.schema
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:Severity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.severity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):RTime:Log:Source_RBV
+      - waveform
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):RTime:Log:Timestamp_RBV
+      - ai
+      - $(SYMBOL).fbTcRTimeListener.stEventInfo.ts
+      - | io: input
+
+
+    * - $(PREFIX):RTime:LogToVisualStudio
+      - bo
+      - $(SYMBOL).fbTcRTimeListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):RTime:LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).fbTcRTimeListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):RTime:MessagesSent_RBV
+      - longin
+      - $(SYMBOL).fbTcRTimeListener.nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):RTime:MinSeverity
+      - mbbo
+      - $(SYMBOL).fbTcRTimeListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):RTime:MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcRTimeListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):System:AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).fbTcSystemListener.nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):System:AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).fbTcSystemListener.nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):System:AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).fbTcSystemListener.nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:EventClass_RBV
+      - waveform
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.event_class
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:EventType_RBV
+      - mbbi
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.event_type
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:Hostname_RBV
+      - waveform
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.plc
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:Message_RBV
+      - waveform
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:MessageID_RBV
+      - longin
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.id
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:MessageJSON_RBV
+      - waveform
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.json
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:Schema_RBV
+      - waveform
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.schema
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:Severity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.severity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):System:Log:Source_RBV
+      - waveform
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):System:Log:Timestamp_RBV
+      - ai
+      - $(SYMBOL).fbTcSystemListener.stEventInfo.ts
+      - | io: input
+
+
+    * - $(PREFIX):System:LogToVisualStudio
+      - bo
+      - $(SYMBOL).fbTcSystemListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):System:LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).fbTcSystemListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):System:MessagesSent_RBV
+      - longin
+      - $(SYMBOL).fbTcSystemListener.nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):System:MinSeverity
+      - mbbo
+      - $(SYMBOL).fbTcSystemListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):System:MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).fbTcSystemListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):Windows:AlarmsCleared_RBV
+      - longin
+      - $(SYMBOL).fbWindowsListener.nCntAlarmsCleared
+      - | io: input
+
+
+    * - $(PREFIX):Windows:AlarmsConfirmed_RBV
+      - longin
+      - $(SYMBOL).fbWindowsListener.nCntAlarmsConfirmed
+      - | io: input
+
+
+    * - $(PREFIX):Windows:AlarmsRaised_RBV
+      - longin
+      - $(SYMBOL).fbWindowsListener.nCntAlarmsRaised
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:EventClass_RBV
+      - waveform
+      - $(SYMBOL).fbWindowsListener.stEventInfo.event_class
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:EventType_RBV
+      - mbbi
+      - $(SYMBOL).fbWindowsListener.stEventInfo.event_type
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:Hostname_RBV
+      - waveform
+      - $(SYMBOL).fbWindowsListener.stEventInfo.plc
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:Message_RBV
+      - waveform
+      - $(SYMBOL).fbWindowsListener.stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:MessageID_RBV
+      - longin
+      - $(SYMBOL).fbWindowsListener.stEventInfo.id
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:MessageJSON_RBV
+      - waveform
+      - $(SYMBOL).fbWindowsListener.stEventInfo.json
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:Schema_RBV
+      - waveform
+      - $(SYMBOL).fbWindowsListener.stEventInfo.schema
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:Severity_RBV
+      - mbbi
+      - $(SYMBOL).fbWindowsListener.stEventInfo.severity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Windows:Log:Source_RBV
+      - waveform
+      - $(SYMBOL).fbWindowsListener.stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):Windows:Log:Timestamp_RBV
+      - ai
+      - $(SYMBOL).fbWindowsListener.stEventInfo.ts
+      - | io: input
+
+
+    * - $(PREFIX):Windows:LogToVisualStudio
+      - bo
+      - $(SYMBOL).fbWindowsListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):Windows:LogToVisualStudio_RBV
+      - bi
+      - $(SYMBOL).fbWindowsListener.bLogToVisualStudio
+      - | io: output
+
+
+    * - $(PREFIX):Windows:MessagesSent_RBV
+      - longin
+      - $(SYMBOL).fbWindowsListener.nCntMessagesSent
+      - | io: input
+
+
+    * - $(PREFIX):Windows:MinSeverity
+      - mbbo
+      - $(SYMBOL).fbWindowsListener.eMinSeverity
+      - | io: output
+
+
+    * - $(PREFIX):Windows:MinSeverity_RBV
+      - mbbi
+      - $(SYMBOL).fbWindowsListener.eMinSeverity
+      - | io: output
+
+
+ 
+FB_LogMessage
+^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):Reset
+      - bo
+      - Rising-edge reset of trip
+      - | io: output
+
+
+    * - $(PREFIX):Reset_RBV
+      - bi
+      - Rising-edge reset of trip
+      - | io: output
+
+
+    * - $(PREFIX):Tripped_RBV
+      - bi
+      - Log message FB tripped
+      - | io: input
+
+
+           
+ST_LoggingEventInfo
+^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):EventClass_RBV
+      - waveform
+      - TwinCAT Event class
+      - | io: input
+
+
+    * - $(PREFIX):EventType_RBV
+      - mbbi
+      - The event type
+      - | io: input
+
+
+    * - $(PREFIX):Hostname_RBV
+      - waveform
+      - PLC Hostname
+      - | io: input
+
+
+    * - $(PREFIX):Message_RBV
+      - waveform
+      - $(SYMBOL).msg
+      - | io: input
+
+
+    * - $(PREFIX):MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):MessageJSON_RBV
+      - waveform
+      - Metadata with the message
+      - | io: input
+
+
+    * - $(PREFIX):Schema_RBV
+      - waveform
+      - Schema string
+      - | io: input
+
+
+    * - $(PREFIX):Severity_RBV
+      - mbbi
+      - TcEventSeverity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Source_RBV
+      - waveform
+      - $(SYMBOL).source
+      - | io: input
+
+
+    * - $(PREFIX):Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+ 
+ST_LoggingEventInfo
+^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):EventClass_RBV
+      - waveform
+      - TwinCAT Event class
+      - | io: input
+
+
+    * - $(PREFIX):EventType_RBV
+      - mbbi
+      - The event type
+      - | io: input
+
+
+    * - $(PREFIX):Hostname_RBV
+      - waveform
+      - PLC Hostname
+      - | io: input
+
+
+    * - $(PREFIX):Message_RBV
+      - waveform
+      - $(SYMBOL).msg
+      - | io: input
+
+
+    * - $(PREFIX):MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):MessageJSON_RBV
+      - waveform
+      - Metadata with the message
+      - | io: input
+
+
+    * - $(PREFIX):Schema_RBV
+      - waveform
+      - Schema string
+      - | io: input
+
+
+    * - $(PREFIX):Severity_RBV
+      - mbbi
+      - TcEventSeverity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Source_RBV
+      - waveform
+      - $(SYMBOL).source
+      - | io: input
+
+
+    * - $(PREFIX):Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+ 
+ST_PendingEvent
+^^^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):EventClass_RBV
+      - waveform
+      - TwinCAT Event class
+      - | io: input
+
+
+    * - $(PREFIX):EventType_RBV
+      - mbbi
+      - The event type
+      - | io: input
+
+
+    * - $(PREFIX):Hostname_RBV
+      - waveform
+      - PLC Hostname
+      - | io: input
+
+
+    * - $(PREFIX):Message_RBV
+      - waveform
+      - $(SYMBOL).stEventInfo.msg
+      - | io: input
+
+
+    * - $(PREFIX):MessageID_RBV
+      - longin
+      - TwinCAT Message ID
+      - | io: input
+
+
+    * - $(PREFIX):MessageJSON_RBV
+      - waveform
+      - Metadata with the message
+      - | io: input
+
+
+    * - $(PREFIX):Schema_RBV
+      - waveform
+      - Schema string
+      - | io: input
+
+
+    * - $(PREFIX):Severity_RBV
+      - mbbi
+      - TcEventSeverity
+      - | field: ONST Info
+        | field: THST Error
+        | field: TWST Warning
+        | field: ZRST Verbose
+        | io: input
+
+
+    * - $(PREFIX):Source_RBV
+      - waveform
+      - $(SYMBOL).stEventInfo.source
+      - | io: input
+
+
+    * - $(PREFIX):Timestamp_RBV
+      - ai
+      - Unix timestamp
+      - | io: input
+
+
+                                                                        
+Database Records
+----------------
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX)LCLSGeneral:GlobalLogTrickleTrip_RBV
+      - bi
+      - Tripped by overall log count
+      - | io: input
+
+
+    * - $(PREFIX)LCLSGeneral:LogHost
+      - waveform
+      - The log host IP address
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogHost_RBV
+      - waveform
+      - The log host IP address
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogMessageCount_RBV
+      - longin
+      - Total log messages on the last cycle
+      - | io: input
+
+
+    * - $(PREFIX)LCLSGeneral:LogPort
+      - longout
+      - The log host UDP port
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogPort_RBV
+      - longin
+      - The log host UDP port
+      - | io: output
+
+
+
