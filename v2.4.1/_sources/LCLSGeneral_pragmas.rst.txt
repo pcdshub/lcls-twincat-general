@@ -1,0 +1,21 @@
+
+Pragmas
+-------
+
+.. csv-table::
+    :header: PLC Name, Total Pragmas, Errors
+    :align: center
+
+    :ref:`LCLSGeneral <LCLSGeneral_overview_pragmas>`, 87, 0
+
+
+.. _LCLSGeneral_overview_pragmas:
+
+
+LCLSGeneral
+^^^^^^^^^^^
+
+Total pragmas found: 87
+Total linter errors: 0
+
+
