@@ -10,7 +10,8 @@ TYPE E_Subsystem :
 	MOTION := 3, //Motion control systems
 	FIELDBUS := 4, //EtherCAT networks
 	SDS := 5, //Sample delivery system
-	OPTICS := 6 //Optics control system
+	OPTICS := 6, //Optics control system
+	EPICS := 7	//EPICS Interface
 )WORD;
 END_TYPE
 ]]></Declaration>

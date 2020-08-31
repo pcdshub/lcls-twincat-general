@@ -31,6 +31,7 @@ VAR
 	iValueInvalidate	: POINTER TO ULINT;
 	tonValueTimeout		: TON;
 	tonSeverityTimeout	: TON;
+	tonSeverityTimeout_PV	: TON;
 	
 	fLastValidValue 	: LREAL;
 	iLastValidSeverity 	: INT;
@@ -49,6 +50,10 @@ VAR
 		field: DESC Internal variable used to monitor EPICS PV severity in PLC
 	'}
 	iPLCInternalSeverity : INT;
+	
+	fbLogger: FB_LogMessage := (eSubsystem:=E_SubSystem.EPICS);
+	rt_bValid: R_TRIG;
+	ft_bValid: F_TRIG;
 
 END_VAR
 VAR CONSTANT
@@ -67,6 +72,8 @@ IF iPLCInternalSeverity <> -1 THEN
 	tonSeverityTimeout(IN:=FALSE);
 	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
+//Add a 2 second buffer if the PV's Severity is not 0. This protects the PV from network blips
+tonSeverityTimeout_PV(IN:=iLastValidSeverity <> 0, PT:=tTimeout);
 
 IF iValueInvalidate^ <> NAN_VALUE THEN
 	// New value from EPICS
@@ -82,8 +89,17 @@ tonValueTimeout();
 tonSeverityTimeout();
 bValid := (NOT tonValueTimeout.Q) AND 
 		  (NOT tonSeverityTimeout.Q) AND 
-		  (iLastValidSeverity = 0);
-fValue := fLastValidValue;]]></ST>
+		  (NOT tonSeverityTimeout_PV.Q);// added 2 second buffer.
+rt_bValid(CLK:=bValid);//Rising edge trigger for Epics Signal
+ft_bValid(CLK:=bValid);//Falling edge trigger for Epics Signal
+IF(ft_bValid.Q)THEN
+	fbLogger(sMsg:='EPICS Signal Disconnected.', eSevr:=TcEventSeverity.Critical);
+END_IF
+IF(rt_bValid.Q)THEN
+	fbLogger(sMsg:='EPICS Signal is Valid', eSevr:=TcEventSeverity.Info);
+END_IF
+fValue := fLastValidValue;
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
