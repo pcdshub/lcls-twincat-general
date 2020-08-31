@@ -22,6 +22,10 @@ be up-to-date and valid within `tTimeout` seconds.
 
 FUNCTION_BLOCK FB_LREALFromEPICS
 
+VAR_INPUT
+    iMaximumValidSeverity		: INT := 1;
+END_VAR
+
 VAR_OUTPUT
 	bValid				: BOOL;
 	fValue				: LREAL;
@@ -52,6 +56,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
+    // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
 	tTimeout			: TIME := T#2S;
 	NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
 END_VAR]]></Declaration>
@@ -82,7 +87,7 @@ tonValueTimeout();
 tonSeverityTimeout();
 bValid := (NOT tonValueTimeout.Q) AND 
 		  (NOT tonSeverityTimeout.Q) AND 
-		  (iLastValidSeverity = 0);
+          (iLastValidSeverity <= iMaximumValidSeverity);
 fValue := fLastValidValue;]]></ST>
     </Implementation>
   </POU>
