@@ -94,6 +94,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#pragmas">Pragmas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#libraries">Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#symbols">Symbols</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defaultglobals">DefaultGlobals</a></li>
@@ -218,6 +219,86 @@
 <span id="lclsgeneral-pragmas"></span><h1>Pragmas<a class="headerlink" href="#pragmas" title="Permalink to this headline">¶</a></h1>
 <p>Total pragmas found: 84
 Total linter errors: 0</p>
+</div>
+<div class="section" id="libraries">
+<h1>Libraries<a class="headerlink" href="#libraries" title="Permalink to this headline">¶</a></h1>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Library</p></th>
+<th class="head"><p>Vendor</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Tc2_EtherCAT</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tc2_IoFunctions</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-even"><td><p>Tc2_ModbusSrv</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tc2_SerialCom</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-even"><td><p>Tc2_Standard</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tc2_System</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-even"><td><p>Tc2_TcpIp</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tc2_Utilities</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-even"><td><p>Tc3_EventLogger</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tc3_JsonXml</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-even"><td><p>Tc3_Module</p></td>
+<td><p>Beckhoff Automation GmbH</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+<tr class="row-odd"><td><p>TcUnit</p></td>
+<td><p>www.tcunit.org</p></td>
+<td><p>Unset</p></td>
+<td><p>Unset</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="symbols">
 <h1>Symbols<a class="headerlink" href="#symbols" title="Permalink to this headline">¶</a></h1>
@@ -490,7 +571,7 @@ Total linter errors: 0</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>GVL_TcUnit.AdsLogger</p></td>
-<td><p>TcUnit.FB_ADSLogStringMessageFifoQueue</p></td>
+<td><p>FB_ADSLogStringMessageFifoQueue</p></td>
 <td><p>4325568 (4128864)</p></td>
 </tr>
 <tr class="row-odd"><td><p>GVL_TcUnit.CurrentTestIsFinished</p></td>
@@ -498,11 +579,11 @@ Total linter errors: 0</p>
 <td><p>4306928 (8)</p></td>
 </tr>
 <tr class="row-even"><td><p>GVL_TcUnit.CurrentTestNameBeingCalled</p></td>
-<td><p>Tc2_System.T_MaxString</p></td>
+<td><p>STRING(255)</p></td>
 <td><p>4307488 (2048)</p></td>
 </tr>
 <tr class="row-odd"><td><p>GVL_TcUnit.CurrentTestSuiteBeingCalled</p></td>
-<td><p>POINTER TO TcUnit.FB_TestSuite</p></td>
+<td><p>POINTER TO FB_TestSuite</p></td>
 <td><p>4307456 (32)</p></td>
 </tr>
 <tr class="row-even"><td><p>GVL_TcUnit.IgnoreCurrentTest</p></td>
@@ -514,11 +595,11 @@ Total linter errors: 0</p>
 <td><p>4309536 (16)</p></td>
 </tr>
 <tr class="row-even"><td><p>GVL_TcUnit.TcUnitRunner</p></td>
-<td><p>TcUnit.FB_TcUnitRunner</p></td>
+<td><p>FB_TcUnitRunner</p></td>
 <td><p>4306944 (512)</p></td>
 </tr>
 <tr class="row-odd"><td><p>GVL_TcUnit.TestSuiteAddresses</p></td>
-<td><p>ARRAY[1..500] OF POINTER TO TcUnit.FB_TestSuite</p></td>
+<td><p>POINTER TO FB_TestSuite</p></td>
 <td><p>4309568 (16000)</p></td>
 </tr>
 <tr class="row-even"><td><p>GVL_TcUnit.TestSuiteIsRegistered</p></td>
@@ -955,7 +1036,7 @@ Total linter errors: 0</p>
 <td><p>4300152 (8)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.EMPTY_ARG_VALUE</p></td>
-<td><p>Tc2_Utilities.T_Arg</p></td>
+<td><p>T_Arg</p></td>
 <td><p>4165248 (96)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.EMPTY_GUID_REGSTRING</p></td>
@@ -971,11 +1052,11 @@ Total linter errors: 0</p>
 <td><p>4302848 (128)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.EMPTY_ROUTE_ENTRY</p></td>
-<td><p>Tc2_Utilities.ST_AmsRouteEntry</p></td>
+<td><p>ST_AmsRouteEntry</p></td>
 <td><p>4163360 (1184)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.eWatchdogConfig</p></td>
-<td><p>Tc2_System.E_WATCHDOG_TIME_CONFIG</p></td>
+<td><p>E_WATCHDOG_TIME_CONFIG</p></td>
 <td><p>4099632 (16)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.FLOATREC_EXP_IS_INF</p></td>
@@ -1079,11 +1160,11 @@ Total linter errors: 0</p>
 <td><p>4099040 (32)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.FORMAT_DECASC_CODES</p></td>
-<td><p>ARRAY[0..9] OF BYTE</p></td>
+<td><p>BYTE</p></td>
 <td><p>4165600 (80)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.FORMAT_HEXASC_CODES</p></td>
-<td><p>ARRAY[0..1] OF BYTE</p></td>
+<td><p>BYTE</p></td>
 <td><p>4165344 (256)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.FORMAT_MAX_ARGS</p></td>
@@ -1099,11 +1180,11 @@ Total linter errors: 0</p>
 <td><p>4101224 (8)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.GLOBAL_FORMAT_HASH_PREFIX_TYPE</p></td>
-<td><p>Tc2_Utilities.E_HashPrefixTypes</p></td>
+<td><p>E_HashPrefixTypes</p></td>
 <td><p>4101312 (16)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.GLOBAL_SBCS_TABLE</p></td>
-<td><p>Tc2_Utilities.E_SBCSType</p></td>
+<td><p>E_SBCSType</p></td>
 <td><p>4101328 (16)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.HKEY_MAX_BINARY_DATA_SIZE</p></td>
@@ -1327,7 +1408,7 @@ Total linter errors: 0</p>
 <td><p>4098992 (8)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.SYSTEMTIME_DATE_AND_TIME_MAX</p></td>
-<td><p>Tc2_Utilities.T_ULARGE_INTEGER</p></td>
+<td><p>T_ULARGE_INTEGER</p></td>
 <td><p>4172224 (64)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.SYSTEMTIME_DATE_AND_TIME_MAX64</p></td>
@@ -1335,7 +1416,7 @@ Total linter errors: 0</p>
 <td><p>4172544 (64)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.SYSTEMTIME_DATE_AND_TIME_MIN</p></td>
-<td><p>Tc2_Utilities.T_ULARGE_INTEGER</p></td>
+<td><p>T_ULARGE_INTEGER</p></td>
 <td><p>4172160 (64)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.SYSTEMTIME_DATE_AND_TIME_MIN64</p></td>
@@ -1347,15 +1428,15 @@ Total linter errors: 0</p>
 <td><p>4171936 (32)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.SYSTEMTIME_MAX_MONTHDAYS</p></td>
-<td><p>ARRAY[0..1] OF WORD</p></td>
+<td><p>WORD</p></td>
 <td><p>4171088 (384)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.SYSTEMTIME_MAX_YEARSDAY</p></td>
-<td><p>ARRAY[0..1] OF WORD</p></td>
+<td><p>WORD</p></td>
 <td><p>4171472 (448)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.SYSTEMTIME_TICKSPERDAY</p></td>
-<td><p>Tc2_Utilities.T_ULARGE_INTEGER</p></td>
+<td><p>T_ULARGE_INTEGER</p></td>
 <td><p>4172096 (64)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.SYSTEMTIME_TICKSPERDAY64</p></td>
@@ -1363,7 +1444,7 @@ Total linter errors: 0</p>
 <td><p>4172416 (64)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.SYSTEMTIME_TICKSPERMSEC</p></td>
-<td><p>Tc2_Utilities.T_ULARGE_INTEGER</p></td>
+<td><p>T_ULARGE_INTEGER</p></td>
 <td><p>4171968 (64)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.SYSTEMTIME_TICKSPERMSEC64</p></td>
@@ -1371,7 +1452,7 @@ Total linter errors: 0</p>
 <td><p>4172288 (64)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.SYSTEMTIME_TICKSPERSEC</p></td>
-<td><p>Tc2_Utilities.T_ULARGE_INTEGER</p></td>
+<td><p>T_ULARGE_INTEGER</p></td>
 <td><p>4172032 (64)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.SYSTEMTIME_TICKSPERSEC64</p></td>
@@ -1471,7 +1552,7 @@ Total linter errors: 0</p>
 <td><p>4304096 (32)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.TCPADS_NULL_HSOCKET</p></td>
-<td><p>Tc2_TcpIp.T_HSOCKET</p></td>
+<td><p>T_HSOCKET</p></td>
 <td><p>4304448 (352)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.TCPADSCONLST_IOF_ACCEPT</p></td>
@@ -1503,11 +1584,11 @@ Total linter errors: 0</p>
 <td><p>4304352 (32)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.THROTTLE_MODE_DEFAULT</p></td>
-<td><p>Tc2_TcpIp.T_ThrottleTimes</p></td>
+<td><p>T_ThrottleTimes</p></td>
 <td><p>4305344 (416)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.THROTTLE_MODE_OFF</p></td>
-<td><p>Tc2_TcpIp.T_ThrottleTimes</p></td>
+<td><p>T_ThrottleTimes</p></td>
 <td><p>4304928 (416)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Global_Variables.TIMESERVICE_ADJUSTTIMETORTC</p></td>
@@ -1531,7 +1612,7 @@ Total linter errors: 0</p>
 <td><p>4098688 (32)</p></td>
 </tr>
 <tr class="row-even"><td><p>Global_Variables.WEST_EUROPE_TZI</p></td>
-<td><p>Tc2_Utilities.ST_TimeZoneInformation</p></td>
+<td><p>ST_TimeZoneInformation</p></td>
 <td><p>4172608 (864)</p></td>
 </tr>
 </tbody>
@@ -1670,7 +1751,7 @@ Total linter errors: 0</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>TC_EVENTS.LCLSGeneralEventClass</p></td>
-<td><p>ST_LCLSGeneralEventClass</p></td>
+<td><p>LCLSGeneralEventClass</p></td>
 <td><p>27333984 (960)</p></td>
 </tr>
 </tbody>
@@ -1734,7 +1815,7 @@ Total linter errors: 0</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>TwinCAT_LicenseInfoVarList._LicenseInfo</p></td>
-<td><p>ARRAY[1..1] OF PlcLicenseInfo</p></td>
+<td><p>PlcLicenseInfo</p></td>
 <td><p>27285728 (1024)</p></td>
 </tr>
 </tbody>
@@ -1764,7 +1845,7 @@ Total linter errors: 0</p>
 <td><p>27286752 (2048)</p></td>
 </tr>
 <tr class="row-even"><td><p>TwinCAT_SystemInfoVarList._TaskInfo</p></td>
-<td><p>ARRAY[1..1] OF PlcTaskSystemInfo</p></td>
+<td><p>PlcTaskSystemInfo</p></td>
 <td><p>27288832 (1024)</p></td>
 </tr>
 <tr class="row-odd"><td><p>TwinCAT_SystemInfoVarList._TaskOid_Task_3</p></td>

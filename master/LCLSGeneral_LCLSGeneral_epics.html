@@ -94,6 +94,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#pragmas">Pragmas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#libraries">Libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#symbols">Symbols</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data Types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fb-listener">FB_Listener</a></li>
@@ -386,7 +387,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):ADS:Log:EventClass_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.event_class</p></td>
+<td><p>TwinCAT Event class</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -394,7 +395,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):ADS:Log:EventType_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.event_type</p></td>
+<td><p>The event type</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -402,7 +403,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):ADS:Log:Hostname_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.plc</p></td>
+<td><p>PLC Hostname</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -426,7 +427,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):ADS:Log:MessageJSON_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.json</p></td>
+<td><p>Metadata with the message</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -434,7 +435,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):ADS:Log:Schema_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.schema</p></td>
+<td><p>Schema string</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -442,7 +443,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):ADS:Log:Severity_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.severity</p></td>
+<td><p>TcEventSeverity</p></td>
 <td><div class="line-block">
 <div class="line">field: ONST Info</div>
 <div class="line">field: THST Error</div>
@@ -534,7 +535,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:EventClass_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.event_class</p></td>
+<td><p>TwinCAT Event class</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -542,7 +543,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):LCLS:Log:EventType_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.event_type</p></td>
+<td><p>The event type</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -574,7 +575,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):LCLS:Log:MessageJSON_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.json</p></td>
+<td><p>Metadata with the message</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -582,7 +583,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:Schema_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.schema</p></td>
+<td><p>Schema string</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -590,7 +591,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):LCLS:Log:Severity_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.severity</p></td>
+<td><p>TcEventSeverity</p></td>
 <td><div class="line-block">
 <div class="line">field: ONST Info</div>
 <div class="line">field: THST Error</div>
@@ -682,7 +683,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Router:Log:EventClass_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.event_class</p></td>
+<td><p>TwinCAT Event class</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -690,7 +691,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Router:Log:EventType_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.event_type</p></td>
+<td><p>The event type</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -698,7 +699,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Router:Log:Hostname_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.plc</p></td>
+<td><p>PLC Hostname</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -714,7 +715,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Router:Log:MessageID_RBV</p></td>
 <td><p>longin</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.id</p></td>
+<td><p>TwinCAT Message ID</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -722,7 +723,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Router:Log:MessageJSON_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.json</p></td>
+<td><p>Metadata with the message</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -730,7 +731,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Router:Log:Schema_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.schema</p></td>
+<td><p>Schema string</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -738,7 +739,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Router:Log:Severity_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.severity</p></td>
+<td><p>TcEventSeverity</p></td>
 <td><div class="line-block">
 <div class="line">field: ONST Info</div>
 <div class="line">field: THST Error</div>
@@ -758,7 +759,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Router:Log:Timestamp_RBV</p></td>
 <td><p>ai</p></td>
-<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.ts</p></td>
+<td><p>Unix timestamp</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -830,7 +831,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):RTime:Log:EventClass_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.event_class</p></td>
+<td><p>TwinCAT Event class</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -838,7 +839,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):RTime:Log:EventType_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.event_type</p></td>
+<td><p>The event type</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -846,7 +847,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):RTime:Log:Hostname_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.plc</p></td>
+<td><p>PLC Hostname</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -862,7 +863,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):RTime:Log:MessageID_RBV</p></td>
 <td><p>longin</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.id</p></td>
+<td><p>TwinCAT Message ID</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -870,7 +871,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):RTime:Log:MessageJSON_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.json</p></td>
+<td><p>Metadata with the message</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -878,7 +879,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):RTime:Log:Schema_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.schema</p></td>
+<td><p>Schema string</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -886,7 +887,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):RTime:Log:Severity_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.severity</p></td>
+<td><p>TcEventSeverity</p></td>
 <td><div class="line-block">
 <div class="line">field: ONST Info</div>
 <div class="line">field: THST Error</div>
@@ -906,7 +907,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):RTime:Log:Timestamp_RBV</p></td>
 <td><p>ai</p></td>
-<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.ts</p></td>
+<td><p>Unix timestamp</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -978,7 +979,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):System:Log:EventClass_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.event_class</p></td>
+<td><p>TwinCAT Event class</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -986,7 +987,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):System:Log:EventType_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.event_type</p></td>
+<td><p>The event type</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -994,7 +995,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):System:Log:Hostname_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.plc</p></td>
+<td><p>PLC Hostname</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1010,7 +1011,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):System:Log:MessageID_RBV</p></td>
 <td><p>longin</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.id</p></td>
+<td><p>TwinCAT Message ID</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1018,7 +1019,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):System:Log:MessageJSON_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.json</p></td>
+<td><p>Metadata with the message</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1026,7 +1027,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):System:Log:Schema_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.schema</p></td>
+<td><p>Schema string</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1034,7 +1035,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):System:Log:Severity_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.severity</p></td>
+<td><p>TcEventSeverity</p></td>
 <td><div class="line-block">
 <div class="line">field: ONST Info</div>
 <div class="line">field: THST Error</div>
@@ -1054,7 +1055,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):System:Log:Timestamp_RBV</p></td>
 <td><p>ai</p></td>
-<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.ts</p></td>
+<td><p>Unix timestamp</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1126,7 +1127,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Windows:Log:EventClass_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.event_class</p></td>
+<td><p>TwinCAT Event class</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1134,7 +1135,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Windows:Log:EventType_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.event_type</p></td>
+<td><p>The event type</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1142,7 +1143,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Windows:Log:Hostname_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.plc</p></td>
+<td><p>PLC Hostname</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1158,7 +1159,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Windows:Log:MessageID_RBV</p></td>
 <td><p>longin</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.id</p></td>
+<td><p>TwinCAT Message ID</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1166,7 +1167,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Windows:Log:MessageJSON_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.json</p></td>
+<td><p>Metadata with the message</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1174,7 +1175,7 @@
 </tr>
 <tr class="row-odd"><td><p>$(PREFIX):Windows:Log:Schema_RBV</p></td>
 <td><p>waveform</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.schema</p></td>
+<td><p>Schema string</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>
@@ -1182,7 +1183,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Windows:Log:Severity_RBV</p></td>
 <td><p>mbbi</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.severity</p></td>
+<td><p>TcEventSeverity</p></td>
 <td><div class="line-block">
 <div class="line">field: ONST Info</div>
 <div class="line">field: THST Error</div>
@@ -1202,7 +1203,7 @@
 </tr>
 <tr class="row-even"><td><p>$(PREFIX):Windows:Log:Timestamp_RBV</p></td>
 <td><p>ai</p></td>
-<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.ts</p></td>
+<td><p>Unix timestamp</p></td>
 <td><div class="line-block">
 <div class="line">io: input</div>
 </div>

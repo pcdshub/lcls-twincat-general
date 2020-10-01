@@ -28,6 +28,27 @@ Total pragmas found: 84
 Total linter errors: 0
 
 
+
+Libraries
+---------
+
+.. csv-table::
+    :header: Library, Vendor, Default, Version
+    :align: center
+
+        Tc2_EtherCAT, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_IoFunctions, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_ModbusSrv, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_SerialCom, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_Standard, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_System, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_TcpIp, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_Utilities, Beckhoff Automation GmbH, Unset, Unset
+        Tc3_EventLogger, Beckhoff Automation GmbH, Unset, Unset
+        Tc3_JsonXml, Beckhoff Automation GmbH, Unset, Unset
+        Tc3_Module, Beckhoff Automation GmbH, Unset, Unset
+        TcUnit, www.tcunit.org, Unset, Unset
+
 Symbols
 -------
 
@@ -144,14 +165,14 @@ GVL_TcUnit
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        GVL_TcUnit.AdsLogger, TcUnit.FB_ADSLogStringMessageFifoQueue, 4325568 (4128864)
+        GVL_TcUnit.AdsLogger, FB_ADSLogStringMessageFifoQueue, 4325568 (4128864)
         GVL_TcUnit.CurrentTestIsFinished, BOOL, 4306928 (8)
-        GVL_TcUnit.CurrentTestNameBeingCalled, Tc2_System.T_MaxString, 4307488 (2048)
-        GVL_TcUnit.CurrentTestSuiteBeingCalled, POINTER TO TcUnit.FB_TestSuite, 4307456 (32)
+        GVL_TcUnit.CurrentTestNameBeingCalled, STRING(255), 4307488 (2048)
+        GVL_TcUnit.CurrentTestSuiteBeingCalled, POINTER TO FB_TestSuite, 4307456 (32)
         GVL_TcUnit.IgnoreCurrentTest, BOOL, 4306936 (8)
         GVL_TcUnit.NumberOfInitializedTestSuites, UINT, 4309536 (16)
-        GVL_TcUnit.TcUnitRunner, TcUnit.FB_TcUnitRunner, 4306944 (512)
-        GVL_TcUnit.TestSuiteAddresses, ARRAY[1..500] OF POINTER TO TcUnit.FB_TestSuite, 4309568 (16000)
+        GVL_TcUnit.TcUnitRunner, FB_TcUnitRunner, 4306944 (512)
+        GVL_TcUnit.TestSuiteAddresses, POINTER TO FB_TestSuite, 4309568 (16000)
         GVL_TcUnit.TestSuiteIsRegistered, BOOL, 4302824 (8)
 
 
@@ -274,12 +295,12 @@ Global_Variables
         Global_Variables.DEFAULT_CSV_FIELD_SEP, BYTE, 4101376 (8)
         Global_Variables.DEFAULT_CSV_RECORD_SEP_CR, BYTE, 4300144 (8)
         Global_Variables.DEFAULT_CSV_RECORD_SEP_LF, BYTE, 4300152 (8)
-        Global_Variables.EMPTY_ARG_VALUE, Tc2_Utilities.T_Arg, 4165248 (96)
+        Global_Variables.EMPTY_ARG_VALUE, T_Arg, 4165248 (96)
         Global_Variables.EMPTY_GUID_REGSTRING, STRING(38), 4303272 (312)
         Global_Variables.EMPTY_GUID_STRING, STRING(36), 4302976 (296)
         Global_Variables.EMPTY_GUID_STRUCT, GUID, 4302848 (128)
-        Global_Variables.EMPTY_ROUTE_ENTRY, Tc2_Utilities.ST_AmsRouteEntry, 4163360 (1184)
-        Global_Variables.eWatchdogConfig, Tc2_System.E_WATCHDOG_TIME_CONFIG, 4099632 (16)
+        Global_Variables.EMPTY_ROUTE_ENTRY, ST_AmsRouteEntry, 4163360 (1184)
+        Global_Variables.eWatchdogConfig, E_WATCHDOG_TIME_CONFIG, 4099632 (16)
         Global_Variables.FLOATREC_EXP_IS_INF, INT, 4164720 (16)
         Global_Variables.FLOATREC_EXP_IS_NAN, INT, 4164704 (16)
         Global_Variables.FLOATREC_MAX_DIGITS, INT, 4164736 (16)
@@ -305,13 +326,13 @@ Global_Variables
         Global_Variables.FOPEN_MODEREAD, DWORD, 4099008 (32)
         Global_Variables.FOPEN_MODETEXT, DWORD, 4099168 (32)
         Global_Variables.FOPEN_MODEWRITE, DWORD, 4099040 (32)
-        Global_Variables.FORMAT_DECASC_CODES, ARRAY[0..9] OF BYTE, 4165600 (80)
-        Global_Variables.FORMAT_HEXASC_CODES, ARRAY[0..1] OF BYTE, 4165344 (256)
+        Global_Variables.FORMAT_DECASC_CODES, BYTE, 4165600 (80)
+        Global_Variables.FORMAT_HEXASC_CODES, BYTE, 4165344 (256)
         Global_Variables.FORMAT_MAX_ARGS, INT, 4164688 (16)
         Global_Variables.GLOBAL_DCF77_PULSE_SPLIT, TIME, 4101344 (32)
         Global_Variables.GLOBAL_DCF77_SEQUENCE_CHECK, BOOL, 4101224 (8)
-        Global_Variables.GLOBAL_FORMAT_HASH_PREFIX_TYPE, Tc2_Utilities.E_HashPrefixTypes, 4101312 (16)
-        Global_Variables.GLOBAL_SBCS_TABLE, Tc2_Utilities.E_SBCSType, 4101328 (16)
+        Global_Variables.GLOBAL_FORMAT_HASH_PREFIX_TYPE, E_HashPrefixTypes, 4101312 (16)
+        Global_Variables.GLOBAL_SBCS_TABLE, E_SBCSType, 4101328 (16)
         Global_Variables.HKEY_MAX_BINARY_DATA_SIZE, UDINT, 4164576 (32)
         Global_Variables.IPHELPERAPI_ADAPTERSINFO, UDINT, 4163040 (32)
         Global_Variables.IPHELPERAPI_IPADDRBYHOSTNAME, UDINT, 4163072 (32)
@@ -367,18 +388,18 @@ Global_Variables
         Global_Variables.SYSTEMSERVICE_TIMESERVICES, UDINT, 4098464 (32)
         Global_Variables.SYSTEMSTATEFLAGS_BSOD, BYTE, 4098984 (8)
         Global_Variables.SYSTEMSTATEFLAGS_RTVIOLATION, BYTE, 4098992 (8)
-        Global_Variables.SYSTEMTIME_DATE_AND_TIME_MAX, Tc2_Utilities.T_ULARGE_INTEGER, 4172224 (64)
+        Global_Variables.SYSTEMTIME_DATE_AND_TIME_MAX, T_ULARGE_INTEGER, 4172224 (64)
         Global_Variables.SYSTEMTIME_DATE_AND_TIME_MAX64, ULINT, 4172544 (64)
-        Global_Variables.SYSTEMTIME_DATE_AND_TIME_MIN, Tc2_Utilities.T_ULARGE_INTEGER, 4172160 (64)
+        Global_Variables.SYSTEMTIME_DATE_AND_TIME_MIN, T_ULARGE_INTEGER, 4172160 (64)
         Global_Variables.SYSTEMTIME_DATE_AND_TIME_MIN64, ULINT, 4172480 (64)
         Global_Variables.SYSTEMTIME_DATEDELTA_OFFSET, DWORD, 4171936 (32)
-        Global_Variables.SYSTEMTIME_MAX_MONTHDAYS, ARRAY[0..1] OF WORD, 4171088 (384)
-        Global_Variables.SYSTEMTIME_MAX_YEARSDAY, ARRAY[0..1] OF WORD, 4171472 (448)
-        Global_Variables.SYSTEMTIME_TICKSPERDAY, Tc2_Utilities.T_ULARGE_INTEGER, 4172096 (64)
+        Global_Variables.SYSTEMTIME_MAX_MONTHDAYS, WORD, 4171088 (384)
+        Global_Variables.SYSTEMTIME_MAX_YEARSDAY, WORD, 4171472 (448)
+        Global_Variables.SYSTEMTIME_TICKSPERDAY, T_ULARGE_INTEGER, 4172096 (64)
         Global_Variables.SYSTEMTIME_TICKSPERDAY64, ULINT, 4172416 (64)
-        Global_Variables.SYSTEMTIME_TICKSPERMSEC, Tc2_Utilities.T_ULARGE_INTEGER, 4171968 (64)
+        Global_Variables.SYSTEMTIME_TICKSPERMSEC, T_ULARGE_INTEGER, 4171968 (64)
         Global_Variables.SYSTEMTIME_TICKSPERMSEC64, ULINT, 4172288 (64)
-        Global_Variables.SYSTEMTIME_TICKSPERSEC, Tc2_Utilities.T_ULARGE_INTEGER, 4172032 (64)
+        Global_Variables.SYSTEMTIME_TICKSPERSEC, T_ULARGE_INTEGER, 4172032 (64)
         Global_Variables.SYSTEMTIME_TICKSPERSEC64, ULINT, 4172352 (64)
         Global_Variables.TCEVENT_FMTPRGSIZE, INT, 4099616 (16)
         Global_Variables.TCEVENT_SRCNAMESIZE, INT, 4099600 (16)
@@ -403,7 +424,7 @@ Global_Variables
         Global_Variables.TCPADS_IGR_RECVFROMBYHDL, UDINT, 4304064 (32)
         Global_Variables.TCPADS_IGR_SENDBYHDL, UDINT, 4303968 (32)
         Global_Variables.TCPADS_IGR_SENDTOBYHDL, UDINT, 4304096 (32)
-        Global_Variables.TCPADS_NULL_HSOCKET, Tc2_TcpIp.T_HSOCKET, 4304448 (352)
+        Global_Variables.TCPADS_NULL_HSOCKET, T_HSOCKET, 4304448 (352)
         Global_Variables.TCPADSCONLST_IOF_ACCEPT, UDINT, 4304320 (32)
         Global_Variables.TCPADSCONLST_IOF_CLOSEALL, UDINT, 4304288 (32)
         Global_Variables.TCPADSCONLST_IOF_CONNECT, UDINT, 4304224 (32)
@@ -411,14 +432,14 @@ Global_Variables
         Global_Variables.TCPADSCONLST_IOF_GETLINKSTATUS, UDINT, 4304416 (32)
         Global_Variables.TCPADSCONLST_IOF_LISTEN, UDINT, 4304256 (32)
         Global_Variables.TCPADSCONLST_IOF_UDPBIND, UDINT, 4304352 (32)
-        Global_Variables.THROTTLE_MODE_DEFAULT, Tc2_TcpIp.T_ThrottleTimes, 4305344 (416)
-        Global_Variables.THROTTLE_MODE_OFF, Tc2_TcpIp.T_ThrottleTimes, 4304928 (416)
+        Global_Variables.THROTTLE_MODE_DEFAULT, T_ThrottleTimes, 4305344 (416)
+        Global_Variables.THROTTLE_MODE_OFF, T_ThrottleTimes, 4304928 (416)
         Global_Variables.TIMESERVICE_ADJUSTTIMETORTC, UDINT, 4098656 (32)
         Global_Variables.TIMESERVICE_DATEANDTIME, UDINT, 4098560 (32)
         Global_Variables.TIMESERVICE_RTCTIMEDIFF, UDINT, 4098624 (32)
         Global_Variables.TIMESERVICE_SYSTEMTIMES, UDINT, 4098592 (32)
         Global_Variables.TIMESERVICE_TIMEZONINFORMATION, UDINT, 4098688 (32)
-        Global_Variables.WEST_EUROPE_TZI, Tc2_Utilities.ST_TimeZoneInformation, 4172608 (864)
+        Global_Variables.WEST_EUROPE_TZI, ST_TimeZoneInformation, 4172608 (864)
 
 .. raw:: html
 
@@ -480,7 +501,7 @@ TC_EVENTS
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        TC_EVENTS.LCLSGeneralEventClass, ST_LCLSGeneralEventClass, 27333984 (960)
+        TC_EVENTS.LCLSGeneralEventClass, LCLSGeneralEventClass, 27333984 (960)
 
 
 TC_EVENT_CLASSES
@@ -505,7 +526,7 @@ TwinCAT_LicenseInfoVarList
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        TwinCAT_LicenseInfoVarList._LicenseInfo, ARRAY[1..1] OF PlcLicenseInfo, 27285728 (1024)
+        TwinCAT_LicenseInfoVarList._LicenseInfo, PlcLicenseInfo, 27285728 (1024)
 
 
 TwinCAT_SystemInfoVarList
@@ -517,7 +538,7 @@ TwinCAT_SystemInfoVarList
 
         TwinCAT_SystemInfoVarList.__Task_3, _Implicit_Task_Info, 27289888 (704)
         TwinCAT_SystemInfoVarList._AppInfo, PlcAppSystemInfo, 27286752 (2048)
-        TwinCAT_SystemInfoVarList._TaskInfo, ARRAY[1..1] OF PlcTaskSystemInfo, 27288832 (1024)
+        TwinCAT_SystemInfoVarList._TaskInfo, PlcTaskSystemInfo, 27288832 (1024)
         TwinCAT_SystemInfoVarList._TaskOid_Task_3, OTCID, 27289856 (32)
         TwinCAT_SystemInfoVarList._TaskPouOid_Task_3, OTCID, 27288800 (32)
 

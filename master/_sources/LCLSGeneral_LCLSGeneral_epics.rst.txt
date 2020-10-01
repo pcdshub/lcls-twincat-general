@@ -159,19 +159,19 @@ FB_LogHandler
 
     * - $(PREFIX):ADS:Log:EventClass_RBV
       - waveform
-      - $(SYMBOL).fbTcAdsListener.stEventInfo.event_class
+      - TwinCAT Event class
       - | io: input
 
 
     * - $(PREFIX):ADS:Log:EventType_RBV
       - mbbi
-      - $(SYMBOL).fbTcAdsListener.stEventInfo.event_type
+      - The event type
       - | io: input
 
 
     * - $(PREFIX):ADS:Log:Hostname_RBV
       - waveform
-      - $(SYMBOL).fbTcAdsListener.stEventInfo.plc
+      - PLC Hostname
       - | io: input
 
 
@@ -189,19 +189,19 @@ FB_LogHandler
 
     * - $(PREFIX):ADS:Log:MessageJSON_RBV
       - waveform
-      - $(SYMBOL).fbTcAdsListener.stEventInfo.json
+      - Metadata with the message
       - | io: input
 
 
     * - $(PREFIX):ADS:Log:Schema_RBV
       - waveform
-      - $(SYMBOL).fbTcAdsListener.stEventInfo.schema
+      - Schema string
       - | io: input
 
 
     * - $(PREFIX):ADS:Log:Severity_RBV
       - mbbi
-      - $(SYMBOL).fbTcAdsListener.stEventInfo.severity
+      - TcEventSeverity
       - | field: ONST Info
         | field: THST Error
         | field: TWST Warning
@@ -271,13 +271,13 @@ FB_LogHandler
 
     * - $(PREFIX):LCLS:Log:EventClass_RBV
       - waveform
-      - $(SYMBOL).fbLCLSListener.stEventInfo.event_class
+      - TwinCAT Event class
       - | io: input
 
 
     * - $(PREFIX):LCLS:Log:EventType_RBV
       - mbbi
-      - $(SYMBOL).fbLCLSListener.stEventInfo.event_type
+      - The event type
       - | io: input
 
 
@@ -301,19 +301,19 @@ FB_LogHandler
 
     * - $(PREFIX):LCLS:Log:MessageJSON_RBV
       - waveform
-      - $(SYMBOL).fbLCLSListener.stEventInfo.json
+      - Metadata with the message
       - | io: input
 
 
     * - $(PREFIX):LCLS:Log:Schema_RBV
       - waveform
-      - $(SYMBOL).fbLCLSListener.stEventInfo.schema
+      - Schema string
       - | io: input
 
 
     * - $(PREFIX):LCLS:Log:Severity_RBV
       - mbbi
-      - $(SYMBOL).fbLCLSListener.stEventInfo.severity
+      - TcEventSeverity
       - | field: ONST Info
         | field: THST Error
         | field: TWST Warning
@@ -383,19 +383,19 @@ FB_LogHandler
 
     * - $(PREFIX):Router:Log:EventClass_RBV
       - waveform
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.event_class
+      - TwinCAT Event class
       - | io: input
 
 
     * - $(PREFIX):Router:Log:EventType_RBV
       - mbbi
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.event_type
+      - The event type
       - | io: input
 
 
     * - $(PREFIX):Router:Log:Hostname_RBV
       - waveform
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.plc
+      - PLC Hostname
       - | io: input
 
 
@@ -407,25 +407,25 @@ FB_LogHandler
 
     * - $(PREFIX):Router:Log:MessageID_RBV
       - longin
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.id
+      - TwinCAT Message ID
       - | io: input
 
 
     * - $(PREFIX):Router:Log:MessageJSON_RBV
       - waveform
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.json
+      - Metadata with the message
       - | io: input
 
 
     * - $(PREFIX):Router:Log:Schema_RBV
       - waveform
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.schema
+      - Schema string
       - | io: input
 
 
     * - $(PREFIX):Router:Log:Severity_RBV
       - mbbi
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.severity
+      - TcEventSeverity
       - | field: ONST Info
         | field: THST Error
         | field: TWST Warning
@@ -441,7 +441,7 @@ FB_LogHandler
 
     * - $(PREFIX):Router:Log:Timestamp_RBV
       - ai
-      - $(SYMBOL).fbTcRouterListener.stEventInfo.ts
+      - Unix timestamp
       - | io: input
 
 
@@ -495,19 +495,19 @@ FB_LogHandler
 
     * - $(PREFIX):RTime:Log:EventClass_RBV
       - waveform
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.event_class
+      - TwinCAT Event class
       - | io: input
 
 
     * - $(PREFIX):RTime:Log:EventType_RBV
       - mbbi
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.event_type
+      - The event type
       - | io: input
 
 
     * - $(PREFIX):RTime:Log:Hostname_RBV
       - waveform
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.plc
+      - PLC Hostname
       - | io: input
 
 
@@ -519,25 +519,25 @@ FB_LogHandler
 
     * - $(PREFIX):RTime:Log:MessageID_RBV
       - longin
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.id
+      - TwinCAT Message ID
       - | io: input
 
 
     * - $(PREFIX):RTime:Log:MessageJSON_RBV
       - waveform
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.json
+      - Metadata with the message
       - | io: input
 
 
     * - $(PREFIX):RTime:Log:Schema_RBV
       - waveform
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.schema
+      - Schema string
       - | io: input
 
 
     * - $(PREFIX):RTime:Log:Severity_RBV
       - mbbi
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.severity
+      - TcEventSeverity
       - | field: ONST Info
         | field: THST Error
         | field: TWST Warning
@@ -553,7 +553,7 @@ FB_LogHandler
 
     * - $(PREFIX):RTime:Log:Timestamp_RBV
       - ai
-      - $(SYMBOL).fbTcRTimeListener.stEventInfo.ts
+      - Unix timestamp
       - | io: input
 
 
@@ -607,19 +607,19 @@ FB_LogHandler
 
     * - $(PREFIX):System:Log:EventClass_RBV
       - waveform
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.event_class
+      - TwinCAT Event class
       - | io: input
 
 
     * - $(PREFIX):System:Log:EventType_RBV
       - mbbi
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.event_type
+      - The event type
       - | io: input
 
 
     * - $(PREFIX):System:Log:Hostname_RBV
       - waveform
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.plc
+      - PLC Hostname
       - | io: input
 
 
@@ -631,25 +631,25 @@ FB_LogHandler
 
     * - $(PREFIX):System:Log:MessageID_RBV
       - longin
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.id
+      - TwinCAT Message ID
       - | io: input
 
 
     * - $(PREFIX):System:Log:MessageJSON_RBV
       - waveform
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.json
+      - Metadata with the message
       - | io: input
 
 
     * - $(PREFIX):System:Log:Schema_RBV
       - waveform
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.schema
+      - Schema string
       - | io: input
 
 
     * - $(PREFIX):System:Log:Severity_RBV
       - mbbi
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.severity
+      - TcEventSeverity
       - | field: ONST Info
         | field: THST Error
         | field: TWST Warning
@@ -665,7 +665,7 @@ FB_LogHandler
 
     * - $(PREFIX):System:Log:Timestamp_RBV
       - ai
-      - $(SYMBOL).fbTcSystemListener.stEventInfo.ts
+      - Unix timestamp
       - | io: input
 
 
@@ -719,19 +719,19 @@ FB_LogHandler
 
     * - $(PREFIX):Windows:Log:EventClass_RBV
       - waveform
-      - $(SYMBOL).fbWindowsListener.stEventInfo.event_class
+      - TwinCAT Event class
       - | io: input
 
 
     * - $(PREFIX):Windows:Log:EventType_RBV
       - mbbi
-      - $(SYMBOL).fbWindowsListener.stEventInfo.event_type
+      - The event type
       - | io: input
 
 
     * - $(PREFIX):Windows:Log:Hostname_RBV
       - waveform
-      - $(SYMBOL).fbWindowsListener.stEventInfo.plc
+      - PLC Hostname
       - | io: input
 
 
@@ -743,25 +743,25 @@ FB_LogHandler
 
     * - $(PREFIX):Windows:Log:MessageID_RBV
       - longin
-      - $(SYMBOL).fbWindowsListener.stEventInfo.id
+      - TwinCAT Message ID
       - | io: input
 
 
     * - $(PREFIX):Windows:Log:MessageJSON_RBV
       - waveform
-      - $(SYMBOL).fbWindowsListener.stEventInfo.json
+      - Metadata with the message
       - | io: input
 
 
     * - $(PREFIX):Windows:Log:Schema_RBV
       - waveform
-      - $(SYMBOL).fbWindowsListener.stEventInfo.schema
+      - Schema string
       - | io: input
 
 
     * - $(PREFIX):Windows:Log:Severity_RBV
       - mbbi
-      - $(SYMBOL).fbWindowsListener.stEventInfo.severity
+      - TcEventSeverity
       - | field: ONST Info
         | field: THST Error
         | field: TWST Warning
@@ -777,7 +777,7 @@ FB_LogHandler
 
     * - $(PREFIX):Windows:Log:Timestamp_RBV
       - ai
-      - $(SYMBOL).fbWindowsListener.stEventInfo.ts
+      - Unix timestamp
       - | io: input
 
 
@@ -841,7 +841,7 @@ FB_LogMessage
       - | io: input
 
 
-           
+       
 ST_LoggingEventInfo
 ^^^^^^^^^^^^^^^^^^^
 
