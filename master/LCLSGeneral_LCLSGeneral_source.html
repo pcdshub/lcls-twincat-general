@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>DUTs &mdash; pcdshub/lcls-twincat-general  documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/doctr-versions-menu.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
@@ -51,7 +56,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pcdshub/lcls-twincat-general
+            <a href="index.html" class="icon icon-home"> pcdshub/lcls-twincat-general
           
 
           
@@ -82,14 +87,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">LCLSGeneral</span></p>
+              <p class="caption" role="heading"><span class="caption-text">LCLSGeneral</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_pragmas.html">Pragmas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
 </ul>
-<p class="caption"><span class="caption-text">LCLSGeneral</span></p>
+<p class="caption" role="heading"><span class="caption-text">LCLSGeneral</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#pragmas">Pragmas</a></li>
@@ -141,6 +146,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-logmessage">FB_LogMessage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lrealbuffer">FB_LREALBuffer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lrealfromepics">FB_LREALFromEPICS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-stringfromepics">FB_STRINGFromEPICS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-tempsensor">FB_TempSensor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-thermocouple">FB_ThermoCouple</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-timestampbuffer">FB_TimeStampBuffer</a></li>
@@ -194,6 +200,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -205,7 +213,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/LCLSGeneral_LCLSGeneral_source.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -311,7 +319,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_EcMasterDevState</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="n">eEcState</span>                        <span class="p">:</span> <span class="n">E_EcCommState</span><span class="p">;</span>
-    <span class="n">nReserved</span>                       <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">2</span><span class="p">]</span> <span class="n">OF</span> <span class="n">UINT</span><span class="p">;</span>
+    <span class="n">nReserved</span>                       <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..2</span><span class="p">]</span> <span class="n">OF</span> <span class="n">UINT</span><span class="p">;</span>
 
     <span class="n">bLinkError</span>                      <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
     <span class="n">bResetRequired</span>          <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
@@ -331,7 +339,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Stuff</span> <span class="n">to</span> <span class="n">log</span> <span class="n">messages</span> <span class="n">within</span> <span class="n">function</span> <span class="n">blocks</span>
 <span class="n">TYPE</span> <span class="n">ST_FbDiagnostics</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
-    <span class="n">asResults</span>       <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">20</span><span class="p">]</span> <span class="n">OF</span> <span class="n">T_MaxString</span><span class="p">;</span> <span class="o">//</span><span class="n">Diagnostic</span> <span class="n">messages</span><span class="p">,</span> <span class="n">use</span> <span class="n">to</span> <span class="n">record</span> <span class="n">state</span> <span class="n">changes</span> <span class="ow">or</span> <span class="n">other</span> <span class="n">important</span> <span class="n">events</span><span class="o">.</span>
+    <span class="n">asResults</span>       <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1..20</span><span class="p">]</span> <span class="n">OF</span> <span class="n">T_MaxString</span><span class="p">;</span> <span class="o">//</span><span class="n">Diagnostic</span> <span class="n">messages</span><span class="p">,</span> <span class="n">use</span> <span class="n">to</span> <span class="n">record</span> <span class="n">state</span> <span class="n">changes</span> <span class="ow">or</span> <span class="n">other</span> <span class="n">important</span> <span class="n">events</span><span class="o">.</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
     <span class="o">//</span><span class="n">Incrementer</span><span class="p">,</span> <span class="n">included</span> <span class="n">here</span> <span class="n">to</span> <span class="n">facilitate</span> <span class="n">using</span> <span class="n">asResults</span>
     <span class="n">resultIdx</span>       <span class="p">:</span>       <span class="n">FB_Index</span> <span class="o">:=</span> <span class="p">(</span>
@@ -566,8 +574,8 @@ END_TYPE
     <span class="n">iOwnAutoIncAddr</span>         <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
     <span class="n">stPhysicalAddr</span>          <span class="p">:</span> <span class="n">ST_PortAddr</span><span class="p">;</span>
     <span class="n">stAutoIncAddr</span>           <span class="p">:</span> <span class="n">ST_PortAddr</span><span class="p">;</span>
-    <span class="n">iPortDelay</span>                      <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">2</span><span class="p">]</span> <span class="n">OF</span> <span class="n">UDINT</span><span class="p">;</span> <span class="p">(</span><span class="o">*</span> <span class="n">EC_AD</span><span class="p">,</span> <span class="n">EC_DB</span><span class="p">,</span> <span class="n">EC_BC</span> <span class="o">*</span><span class="p">)</span>
-    <span class="n">iReserved</span>                       <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">7</span><span class="p">]</span> <span class="n">OF</span> <span class="n">UDINT</span><span class="p">;</span>
+    <span class="n">iPortDelay</span>                      <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..2</span><span class="p">]</span> <span class="n">OF</span> <span class="n">UDINT</span><span class="p">;</span> <span class="p">(</span><span class="o">*</span> <span class="n">EC_AD</span><span class="p">,</span> <span class="n">EC_DB</span><span class="p">,</span> <span class="n">EC_BC</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">iReserved</span>                       <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..7</span><span class="p">]</span> <span class="n">OF</span> <span class="n">UDINT</span><span class="p">;</span>
 <span class="n">END_STRUCT</span>
 <span class="n">END_TYPE</span>
 </pre></div>
@@ -1101,17 +1109,17 @@ END_VAR
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
     <span class="n">q_xAllSlaveStatesGood</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="n">Set</span> <span class="n">to</span> <span class="kc">True</span> <span class="k">if</span> <span class="nb">all</span> <span class="n">Slaves</span> <span class="n">are</span> <span class="ow">in</span> <span class="n">OP</span> <span class="n">State</span>
-    <span class="n">q_anTermStates</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">ECAT</span> <span class="n">State</span> <span class="n">of</span> <span class="n">terminals</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">bus</span>
+    <span class="n">q_anTermStates</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1..256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">ECAT</span> <span class="n">State</span> <span class="n">of</span> <span class="n">terminals</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">bus</span>
     <span class="n">q_xMasterStateGood</span><span class="p">:</span><span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="n">Set</span> <span class="n">to</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">the</span> <span class="n">Master</span> <span class="n">Device</span> <span class="n">State</span> <span class="ow">is</span> <span class="n">OP</span>
     <span class="n">q_nMasterState</span><span class="p">:</span> <span class="n">WORD</span><span class="p">;</span> <span class="o">//</span> <span class="n">The</span> <span class="n">Device</span> <span class="n">State</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Master</span>
     <span class="n">q_sMasterState</span><span class="p">:</span><span class="n">STRING</span><span class="p">;</span> <span class="o">//</span><span class="n">State</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ECAT</span> <span class="n">master</span>
-    <span class="n">q_astEcConfSlaveInfo</span> <span class="p">:</span>  <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_EcDevice</span><span class="p">;</span> <span class="o">//</span><span class="n">State</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">ECAT</span> <span class="n">slaves</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">bus</span>
+    <span class="n">q_astEcConfSlaveInfo</span> <span class="p">:</span>  <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1..256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_EcDevice</span><span class="p">;</span> <span class="o">//</span><span class="n">State</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">ECAT</span> <span class="n">slaves</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">bus</span>
     <span class="n">q_nSlaves</span><span class="p">:</span> <span class="n">UINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">the</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">the</span> <span class="n">connected</span> <span class="n">Slaves</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
     <span class="n">sNetId</span><span class="p">:</span> <span class="n">T_AmsNetId</span><span class="p">;</span> <span class="o">//</span><span class="n">NetId</span> <span class="n">string</span>
-    <span class="n">astTermStates</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_EcSlaveState</span><span class="p">;</span> <span class="o">//</span><span class="n">ECAT</span> <span class="n">Slave</span> <span class="n">States</span> <span class="n">Buffer</span>
-    <span class="n">astEcConfSlaveInfo</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_EcSlaveConfigData</span><span class="p">;</span> <span class="o">//</span><span class="n">ECAT</span> <span class="n">Slave</span> <span class="n">Configs</span> <span class="n">Buffer</span>
+    <span class="n">astTermStates</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1..256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_EcSlaveState</span><span class="p">;</span> <span class="o">//</span><span class="n">ECAT</span> <span class="n">Slave</span> <span class="n">States</span> <span class="n">Buffer</span>
+    <span class="n">astEcConfSlaveInfo</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="mf">1..256</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_EcSlaveConfigData</span><span class="p">;</span> <span class="o">//</span><span class="n">ECAT</span> <span class="n">Slave</span> <span class="n">Configs</span> <span class="n">Buffer</span>
     <span class="n">fbGetAllSlaveStates</span><span class="p">:</span> <span class="n">FB_EcGetAllSlaveStates</span><span class="p">;</span> <span class="o">//</span><span class="n">Acquires</span> <span class="n">the</span> <span class="n">ECAT</span> <span class="n">Slave</span> <span class="n">States</span> <span class="n">puts</span> <span class="n">them</span> <span class="n">into</span> <span class="n">astTermStates</span>
 
     <span class="n">fbGetMasterState</span><span class="p">:</span> <span class="n">FB_EcGetMasterState</span><span class="p">;</span> <span class="o">//</span><span class="n">Acquires</span> <span class="n">ECAT</span> <span class="n">Master</span> <span class="n">State</span>
@@ -2409,7 +2417,7 @@ END_ACTION
     <span class="n">bInitFailed</span>                     <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
     <span class="n">sSubsystemSource</span>        <span class="p">:</span>       <span class="n">STRING</span><span class="p">;</span>
     <span class="n">fbMessage</span>                       <span class="p">:</span>       <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
-    <span class="n">fbMessages</span>                      <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">4</span><span class="p">]</span> <span class="n">OF</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
+    <span class="n">fbMessages</span>                      <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..4</span><span class="p">]</span> <span class="n">OF</span> <span class="n">FB_TcMessage</span><span class="p">;</span>
     <span class="n">fbSource</span>                        <span class="p">:</span>       <span class="n">FB_TcSourceInfo</span><span class="p">;</span>
     <span class="n">ipResultMessage</span>         <span class="p">:</span>       <span class="n">I_TcMessage</span><span class="p">;</span>
     <span class="n">hr</span>                                      <span class="p">:</span>       <span class="n">HRESULT</span><span class="p">;</span>
@@ -2630,11 +2638,11 @@ END_ACTION
     <span class="n">fInput</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
-    <span class="n">arrOutput</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">arrOutput</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1..1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="n">bNewArray</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
-    <span class="n">arrPartial</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">arrPartial</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1..1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="n">fbDataBuffer</span><span class="p">:</span> <span class="n">FB_DataBuffer</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">fbDataBuffer</span><span class="p">(</span>
@@ -2739,6 +2747,109 @@ bValid := (NOT tonValueTimeout.Q) AND
               (NOT tonSeverityTimeout.Q) AND
           (iLastValidSeverity &lt;= iMaximumValidSeverity);
 fValue := fLastValidValue;
+
+END_FUNCTION_BLOCK
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-stringfromepics">
+<h2>FB_STRINGFromEPICS<a class="headerlink" href="#fb-stringfromepics" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
+Function block to link an analog value from EPICS to a STRING on the PLC
+
+Usage:
+
+    {attribute &#39;pytmc&#39; := &#39;
+            pv: INTERNAL:RECORD
+            link: PV:NAME:TO:LINK:TO.VAL@
+    &#39;}
+    fbLinkedValue1 : FB_STRINGFromEPICS;
+
+Such that when PV:NAME:TO:LINK:TO.VAL$ changes in EPICS, the INTERNAL:RECORD will be used to
+push a value through to the PLC with this function block.
+
+The usage of &quot;@&quot; above has several layers of complexity, which are not strictly necessary to
+understand in order to use this function block. The reasons are as follows:
+
+    1. TwinCAT does not allow the &quot;$&quot; symbol to be used in pragmas.  pytmc uses &quot;@&quot; as an
+       alternate character for &quot;$&quot; as the latter is more frequently useful.
+    2. The &quot;$&quot; is used as a suffix for EPICS string PVs where accessing strings over
+       the standard 40 character length is desirable.
+    3. Combining the above, using &quot;PV.VAL@&quot; we can direct EPICS to use long string
+       handling over the Channel Access link to the link PV (&quot;PV.VAL$&quot;).
+
+As this block takes care of IOC heartbeat signals and monitors the link and value severity,
+the end-user should then only have to look at `.bValid` and `.sValue`. These are guaranteed to
+be up-to-date and valid within `tTimeout` seconds.
+*)
+
+FUNCTION_BLOCK FB_STRINGFromEPICS
+
+VAR_INPUT
+    iMaximumValidSeverity           : INT := 1;
+END_VAR
+
+VAR_OUTPUT
+    bValid                          : BOOL;
+    sValue                          : STRING;
+END_VAR
+
+VAR
+    tonValueTimeout         : TON;
+    tonSeverityTimeout      : TON;
+
+    sLastValidValue         : STRING;
+    iLastValidSeverity      : INT;
+
+    {attribute &#39;pytmc&#39; := &#39;
+            pv: EPICSLink
+            link:
+            field: DESC Internal variable used to monitor EPICS PV in PLC
+    &#39;}
+    sPLCInternalValue : STRING;
+
+    // Use special link syntax for now to get EPICSLink.SEVR here:
+    {attribute &#39;pytmc&#39; := &#39;
+            pv: EPICSLink:Sevr
+            link: *EPICSLink.SEVR
+            field: DESC Internal variable used to monitor EPICS PV severity in PLC
+    &#39;}
+    iPLCInternalSeverity : INT;
+
+END_VAR
+VAR CONSTANT
+    // The timeout will trip after `tTimeout` if EPICS doesn&#39;t write in that time period:
+    tTimeout                        : TIME := T#2S;
+    // This is an arbitrary extended UUID.  If you want to store this value in your IOC
+    // and use it with this function block - well, too bad.
+    sUnsetString            : STRING := &#39;857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd&#39;;
+END_VAR
+IF iPLCInternalSeverity &lt;&gt; -1 THEN
+    // New severity value
+    iLastValidSeverity := iPLCInternalSeverity;
+    iPLCInternalSeverity := -1;
+
+    // Reset the timer
+    tonSeverityTimeout(IN:=FALSE);
+    tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+END_IF
+
+IF sPLCInternalValue &lt;&gt; sUnsetString THEN
+    // New value from EPICS
+    sLastValidValue         := sPLCInternalValue;
+    sPLCInternalValue       := sUnsetString;
+
+    // Reset the timer
+    tonValueTimeout(IN:=FALSE);
+    tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+END_IF
+
+tonValueTimeout();
+tonSeverityTimeout();
+bValid := (NOT tonValueTimeout.Q) AND
+              (NOT tonSeverityTimeout.Q) AND
+          (iLastValidSeverity &lt;= iMaximumValidSeverity);
+sValue := sLastValidValue;
 
 END_FUNCTION_BLOCK
 </pre></div>
@@ -2854,7 +2965,7 @@ END_FUNCTION_BLOCK
     <span class="n">bExecute</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
-    <span class="n">arrOutput</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">arrOutput</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1..1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="n">bNewArray</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
@@ -2887,7 +2998,7 @@ END_FUNCTION_BLOCK
     <span class="n">bExecute</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
-    <span class="n">arrOutput</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">arrOutput</span><span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1..1000</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="n">bNewArray</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
@@ -2990,7 +3101,7 @@ END_FUNCTION_BLOCK
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_XKoyoPLCModbus</span>
 <span class="n">VAR</span>
     <span class="n">fbKoyo_PLCInputCoilsRx</span>  <span class="p">:</span>       <span class="n">FB_MBReadCoils</span><span class="p">;</span> <span class="o">//</span><span class="n">FB</span> <span class="k">for</span> <span class="n">reading</span> <span class="n">the</span> <span class="n">coils</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">other</span> <span class="n">PLC</span>
-    <span class="n">anKoyo_PLC_CnBits</span>       <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">20</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">Buffer</span> <span class="k">for</span> <span class="n">coil</span> <span class="n">readbacks</span>
+    <span class="n">anKoyo_PLC_CnBits</span>       <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..20</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">Buffer</span> <span class="k">for</span> <span class="n">coil</span> <span class="n">readbacks</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
     <span class="n">ftReset</span> <span class="p">:</span> <span class="n">F_TRIG</span><span class="p">;</span> <span class="o">//</span><span class="n">Reset</span> <span class="n">edge</span> <span class="n">sensor</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
@@ -3005,7 +3116,7 @@ END_FUNCTION_BLOCK
 
 <span class="n">VAR_OUTPUT</span>
     <span class="n">q_xNoPLCResponse</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span> <span class="o">//</span><span class="n">Could</span> <span class="ow">not</span> <span class="n">reach</span> <span class="n">the</span> <span class="n">PLC</span> <span class="k">if</span> <span class="n">true</span>
-    <span class="n">q_anPLCResponse</span>   <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">20</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">Buffer</span> <span class="n">of</span> <span class="n">coils</span> <span class="n">retrieved</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">other</span> <span class="n">PLC</span>
+    <span class="n">q_anPLCResponse</span>   <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..20</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span><span class="n">Buffer</span> <span class="n">of</span> <span class="n">coils</span> <span class="n">retrieved</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">other</span> <span class="n">PLC</span>
     <span class="n">q_xError</span>         <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span> <span class="o">//</span><span class="n">Transaction</span> <span class="ow">or</span> <span class="n">other</span> <span class="n">error</span>
 <span class="n">END_VAR</span>
 <span class="p">(</span><span class="o">*</span> <span class="n">Look</span> <span class="n">ma</span><span class="s1">&#39; no wires! *)</span>
@@ -3137,35 +3248,28 @@ END_FUNCTION_BLOCK
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="LCLSGeneral_LCLSGeneral_epics.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="LCLSGeneral_LCLSGeneral_epics.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, SLAC National Accelerator Laboratory
+        &#169; Copyright 2021, SLAC National Accelerator Laboratory.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
