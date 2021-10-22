@@ -44,11 +44,9 @@ VAR
 	bReadyToLog		: 	BOOL	:= FALSE;
 	rtFirstLog		: 	R_TRIG;
 	
-	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
-    fbGetAdapterIP : FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := ''); // Acquire IP of the correct adapter
-	bHostnameSet	:	BOOL	:= FALSE;
-    idxPortFind : UDINT;
-
+	fbGetHostName 	: FB_GetPLCHostname;
+	fbGetIP		 	: FB_GetPLCIPAddress;
+	
 	fbListener		:	REFERENCE TO FB_Listener;
 	fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
 	
@@ -65,15 +63,12 @@ VAR
     
     SocketEnable : BOOL;
     
-    bAdapterSet : BOOL;
-    
     ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
     
     tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
     
     tofTrickleBreakerPre : TOF := (PT:=T#1s);
     tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
-    DisarmCounter   : INT := DisarmCountDefault; 
     bTripCon : BOOL;
 END_VAR
 
@@ -99,30 +94,15 @@ END_VAR]]></Declaration>
 	fbListeners[5] := ADR(fbLCLSListener);
     
 END_IF 
+
+fbGetHostName(
+	sHostname => GVL_Logger.sPlcHostname,
+);
+
+fbGetIP(
+	sIPAddress => fbSocket.sLocalHost
+);
 	
-IF NOT bHostnameSet THEN
-	fbGetHostName();
-	IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
-		GVL_Logger.sPlcHostname := fbGetHostName.sHostName;
-		bHostnameSet 			:= TRUE;
-	END_IF
-END_IF
-
-IF NOT bAdapterSet THEN
-    fbGetAdapterIP();
-    IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
-        FOR idxPortFind := 0 TO MAX_LOCAL_ADAPTERS DO
-            IF FIND(fbGetAdapterIP.arrAdapters[idxPortFind].sIpAddr,
-               GVL_Logger.sIpTidbit) <> 0 THEN
-                fbSocket.sLocalHost := fbGetAdapterIP.arrAdapters[idxPortFind].sIpAddr;
-                SocketEnable := TRUE;
-                bAdapterSet := TRUE;
-                EXIT;
-            END_IF
-        END_FOR
-    END_IF
-END_IF
-
 (* Ensure the socket is ready for when JSON documents are emitted *)
 rtReset(CLK:=bReset);
 
@@ -139,12 +119,18 @@ SocketEnable S= tRetryConnection.Q OR rtReset.Q;
 
 fbSocket(
 	nLocalPort:=0,
-	bEnable:=SocketEnable,
+	bEnable:=fbGetIP.bDone,
 	nMode:=CONNECT_MODE_ENABLEDBG,
 );
 
-bReadyToLog := (bAdapterSet AND bHostnameSet AND bInitialized AND 
-                fbSocket.bEnable AND NOT fbSocket.bError AND fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED);
+bReadyToLog := (
+	fbGetHostName.bDone AND
+	fbGetIP.bDone AND
+	bInitialized AND
+	fbSocket.bEnable AND 
+	NOT fbSocket.bError AND 
+	fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED
+);
 rtFirstLog(CLK:=bReadyToLog);
 
 IF rtFirstLog.Q THEN

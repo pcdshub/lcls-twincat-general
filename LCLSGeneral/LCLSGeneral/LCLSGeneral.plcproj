@@ -146,6 +146,12 @@
     <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Hardware\FB_GetPLCHostname.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_GetPLCIPAddress.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_ThermoCouple.TcPOU">
       <SubType>Code</SubType>
     </Compile>
