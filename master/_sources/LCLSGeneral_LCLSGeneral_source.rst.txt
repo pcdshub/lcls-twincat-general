@@ -26,6 +26,10 @@ E_EcatDiagState
     END_TYPE
 
 
+Related:
+    * `E_EcatDiagState`_
+
+
 E_EcCommState
 ^^^^^^^^^^^^^
 
@@ -40,6 +44,8 @@ E_EcCommState
     	eEcState_OP 		:= 8
     ) UDINT;
     END_TYPE
+
+
 
 
 E_LogEventType_WC
@@ -62,6 +68,8 @@ E_LogEventType_WC
        global type when pinning ST_LoggingEventInfo *)
 
 
+
+
 E_Subsystem
 ^^^^^^^^^^^
 
@@ -81,6 +89,10 @@ E_Subsystem
     END_TYPE
 
 
+Related:
+    * `FB_LogMessage`_
+
+
 ST_EcDevice
 ^^^^^^^^^^^
 
@@ -97,6 +109,8 @@ ST_EcDevice
     	sName:STRING; //EtherCAT slave name
     END_STRUCT
     END_TYPE
+
+
 
 
 ST_EcMasterDevState
@@ -121,6 +135,10 @@ ST_EcMasterDevState
     END_TYPE
 
 
+Related:
+    * `E_EcCommState`_
+
+
 ST_FbDiagnostics
 ^^^^^^^^^^^^^^^^
 
@@ -140,6 +158,10 @@ ST_FbDiagnostics
     	fString	:	FB_FormatString; //Use to create good log messages, similar to C++ fstring
     END_STRUCT
     END_TYPE
+
+
+Related:
+    * `FB_Index`_
 
 
 ST_LoggingEventInfo_WC
@@ -250,6 +272,8 @@ ST_LoggingEventInfo_WC
     END_TYPE
 
 
+
+
 ST_PendingEvent
 ^^^^^^^^^^^^^^^
 
@@ -269,6 +293,8 @@ ST_PendingEvent
     END_TYPE
 
 
+
+
 ST_PortAddr
 ^^^^^^^^^^^
 
@@ -282,6 +308,8 @@ ST_PortAddr
     	portD : UINT;
     END_STRUCT
     END_TYPE
+
+
 
 
 ST_SlaveState
@@ -311,6 +339,10 @@ ST_SlaveState
     END_TYPE
 
 
+Related:
+    * `E_EcCommState`_
+
+
 ST_SlaveStateInfo
 ^^^^^^^^^^^^^^^^^
 
@@ -330,6 +362,10 @@ ST_SlaveStateInfo
     END_TYPE
 
 
+Related:
+    * `ST_SlaveState`_
+
+
 ST_SlaveStateInfoScanned
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -346,6 +382,8 @@ ST_SlaveStateInfoScanned
     	bDifferentAddr	: BOOL;			(* EcAddress of Scanned configuration differs from Configured configuration *)
     END_STRUCT
     END_TYPE
+
+
 
 
 ST_System
@@ -369,6 +407,10 @@ ST_System
     END_TYPE
 
 
+Related:
+    * `FB_EcatDiag`_
+
+
 ST_TopologyData
 ^^^^^^^^^^^^^^^
 
@@ -384,6 +426,10 @@ ST_TopologyData
     	iReserved			: ARRAY [0..7] OF UDINT;
     END_STRUCT
     END_TYPE
+
+
+Related:
+    * `ST_PortAddr`_
 
 
 GVLs
@@ -403,6 +449,10 @@ DefaultGlobals
     END_VAR
 
 
+Related:
+    * `ST_System`_
+
+
 Global_Variables_EtherCAT
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -412,6 +462,8 @@ Global_Variables_EtherCAT
     	iSLAVEADDR_ARR_SIZE	: UINT := 256;
         ESC_MAX_PORTS : UINT := 3; // Maximum number of ports (4) on ESC
     END_VAR
+
+
 
 
 GVL_Logger
@@ -488,6 +540,10 @@ GVL_Logger
     END_VAR
 
 
+Related:
+    * `FB_LogMessage`_
+
+
 POUs
 ----
 
@@ -510,6 +566,8 @@ F_ConvertTicksToUnixTimestamp
     F_ConvertTicksToUnixTimestamp := ULINT_TO_LREAL(nTimestamp) / nTicksToSeconds - nEpochOffset;
 
     END_FUNCTION
+
+
 
 
 F_SendUDPMessage
@@ -541,6 +599,8 @@ F_SendUDPMessage
     END_IF
 
     END_FUNCTION
+
+
 
 
 FB_AnalogInput
@@ -578,6 +638,8 @@ FB_AnalogInput
     END_IF
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_AnalogOutput
@@ -624,6 +686,8 @@ FB_AnalogOutput
     iRaw := LREAL_TO_INT((fReal - fTermMin) * fScale);
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_BasicStats
@@ -765,6 +829,8 @@ FB_BasicStats
     END_FUNCTION_BLOCK
 
 
+
+
 FB_CircuitBreaker_Test
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -783,6 +849,8 @@ FB_CircuitBreaker_Test
     DeathByManySmall();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_CoE_FastRead
@@ -852,6 +920,8 @@ FB_CoE_FastRead
     END_FUNCTION_BLOCK
 
 
+
+
 FB_DataBuffer
 ^^^^^^^^^^^^^
 
@@ -913,6 +983,8 @@ FB_DataBuffer
     END_IF
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_EcatDiag
@@ -1017,6 +1089,10 @@ FB_EcatDiag
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `ST_EcDevice`_
+
+
 FB_EcatDiagWrapper
 ^^^^^^^^^^^^^^^^^^
 
@@ -1098,6 +1174,14 @@ FB_EcatDiagWrapper
     );
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_EtherCATDiag`_
+    * `FB_EtherCATFrameDiag`_
+    * `ST_EcMasterDevState`_
+    * `ST_SlaveStateInfo`_
+    * `ST_SlaveStateInfoScanned`_
 
 
 FB_EL6_Com
@@ -1286,6 +1370,8 @@ FB_EL6_Com
     END_CASE
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_EtherCATDiag
@@ -1906,6 +1992,16 @@ FB_EtherCATDiag
     END_ACTION
 
 
+Related:
+    * `E_EcatDiagState`_
+    * `E_Subsystem`_
+    * `FB_LogMessage`_
+    * `ST_EcMasterDevState`_
+    * `ST_SlaveStateInfo`_
+    * `ST_SlaveStateInfoScanned`_
+    * `ST_TopologyData`_
+
+
 FB_EtherCATFrameDiag
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -1925,6 +2021,8 @@ FB_EtherCATFrameDiag
     bFrameWcStateOK := ((wFrmXWcState AND wReqZeroMask) = 0);
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_Index
@@ -1966,6 +2064,8 @@ FB_Index
     nVal := nVal + ValInc;
     IF nVal >  UpperLimit THEN nVal := LowerLimit; END_IF
     END_ACTION
+
+
 
 
 FB_Listener
@@ -2044,6 +2144,10 @@ FB_Listener
 
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `ST_PendingEvent`_
 
 
 FB_LogHandler
@@ -2234,6 +2338,13 @@ FB_LogHandler
 
     GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle
     END_ACTION
+
+
+Related:
+    * `E_Subsystem`_
+    * `FB_Listener`_
+    * `FB_LogMessage`_
+    * `GVL_Logger`_
 
 
 FB_LogMessage
@@ -2471,6 +2582,12 @@ FB_LogMessage
     END_ACTION
 
 
+Related:
+    * `E_Subsystem`_
+    * `GVL_Logger`_
+    * `TIME_TO_100NS`_
+
+
 FB_LREALBuffer
 ^^^^^^^^^^^^^^
 
@@ -2505,6 +2622,10 @@ FB_LREALBuffer
     	bNewArray => bNewArray);
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_DataBuffer`_
 
 
 FB_LREALFromEPICS
@@ -2601,6 +2722,8 @@ FB_LREALFromEPICS
     fValue := fLastValidValue;
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_STRINGFromEPICS
@@ -2708,6 +2831,8 @@ FB_STRINGFromEPICS
     END_FUNCTION_BLOCK
 
 
+
+
 FB_TempSensor
 ^^^^^^^^^^^^^
 
@@ -2761,6 +2886,8 @@ FB_TempSensor
     END_FUNCTION_BLOCK
 
 
+
+
 FB_ThermoCouple
 ^^^^^^^^^^^^^^^
 
@@ -2810,6 +2937,10 @@ FB_ThermoCouple
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_TempSensor`_
+
+
 FB_TimeStampBuffer
 ^^^^^^^^^^^^^^^^^^
 
@@ -2843,6 +2974,10 @@ FB_TimeStampBuffer
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_LREALBuffer`_
+
+
 FB_TimeStampBufferGlobal
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2873,6 +3008,13 @@ FB_TimeStampBufferGlobal
     	bNewArray => bNewArray);
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `DefaultGlobals`_
+    * `FB_LREALBuffer`_
+    * `FB_TimeStampBuffer`_
+    * `FB_UnixTimeStampGlobal`_
 
 
 FB_UnixTimeStamp
@@ -2934,6 +3076,8 @@ FB_UnixTimeStamp
     END_FUNCTION_BLOCK
 
 
+
+
 FB_UnixTimeStampGlobal
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2958,6 +3102,11 @@ FB_UnixTimeStampGlobal
     	fTime => DefaultGlobals.fTimeStamp);
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `DefaultGlobals`_
+    * `FB_UnixTimeStamp`_
 
 
 FB_XKoyoPLCModbus
@@ -3050,6 +3199,8 @@ FB_XKoyoPLCModbus
     END_FUNCTION_BLOCK
 
 
+
+
 ResetCircuitBreakerGlobals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3066,6 +3217,10 @@ ResetCircuitBreakerGlobals
     END_FUNCTION
 
 
+Related:
+    * `GVL_Logger`_
+
+
 RUN_TESTS
 ^^^^^^^^^
 
@@ -3078,6 +3233,10 @@ RUN_TESTS
     TcUnit.RUN();
 
     END_PROGRAM
+
+
+Related:
+    * `FB_CircuitBreaker_Test`_
 
 
 SYSTEM_TIME_TO_RFC3339
@@ -3100,6 +3259,8 @@ SYSTEM_TIME_TO_RFC3339
     END_FUNCTION
 
 
+
+
 TIME_TO_100NS
 ^^^^^^^^^^^^^
 
@@ -3114,4 +3275,6 @@ TIME_TO_100NS
     TIME_TO_100NS := TIME_TO_ULINT(nTime)*10000;
 
     END_FUNCTION
+
+
 
