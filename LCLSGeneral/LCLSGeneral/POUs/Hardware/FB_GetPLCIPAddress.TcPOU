@@ -3,53 +3,50 @@
   <POU Name="FB_GetPLCIPAddress" Id="{3dc87598-d3fd-46d3-b621-8ecdb5e5ec58}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_GetPLCIPAddress
 VAR_INPUT
-	bExecute		: BOOL := TRUE;
-	fRetryDelay		: TIME := T#10s;
+    bExecute		: BOOL := TRUE;
+    fRetryDelay		: TIME := T#10s;
 END_VAR
 VAR_OUTPUT
-	sIPAddress		: STRING(15);
+    sIPAddress		: STRING(15);
 
-	bDone 			: BOOL;
-	bError			: BOOL;
+    bDone 			: BOOL;
+    bError			: BOOL;
 END_VAR
 VAR
     fbGetAdapterIP 	: FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := ''); // Acquire IP of the correct adapter
-	
-	iIndex			: UDINT;
-	
+
+    iIndex			: UDINT;
+
     tRetry 			: TON;
-	rtReset			: R_TRIG;
-	bReset			: BOOL;
-	bInitialized	: BOOL := FALSE;
-		
+    bReset			: BOOL;
+    bInitialized	: BOOL := FALSE;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF bExecute THEN
-	IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
-		bReset			:= TRUE;
-		bInitialized	:= TRUE;
-		fbGetAdapterIP(bExecute:=FALSE);
-	END_IF
-	
-	tRetry(IN:=bReset, PT:=fRetryDelay);
-	rtReset(CLK:=bReset);
-	
-	bReset := FALSE;
-	
-	IF NOT bDone THEN
-		fbGetAdapterIP(bExecute:=TRUE, bError=>bError);
-		IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
-			FOR iIndex := 0 TO MAX_LOCAL_ADAPTERS DO
-				IF FIND(fbGetAdapterIP.arrAdapters[iIndex].sIpAddr, GVL_Logger.sIpTidbit) <> 0 THEN
-					sIPAddress := fbGetAdapterIP.arrAdapters[iIndex].sIpAddr;
-					bDone := TRUE;
-					EXIT;
-				END_IF
-			END_FOR
-		END_IF
-	END_IF
-	
+    IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
+        bReset			:= TRUE;
+        bInitialized	:= TRUE;
+        fbGetAdapterIP(bExecute:=FALSE);
+    END_IF
+
+    tRetry(IN:=bReset, PT:=fRetryDelay);
+    bReset := FALSE;
+
+    IF NOT bDone THEN
+        fbGetAdapterIP(bExecute:=TRUE, bError=>bError);
+        IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
+            FOR iIndex := 0 TO MAX_LOCAL_ADAPTERS DO
+                IF FIND(fbGetAdapterIP.arrAdapters[iIndex].sIpAddr, GVL_Logger.sIpTidbit) <> 0 THEN
+                    sIPAddress := fbGetAdapterIP.arrAdapters[iIndex].sIpAddr;
+                    bDone := TRUE;
+                    EXIT;
+                END_IF
+            END_FOR
+        END_IF
+    END_IF
+
 END_IF]]></ST>
     </Implementation>
   </POU>
