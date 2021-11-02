@@ -3,135 +3,135 @@
   <POU Name="FB_BasicStats" Id="{dd720d4e-bff0-4eac-9bd3-db3174a49483}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_BasicStats
 (*
-	Minimalist Array Stats for LREALs
-	2019-10-10 Zachary Lentz
-	
-	Calculates the most basic stats for an array and provides pytmc control points.
-	This is an alternative to the TC3 Condition Monitoring library which requires an
-	additional license and had a more complicated interface.
+    Minimalist Array Stats for LREALs
+    2019-10-10 Zachary Lentz
+
+    Calculates the most basic stats for an array and provides pytmc control points.
+    This is an alternative to the TC3 Condition Monitoring library which requires an
+    additional license and had a more complicated interface.
 *)
 VAR_IN_OUT
-	// Input array of floats
-	{attribute 'pytmc' := '
-		pv: STATS:DATA
-		io: i
-	'}
-	aSignal: ARRAY[*] OF LREAL;
+    // Input array of floats
+    {attribute 'pytmc' := '
+        pv: STATS:DATA
+        io: i
+    '}
+    aSignal: ARRAY[*] OF LREAL;
 END_VAR
 VAR_INPUT
-	// If TRUE, we will update the results every cycle
-	{attribute 'pytmc' := 'pv: STATS:ALWAYS_CALC'}
-	bAlwaysCalc: BOOL;
-	// On rising edge, do one calculation
-	{attribute 'pytmc' := 'pv: STATS:EXECUTE'}
-	bExecute: BOOL;
-	// If set to TRUE, reset outputs
-	{attribute 'pytmc' := 'pv: STATS:RESET'}
-	bReset: BOOL;
-	// If nonzero, we will only pay attention to the first nElems items in aSignal
-	{attribute 'pytmc' := '
-		pv: STATS:NELM
-		io: i
-	'}
-	nElems: UDINT;
+    // If TRUE, we will update the results every cycle
+    {attribute 'pytmc' := 'pv: STATS:ALWAYS_CALC'}
+    bAlwaysCalc: BOOL;
+    // On rising edge, do one calculation
+    {attribute 'pytmc' := 'pv: STATS:EXECUTE'}
+    bExecute: BOOL;
+    // If set to TRUE, reset outputs
+    {attribute 'pytmc' := 'pv: STATS:RESET'}
+    bReset: BOOL;
+    // If nonzero, we will only pay attention to the first nElems items in aSignal
+    {attribute 'pytmc' := '
+        pv: STATS:NELM
+        io: i
+    '}
+    nElems: UDINT;
 END_VAR
 VAR_OUTPUT
-	// Average of all values in the array
-	{attribute 'pytmc' := '
-		pv: STATS:MEAN
-		io: i
-	'}
-	fMean: LREAL;
-	// Standard deviation of all values in the array
-	{attribute 'pytmc' := '
-		pv: STATS:STDEV
-		io: i
-	'}
-	fStDev: LREAL;
-	// Largest value in the array
-	{attribute 'pytmc' := '
-		pv: STATS:MAX
-		io: i
-	'}
-	fMax: LREAL;
-	// Smallest value in the array
-	{attribute 'pytmc' := '
-		pv: STATS:MIN
-		io: i
-	'}
-	fMin: LREAL;
-	// Largest array element subtracted by the smallest
-	{attribute 'pytmc' := '
-		pv: STATS:RANGE
-		io: i
-	'}
-	fRange: LREAL;
-	// True if the other outputs are valid
-	{attribute 'pytmc' := '
-		pv: STATS:VALID
-		io: i
-	'}
-	bValid: BOOL;
+    // Average of all values in the array
+    {attribute 'pytmc' := '
+        pv: STATS:MEAN
+        io: i
+    '}
+    fMean: LREAL;
+    // Standard deviation of all values in the array
+    {attribute 'pytmc' := '
+        pv: STATS:STDEV
+        io: i
+    '}
+    fStDev: LREAL;
+    // Largest value in the array
+    {attribute 'pytmc' := '
+        pv: STATS:MAX
+        io: i
+    '}
+    fMax: LREAL;
+    // Smallest value in the array
+    {attribute 'pytmc' := '
+        pv: STATS:MIN
+        io: i
+    '}
+    fMin: LREAL;
+    // Largest array element subtracted by the smallest
+    {attribute 'pytmc' := '
+        pv: STATS:RANGE
+        io: i
+    '}
+    fRange: LREAL;
+    // True if the other outputs are valid
+    {attribute 'pytmc' := '
+        pv: STATS:VALID
+        io: i
+    '}
+    bValid: BOOL;
 END_VAR
 VAR
-	rTrig: R_TRIG;
-	nIndex: DINT;
-	nElemsSeen: UDINT;
-	fSum: LREAL;
-	fVarianceSum: LREAL;
-	fVarianceMean: LREAL;
+    rTrig: R_TRIG;
+    nIndex: DINT;
+    nElemsSeen: UDINT;
+    fSum: LREAL;
+    fVarianceSum: LREAL;
+    fVarianceMean: LREAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[rTrig(CLK:=bExecute);
 IF bReset THEN
-	fMean := 0;
-	fStDev := 0;
-	fMax := 0;
-	fMin := 0;
-	fRange := 0;
-	bValid := FALSE;
-	bReset := FALSE;
+    fMean := 0;
+    fStDev := 0;
+    fMax := 0;
+    fMin := 0;
+    fRange := 0;
+    bValid := FALSE;
+    bReset := FALSE;
 ELSIF NOT (bExecute OR bAlwaysCalc) THEN
-	bValid := FALSE;
+    bValid := FALSE;
 ELSIF bAlwaysCalc OR rTrig.Q THEN
-	// First pass through aSignal: get sum, mean, max, min
-	nElemsSeen := 0;
-	fSum := 0;
-	fMax := aSignal[LOWER_BOUND(aSignal, 1)];
-	fMin := fMax;
-	FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
-		nElemsSeen := nElemsSeen + 1;
-		fSum := fSum + aSignal[nIndex];
-		IF aSignal[nIndex] > fMax THEN
-			fMax := aSignal[nIndex];
-		ELSIF aSignal[nIndex] < fMin tHEN
-			fMin := aSignal[nIndex];
-		END_IF
-		IF nElems > 0 AND nElemsSeen >= nElems THEN
-			EXIT;
-		END_IF
-	END_FOR
-	IF nElemsSeen > 0 THEN
-		fMean := fSum / nElemsSeen;
-		fRange := fMax - fMin;
+    // First pass through aSignal: get sum, mean, max, min
+    nElemsSeen := 0;
+    fSum := 0;
+    fMax := aSignal[LOWER_BOUND(aSignal, 1)];
+    fMin := fMax;
+    FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+        nElemsSeen := nElemsSeen + 1;
+        fSum := fSum + aSignal[nIndex];
+        IF aSignal[nIndex] > fMax THEN
+            fMax := aSignal[nIndex];
+        ELSIF aSignal[nIndex] < fMin tHEN
+            fMin := aSignal[nIndex];
+        END_IF
+        IF nElems > 0 AND nElemsSeen >= nElems THEN
+            EXIT;
+        END_IF
+    END_FOR
+    IF nElemsSeen > 0 THEN
+        fMean := fSum / nElemsSeen;
+        fRange := fMax - fMin;
 
-		// Second pass through aSignal: get the sum of the variances and then the stdev
-		nElemsSeen := 0;
-		fVarianceSum := 0;
-		FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
-			nElemsSeen := nElemsSeen + 1;
-			fVarianceSum := fVarianceSum + (aSignal[nIndex] - fMean) * (aSignal[nIndex] - fMean);
-			IF nElems > 0 AND nElemsSeen >= nElems THEN
-				EXIT;
-			END_IF
-		END_FOR
-		IF nElemsSeen > 1 THEN
-			fVarianceMean := fVarianceSum / (nElemsSeen - 1);
-			fStDev := SQRT(fVarianceMean);
-			bValid := TRUE;
-		END_IF
-	END_IF
+        // Second pass through aSignal: get the sum of the variances and then the stdev
+        nElemsSeen := 0;
+        fVarianceSum := 0;
+        FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+            nElemsSeen := nElemsSeen + 1;
+            fVarianceSum := fVarianceSum + (aSignal[nIndex] - fMean) * (aSignal[nIndex] - fMean);
+            IF nElems > 0 AND nElemsSeen >= nElems THEN
+                EXIT;
+            END_IF
+        END_FOR
+        IF nElemsSeen > 1 THEN
+            fVarianceMean := fVarianceSum / (nElemsSeen - 1);
+            fStDev := SQRT(fVarianceMean);
+            bValid := TRUE;
+        END_IF
+    END_IF
 END_IF]]></ST>
     </Implementation>
   </POU>

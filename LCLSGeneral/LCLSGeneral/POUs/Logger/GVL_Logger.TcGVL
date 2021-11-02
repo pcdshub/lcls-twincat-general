@@ -4,33 +4,33 @@
     <Declaration><![CDATA[{attribute 'qualified only'}
 //Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
-	(*
-	Using the IP address directly avoids DNS configuration issues.
-	While we may want to address this in the future, for now the static IP
-	will suffice:
+    (*
+    Using the IP address directly avoids DNS configuration issues.
+    While we may want to address this in the future, for now the static IP
+    will suffice:
 
-	$ nslookup ctl-logsrv01
-	Name:   ctl-logsrv01.pcdsn
-	Address: 172.21.32.36
-	*)
-	{attribute 'pytmc' := '
-		pv: @(PREFIX)LCLSGeneral:LogHost
-		io: io
-		field: DESC The log host IP address
-	'}
-	cLogHost		:	STRING(15)	:= '172.21.32.36';
-	
-	{attribute 'pytmc' := '
-		pv: @(PREFIX)LCLSGeneral:LogPort
-		io: io
-		field: DESC The log host UDP port
-	'}
-	iLogPort		:	UINT		:= 54321;
-    
+    $ nslookup ctl-logsrv01
+    Name:   ctl-logsrv01.pcdsn
+    Address: 172.21.32.36
+    *)
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)LCLSGeneral:LogHost
+        io: io
+        field: DESC The log host IP address
+    '}
+    cLogHost		:	STRING(15)	:= '172.21.32.36';
+
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)LCLSGeneral:LogPort
+        io: io
+        field: DESC The log host UDP port
+    '}
+    iLogPort		:	UINT		:= 54321;
+
     sIpTidbit : STRING(6) := '172.21';
-   
-    // Log message circuit breaker configuration 
-    
+
+    // Log message circuit breaker configuration
+
     // Initialization constants for circuit breakers
     nLocalTripThreshold : TIME := T#1ms; // Minimum time between log messages
     nMinTimeViolationAcceptable : INT := 5; // Trip if `nLocalTripThreshold` exceeded `nMinTimeViolationAcceptable` times
@@ -41,32 +41,32 @@ VAR_GLOBAL CONSTANT
 END_VAR
 
 VAR_GLOBAL
-	sPlcHostname	:	STRING		:= 'unknown';
-	
-	(* Ref: https://infosys.beckhoff.com/english.php?content=../content/1033/tcpipserver/html/TcPlcLibTcpIp_FB_SocketUdpSendTo.htm
-		TODO: Activate the "Replace constants" option in the
-		TwinCAT PLC Control->"Project->Options...->Build" dialog window. 
-	*)
-	TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
-    
-	{analysis -33}
-	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
-	{analysis +33}
-    
+    sPlcHostname	:	STRING		:= 'unknown';
+
+    (* Ref: https://infosys.beckhoff.com/english.php?content=../content/1033/tcpipserver/html/TcPlcLibTcpIp_FB_SocketUdpSendTo.htm
+        TODO: Activate the "Replace constants" option in the
+        TwinCAT PLC Control->"Project->Options...->Build" dialog window.
+    *)
+    TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
+
+    {analysis -33}
+    fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
+    {analysis +33}
+
     {attribute 'pytmc' := '
-		pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
-		io: i
-		field: DESC Tripped by overall log count
-	'}
+        pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
+        io: i
+        field: DESC Tripped by overall log count
+    '}
     bTrickleTripped :   BOOL; // Global trickle trip flag
-    
+
     {attribute 'pytmc' := '
-		pv: @(PREFIX)LCLSGeneral:LogMessageCount
-		io: i
-		field: DESC Total log messages on the last cycle
-	'}
+        pv: @(PREFIX)LCLSGeneral:LogMessageCount
+        io: i
+        field: DESC Total log messages on the last cycle
+    '}
     nGlobAccEvents : UDINT; // Global log message count
-    nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the 
+    nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

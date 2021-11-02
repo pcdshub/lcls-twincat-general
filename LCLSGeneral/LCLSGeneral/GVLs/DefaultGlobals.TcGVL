@@ -3,9 +3,9 @@
   <GVL Name="DefaultGlobals" Id="{2d2569a9-cdb9-4b2c-9048-e9448cd0d09e}">
     <Declaration><![CDATA[//These are variables every PLC project should have
 VAR_GLOBAL
-	
-	stSys	:	ST_System; //Included for you
-	fTimeStamp: LREAL;
+
+    stSys	:	ST_System; //Included for you
+    fTimeStamp: LREAL;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

@@ -6,8 +6,8 @@
 {attribute 'analysis' := '-23'}
 FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
 VAR_INPUT
-	{attribute 'naming' := 'omit'}
-	tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
+    {attribute 'naming' := 'omit'}
+    tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
 END_VAR
 VAR
 END_VAR
@@ -15,8 +15,5 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SYSTEM_TIME_TO_RFC3339 := CONCAT(REPLACE(SYSTEMTIME_TO_STRING(tCurrentTime), 'T', 1, 11), 'Z');]]></ST>
     </Implementation>
-    <LineIds Name="SYSTEM_TIME_TO_RFC3339">
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

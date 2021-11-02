@@ -27,7 +27,7 @@ VAR_INST
 
     //Auto reset test
     tonAutoResetTest : TON;
-    
+
     Init : BOOL := TRUE;
 END_VAR]]></Declaration>
       <Implementation>
@@ -45,13 +45,13 @@ END_IF
 tonAutoResetTest(IN:=NOT Init, PT:=T#6s);
 
 IF tonAutoResetTest.Q THEN
-    
+
     fbLog.CircuitBreaker();
-    
+
     AssertFalse(fbLog.bTripped,
         'Circuit breaker should be reset automatically');
-    
-    TEST_FINISHED_NAMED('AutoReset');    
+
+    TEST_FINISHED_NAMED('AutoReset');
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -121,14 +121,14 @@ in one cycle, leading to a large excess of messages.
 TEST('LocalFastTrip');
     FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
         fbLog.CircuitBreaker();
-	END_FOR
-    
+    END_FOR
+
     AssertTrue(fbLog.bLocalTripped AND NOT fbLog.bLocalTrickleTripped,
         'Only local trip should occur in these conditions');
 TEST_FINISHED();
 
 
-    
+
 
 ]]></ST>
       </Implementation>

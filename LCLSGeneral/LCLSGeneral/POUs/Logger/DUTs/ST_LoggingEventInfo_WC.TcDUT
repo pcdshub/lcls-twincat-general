@@ -3,102 +3,102 @@
   <DUT Name="ST_LoggingEventInfo_WC" Id="{c7089d6f-7fa7-426b-9d50-1a010ea23a13}">
     <Declaration><![CDATA[TYPE ST_LoggingEventInfo_WC :
 STRUCT
-	(* 
-		Message or Alarm{Cleared,Confirmed,Raised} event information
-		
-		** Working copy - to be used for the pinned ST_LoggingEventInfo **
-		* The process for updating this type is as follows:
-			1. Copy this structure and rename to ST_LoggingEventInfo
-			2. Remove the working copy notes section
-			3. Pin the global data type  
-		** End of working copy information **
- 
-		Note that elements here do not follow the usual Hungarian notation / 
-		variable-type-prefixing naming convention due to the member names being
-		used directly in the generation of the JSON document.
-	*)
-	
-	{attribute 'pytmc' := '
-		pv: Schema
-		io: i
-		field: DESC Schema string
-	'}
-	schema		:	STRING := 'twincat-event-0';
-	  
-	{attribute 'pytmc' := '
-		pv: Timestamp 
-		io: i
-		field: DESC Unix timestamp
-	'}
-  	ts			:	LREAL;
-	
-  	{attribute 'pytmc' := '
-		pv: Hostname 
-		io: i
-		field: DESC PLC Hostname
-	'}
-  	plc			:	STRING;
-  
-	{attribute 'pytmc' := '
-		pv: Severity
-		io: i
-		field: DESC TcEventSeverity	
-		field: ZRST Verbose
-		field: ONST Info
-		field: TWST Warning
-		field: THST Error
-	'}
-	severity	:	TcEventSeverity;
-	
-	{attribute 'pytmc' := '
-		pv: MessageID
-		io: i
-		field: DESC TwinCAT Message ID	
-	'}
-	id			:	UDINT;
+    (*
+        Message or Alarm{Cleared,Confirmed,Raised} event information
 
-	{attribute 'pytmc' := '
-		pv: EventClass
-		io: i
-		field: DESC TwinCAT Event class	
-	'}
-	event_class		:	STRING;
-		
-	{attribute 'pytmc' := '
-		pv: Message
-		io: i
-	'}
-	msg				: STRING(255);	 
-	// This is actually: T_MaxString
-	// which has been expanded due to requirements for pinning global data types.
-	
-	{attribute 'pytmc' := '
-		pv: Source
-		io: i
-	'}
-	source			: STRING(255);	 
-	// This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
-	// which has been expanded due to requirements for pinning global data types.
-	
-	{attribute 'pytmc' := '
-		pv: EventType
-		io: i
-		field: DESC The event type
-	'}
-	event_type	:	 E_LogEventType;
-	
-	{attribute 'pytmc' := '
-		pv: MessageJSON
-		io: i
-		field: DESC Metadata with the message	
-	'}
-	json 		:	STRING(10000);
-	(* 
-	NOTE: this JSON gets inserted as an escaped string in the "json" key.
-	TODO: it may be possible to use `fbJson.AddRawObject`, but this would
-		  require us to switch back to creating the JSON in a more manual
-		  way with AddKey/AddInt (and such).
-	*)		 
+        ** Working copy - to be used for the pinned ST_LoggingEventInfo **
+        * The process for updating this type is as follows:
+            1. Copy this structure and rename to ST_LoggingEventInfo
+            2. Remove the working copy notes section
+            3. Pin the global data type
+        ** End of working copy information **
+
+        Note that elements here do not follow the usual Hungarian notation /
+        variable-type-prefixing naming convention due to the member names being
+        used directly in the generation of the JSON document.
+    *)
+
+    {attribute 'pytmc' := '
+        pv: Schema
+        io: i
+        field: DESC Schema string
+    '}
+    schema		:	STRING := 'twincat-event-0';
+
+    {attribute 'pytmc' := '
+        pv: Timestamp
+        io: i
+        field: DESC Unix timestamp
+    '}
+      ts			:	LREAL;
+
+      {attribute 'pytmc' := '
+        pv: Hostname
+        io: i
+        field: DESC PLC Hostname
+    '}
+      plc			:	STRING;
+
+    {attribute 'pytmc' := '
+        pv: Severity
+        io: i
+        field: DESC TcEventSeverity
+        field: ZRST Verbose
+        field: ONST Info
+        field: TWST Warning
+        field: THST Error
+    '}
+    severity	:	TcEventSeverity;
+
+    {attribute 'pytmc' := '
+        pv: MessageID
+        io: i
+        field: DESC TwinCAT Message ID
+    '}
+    id			:	UDINT;
+
+    {attribute 'pytmc' := '
+        pv: EventClass
+        io: i
+        field: DESC TwinCAT Event class
+    '}
+    event_class		:	STRING;
+
+    {attribute 'pytmc' := '
+        pv: Message
+        io: i
+    '}
+    msg				: STRING(255);
+    // This is actually: T_MaxString
+    // which has been expanded due to requirements for pinning global data types.
+
+    {attribute 'pytmc' := '
+        pv: Source
+        io: i
+    '}
+    source			: STRING(255);
+    // This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
+    // which has been expanded due to requirements for pinning global data types.
+
+    {attribute 'pytmc' := '
+        pv: EventType
+        io: i
+        field: DESC The event type
+    '}
+    event_type	:	 E_LogEventType;
+
+    {attribute 'pytmc' := '
+        pv: MessageJSON
+        io: i
+        field: DESC Metadata with the message
+    '}
+    json 		:	STRING(10000);
+    (*
+    NOTE: this JSON gets inserted as an escaped string in the "json" key.
+    TODO: it may be possible to use `fbJson.AddRawObject`, but this would
+          require us to switch back to creating the JSON in a more manual
+          way with AddKey/AddInt (and such).
+    *)
 
 END_STRUCT
 END_TYPE]]></Declaration>

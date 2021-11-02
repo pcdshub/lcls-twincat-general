@@ -6,14 +6,14 @@ Function block to link an analog value from EPICS to an LREAL on the PLC
 
 Usage:
 
-	{attribute 'pytmc' := '
-		pv: INTERNAL:RECORD
-		link: PV:NAME:TO:LINK:TO
-	'}
-	fbLinkedValue1 : FB_LREALFromEPICS;
-	
+    {attribute 'pytmc' := '
+        pv: INTERNAL:RECORD
+        link: PV:NAME:TO:LINK:TO
+    '}
+    fbLinkedValue1 : FB_LREALFromEPICS;
+
 Such that when PV:NAME:TO:LINK:TO changes in EPICS, the INTERNAL:RECORD will be used to
-push a value through to the PLC with this function block. 
+push a value through to the PLC with this function block.
 
 As this block takes care of IOC heartbeat signals and monitors the link and value severity,
 the end-user should then only have to look at `.bValid` and `.fValue`. These are guaranteed to
@@ -27,66 +27,66 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	bValid				: BOOL;
-	fValue				: LREAL;
+    bValid				: BOOL;
+    fValue				: LREAL;
 END_VAR
 
 VAR
-	iValueInvalidate	: POINTER TO ULINT;
-	tonValueTimeout		: TON;
-	tonSeverityTimeout	: TON;
-	
-	fLastValidValue 	: LREAL;
-	iLastValidSeverity 	: INT;
-	
-	{attribute 'pytmc' := '
-		pv: EPICSLink
-		link:
-		field: DESC Internal variable used to monitor EPICS PV in PLC
-	'}
-	fPLCInternalValue : LREAL;
+    iValueInvalidate	: POINTER TO ULINT;
+    tonValueTimeout		: TON;
+    tonSeverityTimeout	: TON;
 
-	// Use special link syntax for now to get EPICSLink.SEVR here:
-	{attribute 'pytmc' := '
-		pv: EPICSLink:LinkSeverity
-		link: *EPICSLink.SEVR
-		field: DESC Internal variable used to monitor EPICS PV severity in PLC
-	'}
-	iPLCInternalSeverity : INT;
+    fLastValidValue 	: LREAL;
+    iLastValidSeverity 	: INT;
+
+    {attribute 'pytmc' := '
+        pv: EPICSLink
+        link:
+        field: DESC Internal variable used to monitor EPICS PV in PLC
+    '}
+    fPLCInternalValue : LREAL;
+
+    // Use special link syntax for now to get EPICSLink.SEVR here:
+    {attribute 'pytmc' := '
+        pv: EPICSLink:LinkSeverity
+        link: *EPICSLink.SEVR
+        field: DESC Internal variable used to monitor EPICS PV severity in PLC
+    '}
+    iPLCInternalSeverity : INT;
 
 END_VAR
 VAR CONSTANT
     // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
-	tTimeout			: TIME := T#2S;
-	NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
+    tTimeout			: TIME := T#2S;
+    NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[iValueInvalidate := ADR(fPLCInternalValue);
 
 IF iPLCInternalSeverity <> -1 THEN
-	// New severity value
-	iLastValidSeverity := iPLCInternalSeverity;
-	iPLCInternalSeverity := -1;
-	
- 	// Reset the timer
-	tonSeverityTimeout(IN:=FALSE);
-	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+    // New severity value
+    iLastValidSeverity := iPLCInternalSeverity;
+    iPLCInternalSeverity := -1;
+
+     // Reset the timer
+    tonSeverityTimeout(IN:=FALSE);
+    tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
 
 IF iValueInvalidate^ <> NAN_VALUE THEN
-	// New value from EPICS
-	fLastValidValue 	:= fPLCInternalValue;
-	iValueInvalidate^	:= NAN_VALUE;
-	
-	// Reset the timer
-	tonValueTimeout(IN:=FALSE);
-	tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+    // New value from EPICS
+    fLastValidValue 	:= fPLCInternalValue;
+    iValueInvalidate^	:= NAN_VALUE;
+
+    // Reset the timer
+    tonValueTimeout(IN:=FALSE);
+    tonValueTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
 
 tonValueTimeout();
 tonSeverityTimeout();
-bValid := (NOT tonValueTimeout.Q) AND 
-		  (NOT tonSeverityTimeout.Q) AND 
+bValid := (NOT tonValueTimeout.Q) AND
+          (NOT tonSeverityTimeout.Q) AND
           (iLastValidSeverity <= iMaximumValidSeverity);
 fValue := fLastValidValue;]]></ST>
     </Implementation>

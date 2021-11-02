@@ -4,14 +4,14 @@
     <Declaration><![CDATA[//Defacto system structure, must be included in all projects
 TYPE ST_System :
 STRUCT
-	
-	xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
-	xAtVacuum 	    : BOOL;(* System At Vacuum *)
-	xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
-	xOverrideMode	: BOOL; //This bit is set when using the override features of the system
-	xIOState        : BOOL; (* ECat Bus Health *)
-	{attribute 'naming' := 'omit'}
-	I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
+
+    xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+    xAtVacuum 	    : BOOL;(* System At Vacuum *)
+    xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
+    xOverrideMode	: BOOL; //This bit is set when using the override features of the system
+    xIOState        : BOOL; (* ECat Bus Health *)
+    {attribute 'naming' := 'omit'}
+    I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
 
 END_STRUCT
 END_TYPE]]></Declaration>

@@ -6,24 +6,24 @@ Function block to link an analog value from EPICS to a STRING on the PLC
 
 Usage:
 
-	{attribute 'pytmc' := '
-		pv: INTERNAL:RECORD
-		link: PV:NAME:TO:LINK:TO.VAL@
-	'}
-	fbLinkedValue1 : FB_STRINGFromEPICS;
-	
+    {attribute 'pytmc' := '
+        pv: INTERNAL:RECORD
+        link: PV:NAME:TO:LINK:TO.VAL@
+    '}
+    fbLinkedValue1 : FB_STRINGFromEPICS;
+
 Such that when PV:NAME:TO:LINK:TO.VAL$ changes in EPICS, the INTERNAL:RECORD will be used to
 push a value through to the PLC with this function block.
 
-The usage of "@" above has several layers of complexity, which are not strictly necessary to 
+The usage of "@" above has several layers of complexity, which are not strictly necessary to
 understand in order to use this function block. The reasons are as follows:
 
-	1. TwinCAT does not allow the "$" symbol to be used in pragmas.  pytmc uses "@" as an
-	   alternate character for "$" as the latter is more frequently useful.
-	2. The "$" is used as a suffix for EPICS string PVs where accessing strings over
-	   the standard 40 character length is desirable. 
-	3. Combining the above, using "PV.VAL@" we can direct EPICS to use long string
-	   handling over the Channel Access link to the link PV ("PV.VAL$").
+    1. TwinCAT does not allow the "$" symbol to be used in pragmas.  pytmc uses "@" as an
+       alternate character for "$" as the latter is more frequently useful.
+    2. The "$" is used as a suffix for EPICS string PVs where accessing strings over
+       the standard 40 character length is desirable.
+    3. Combining the above, using "PV.VAL@" we can direct EPICS to use long string
+       handling over the Channel Access link to the link PV ("PV.VAL$").
 
 As this block takes care of IOC heartbeat signals and monitors the link and value severity,
 the end-user should then only have to look at `.bValid` and `.sValue`. These are guaranteed to
@@ -37,65 +37,65 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	bValid				: BOOL;
-	sValue				: STRING;
+    bValid				: BOOL;
+    sValue				: STRING;
 END_VAR
 
 VAR
-	tonValueTimeout		: TON;
-	tonSeverityTimeout	: TON;
-	
-	sLastValidValue 	: STRING;
-	iLastValidSeverity 	: INT;
-	
-	{attribute 'pytmc' := '
-		pv: EPICSLink
-		link:
-		field: DESC Internal variable used to monitor EPICS PV in PLC
-	'}
-	sPLCInternalValue : STRING;
+    tonValueTimeout		: TON;
+    tonSeverityTimeout	: TON;
 
-	// Use special link syntax for now to get EPICSLink.SEVR here:
-	{attribute 'pytmc' := '
-		pv: EPICSLink:Sevr
-		link: *EPICSLink.SEVR
-		field: DESC Internal variable used to monitor EPICS PV severity in PLC
-	'}
-	iPLCInternalSeverity : INT;
+    sLastValidValue 	: STRING;
+    iLastValidSeverity 	: INT;
+
+    {attribute 'pytmc' := '
+        pv: EPICSLink
+        link:
+        field: DESC Internal variable used to monitor EPICS PV in PLC
+    '}
+    sPLCInternalValue : STRING;
+
+    // Use special link syntax for now to get EPICSLink.SEVR here:
+    {attribute 'pytmc' := '
+        pv: EPICSLink:Sevr
+        link: *EPICSLink.SEVR
+        field: DESC Internal variable used to monitor EPICS PV severity in PLC
+    '}
+    iPLCInternalSeverity : INT;
 
 END_VAR
 VAR CONSTANT
     // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
-	tTimeout			: TIME := T#2S;
-	// This is an arbitrary extended UUID.  If you want to store this value in your IOC 
-	// and use it with this function block - well, too bad.
-	sUnsetString   		: STRING := '857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd';
+    tTimeout			: TIME := T#2S;
+    // This is an arbitrary extended UUID.  If you want to store this value in your IOC
+    // and use it with this function block - well, too bad.
+    sUnsetString   		: STRING := '857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd';
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF iPLCInternalSeverity <> -1 THEN
-	// New severity value
-	iLastValidSeverity := iPLCInternalSeverity;
-	iPLCInternalSeverity := -1;
-	
- 	// Reset the timer
-	tonSeverityTimeout(IN:=FALSE);
-	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+    // New severity value
+    iLastValidSeverity := iPLCInternalSeverity;
+    iPLCInternalSeverity := -1;
+
+     // Reset the timer
+    tonSeverityTimeout(IN:=FALSE);
+    tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
 
 IF sPLCInternalValue <> sUnsetString THEN
-	// New value from EPICS
-	sLastValidValue 	:= sPLCInternalValue;
-	sPLCInternalValue	:= sUnsetString;
-	
-	// Reset the timer
-	tonValueTimeout(IN:=FALSE);
-	tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+    // New value from EPICS
+    sLastValidValue 	:= sPLCInternalValue;
+    sPLCInternalValue	:= sUnsetString;
+
+    // Reset the timer
+    tonValueTimeout(IN:=FALSE);
+    tonValueTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
 
 tonValueTimeout();
 tonSeverityTimeout();
-bValid := (NOT tonValueTimeout.Q) AND 
-		  (NOT tonSeverityTimeout.Q) AND 
+bValid := (NOT tonValueTimeout.Q) AND
+          (NOT tonSeverityTimeout.Q) AND
           (iLastValidSeverity <= iMaximumValidSeverity);
 sValue := sLastValidValue;]]></ST>
     </Implementation>

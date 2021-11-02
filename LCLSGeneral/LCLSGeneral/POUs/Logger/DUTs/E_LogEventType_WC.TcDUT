@@ -5,10 +5,10 @@
 {attribute 'strict'}
 TYPE E_LogEventType_WC :
 (
-	AlarmCleared 	:= 0,
-	AlarmConfirmed 	:= 1,
-	AlarmRaised 	:= 2,
-	MessageSent 	:= 3
+    AlarmCleared 	:= 0,
+    AlarmConfirmed 	:= 1,
+    AlarmRaised 	:= 2,
+    MessageSent 	:= 3
 );
 END_TYPE
 

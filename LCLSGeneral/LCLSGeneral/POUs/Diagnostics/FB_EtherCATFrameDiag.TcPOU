@@ -3,11 +3,11 @@
   <POU Name="FB_EtherCATFrameDiag" Id="{c00b03c3-5a7a-47db-a857-8e703b702b2a}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EtherCATFrameDiag
 VAR_INPUT
-	wFrmXWcState 		: WORD;				// FrmXWcState
-	wReqZeroMask 		: WORD := 16#FFFF;	// mask, bit TRUE: require wFrmXWcState.bit = FALSE, bit FALSE: ignore wFrmXWcState.bit *)
+    wFrmXWcState 		: WORD;				// FrmXWcState
+    wReqZeroMask 		: WORD := 16#FFFF;	// mask, bit TRUE: require wFrmXWcState.bit = FALSE, bit FALSE: ignore wFrmXWcState.bit *)
 END_VAR
 VAR_OUTPUT
-	bFrameWcStateOK		: BOOL;				// result of fram state check
+    bFrameWcStateOK		: BOOL;				// result of fram state check
 END_VAR
 VAR
 END_VAR]]></Declaration>

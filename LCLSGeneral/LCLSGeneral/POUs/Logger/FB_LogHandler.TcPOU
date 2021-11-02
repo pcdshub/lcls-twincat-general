@@ -3,111 +3,111 @@
   <POU Name="FB_LogHandler" Id="{3f56ea05-5d12-4cf3-aa32-b1078ff3baf8}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LogHandler
 VAR_INPUT
-	
-	{attribute 'pytmc' := '
-		pv: ADS
-	'}
-	fbTcAdsListener : FB_Listener;	
-	
-	{attribute 'pytmc' := '
-		pv: Router
-	'}
-	fbTcRouterListener : FB_Listener;
-	
-	{attribute 'pytmc' := '
-		pv: RTime
-	'}
-	fbTcRTimeListener : FB_Listener;	
-	
-	{attribute 'pytmc' := '
-		pv: System
-	'}
-	fbTcSystemListener : FB_Listener;
-	
-	{attribute 'pytmc' := '
-		pv: Windows
-	'}
-	fbWindowsListener : FB_Listener;	
 
-	{attribute 'pytmc' := '
-		pv: LCLS
-	'}
-	fbLCLSListener 	: FB_Listener;	
+    {attribute 'pytmc' := '
+        pv: ADS
+    '}
+    fbTcAdsListener : FB_Listener;
+
+    {attribute 'pytmc' := '
+        pv: Router
+    '}
+    fbTcRouterListener : FB_Listener;
+
+    {attribute 'pytmc' := '
+        pv: RTime
+    '}
+    fbTcRTimeListener : FB_Listener;
+
+    {attribute 'pytmc' := '
+        pv: System
+    '}
+    fbTcSystemListener : FB_Listener;
+
+    {attribute 'pytmc' := '
+        pv: Windows
+    '}
+    fbWindowsListener : FB_Listener;
+
+    {attribute 'pytmc' := '
+        pv: LCLS
+    '}
+    fbLCLSListener 	: FB_Listener;
 
 END_VAR
 VAR_OUTPUT
 END_VAR
 
 VAR
-	
-	bInitialized	:	BOOL	:= FALSE;
-	bReadyToLog		: 	BOOL	:= FALSE;
-	rtFirstLog		: 	R_TRIG;
-	
-	fbGetHostName 	: FB_GetPLCHostname;
-	fbGetIP		 	: FB_GetPLCIPAddress;
-	
-	fbListener		:	REFERENCE TO FB_Listener;
-	fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
-	
-	// Default minimum severity for subscriptions
-	eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;	
-	
-	{attribute 'naming' := 'omit'}
-	rtReset				:	R_TRIG; //Reset trigger
-	bReset				:	BOOL;
-		
-	fbSocket	   		:	FB_ConnectionlessSocket;
-	
-	nI					:	UINT;
-    
+
+    bInitialized	:	BOOL	:= FALSE;
+    bReadyToLog		: 	BOOL	:= FALSE;
+    rtFirstLog		: 	R_TRIG;
+
+    fbGetHostName 	: FB_GetPLCHostname;
+    fbGetIP		 	: FB_GetPLCIPAddress;
+
+    fbListener		:	REFERENCE TO FB_Listener;
+    fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
+
+    // Default minimum severity for subscriptions
+    eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;
+
+    {attribute 'naming' := 'omit'}
+    rtReset				:	R_TRIG; //Reset trigger
+    bReset				:	BOOL;
+
+    fbSocket	   		:	FB_ConnectionlessSocket;
+
+    nI					:	UINT;
+
     SocketEnable : BOOL;
-    
+
     ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
-    
+
     tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
-    
+
     tofTrickleBreakerPre : TOF := (PT:=T#1s);
     tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
     bTripCon : BOOL;
 END_VAR
 
 VAR CONSTANT
-	nNumListeners		:	UINT	:= 6;
+    nNumListeners		:	UINT	:= 6;
     DisarmCountDefault : UINT :=5; // # number of cycles to permit below threshold condition
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT bInitialized THEN 
-	bInitialized := TRUE;
-	fbTcAdsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-	fbTcRouterListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRouterEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-	fbTcRTimeListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-	fbTcSystemListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcSystemEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-	fbWindowsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.Win32EventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-	fbLCLSListener.Configure(i_EventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+      <ST><![CDATA[IF NOT bInitialized THEN
+    bInitialized := TRUE;
+    fbTcAdsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    fbTcRouterListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRouterEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    fbTcRTimeListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    fbTcSystemListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcSystemEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    fbWindowsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.Win32EventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    fbLCLSListener.Configure(i_EventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
 
-	fbListeners[0] := ADR(fbTcAdsListener);
-	fbListeners[1] := ADR(fbTcRouterListener);
-	fbListeners[2] := ADR(fbTcRTimeListener);
-	fbListeners[3] := ADR(fbTcSystemListener);
-	fbListeners[4] := ADR(fbWindowsListener);
-	fbListeners[5] := ADR(fbLCLSListener);
-    
-END_IF 
+    fbListeners[0] := ADR(fbTcAdsListener);
+    fbListeners[1] := ADR(fbTcRouterListener);
+    fbListeners[2] := ADR(fbTcRTimeListener);
+    fbListeners[3] := ADR(fbTcSystemListener);
+    fbListeners[4] := ADR(fbWindowsListener);
+    fbListeners[5] := ADR(fbLCLSListener);
+
+END_IF
 
 fbGetHostName(
-	sHostname => GVL_Logger.sPlcHostname,
+    sHostname => GVL_Logger.sPlcHostname,
 );
 
 fbGetIP(
-	sIPAddress => fbSocket.sLocalHost
+    sIPAddress => fbSocket.sLocalHost
 );
-	
+
 (* Ensure the socket is ready for when JSON documents are emitted *)
 rtReset(CLK:=bReset);
 
 IF (rtReset.Q AND fbSocket.bEnable) THEN
-	fbSocket(bEnable:=FALSE);
+    fbSocket(bEnable:=FALSE);
 END_IF
 
 // Disable fbSocket if too many errors occur
@@ -118,18 +118,18 @@ tRetryConnection(IN:=ctuSocketError.Q);
 SocketEnable S= tRetryConnection.Q OR rtReset.Q;
 
 fbSocket(
-	nLocalPort:=0,
-	bEnable:=fbGetIP.bDone,
-	nMode:=CONNECT_MODE_ENABLEDBG,
+    nLocalPort:=0,
+    bEnable:=fbGetIP.bDone,
+    nMode:=CONNECT_MODE_ENABLEDBG,
 );
 
 bReadyToLog := (
-	fbGetHostName.bDone AND
-	fbGetIP.bDone AND
-	bInitialized AND
-	fbSocket.bEnable AND 
-	NOT fbSocket.bError AND 
-	fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED
+    fbGetHostName.bDone AND
+    fbGetIP.bDone AND
+    bInitialized AND
+    fbSocket.bEnable AND
+    NOT fbSocket.bError AND
+    fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED
 );
 rtFirstLog(CLK:=bReadyToLog);
 
@@ -142,9 +142,9 @@ CircuitBreaker();
 
 (* Poke all of the listeners *)
 FOR nI := 0 TO nNumListeners - 1 DO
-	fbListener REF= fbListeners[nI]^;
-	fbListener.Execute();
-	fbListener.PublishEvents();
+    fbListener REF= fbListeners[nI]^;
+    fbListener.Execute();
+    fbListener.PublishEvents();
 END_FOR]]></ST>
     </Implementation>
     <Action Name="CircuitBreaker" Id="{507d90b1-d1d6-4cc3-b632-e6c3c5e13942}">
@@ -154,7 +154,7 @@ END_FOR]]></ST>
 Logic explanation
 We want to trip if there is a constant stream of messages being emitted by this PLC. We also
 only want the noisy offenders to trip. To target them we set a global trickle tripped flag
-using this logic here. Then each individual FB_LogMessage evaluates itself to see if it's 
+using this logic here. Then each individual FB_LogMessage evaluates itself to see if it's
 sending a message too frequently (ie. it's being called to often).
 
 This logic is attempting to implement the following:
