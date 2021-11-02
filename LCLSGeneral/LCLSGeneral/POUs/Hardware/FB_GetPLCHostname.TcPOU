@@ -3,8 +3,8 @@
   <POU Name="FB_GetPLCHostname" Id="{bd570dd7-dba7-4a18-a0ee-a97d90c7deaf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_GetPLCHostname
 VAR_INPUT
-    fRetryDelay		: TIME := T#10s;
-    bExecute		: BOOL := TRUE;
+    bExecute		: BOOL;
+    tRetryDelay		: TIME := T#10s;
 END_VAR
 VAR_OUTPUT
     sHostname		: T_MaxString;
@@ -12,7 +12,7 @@ VAR_OUTPUT
     bError			: BOOL;
 END_VAR
 VAR
-    fbGetHostName	: FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
+    fbGetHostName	: FB_GetHostName;
 
     tRetry 			: TON;
     bReset			: BOOL;
@@ -22,13 +22,15 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF bExecute THEN
+    fbGetHostName.sNetID := '';
+
     IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
         bReset			:= TRUE;
         bInitialized	:= TRUE;
         fbGetHostName(bExecute:=FALSE);
     END_IF
 
-    tRetry(IN:=bReset, PT:=fRetryDelay);
+    tRetry(IN:=bReset, PT:=tRetryDelay);
 
     bReset := FALSE;
 

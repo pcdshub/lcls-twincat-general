@@ -3,8 +3,8 @@
   <POU Name="FB_GetPLCIPAddress" Id="{3dc87598-d3fd-46d3-b621-8ecdb5e5ec58}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_GetPLCIPAddress
 VAR_INPUT
-    bExecute		: BOOL := TRUE;
-    fRetryDelay		: TIME := T#10s;
+    bExecute		: BOOL;
+    tRetryDelay		: TIME := T#10s;
 END_VAR
 VAR_OUTPUT
     sIPAddress		: STRING(15);
@@ -31,7 +31,7 @@ END_VAR
         fbGetAdapterIP(bExecute:=FALSE);
     END_IF
 
-    tRetry(IN:=bReset, PT:=fRetryDelay);
+    tRetry(IN:=bReset, PT:=tRetryDelay);
     bReset := FALSE;
 
     IF NOT bDone THEN
