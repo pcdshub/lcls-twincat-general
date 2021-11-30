@@ -96,10 +96,12 @@ END_VAR]]></Declaration>
 END_IF
 
 fbGetHostName(
+    bEnable := TRUE,
     sHostname => GVL_Logger.sPlcHostname,
 );
 
 fbGetIP(
+    bEnable := TRUE,
     sIPAddress => fbSocket.sLocalHost
 );
 

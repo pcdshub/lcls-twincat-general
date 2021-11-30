@@ -3,7 +3,7 @@
   <POU Name="FB_GetPLCIPAddress" Id="{3dc87598-d3fd-46d3-b621-8ecdb5e5ec58}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_GetPLCIPAddress
 VAR_INPUT
-    bExecute		: BOOL;
+    bEnable			: BOOL;
     tRetryDelay		: TIME := T#10s;
 END_VAR
 VAR_OUTPUT
@@ -24,7 +24,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF bExecute THEN
+      <ST><![CDATA[IF bEnable THEN
     IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
         bReset			:= TRUE;
         bInitialized	:= TRUE;
