@@ -3,14 +3,14 @@
   <DUT Name="ST_PendingEvent" Id="{abbfd234-3623-42a3-aa27-c85d027ac193}">
     <Declaration><![CDATA[TYPE ST_PendingEvent :
 STRUCT
-	
-	{attribute 'pytmc' := '
-		pv:
-	'}
-	stEventInfo			:	ST_LoggingEventInfo;
-	bInUse				:	BOOL;
-	fbRequestEventText	:	FB_RequestEventText;
-	
+
+    {attribute 'pytmc' := '
+        pv:
+    '}
+    stEventInfo			:	ST_LoggingEventInfo;
+    bInUse				:	BOOL;
+    fbRequestEventText	:	FB_RequestEventText;
+
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -3,33 +3,33 @@
   <POU Name="FB_LREALBuffer" Id="{bbdb5874-82a3-4838-8bc3-8b225e25cc46}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LREALBuffer
 (*
-	An example use of FB_DataBuffer for the likely most-common use case.
-	2019-10-09 Zachary Lentz
+    An example use of FB_DataBuffer for the likely most-common use case.
+    2019-10-09 Zachary Lentz
 *)
 VAR_INPUT
-	// If TRUE, we'll accumulate a value on this cycle.
-	bExecute: BOOL;
-	// The value to accumulate.
-	fInput: LREAL;
+    // If TRUE, we'll accumulate a value on this cycle.
+    bExecute: BOOL;
+    // The value to accumulate.
+    fInput: LREAL;
 END_VAR
 VAR_OUTPUT
-	arrOutput: ARRAY [1..1000] OF LREAL;
-	bNewArray: BOOL;
+    arrOutput: ARRAY [1..1000] OF LREAL;
+    bNewArray: BOOL;
 END_VAR
 VAR
-	arrPartial: ARRAY [1..1000] OF LREAL;
-	fbDataBuffer: FB_DataBuffer;
+    arrPartial: ARRAY [1..1000] OF LREAL;
+    fbDataBuffer: FB_DataBuffer;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbDataBuffer(
-	bExecute := bExecute,
-	pInputAdr := ADR(fInput),
-	iInputSize := SIZEOF(fInput),
-	iElemCount := 1000,
-	pPartialAdr := ADR(arrPartial),
-	pOutputAdr := ADR(arrOutput),
-	bNewArray => bNewArray);]]></ST>
+    bExecute := bExecute,
+    pInputAdr := ADR(fInput),
+    iInputSize := SIZEOF(fInput),
+    iElemCount := 1000,
+    pPartialAdr := ADR(arrPartial),
+    pOutputAdr := ADR(arrOutput),
+    bNewArray => bNewArray);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

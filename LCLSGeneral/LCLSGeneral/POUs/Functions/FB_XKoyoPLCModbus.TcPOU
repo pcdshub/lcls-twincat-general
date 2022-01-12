@@ -4,28 +4,28 @@
     <Declaration><![CDATA[//Facilitates communication between Beckhoff and Koyo PLC over the network.
 FUNCTION_BLOCK FB_XKoyoPLCModbus
 VAR
-	fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils; //FB for reading the coils from the other PLC
-	anKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE; //Buffer for coil readbacks
-	{attribute 'naming' := 'omit'}
-	ftReset	: F_TRIG; //Reset edge sensor
-	{attribute 'naming' := 'omit'}
-	tonRetry : TON; //Retry timer
-	nIndex : INT; //Index for clearing the coil array
+    fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils; //FB for reading the coils from the other PLC
+    anKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE; //Buffer for coil readbacks
+    {attribute 'naming' := 'omit'}
+    ftReset	: F_TRIG; //Reset edge sensor
+    {attribute 'naming' := 'omit'}
+    tonRetry : TON; //Retry timer
+    nIndex : INT; //Index for clearing the coil array
 END_VAR
 
 VAR_INPUT
-	i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
-	i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
+    i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
+    i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
 END_VAR
 
 VAR_OUTPUT
-	q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
-	q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
-	q_xError         : BOOL := FALSE; //Transaction or other error
+    q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
+    q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
+    q_xError         : BOOL := FALSE; //Transaction or other error
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Look ma' no wires! *)
-(* A. Wallace, 2015-7-22 
+(* A. Wallace, 2015-7-22
 XKoyoPLCModbus
 
 Facilitates communication between Beckhoff and Koyo PLC over the network.
@@ -62,32 +62,28 @@ fbKoyo_PLCInputCoilsRx(sIPAddr:='i_sIPAddr', nTCPPort:=502, nQuantity:=32, nMBAd
 
 //run some error code for modbus
 IF fbKoyo_PLCInputCoilsRx.bError THEN
-	//if there's a modbus error, set all incoming bits to zero
-	{analysis -41} //There are one-liners for resetting an array to zero but they don't comply with 61131
-	FOR nIndex := 0 TO USINT_TO_INT(SIZEOF(anKoyo_PLC_CnBits))-1 DO //starts at 0
-		anKoyo_PLC_CnBits[nIndex]:=0;
-	END_FOR
-	{analysis +41}
-	q_xError := TRUE;
-	
-ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
-	fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
-	q_xNoPLCResponse:= FALSE;
-	q_xError := FALSE;
+    //if there's a modbus error, set all incoming bits to zero
+    {analysis -41} //There are one-liners for resetting an array to zero but they don't comply with 61131
+    FOR nIndex := 0 TO USINT_TO_INT(SIZEOF(anKoyo_PLC_CnBits))-1 DO //starts at 0
+        anKoyo_PLC_CnBits[nIndex]:=0;
+    END_FOR
+    {analysis +41}
+    q_xError := TRUE;
 
-//more error code cause we didn't manage to read anything	
+ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
+    fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
+    q_xNoPLCResponse:= FALSE;
+    q_xError := FALSE;
+
+//more error code cause we didn't manage to read anything
 ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
-	q_xError := TRUE;
-	q_xNoPLCResponse:= TRUE;
-			
+    q_xError := TRUE;
+    q_xNoPLCResponse:= TRUE;
+
 END_IF
 
 q_anPLCResponse := anKoyo_PLC_CnBits;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_XKoyoPLCModbus">
-      <LineId Id="919" Count="58" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

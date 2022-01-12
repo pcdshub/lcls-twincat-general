@@ -11,17 +11,17 @@ Use this thing to have a simple indexer with rollover.
 *)
 FUNCTION_BLOCK FB_Index
 VAR_INPUT
-	{attribute 'naming' := 'off'}
-	LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
-	ValInc : INT := 1; //Incrementer increments by this value
-	UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
-	{attribute 'naming' := 'off'}
+    {attribute 'naming' := 'off'}
+    LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
+    ValInc : INT := 1; //Incrementer increments by this value
+    UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
+    {attribute 'naming' := 'off'}
 END_VAR
 VAR_OUTPUT
-	
+
 END_VAR
 VAR
-	nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
+    nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[{analysis -2} //Only the methods and actions are needed]]></ST>
@@ -61,24 +61,5 @@ END_VAR
 IncVal := nVal;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Index">
-      <LineId Id="7" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Index.Dec">
-      <LineId Id="2" Count="0" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Index.DecVal">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Index.Inc">
-      <LineId Id="2" Count="1" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Index.IncVal">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

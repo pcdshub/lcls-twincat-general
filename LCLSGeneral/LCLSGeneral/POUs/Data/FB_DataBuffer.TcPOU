@@ -3,58 +3,58 @@
   <POU Name="FB_DataBuffer" Id="{663bb4ee-ee74-4dfb-9a41-308201d6b012}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DataBuffer
 (*
-	Function Block to accumulate data into an array.
-	2019-10-09 Zachary Lentz
-	
-	Requires the user to supply pointers to the value and to 2 arrays:
-	1. A partial buffer that we will slowly fill one value at a time
-	2. An output buffer that will only update when the partial buffer is full
-	
-	Take great care of the following, or else your program will likely crash,
-	or at least have corrupt data:
-	1. The input type and array types must match
-	2. The provided element count must be accurate and match both arrays
-	3. The provided element size is correct
-	
-	As this function block as no way of checking that you did this correctly.
+    Function Block to accumulate data into an array.
+    2019-10-09 Zachary Lentz
+
+    Requires the user to supply pointers to the value and to 2 arrays:
+    1. A partial buffer that we will slowly fill one value at a time
+    2. An output buffer that will only update when the partial buffer is full
+
+    Take great care of the following, or else your program will likely crash,
+    or at least have corrupt data:
+    1. The input type and array types must match
+    2. The provided element count must be accurate and match both arrays
+    3. The provided element size is correct
+
+    As this function block as no way of checking that you did this correctly.
 *)
 VAR_INPUT
-	// Whether or not to accumulate on this cycle
-	bExecute: BOOL;
-	// Address of the value to accumulate
-	pInputAdr: PVOID;
-	// Size of the accumulated value
-	iInputSize: UDINT;
-	// Number of values in the output array
-	iElemCount: UDINT;
-	// Address of the rolling buffer to be filled every cycle
-	pPartialAdr: PVOID;
-	// Address of the output buffer to be filled when the rolling buffer is full
-	pOutputAdr: PVOID;
+    // Whether or not to accumulate on this cycle
+    bExecute: BOOL;
+    // Address of the value to accumulate
+    pInputAdr: PVOID;
+    // Size of the accumulated value
+    iInputSize: UDINT;
+    // Number of values in the output array
+    iElemCount: UDINT;
+    // Address of the rolling buffer to be filled every cycle
+    pPartialAdr: PVOID;
+    // Address of the output buffer to be filled when the rolling buffer is full
+    pOutputAdr: PVOID;
 END_VAR
 VAR_OUTPUT
-	// Set to TRUE on the cycle that we copy the output array
-	bNewArray: BOOL;
+    // Set to TRUE on the cycle that we copy the output array
+    bNewArray: BOOL;
 END_VAR
 VAR
-	iArrayIndex: UDINT := 0;
+    iArrayIndex: UDINT := 0;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[bNewArray := FALSE;
 IF bExecute THEN
-	MEMCPY(
-		destAddr := pPartialAdr + iArrayIndex*iInputSize,
-		srcAddr := pInputAdr,
-		n := iInputSize);
-	iArrayIndex := iArrayIndex + 1;
-	IF iArrayIndex >= iElemCount THEN
-		MEMCPY(
-			destAddr := pOutputAdr,
-			srcAddr := pPartialAdr,
-			n := iElemCount*iInputSize);
-		iArrayIndex := 0;
-		bNewArray := TRUE;
-	END_IF
+    MEMCPY(
+        destAddr := pPartialAdr + iArrayIndex*iInputSize,
+        srcAddr := pInputAdr,
+        n := iInputSize);
+    iArrayIndex := iArrayIndex + 1;
+    IF iArrayIndex >= iElemCount THEN
+        MEMCPY(
+            destAddr := pOutputAdr,
+            srcAddr := pPartialAdr,
+            n := iElemCount*iInputSize);
+        iArrayIndex := 0;
+        bNewArray := TRUE;
+    END_IF
 END_IF]]></ST>
     </Implementation>
   </POU>

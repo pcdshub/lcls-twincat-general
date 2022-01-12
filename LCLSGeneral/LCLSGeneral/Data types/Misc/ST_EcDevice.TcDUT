@@ -4,12 +4,12 @@
     <Declaration><![CDATA[//EtherCAT Device struct for EtherCAT diagnostics
 TYPE ST_EcDevice :
 STRUCT
-	nDeviceState: BYTE; //EtherCAT state machine state number, 8 is OP is good
-	sDeviceState :STRING; //EtherCAT state machine state, OP is good
-	nLinkState: BYTE; //EtherCAT link state, 8 is good
-	nAddrr: WORD; //EtherCAT slave address
-	sType: STRING; //EtherCAT slave type
-	sName:STRING; //EtherCAT slave name
+    nDeviceState: BYTE; //EtherCAT state machine state number, 8 is OP is good
+    sDeviceState :STRING; //EtherCAT state machine state, OP is good
+    nLinkState: BYTE; //EtherCAT link state, 8 is good
+    nAddrr: WORD; //EtherCAT slave address
+    sType: STRING; //EtherCAT slave type
+    sName:STRING; //EtherCAT slave name
 END_STRUCT
 END_TYPE
 ]]></Declaration>

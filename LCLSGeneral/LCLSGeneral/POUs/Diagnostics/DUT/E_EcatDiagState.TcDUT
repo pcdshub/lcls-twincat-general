@@ -3,7 +3,7 @@
   <DUT Name="E_EcatDiagState" Id="{ea5bfb7d-3579-4b8e-b049-2c6788da170b}">
     <Declaration><![CDATA[TYPE E_EcatDiagState :
 (
-	Idle := 0,
+    Idle := 0,
     GetSlaveAddresses := 1,
     GetSlaveStates := 2,
     GetTopoDataLen := 3,
