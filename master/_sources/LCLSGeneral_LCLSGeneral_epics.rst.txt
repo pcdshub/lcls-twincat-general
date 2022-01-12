@@ -3,7 +3,7 @@ Data Types
 ----------
 
 
-     
+       
 FB_Listener
 ^^^^^^^^^^^
 
@@ -841,7 +841,7 @@ FB_LogMessage
       - | io: input
 
 
-       
+      
 ST_LoggingEventInfo
 ^^^^^^^^^^^^^^^^^^^
 
@@ -1069,7 +1069,7 @@ ST_PendingEvent
       - | io: input
 
 
-                                                                        
+                                                                                
 Database Records
 ----------------
 

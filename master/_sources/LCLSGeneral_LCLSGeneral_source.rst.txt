@@ -11,7 +11,7 @@ E_EcatDiagState
 
     TYPE E_EcatDiagState :
     (
-    	Idle := 0,
+        Idle := 0,
         GetSlaveAddresses := 1,
         GetSlaveStates := 2,
         GetTopoDataLen := 3,
@@ -36,12 +36,12 @@ E_EcCommState
 ::
 
     TYPE E_EcCommState : (
-    	eEcState_UNDEFINED 	:= 0,
-    	eEcState_INIT 		:= 1,
-    	eEcState_PREOP 		:= 2,
-    	eEcState_BOOT 		:= 3,
-    	eEcState_SAFEOP 	:= 4,
-    	eEcState_OP 		:= 8
+        eEcState_UNDEFINED 	:= 0,
+        eEcState_INIT 		:= 1,
+        eEcState_PREOP 		:= 2,
+        eEcState_BOOT 		:= 3,
+        eEcState_SAFEOP 	:= 4,
+        eEcState_OP 		:= 8
     ) UDINT;
     END_TYPE
 
@@ -57,10 +57,10 @@ E_LogEventType_WC
     {attribute 'strict'}
     TYPE E_LogEventType_WC :
     (
-    	AlarmCleared 	:= 0,
-    	AlarmConfirmed 	:= 1,
-    	AlarmRaised 	:= 2,
-    	MessageSent 	:= 3
+        AlarmCleared 	:= 0,
+        AlarmConfirmed 	:= 1,
+        AlarmRaised 	:= 2,
+        MessageSent 	:= 3
     );
     END_TYPE
 
@@ -78,13 +78,13 @@ E_Subsystem
     //LCLS Defined subsystems, make sure these correspond with casSubsystems in FB_LogMessage
     TYPE E_Subsystem :
     (
-    	NILVALUE := 0, //Undefined system
-    	VACUUM := 1, //Vacuum control system
-    	MPS := 2, //Machine protection system
-    	MOTION := 3, //Motion control systems
-    	FIELDBUS := 4, //EtherCAT networks
-    	SDS := 5, //Sample delivery system
-    	OPTICS := 6 //Optics control system
+        NILVALUE := 0, //Undefined system
+        VACUUM := 1, //Vacuum control system
+        MPS := 2, //Machine protection system
+        MOTION := 3, //Motion control systems
+        FIELDBUS := 4, //EtherCAT networks
+        SDS := 5, //Sample delivery system
+        OPTICS := 6 //Optics control system
     )WORD;
     END_TYPE
 
@@ -101,12 +101,12 @@ ST_EcDevice
     //EtherCAT Device struct for EtherCAT diagnostics
     TYPE ST_EcDevice :
     STRUCT
-    	nDeviceState: BYTE; //EtherCAT state machine state number, 8 is OP is good
-    	sDeviceState :STRING; //EtherCAT state machine state, OP is good
-    	nLinkState: BYTE; //EtherCAT link state, 8 is good
-    	nAddrr: WORD; //EtherCAT slave address
-    	sType: STRING; //EtherCAT slave type
-    	sName:STRING; //EtherCAT slave name
+        nDeviceState: BYTE; //EtherCAT state machine state number, 8 is OP is good
+        sDeviceState :STRING; //EtherCAT state machine state, OP is good
+        nLinkState: BYTE; //EtherCAT link state, 8 is good
+        nAddrr: WORD; //EtherCAT slave address
+        sType: STRING; //EtherCAT slave type
+        sName:STRING; //EtherCAT slave name
     END_STRUCT
     END_TYPE
 
@@ -120,17 +120,17 @@ ST_EcMasterDevState
 
     TYPE ST_EcMasterDevState :
     STRUCT
-    	eEcState	 		: E_EcCommState;
-    	nReserved			: ARRAY [0..2] OF UINT;
+        eEcState	 		: E_EcCommState;
+        nReserved			: ARRAY [0..2] OF UINT;
 
-    	bLinkError			: BOOL;
-    	bResetRequired		: BOOL;
-    	bMissFrmRedMode		: BOOL;
-    	bWatchdogTriggerd	: BOOL;
-    	bDriverNotFound		: BOOL;
-    	bResetActive		: BOOL;
-    	bAtLeastOneNotInOp	: BOOL;
-    	bDcNotInSync		: BOOL;
+        bLinkError			: BOOL;
+        bResetRequired		: BOOL;
+        bMissFrmRedMode		: BOOL;
+        bWatchdogTriggerd	: BOOL;
+        bDriverNotFound		: BOOL;
+        bResetActive		: BOOL;
+        bAtLeastOneNotInOp	: BOOL;
+        bDcNotInSync		: BOOL;
     END_STRUCT
     END_TYPE
 
@@ -147,15 +147,15 @@ ST_FbDiagnostics
     //Stuff to log messages within function blocks
     TYPE ST_FbDiagnostics :
     STRUCT
-    	asResults	:	ARRAY [1..20] OF T_MaxString; //Diagnostic messages, use to record state changes or other important events.
-    	{attribute 'naming' := 'omit'}
-    	//Incrementer, included here to facilitate using asResults
-    	resultIdx	:	FB_Index := ( 
-    		LowerLimit := 1,
-    		UpperLimit := 20
-    	);
-    	{attribute 'naming' := 'omit'}
-    	fString	:	FB_FormatString; //Use to create good log messages, similar to C++ fstring
+        asResults	:	ARRAY [1..20] OF T_MaxString; //Diagnostic messages, use to record state changes or other important events.
+        {attribute 'naming' := 'omit'}
+        //Incrementer, included here to facilitate using asResults
+        resultIdx	:	FB_Index := (
+            LowerLimit := 1,
+            UpperLimit := 20
+        );
+        {attribute 'naming' := 'omit'}
+        fString	:	FB_FormatString; //Use to create good log messages, similar to C++ fstring
     END_STRUCT
     END_TYPE
 
@@ -171,102 +171,102 @@ ST_LoggingEventInfo_WC
 
     TYPE ST_LoggingEventInfo_WC :
     STRUCT
-    	(* 
-    		Message or Alarm{Cleared,Confirmed,Raised} event information
-    		
-    		** Working copy - to be used for the pinned ST_LoggingEventInfo **
-    		* The process for updating this type is as follows:
-    			1. Copy this structure and rename to ST_LoggingEventInfo
-    			2. Remove the working copy notes section
-    			3. Pin the global data type  
-    		** End of working copy information **
-     
-    		Note that elements here do not follow the usual Hungarian notation / 
-    		variable-type-prefixing naming convention due to the member names being
-    		used directly in the generation of the JSON document.
-    	*)
-    	
-    	{attribute 'pytmc' := '
-    		pv: Schema
-    		io: i
-    		field: DESC Schema string
-    	'}
-    	schema		:	STRING := 'twincat-event-0';
-    	  
-    	{attribute 'pytmc' := '
-    		pv: Timestamp 
-    		io: i
-    		field: DESC Unix timestamp
-    	'}
-      	ts			:	LREAL;
-    	
-      	{attribute 'pytmc' := '
-    		pv: Hostname 
-    		io: i
-    		field: DESC PLC Hostname
-    	'}
-      	plc			:	STRING;
-      
-    	{attribute 'pytmc' := '
-    		pv: Severity
-    		io: i
-    		field: DESC TcEventSeverity	
-    		field: ZRST Verbose
-    		field: ONST Info
-    		field: TWST Warning
-    		field: THST Error
-    	'}
-    	severity	:	TcEventSeverity;
-    	
-    	{attribute 'pytmc' := '
-    		pv: MessageID
-    		io: i
-    		field: DESC TwinCAT Message ID	
-    	'}
-    	id			:	UDINT;
+        (*
+            Message or Alarm{Cleared,Confirmed,Raised} event information
 
-    	{attribute 'pytmc' := '
-    		pv: EventClass
-    		io: i
-    		field: DESC TwinCAT Event class	
-    	'}
-    	event_class		:	STRING;
-    		
-    	{attribute 'pytmc' := '
-    		pv: Message
-    		io: i
-    	'}
-    	msg				: STRING(255);	 
-    	// This is actually: T_MaxString
-    	// which has been expanded due to requirements for pinning global data types.
-    	
-    	{attribute 'pytmc' := '
-    		pv: Source
-    		io: i
-    	'}
-    	source			: STRING(255);	 
-    	// This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
-    	// which has been expanded due to requirements for pinning global data types.
-    	
-    	{attribute 'pytmc' := '
-    		pv: EventType
-    		io: i
-    		field: DESC The event type
-    	'}
-    	event_type	:	 E_LogEventType;
-    	
-    	{attribute 'pytmc' := '
-    		pv: MessageJSON
-    		io: i
-    		field: DESC Metadata with the message	
-    	'}
-    	json 		:	STRING(10000);
-    	(* 
-    	NOTE: this JSON gets inserted as an escaped string in the "json" key.
-    	TODO: it may be possible to use `fbJson.AddRawObject`, but this would
-    		  require us to switch back to creating the JSON in a more manual
-    		  way with AddKey/AddInt (and such).
-    	*)		 
+            ** Working copy - to be used for the pinned ST_LoggingEventInfo **
+            * The process for updating this type is as follows:
+                1. Copy this structure and rename to ST_LoggingEventInfo
+                2. Remove the working copy notes section
+                3. Pin the global data type
+            ** End of working copy information **
+
+            Note that elements here do not follow the usual Hungarian notation /
+            variable-type-prefixing naming convention due to the member names being
+            used directly in the generation of the JSON document.
+        *)
+
+        {attribute 'pytmc' := '
+            pv: Schema
+            io: i
+            field: DESC Schema string
+        '}
+        schema		:	STRING := 'twincat-event-0';
+
+        {attribute 'pytmc' := '
+            pv: Timestamp
+            io: i
+            field: DESC Unix timestamp
+        '}
+          ts			:	LREAL;
+
+          {attribute 'pytmc' := '
+            pv: Hostname
+            io: i
+            field: DESC PLC Hostname
+        '}
+          plc			:	STRING;
+
+        {attribute 'pytmc' := '
+            pv: Severity
+            io: i
+            field: DESC TcEventSeverity
+            field: ZRST Verbose
+            field: ONST Info
+            field: TWST Warning
+            field: THST Error
+        '}
+        severity	:	TcEventSeverity;
+
+        {attribute 'pytmc' := '
+            pv: MessageID
+            io: i
+            field: DESC TwinCAT Message ID
+        '}
+        id			:	UDINT;
+
+        {attribute 'pytmc' := '
+            pv: EventClass
+            io: i
+            field: DESC TwinCAT Event class
+        '}
+        event_class		:	STRING;
+
+        {attribute 'pytmc' := '
+            pv: Message
+            io: i
+        '}
+        msg				: STRING(255);
+        // This is actually: T_MaxString
+        // which has been expanded due to requirements for pinning global data types.
+
+        {attribute 'pytmc' := '
+            pv: Source
+            io: i
+        '}
+        source			: STRING(255);
+        // This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
+        // which has been expanded due to requirements for pinning global data types.
+
+        {attribute 'pytmc' := '
+            pv: EventType
+            io: i
+            field: DESC The event type
+        '}
+        event_type	:	 E_LogEventType;
+
+        {attribute 'pytmc' := '
+            pv: MessageJSON
+            io: i
+            field: DESC Metadata with the message
+        '}
+        json 		:	STRING(10000);
+        (*
+        NOTE: this JSON gets inserted as an escaped string in the "json" key.
+        TODO: it may be possible to use `fbJson.AddRawObject`, but this would
+              require us to switch back to creating the JSON in a more manual
+              way with AddKey/AddInt (and such).
+        *)
 
     END_STRUCT
     END_TYPE
@@ -281,14 +281,14 @@ ST_PendingEvent
 
     TYPE ST_PendingEvent :
     STRUCT
-    	
-    	{attribute 'pytmc' := '
-    		pv:
-    	'}
-    	stEventInfo			:	ST_LoggingEventInfo;
-    	bInUse				:	BOOL;
-    	fbRequestEventText	:	FB_RequestEventText;
-    	
+
+        {attribute 'pytmc' := '
+            pv:
+        '}
+        stEventInfo			:	ST_LoggingEventInfo;
+        bInUse				:	BOOL;
+        fbRequestEventText	:	FB_RequestEventText;
+
     END_STRUCT
     END_TYPE
 
@@ -302,10 +302,10 @@ ST_PortAddr
 
     TYPE ST_PortAddr :
     STRUCT
-    	portA : UINT;
-    	portB : UINT;
-    	portC : UINT;
-    	portD : UINT;
+        portA : UINT;
+        portB : UINT;
+        portC : UINT;
+        portD : UINT;
     END_STRUCT
     END_TYPE
 
@@ -319,22 +319,22 @@ ST_SlaveState
 
     TYPE ST_SlaveState :
     STRUCT
-    	(* slave state *)
-    	eEcState 		: E_EcCommState;
-    	nReserved		: UINT;
-    	bError			: BOOL;
-    	bInvalidVPRS	: BOOL;
-    	nReserved2		: UINT;
+        (* slave state *)
+        eEcState 		: E_EcCommState;
+        nReserved		: UINT;
+        bError			: BOOL;
+        bInvalidVPRS	: BOOL;
+        nReserved2		: UINT;
 
-    	(* link state *)
-    	bNoCommToSlave	: BOOL;
-    	bLinkError		: BOOL;
-    	bMissingLink	: BOOL;
-    	bUnexpectedLink	: BOOL;
-    	bPortA			: BOOL;
-    	bPortB			: BOOL;
-    	bPortC			: BOOL;
-    	bPortD			: BOOL;
+        (* link state *)
+        bNoCommToSlave	: BOOL;
+        bLinkError		: BOOL;
+        bMissingLink	: BOOL;
+        bUnexpectedLink	: BOOL;
+        bPortA			: BOOL;
+        bPortB			: BOOL;
+        bPortC			: BOOL;
+        bPortD			: BOOL;
     END_STRUCT
     END_TYPE
 
@@ -350,14 +350,14 @@ ST_SlaveStateInfo
 
     TYPE ST_SlaveStateInfo :
     STRUCT
-    	nIndex 			: DINT;
-    	sName 			: STRING; 		(* name of slave given in System Manager *)
-    	sType 			: STRING;		(* type of slave, e.g. EK1100*)
-    	nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
-    	bDiagData		: BOOL;			(* DiagData in Slave State *)
-    	stPortCRCErrors	: ST_EcCrcErrorEx;(* Slave CRC-Errors, separate for each Port *)
-    	nSumCRCErrors	: UDINT;		(* Slave CRC-Errors, sum of all Ports *)
-    	stState 		: ST_SlaveState;(* EtherCAT State and Link state*)
+        nIndex 			: DINT;
+        sName 			: STRING; 		(* name of slave given in System Manager *)
+        sType 			: STRING;		(* type of slave, e.g. EK1100*)
+        nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
+        bDiagData		: BOOL;			(* DiagData in Slave State *)
+        stPortCRCErrors	: ST_EcCrcErrorEx;(* Slave CRC-Errors, separate for each Port *)
+        nSumCRCErrors	: UDINT;		(* Slave CRC-Errors, sum of all Ports *)
+        stState 		: ST_SlaveState;(* EtherCAT State and Link state*)
     END_STRUCT
     END_TYPE
 
@@ -373,13 +373,13 @@ ST_SlaveStateInfoScanned
 
     TYPE ST_SlaveStateInfoScanned :
     STRUCT
-    	nIndex 			: DINT;
-    	sName 			: STRING; 		(* name of slave given in System Manager *)
-    	sType 			: STRING;		(* type of slave, e.g. EK1100*)
-    	nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
-    	bDifferentName	: BOOL;			(* Name of Scanned configuration differs from Configured configuration *)
-    	bDifferentType	: BOOL;			(* Type Of Scanned configuration differs from Configured configuration *)
-    	bDifferentAddr	: BOOL;			(* EcAddress of Scanned configuration differs from Configured configuration *)
+        nIndex 			: DINT;
+        sName 			: STRING; 		(* name of slave given in System Manager *)
+        sType 			: STRING;		(* type of slave, e.g. EK1100*)
+        nECAddr 		: UINT;			(* EtherCAT Slave Addr *)
+        bDifferentName	: BOOL;			(* Name of Scanned configuration differs from Configured configuration *)
+        bDifferentType	: BOOL;			(* Type Of Scanned configuration differs from Configured configuration *)
+        bDifferentAddr	: BOOL;			(* EcAddress of Scanned configuration differs from Configured configuration *)
     END_STRUCT
     END_TYPE
 
@@ -394,14 +394,14 @@ ST_System
     //Defacto system structure, must be included in all projects
     TYPE ST_System :
     STRUCT
-    	
-    	xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
-    	xAtVacuum 	    : BOOL;(* System At Vacuum *)
-    	xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
-    	xOverrideMode	: BOOL; //This bit is set when using the override features of the system
-    	xIOState        : BOOL; (* ECat Bus Health *)
-    	{attribute 'naming' := 'omit'}
-    	I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
+
+        xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+        xAtVacuum 	    : BOOL;(* System At Vacuum *)
+        xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
+        xOverrideMode	: BOOL; //This bit is set when using the override features of the system
+        xIOState        : BOOL; (* ECat Bus Health *)
+        {attribute 'naming' := 'omit'}
+        I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
 
     END_STRUCT
     END_TYPE
@@ -418,12 +418,12 @@ ST_TopologyData
 
     TYPE ST_TopologyData :
     STRUCT
-    	iOwnPhysicalAddr 	: UINT;
-    	iOwnAutoIncAddr		: UINT;
-    	stPhysicalAddr		: ST_PortAddr;
-    	stAutoIncAddr		: ST_PortAddr;
-    	iPortDelay			: ARRAY [0..2] OF UDINT; (* EC_AD, EC_DB, EC_BC *)
-    	iReserved			: ARRAY [0..7] OF UDINT;
+        iOwnPhysicalAddr 	: UINT;
+        iOwnAutoIncAddr		: UINT;
+        stPhysicalAddr		: ST_PortAddr;
+        stAutoIncAddr		: ST_PortAddr;
+        iPortDelay			: ARRAY [0..2] OF UDINT; (* EC_AD, EC_DB, EC_BC *)
+        iReserved			: ARRAY [0..7] OF UDINT;
     END_STRUCT
     END_TYPE
 
@@ -443,9 +443,9 @@ DefaultGlobals
 
     //These are variables every PLC project should have
     VAR_GLOBAL
-    	
-    	stSys	:	ST_System; //Included for you
-    	fTimeStamp: LREAL;
+
+        stSys	:	ST_System; //Included for you
+        fTimeStamp: LREAL;
     END_VAR
 
 
@@ -459,7 +459,7 @@ Global_Variables_EtherCAT
 ::
 
     VAR_GLOBAL CONSTANT
-    	iSLAVEADDR_ARR_SIZE	: UINT := 256;
+        iSLAVEADDR_ARR_SIZE	: UINT := 256;
         ESC_MAX_PORTS : UINT := 3; // Maximum number of ports (4) on ESC
     END_VAR
 
@@ -474,33 +474,33 @@ GVL_Logger
     {attribute 'qualified only'}
     //Global variables for logging to syslog
     VAR_GLOBAL CONSTANT
-    	(*
-    	Using the IP address directly avoids DNS configuration issues.
-    	While we may want to address this in the future, for now the static IP
-    	will suffice:
+        (*
+        Using the IP address directly avoids DNS configuration issues.
+        While we may want to address this in the future, for now the static IP
+        will suffice:
 
-    	$ nslookup ctl-logsrv01
-    	Name:   ctl-logsrv01.pcdsn
-    	Address: 172.21.32.36
-    	*)
-    	{attribute 'pytmc' := '
-    		pv: @(PREFIX)LCLSGeneral:LogHost
-    		io: io
-    		field: DESC The log host IP address
-    	'}
-    	cLogHost		:	STRING(15)	:= '172.21.32.36';
-    	
-    	{attribute 'pytmc' := '
-    		pv: @(PREFIX)LCLSGeneral:LogPort
-    		io: io
-    		field: DESC The log host UDP port
-    	'}
-    	iLogPort		:	UINT		:= 54321;
-        
+        $ nslookup ctl-logsrv01
+        Name:   ctl-logsrv01.pcdsn
+        Address: 172.21.32.36
+        *)
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)LCLSGeneral:LogHost
+            io: io
+            field: DESC The log host IP address
+        '}
+        cLogHost		:	STRING(15)	:= '172.21.32.36';
+
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)LCLSGeneral:LogPort
+            io: io
+            field: DESC The log host UDP port
+        '}
+        iLogPort		:	UINT		:= 54321;
+
         sIpTidbit : STRING(6) := '172.21';
-       
-        // Log message circuit breaker configuration 
-        
+
+        // Log message circuit breaker configuration
+
         // Initialization constants for circuit breakers
         nLocalTripThreshold : TIME := T#1ms; // Minimum time between log messages
         nMinTimeViolationAcceptable : INT := 5; // Trip if `nLocalTripThreshold` exceeded `nMinTimeViolationAcceptable` times
@@ -511,32 +511,32 @@ GVL_Logger
     END_VAR
 
     VAR_GLOBAL
-    	sPlcHostname	:	STRING		:= 'unknown';
-    	
-    	(* Ref: https://infosys.beckhoff.com/english.php?content=../content/1033/tcpipserver/html/TcPlcLibTcpIp_FB_SocketUdpSendTo.htm
-    		TODO: Activate the "Replace constants" option in the
-    		TwinCAT PLC Control->"Project->Options...->Build" dialog window. 
-    	*)
-    	TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
-        
-    	{analysis -33}
-    	fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
-    	{analysis +33}
-        
+        sPlcHostname	:	STRING		:= 'unknown';
+
+        (* Ref: https://infosys.beckhoff.com/english.php?content=../content/1033/tcpipserver/html/TcPlcLibTcpIp_FB_SocketUdpSendTo.htm
+            TODO: Activate the "Replace constants" option in the
+            TwinCAT PLC Control->"Project->Options...->Build" dialog window.
+        *)
+        TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
+
+        {analysis -33}
+        fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere
+        {analysis +33}
+
         {attribute 'pytmc' := '
-    		pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
-    		io: i
-    		field: DESC Tripped by overall log count
-    	'}
+            pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
+            io: i
+            field: DESC Tripped by overall log count
+        '}
         bTrickleTripped :   BOOL; // Global trickle trip flag
-        
+
         {attribute 'pytmc' := '
-    		pv: @(PREFIX)LCLSGeneral:LogMessageCount
-    		io: i
-    		field: DESC Total log messages on the last cycle
-    	'}
+            pv: @(PREFIX)LCLSGeneral:LogMessageCount
+            io: i
+            field: DESC Total log messages on the last cycle
+        '}
         nGlobAccEvents : UDINT; // Global log message count
-        nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the 
+        nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the
     END_VAR
 
 
@@ -555,13 +555,13 @@ F_ConvertTicksToUnixTimestamp
 
     FUNCTION F_ConvertTicksToUnixTimestamp : LREAL
     VAR_INPUT
-    	nTimestamp : ULINT;
+        nTimestamp : ULINT;
     END_VAR
     VAR CONSTANT
-    	// Timer ticks in Windows are 100ns (1e-7 sec)
-    	nTicksToSeconds : LREAL := 10_000_000;
-    	// Epoch offset 1601 to 1970
-    	nEpochOffset	: LREAL := 11_644_473_600;
+        // Timer ticks in Windows are 100ns (1e-7 sec)
+        nTicksToSeconds : LREAL := 10_000_000;
+        // Epoch offset 1601 to 1970
+        nEpochOffset	: LREAL := 11_644_473_600;
     END_VAR
     F_ConvertTicksToUnixTimestamp := ULINT_TO_LREAL(nTimestamp) / nTicksToSeconds - nEpochOffset;
 
@@ -577,25 +577,25 @@ F_SendUDPMessage
 
     FUNCTION F_SendUDPMessage : HRESULT
     VAR_INPUT
-    	sMessage			:	POINTER TO STRING;
-    	fbSocket			:	REFERENCE TO FB_ConnectionlessSocket;
-    	sHost				:	STRING;
-    	iPort				:	UINT;
+        sMessage			:	POINTER TO STRING;
+        fbSocket			:	REFERENCE TO FB_ConnectionlessSocket;
+        sHost				:	STRING;
+        iPort				:	UINT;
     END_VAR
 
     VAR
-    	fbSend				:	FB_SocketUdpSendTo;
+        fbSend				:	FB_SocketUdpSendTo;
     END_VAR
     IF sMessage <> 0 AND __ISVALIDREF(fbSocket) THEN
-    	fbSend.hSocket		:= fbSocket.hSocket;
-    	fbSend.sRemoteHost	:= sHost;
-    	fbSend.nRemotePort	:= iPort;
-    	fbSend.pSrc 		:= sMessage;
-    	fbSend.cbLen		:= LEN2(sMessage);
-    	fbSend.bExecute	 	:= TRUE;
-    	fbSend();
-    	
-    	fbSend.bExecute 	R= fbSend.bBusy;
+        fbSend.hSocket		:= fbSocket.hSocket;
+        fbSend.sRemoteHost	:= sHost;
+        fbSend.nRemotePort	:= iPort;
+        fbSend.pSrc 		:= sMessage;
+        fbSend.cbLen		:= LEN2(sMessage);
+        fbSend.bExecute	 	:= TRUE;
+        fbSend();
+
+        fbSend.bExecute 	R= fbSend.bBusy;
     END_IF
 
     END_FUNCTION
@@ -610,31 +610,31 @@ FB_AnalogInput
 
     FUNCTION_BLOCK FB_AnalogInput
     (*
-    	Converts the integer from an analog input terminal to a real unit value (e.g., volts)
-    	2019-10-09 Zachary Lentz
+        Converts the integer from an analog input terminal to a real unit value (e.g., volts)
+        2019-10-09 Zachary Lentz
     *)
     VAR_INPUT
-    	// Connect this input to the terminal
-    	iRaw AT %I*: INT;
-    	// The number of bits correlated with the terminal's max value. This is not necessarily the resolution parameter.
-    	iTermBits: UINT;
-    	// The fReal value correlated with the terminal's max value
-    	fTermMax: LREAL;
-    	// The fReal value correlated with the terminal's min value
-    	fTermMin: LREAL;
+        // Connect this input to the terminal
+        iRaw AT %I*: INT;
+        // The number of bits correlated with the terminal's max value. This is not necessarily the resolution parameter.
+        iTermBits: UINT;
+        // The fReal value correlated with the terminal's max value
+        fTermMax: LREAL;
+        // The fReal value correlated with the terminal's min value
+        fTermMin: LREAL;
     END_VAR
     VAR_OUTPUT
-    	// The real value read from the output
-    	fReal: LREAL;
+        // The real value read from the output
+        fReal: LREAL;
     END_VAR
     VAR
-    	fScale: LREAL;
+        fScale: LREAL;
     END_VAR
     IF fScale = 0 AND fTermMax > fTermMin THEN
-    	fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+        fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
     END_IF
     IF fScale <> 0 THEN
-    	fReal := iRaw / fScale + fTermMin;
+        fReal := iRaw / fScale + fTermMin;
     END_IF
 
     END_FUNCTION_BLOCK
@@ -649,33 +649,33 @@ FB_AnalogOutput
 
     FUNCTION_BLOCK FB_AnalogOutput
     (*
-    	Converts a real unit value (e.g., volts) to the integer needed for an analog output terminal.
-    	2019-10-09 Zachary Lentz
+        Converts a real unit value (e.g., volts) to the integer needed for an analog output terminal.
+        2019-10-09 Zachary Lentz
     *)
     VAR_INPUT
-    	// The real value to send to the output
-    	fReal: LREAL;
-    	// The maximum allowed real value for the connected hardware
-    	fSafeMax: LREAL;
-    	// The minimum allowed real value for the connected hardware
-    	fSafeMin: LREAL;
-    	// The number of bits correlated with the terminal's max output. This is not necessarily the resolution parameter.
-    	iTermBits: UINT;
-    	// The fReal value correlated with the terminal's max output
-    	fTermMax: LREAL;
-    	// The fReal value correlated with the terminal's min output
-    	fTermMin: LREAL;
+        // The real value to send to the output
+        fReal: LREAL;
+        // The maximum allowed real value for the connected hardware
+        fSafeMax: LREAL;
+        // The minimum allowed real value for the connected hardware
+        fSafeMin: LREAL;
+        // The number of bits correlated with the terminal's max output. This is not necessarily the resolution parameter.
+        iTermBits: UINT;
+        // The fReal value correlated with the terminal's max output
+        fTermMax: LREAL;
+        // The fReal value correlated with the terminal's min output
+        fTermMin: LREAL;
     END_VAR
     VAR_OUTPUT
-    	// Connect this output to the terminal
-    	iRaw AT %Q*: INT;
+        // Connect this output to the terminal
+        iRaw AT %Q*: INT;
     END_VAR
     VAR
-    	fScale: LREAL;
+        fScale: LREAL;
     END_VAR
     // Set the scaling from real to raw
     IF fScale = 0 AND fTermMax > fTermMin THEN
-    	fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+        fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
     END_IF
 
     // Adjust real value to be within the limits
@@ -697,133 +697,133 @@ FB_BasicStats
 
     FUNCTION_BLOCK FB_BasicStats
     (*
-    	Minimalist Array Stats for LREALs
-    	2019-10-10 Zachary Lentz
-    	
-    	Calculates the most basic stats for an array and provides pytmc control points.
-    	This is an alternative to the TC3 Condition Monitoring library which requires an
-    	additional license and had a more complicated interface.
+        Minimalist Array Stats for LREALs
+        2019-10-10 Zachary Lentz
+
+        Calculates the most basic stats for an array and provides pytmc control points.
+        This is an alternative to the TC3 Condition Monitoring library which requires an
+        additional license and had a more complicated interface.
     *)
     VAR_IN_OUT
-    	// Input array of floats
-    	{attribute 'pytmc' := '
-    		pv: STATS:DATA
-    		io: i
-    	'}
-    	aSignal: ARRAY[*] OF LREAL;
+        // Input array of floats
+        {attribute 'pytmc' := '
+            pv: STATS:DATA
+            io: i
+        '}
+        aSignal: ARRAY[*] OF LREAL;
     END_VAR
     VAR_INPUT
-    	// If TRUE, we will update the results every cycle
-    	{attribute 'pytmc' := 'pv: STATS:ALWAYS_CALC'}
-    	bAlwaysCalc: BOOL;
-    	// On rising edge, do one calculation
-    	{attribute 'pytmc' := 'pv: STATS:EXECUTE'}
-    	bExecute: BOOL;
-    	// If set to TRUE, reset outputs
-    	{attribute 'pytmc' := 'pv: STATS:RESET'}
-    	bReset: BOOL;
-    	// If nonzero, we will only pay attention to the first nElems items in aSignal
-    	{attribute 'pytmc' := '
-    		pv: STATS:NELM
-    		io: i
-    	'}
-    	nElems: UDINT;
+        // If TRUE, we will update the results every cycle
+        {attribute 'pytmc' := 'pv: STATS:ALWAYS_CALC'}
+        bAlwaysCalc: BOOL;
+        // On rising edge, do one calculation
+        {attribute 'pytmc' := 'pv: STATS:EXECUTE'}
+        bExecute: BOOL;
+        // If set to TRUE, reset outputs
+        {attribute 'pytmc' := 'pv: STATS:RESET'}
+        bReset: BOOL;
+        // If nonzero, we will only pay attention to the first nElems items in aSignal
+        {attribute 'pytmc' := '
+            pv: STATS:NELM
+            io: i
+        '}
+        nElems: UDINT;
     END_VAR
     VAR_OUTPUT
-    	// Average of all values in the array
-    	{attribute 'pytmc' := '
-    		pv: STATS:MEAN
-    		io: i
-    	'}
-    	fMean: LREAL;
-    	// Standard deviation of all values in the array
-    	{attribute 'pytmc' := '
-    		pv: STATS:STDEV
-    		io: i
-    	'}
-    	fStDev: LREAL;
-    	// Largest value in the array
-    	{attribute 'pytmc' := '
-    		pv: STATS:MAX
-    		io: i
-    	'}
-    	fMax: LREAL;
-    	// Smallest value in the array
-    	{attribute 'pytmc' := '
-    		pv: STATS:MIN
-    		io: i
-    	'}
-    	fMin: LREAL;
-    	// Largest array element subtracted by the smallest
-    	{attribute 'pytmc' := '
-    		pv: STATS:RANGE
-    		io: i
-    	'}
-    	fRange: LREAL;
-    	// True if the other outputs are valid
-    	{attribute 'pytmc' := '
-    		pv: STATS:VALID
-    		io: i
-    	'}
-    	bValid: BOOL;
+        // Average of all values in the array
+        {attribute 'pytmc' := '
+            pv: STATS:MEAN
+            io: i
+        '}
+        fMean: LREAL;
+        // Standard deviation of all values in the array
+        {attribute 'pytmc' := '
+            pv: STATS:STDEV
+            io: i
+        '}
+        fStDev: LREAL;
+        // Largest value in the array
+        {attribute 'pytmc' := '
+            pv: STATS:MAX
+            io: i
+        '}
+        fMax: LREAL;
+        // Smallest value in the array
+        {attribute 'pytmc' := '
+            pv: STATS:MIN
+            io: i
+        '}
+        fMin: LREAL;
+        // Largest array element subtracted by the smallest
+        {attribute 'pytmc' := '
+            pv: STATS:RANGE
+            io: i
+        '}
+        fRange: LREAL;
+        // True if the other outputs are valid
+        {attribute 'pytmc' := '
+            pv: STATS:VALID
+            io: i
+        '}
+        bValid: BOOL;
     END_VAR
     VAR
-    	rTrig: R_TRIG;
-    	nIndex: DINT;
-    	nElemsSeen: UDINT;
-    	fSum: LREAL;
-    	fVarianceSum: LREAL;
-    	fVarianceMean: LREAL;
+        rTrig: R_TRIG;
+        nIndex: DINT;
+        nElemsSeen: UDINT;
+        fSum: LREAL;
+        fVarianceSum: LREAL;
+        fVarianceMean: LREAL;
     END_VAR
     rTrig(CLK:=bExecute);
     IF bReset THEN
-    	fMean := 0;
-    	fStDev := 0;
-    	fMax := 0;
-    	fMin := 0;
-    	fRange := 0;
-    	bValid := FALSE;
-    	bReset := FALSE;
+        fMean := 0;
+        fStDev := 0;
+        fMax := 0;
+        fMin := 0;
+        fRange := 0;
+        bValid := FALSE;
+        bReset := FALSE;
     ELSIF NOT (bExecute OR bAlwaysCalc) THEN
-    	bValid := FALSE;
+        bValid := FALSE;
     ELSIF bAlwaysCalc OR rTrig.Q THEN
-    	// First pass through aSignal: get sum, mean, max, min
-    	nElemsSeen := 0;
-    	fSum := 0;
-    	fMax := aSignal[LOWER_BOUND(aSignal, 1)];
-    	fMin := fMax;
-    	FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
-    		nElemsSeen := nElemsSeen + 1;
-    		fSum := fSum + aSignal[nIndex];
-    		IF aSignal[nIndex] > fMax THEN
-    			fMax := aSignal[nIndex];
-    		ELSIF aSignal[nIndex] < fMin tHEN
-    			fMin := aSignal[nIndex];
-    		END_IF
-    		IF nElems > 0 AND nElemsSeen >= nElems THEN
-    			EXIT;
-    		END_IF
-    	END_FOR
-    	IF nElemsSeen > 0 THEN
-    		fMean := fSum / nElemsSeen;
-    		fRange := fMax - fMin;
+        // First pass through aSignal: get sum, mean, max, min
+        nElemsSeen := 0;
+        fSum := 0;
+        fMax := aSignal[LOWER_BOUND(aSignal, 1)];
+        fMin := fMax;
+        FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+            nElemsSeen := nElemsSeen + 1;
+            fSum := fSum + aSignal[nIndex];
+            IF aSignal[nIndex] > fMax THEN
+                fMax := aSignal[nIndex];
+            ELSIF aSignal[nIndex] < fMin tHEN
+                fMin := aSignal[nIndex];
+            END_IF
+            IF nElems > 0 AND nElemsSeen >= nElems THEN
+                EXIT;
+            END_IF
+        END_FOR
+        IF nElemsSeen > 0 THEN
+            fMean := fSum / nElemsSeen;
+            fRange := fMax - fMin;
 
-    		// Second pass through aSignal: get the sum of the variances and then the stdev
-    		nElemsSeen := 0;
-    		fVarianceSum := 0;
-    		FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
-    			nElemsSeen := nElemsSeen + 1;
-    			fVarianceSum := fVarianceSum + (aSignal[nIndex] - fMean) * (aSignal[nIndex] - fMean);
-    			IF nElems > 0 AND nElemsSeen >= nElems THEN
-    				EXIT;
-    			END_IF
-    		END_FOR
-    		IF nElemsSeen > 1 THEN
-    			fVarianceMean := fVarianceSum / (nElemsSeen - 1);
-    			fStDev := SQRT(fVarianceMean);
-    			bValid := TRUE;
-    		END_IF
-    	END_IF
+            // Second pass through aSignal: get the sum of the variances and then the stdev
+            nElemsSeen := 0;
+            fVarianceSum := 0;
+            FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+                nElemsSeen := nElemsSeen + 1;
+                fVarianceSum := fVarianceSum + (aSignal[nIndex] - fMean) * (aSignal[nIndex] - fMean);
+                IF nElems > 0 AND nElemsSeen >= nElems THEN
+                    EXIT;
+                END_IF
+            END_FOR
+            IF nElemsSeen > 1 THEN
+                fVarianceMean := fVarianceSum / (nElemsSeen - 1);
+                fStDev := SQRT(fVarianceMean);
+                bValid := TRUE;
+            END_IF
+        END_IF
     END_IF
 
     END_FUNCTION_BLOCK
@@ -860,35 +860,35 @@ FB_CoE_FastRead
 
     FUNCTION_BLOCK FB_CoE_FastRead
     (*
-    	Utility to repeatedly read a CoE parameter
-    	2019-10-09 Zachary Lentz
-    	
-    	In practice, it's impossible to read most CoE parameters every cycle,
-    	but this is a best effort and will work if the data is available
+        Utility to repeatedly read a CoE parameter
+        2019-10-09 Zachary Lentz
+
+        In practice, it's impossible to read most CoE parameters every cycle,
+        but this is a best effort and will work if the data is available
     *)
     VAR_INPUT
-    	// If TRUE we'll attempt a CoE read this cycle.
-    	bExecute: BOOL;
-    	// Link this to your terminal's drive reference variables under InfoData.
-    	stPlcDriveRef AT %I*: ST_PlcDriveRef;
-    	// Hexadecimal index of CoE, e.g. the 8010 in 8010:12
-    	nIndex: UINT;
-    	// Hexadecimal subindex of CoE, e.g. the 12 in 8010:12
-    	nSubIndex: BYTE;
-    	// Pointer to a value to fill with the result of the read, e.g. ADR(MyValue)
-    	pDstBuf: PVOID;
-    	// Data size of pDstBuf, e.g. SIZEOF(MyValue)
-    	cbBufLen: UINT;
+        // If TRUE we'll attempt a CoE read this cycle.
+        bExecute: BOOL;
+        // Link this to your terminal's drive reference variables under InfoData.
+        stPlcDriveRef AT %I*: ST_PlcDriveRef;
+        // Hexadecimal index of CoE, e.g. the 8010 in 8010:12
+        nIndex: UINT;
+        // Hexadecimal subindex of CoE, e.g. the 12 in 8010:12
+        nSubIndex: BYTE;
+        // Pointer to a value to fill with the result of the read, e.g. ADR(MyValue)
+        pDstBuf: PVOID;
+        // Data size of pDstBuf, e.g. SIZEOF(MyValue)
+        cbBufLen: UINT;
     END_VAR
     VAR_OUTPUT
-    	// TRUE if the value was updated on this cycle.
-    	bNewValue: BOOL;
+        // TRUE if the value was updated on this cycle.
+        bNewValue: BOOL;
     END_VAR
     VAR
-    	fbRead: FB_CoERead_ByDriveRef;
-    	stDriveRef: ST_DriveRef;
-    	iLoop: INT;
-    	bInnerExec: BOOL;
+        fbRead: FB_CoERead_ByDriveRef;
+        stDriveRef: ST_DriveRef;
+        iLoop: INT;
+        bInnerExec: BOOL;
     END_VAR
     stDriveRef.sNetId := F_CreateAmsNetId(stPlcDriveRef.aNetId);
     stDriveRef.nSlaveAddr := stPlcDriveRef.nSlaveAddr;
@@ -897,24 +897,24 @@ FB_CoE_FastRead
 
     bNewValue := FALSE;
     IF bExecute THEN
-    	// You need to do this block 3 times per cycle to have a chance at always getting a read
-    	FOR iLoop:= 1 TO 3 DO
-    		fbRead(
-    			stDriveRef := stDriveRef,
-    			nIndex := nIndex,
-    			nSubIndex := nSubIndex,
-    			pDstBuf := pDstBuf,
-    			cbBufLen := cbBufLen,
-    			bExecute := bInnerExec,
-    			tTimeout := T#1s);
-    			
-    		IF bInnerExec AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
-    			bInnerExec := FALSE;
-    			bNewValue := TRUE;
-    		ELSE
-    			bInnerExec := TRUE;
-    		END_IF
-    	END_FOR
+        // You need to do this block 3 times per cycle to have a chance at always getting a read
+        FOR iLoop:= 1 TO 3 DO
+            fbRead(
+                stDriveRef := stDriveRef,
+                nIndex := nIndex,
+                nSubIndex := nSubIndex,
+                pDstBuf := pDstBuf,
+                cbBufLen := cbBufLen,
+                bExecute := bInnerExec,
+                tTimeout := T#1s);
+
+            IF bInnerExec AND NOT fbRead.bBusy AND NOT fbRead.bError THEN
+                bInnerExec := FALSE;
+                bNewValue := TRUE;
+            ELSE
+                bInnerExec := TRUE;
+            END_IF
+        END_FOR
     END_IF
 
     END_FUNCTION_BLOCK
@@ -929,57 +929,57 @@ FB_DataBuffer
 
     FUNCTION_BLOCK FB_DataBuffer
     (*
-    	Function Block to accumulate data into an array.
-    	2019-10-09 Zachary Lentz
-    	
-    	Requires the user to supply pointers to the value and to 2 arrays:
-    	1. A partial buffer that we will slowly fill one value at a time
-    	2. An output buffer that will only update when the partial buffer is full
-    	
-    	Take great care of the following, or else your program will likely crash,
-    	or at least have corrupt data:
-    	1. The input type and array types must match
-    	2. The provided element count must be accurate and match both arrays
-    	3. The provided element size is correct
-    	
-    	As this function block as no way of checking that you did this correctly.
+        Function Block to accumulate data into an array.
+        2019-10-09 Zachary Lentz
+
+        Requires the user to supply pointers to the value and to 2 arrays:
+        1. A partial buffer that we will slowly fill one value at a time
+        2. An output buffer that will only update when the partial buffer is full
+
+        Take great care of the following, or else your program will likely crash,
+        or at least have corrupt data:
+        1. The input type and array types must match
+        2. The provided element count must be accurate and match both arrays
+        3. The provided element size is correct
+
+        As this function block as no way of checking that you did this correctly.
     *)
     VAR_INPUT
-    	// Whether or not to accumulate on this cycle
-    	bExecute: BOOL;
-    	// Address of the value to accumulate
-    	pInputAdr: PVOID;
-    	// Size of the accumulated value
-    	iInputSize: UDINT;
-    	// Number of values in the output array
-    	iElemCount: UDINT;
-    	// Address of the rolling buffer to be filled every cycle
-    	pPartialAdr: PVOID;
-    	// Address of the output buffer to be filled when the rolling buffer is full
-    	pOutputAdr: PVOID;
+        // Whether or not to accumulate on this cycle
+        bExecute: BOOL;
+        // Address of the value to accumulate
+        pInputAdr: PVOID;
+        // Size of the accumulated value
+        iInputSize: UDINT;
+        // Number of values in the output array
+        iElemCount: UDINT;
+        // Address of the rolling buffer to be filled every cycle
+        pPartialAdr: PVOID;
+        // Address of the output buffer to be filled when the rolling buffer is full
+        pOutputAdr: PVOID;
     END_VAR
     VAR_OUTPUT
-    	// Set to TRUE on the cycle that we copy the output array
-    	bNewArray: BOOL;
+        // Set to TRUE on the cycle that we copy the output array
+        bNewArray: BOOL;
     END_VAR
     VAR
-    	iArrayIndex: UDINT := 0;
+        iArrayIndex: UDINT := 0;
     END_VAR
     bNewArray := FALSE;
     IF bExecute THEN
-    	MEMCPY(
-    		destAddr := pPartialAdr + iArrayIndex*iInputSize,
-    		srcAddr := pInputAdr,
-    		n := iInputSize);
-    	iArrayIndex := iArrayIndex + 1;
-    	IF iArrayIndex >= iElemCount THEN
-    		MEMCPY(
-    			destAddr := pOutputAdr,
-    			srcAddr := pPartialAdr,
-    			n := iElemCount*iInputSize);
-    		iArrayIndex := 0;
-    		bNewArray := TRUE;
-    	END_IF
+        MEMCPY(
+            destAddr := pPartialAdr + iArrayIndex*iInputSize,
+            srcAddr := pInputAdr,
+            n := iInputSize);
+        iArrayIndex := iArrayIndex + 1;
+        IF iArrayIndex >= iElemCount THEN
+            MEMCPY(
+                destAddr := pOutputAdr,
+                srcAddr := pPartialAdr,
+                n := iElemCount*iInputSize);
+            iArrayIndex := 0;
+            bNewArray := TRUE;
+        END_IF
     END_IF
 
     END_FUNCTION_BLOCK
@@ -992,47 +992,47 @@ FB_EcatDiag
 
 ::
 
-    (* 
+    (*
     Ecat bus diagnostic tool
     2015-11-4 Alex Wallace
-    This function block checks the states of all slaves on the ecat bus network, 
+    This function block checks the states of all slaves on the ecat bus network,
     it could be modified to export the states of the slaves on an individual basis,
     but for now it sets the output boolean true if all slaves are OP and false otherwise.
     To start the block provide a falling edge on the first pass boolean input.
 
     2018-05-05 Margaret Ghaly
     Function block has been modified to retrieve the Device State of the Ethercat Master.
-    It also exports the states and information of each individual configured Slave. 
+    It also exports the states and information of each individual configured Slave.
     And saves them in the array q_aEcConfSlaveInfo.
     *)
     FUNCTION_BLOCK FB_EcatDiag
     VAR_INPUT
-    	{attribute 'naming' := 'omit'}
-    	I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
-    	i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
+        {attribute 'naming' := 'omit'}
+        I_AMSNetId AT %I* : AMSNETID; //Link to the AMSNETID name in the ethercat master info.
+        i_xFirstPass: BOOL; //Hook to system first pass boolean for proper intialization (must be true for the first cycle of the PLC)
     END_VAR
     VAR_OUTPUT
-    	q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
-    	q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
-    	q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
-    	q_nMasterState: WORD; // The Device State of the Master
-    	q_sMasterState:STRING; //State of the ECAT master
-    	q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
-    	q_nSlaves: UINT; // the Number of the connected Slaves
+        q_xAllSlaveStatesGood: BOOL; // Set to True if all Slaves are in OP State
+        q_anTermStates: ARRAY[1..256] OF BYTE; //ECAT State of terminals in the bus
+        q_xMasterStateGood:BOOL; // Set to True if the Master Device State is OP
+        q_nMasterState: WORD; // The Device State of the Master
+        q_sMasterState:STRING; //State of the ECAT master
+        q_astEcConfSlaveInfo :  ARRAY[1..256] OF ST_EcDevice; //State of all ECAT slaves in the bus
+        q_nSlaves: UINT; // the Number of the connected Slaves
     END_VAR
     VAR
-    	sNetId: T_AmsNetId; //NetId string
-    	astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
-    	astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
-    	fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates 
-    	
-    	fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
-    	fbGetConfSlaves: FB_EcGetConfSlaves; //Acquires the ECAT slave configuration of the bus (how many, what kind, etc)
-    	{attribute 'naming' := 'omit'} 
-    	ftReset: F_TRIG; //Reset trigger sensor
-    	{attribute 'naming' := 'omit'}
-    	ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
-    	nIterator: INT; //Generic iterator placeholder
+        sNetId: T_AmsNetId; //NetId string
+        astTermStates: ARRAY[1..256] OF ST_EcSlaveState; //ECAT Slave States Buffer
+        astEcConfSlaveInfo: ARRAY[1..256] OF ST_EcSlaveConfigData; //ECAT Slave Configs Buffer
+        fbGetAllSlaveStates: FB_EcGetAllSlaveStates; //Acquires the ECAT Slave States puts them into astTermStates
+
+        fbGetMasterState: FB_EcGetMasterState; //Acquires ECAT Master State
+        fbGetConfSlaves: FB_EcGetConfSlaves; //Acquires the ECAT slave configuration of the bus (how many, what kind, etc)
+        {attribute 'naming' := 'omit'}
+        ftReset: F_TRIG; //Reset trigger sensor
+        {attribute 'naming' := 'omit'}
+        ftMasterReset: F_TRIG; //Retrigger sensor for GetMasterState
+        nIterator: INT; //Generic iterator placeholder
     END_VAR
     //Create the net ID string
     sNetId := F_CreateAmsNetId(I_AMSNetId);
@@ -1048,26 +1048,26 @@ FB_EcatDiag
     //Cycle through each entry in the array and check if we have anyone not in OP and that the link state is good.
     // If so, then set our global IO bad boolean.
     IF fbGetAllSlaveStates.nSlaves > 0 THEN
-    	q_xAllSlaveStatesGood := TRUE;
+        q_xAllSlaveStatesGood := TRUE;
     FOR nIterator := 1 TO (UINT_TO_INT(fbGetAllSlaveStates.nSlaves) ) BY 1
-    	DO
-    	IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
-    		q_xAllSlaveStatesGood := FALSE;
-    	END_IF
-    	q_anTermStates[nIterator] := astTermStates[nIterator].deviceState;
-    	q_astEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
-    	q_astEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
-    	q_astEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
-    	
+        DO
+        IF NOT( (astTermStates[nIterator].deviceState = EC_DEVICE_STATE_OP) AND (astTermStates[nIterator].linkState = EC_LINK_STATE_OK)) THEN
+            q_xAllSlaveStatesGood := FALSE;
+        END_IF
+        q_anTermStates[nIterator] := astTermStates[nIterator].deviceState;
+        q_astEcConfSlaveInfo[nIterator].nDeviceState :=astTermStates[nIterator].deviceState;//
+        q_astEcConfSlaveInfo[nIterator].nLinkState :=astTermStates[nIterator].linkState;//
+        q_astEcConfSlaveInfo[nIterator].sDeviceState:= F_ConvSlaveStateToString(state:=astTermStates[nIterator]);//
+
     END_FOR
     END_IF
 
-    // Read the EtherCAT state of the master. If the call is successful, 
+    // Read the EtherCAT state of the master. If the call is successful,
     //the State output variable of type WORD contains the requested status information.
     ftMasterReset(CLK:=fbGetMasterState.bBusy OR i_xFirstPass);
-    fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q, 
-    				state => q_nMasterState,bError=>,
-    				nErrId=>);
+    fbGetMasterState(sNetId:= sNetId, bExecute:=ftMasterReset.Q,
+                    state => q_nMasterState,bError=>,
+                    nErrId=>);
     q_xMasterStateGood:= (fbGetMasterState.state = BYTE_TO_UINT(EC_DEVICE_STATE_OP));
     q_sMasterState := F_ConvMasterDevStateToString(fbGetMasterState.state);
 
@@ -1077,13 +1077,13 @@ FB_EcatDiag
     q_nSlaves:=fbGetConfSlaves.nSlaves;
 
     IF  NOT (fbGetConfSlaves.bBusy) THEN
-    	FOR nIterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
-    	DO
-    	q_astEcConfSlaveInfo[nIterator].nAddrr :=astEcConfSlaveInfo[nIterator].nAddr;
-    	q_astEcConfSlaveInfo[nIterator].sName :=astEcConfSlaveInfo[nIterator].sName;
-    	q_astEcConfSlaveInfo[nIterator].sType :=astEcConfSlaveInfo[nIterator].sType;
+        FOR nIterator := 1 TO (UINT_TO_INT(fbGetConfSlaves.nSlaves) ) BY 1
+        DO
+        q_astEcConfSlaveInfo[nIterator].nAddrr :=astEcConfSlaveInfo[nIterator].nAddr;
+        q_astEcConfSlaveInfo[nIterator].sName :=astEcConfSlaveInfo[nIterator].sName;
+        q_astEcConfSlaveInfo[nIterator].sType :=astEcConfSlaveInfo[nIterator].sType;
     END_FOR
-    	fbGetConfSlaves.bExecute := FALSE;
+        fbGetConfSlaves.bExecute := FALSE;
     END_IF
 
     END_FUNCTION_BLOCK
@@ -1104,48 +1104,48 @@ FB_EcatDiagWrapper
     VAR_OUTPUT
         bAllFrameWcStatesOK		: BOOL;				// all frames are OK
         bEtherCATOK				: BOOL;				// no problem on EtherCAT
-    	bFrameWcStateError		: BOOL;				// at least one fram with error
-    	bSlaveCountError		: BOOL;				// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
-    	bMasterDevStateError	: BOOL;				// EtherCAT master device state signals error
-    	stMasterDevState		: ST_EcMasterDevState; // device state split to a structure
-    	bBusy					: BOOL;				// diagnostic FB is busy
-    	bError					: BOOL;				// diagnostic FB has an error
-    	iErrorID				: UDINT;			// error ID of diagnostic FB
+        bFrameWcStateError		: BOOL;				// at least one fram with error
+        bSlaveCountError		: BOOL;				// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
+        bMasterDevStateError	: BOOL;				// EtherCAT master device state signals error
+        stMasterDevState		: ST_EcMasterDevState; // device state split to a structure
+        bBusy					: BOOL;				// diagnostic FB is busy
+        bError					: BOOL;				// diagnostic FB has an error
+        iErrorID				: UDINT;			// error ID of diagnostic FB
     END_VAR
     VAR
-        
+
         (* ******************* EtherCAT Frame ***************************** *)
-    	fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic
-        {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^Frm1WcState'} 
-    	wFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
-    	wReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
-    	bFrameWcStateOK			: BOOL;				// this frame is OK 
+        fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic
+        {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^Frm1WcState'}
+        wFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
+        wReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
+        bFrameWcStateOK			: BOOL;				// this frame is OK
 
         (* ******************* EtherCAT Diag ***************************** *)
         fbEtherCATDiag			: FB_EtherCATDiag;	// deep EtherCAT diagnostic
 
-    	(* cyclic variables from EtherCAT Master *)
+        (* cyclic variables from EtherCAT Master *)
         {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^SlaveCount'}
-    	nEcMasterSlaveCount AT %I* 	: UINT;			// link to SlaveCount of EtherCAT Master (Inputs)
+        nEcMasterSlaveCount AT %I* 	: UINT;			// link to SlaveCount of EtherCAT Master (Inputs)
         {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^DevState'}
-    	nEcMasterDevState AT %I* 	: UINT;			// link to DevState of EtherCAT Master (Inputs)
+        nEcMasterDevState AT %I* 	: UINT;			// link to DevState of EtherCAT Master (Inputs)
         {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^DevId'}
-    	nEcMasterDeviceId AT %I*	: UINT;			// link to DevID of EtherCAT Master (InfoData)
+        nEcMasterDeviceId AT %I*	: UINT;			// link to DevID of EtherCAT Master (InfoData)
         {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^AmsNetId'}
-    	arrEcMasterNetId AT %I* 	: T_AmsNetIdArr;// link to NetID of EtherCAT Master (InfoData)
-    	sEcMasterNetId  			: T_AmsNetId := '';
+        arrEcMasterNetId AT %I* 	: T_AmsNetIdArr;// link to NetID of EtherCAT Master (InfoData)
+        sEcMasterNetId  			: T_AmsNetId := '';
         {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^InfoData^CfgSlaveCount'}
-    	nEcMasterSlaveCountCfg AT %I* 	: UINT;		// link to CfgSlaveCount of EtherCAT Master (InfoData)
+        nEcMasterSlaveCountCfg AT %I* 	: UINT;		// link to CfgSlaveCount of EtherCAT Master (InfoData)
 
-    	(* general variables *)
-    	arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves 
-    	arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves  
+        (* general variables *)
+        arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves
+        arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves
     END_VAR
     (*************************************** Frame Diag *********************************************)
     fbEtherCATFrameDiag(
-    	wFrmXWcState 	:= wFrmXWcState,
-    	wReqZeroMask 	:= wReqZeroMask,
-    	bFrameWcStateOK	=> bFrameWcStateOK
+        wFrmXWcState 	:= wFrmXWcState,
+        wReqZeroMask 	:= wReqZeroMask,
+        bFrameWcStateOK	=> bFrameWcStateOK
     );
     bAllFrameWcStatesOK := bFrameWcStateOK;
 
@@ -1153,24 +1153,24 @@ FB_EcatDiagWrapper
     (* generate Net Id *)
     sEcMasterNetId := F_CreateAmsNetId(nIds := arrEcMasterNetId);
     fbEtherCATDiag(
-    	sIPCNetID			:= '',
-    	sMasterNetID		:= sEcMasterNetId,
-    	nMasterDevID		:= nEcMasterDeviceId,
-    	nSlaveCount			:= nEcMasterSlaveCount,
-    	nSlaveCountCfg		:= nEcMasterSlaveCountCfg,
-    	nMasterDevState		:= nEcMasterDevState,
-    	bAllFrameWcStatesOK	:= bAllFrameWcStatesOK,
-    	tTimeout			:= T#5s,
-    	arrDiagSlaveInfo	:= arrDiagSlaveInfo,
-    	arrDiagSlaveInfoScanned	:= arrDiagSlaveInfoScanned,
-    	bEtherCATOK			=> bEtherCATOK,
-    	bFrameWcStateError	=> bFrameWcStateError,
-    	bSlaveCountError	=> bSlaveCountError,
-    	bMasterDevStateError=> bMasterDevStateError,
-    	stMasterDevState	=> stMasterDevState,
-    	bBusy				=> bBusy,
-    	bError				=> bError,
-    	iErrorID			=> iErrorID
+        sIPCNetID			:= '',
+        sMasterNetID		:= sEcMasterNetId,
+        nMasterDevID		:= nEcMasterDeviceId,
+        nSlaveCount			:= nEcMasterSlaveCount,
+        nSlaveCountCfg		:= nEcMasterSlaveCountCfg,
+        nMasterDevState		:= nEcMasterDevState,
+        bAllFrameWcStatesOK	:= bAllFrameWcStatesOK,
+        tTimeout			:= T#5s,
+        arrDiagSlaveInfo	:= arrDiagSlaveInfo,
+        arrDiagSlaveInfoScanned	:= arrDiagSlaveInfoScanned,
+        bEtherCATOK			=> bEtherCATOK,
+        bFrameWcStateError	=> bFrameWcStateError,
+        bSlaveCountError	=> bSlaveCountError,
+        bMasterDevStateError=> bMasterDevStateError,
+        stMasterDevState	=> stMasterDevState,
+        bBusy				=> bBusy,
+        bError				=> bError,
+        iErrorID			=> iErrorID
     );
 
     END_FUNCTION_BLOCK
@@ -1191,182 +1191,182 @@ FB_EL6_Com
 
     FUNCTION_BLOCK FB_EL6_Com
     (*
-    	Communicate with a serial device connected to an EL6XXX
-    	2019-10-09 Zachary Lentz and Jackson Sheppard
-    	
-    	May contain assumptions about the device we wrote it for, potentially will need to be adjusted
+        Communicate with a serial device connected to an EL6XXX
+        2019-10-09 Zachary Lentz and Jackson Sheppard
+
+        May contain assumptions about the device we wrote it for, potentially will need to be adjusted
     *)
     VAR_INPUT
-    	// Command to send to the serial device
-    	{attribute 'pytmc' := '
-    		pv: CMD
-    		io: io
-    	'}
-    	sCmd: STRING;
-    	
-    	// Pulse this to TRUE and back to FALSE when it's time to send
-    	{attribute 'pytmc' := '
-    		pv: SEND
-    		io: io
-    	'}
-    	bSend: BOOL;
-    	
-    	// Any static prefix to add before every sent message
-    	sSendPrefix: STRING;
-    	// Any static suffix to add after every sent message
-    	sSendSuffix: STRING;
-    	// Any static prefix to strip off of every recieved message
-    	sRecvPrefix: STRING;
-    	// Any static suffic to strip off of every recieved message
-    	sRecvSuffix: STRING;
-    	tTimeout: TIME := T#1S;
+        // Command to send to the serial device
+        {attribute 'pytmc' := '
+            pv: CMD
+            io: io
+        '}
+        sCmd: STRING;
+
+        // Pulse this to TRUE and back to FALSE when it's time to send
+        {attribute 'pytmc' := '
+            pv: SEND
+            io: io
+        '}
+        bSend: BOOL;
+
+        // Any static prefix to add before every sent message
+        sSendPrefix: STRING;
+        // Any static suffix to add after every sent message
+        sSendSuffix: STRING;
+        // Any static prefix to strip off of every recieved message
+        sRecvPrefix: STRING;
+        // Any static suffic to strip off of every recieved message
+        sRecvSuffix: STRING;
+        tTimeout: TIME := T#1S;
     END_VAR
     VAR_IN_OUT
-    	stIn_EL6: EL6inData22B;
-    	stOut_EL6: EL6outData22B;
+        stIn_EL6: EL6inData22B;
+        stOut_EL6: EL6outData22B;
     END_VAR
     VAR_OUTPUT
-    	// The response recieved from the serial device
-    	{attribute 'pytmc' := '
-    		pv: RESP
-    		io: input
-    	'}
-    	sResponse: STRING;
-    	
-    	// This is set to TRUE after recieving a response
-    	{attribute 'pytmc' := '
-    		pv: DONE
-    		io: input
-    	'}
-    	bDone: BOOL;
-    	
-    	{attribute 'pytmc' := '
-    		pv: ERR:SER
-    		io: input
-    	'}
-    	eSerialLineErrorID: ComError_t;
-    	
-    	{attribute 'pytmc' := '
-    		pv: ERR:SEND
-    		io: input
-    	'}
-    	eSendErrorID: ComError_t;
-    	
-    	{attribute 'pytmc' := '
-    		pv: ERR:RECV
-    		io: input
-    	'}
-    	eRecvErrorID: ComError_t;
+        // The response recieved from the serial device
+        {attribute 'pytmc' := '
+            pv: RESP
+            io: input
+        '}
+        sResponse: STRING;
+
+        // This is set to TRUE after recieving a response
+        {attribute 'pytmc' := '
+            pv: DONE
+            io: input
+        '}
+        bDone: BOOL;
+
+        {attribute 'pytmc' := '
+            pv: ERR:SER
+            io: input
+        '}
+        eSerialLineErrorID: ComError_t;
+
+        {attribute 'pytmc' := '
+            pv: ERR:SEND
+            io: input
+        '}
+        eSendErrorID: ComError_t;
+
+        {attribute 'pytmc' := '
+            pv: ERR:RECV
+            io: input
+        '}
+        eRecvErrorID: ComError_t;
     END_VAR
     VAR
-    	// Communication Buffers
-    	TxBuffer: ComBuffer;
-    	RxBuffer: ComBuffer;
-    	fbClearComBuffer: ClearComBuffer;
-    	
-    	// Parameters for PLC -> EL6
-    	fbEL6Ctrl: SerialLineControl;
-    	bEL6CtrlError: BOOL;
-    	eEL6CtrlErrorID: ComError_t;
-    	
-    	// Parameters for EL6 -> Serial Device
-    	fbSend: SendString;
-    	bSendBusy: BOOL;
-    	eLastSendErrorID: ComError_t;
-    	fbReceive: ReceiveString;
-    	sReceivedString: STRING;
-    	sLastReceivedString: STRING;
-    	bStringReceived: BOOL;
-    	bReceiveBusy: BOOL;
-    	bReceiveError: BOOL;
-    	eReceiveErrorID: ComError_t;
-    	bReceiveTimeout: BOOL;
-    	nReceiveCounter: UDINT;
-    	nSendCounter: UDINT;
-    	sStringToSend: STRING;
-    	fbFormatString: FB_FormatString;
-    	
-    	// Parameters for state-machine implementation
-    	nStep: INT := 0;
+        // Communication Buffers
+        TxBuffer: ComBuffer;
+        RxBuffer: ComBuffer;
+        fbClearComBuffer: ClearComBuffer;
+
+        // Parameters for PLC -> EL6
+        fbEL6Ctrl: SerialLineControl;
+        bEL6CtrlError: BOOL;
+        eEL6CtrlErrorID: ComError_t;
+
+        // Parameters for EL6 -> Serial Device
+        fbSend: SendString;
+        bSendBusy: BOOL;
+        eLastSendErrorID: ComError_t;
+        fbReceive: ReceiveString;
+        sReceivedString: STRING;
+        sLastReceivedString: STRING;
+        bStringReceived: BOOL;
+        bReceiveBusy: BOOL;
+        bReceiveError: BOOL;
+        eReceiveErrorID: ComError_t;
+        bReceiveTimeout: BOOL;
+        nReceiveCounter: UDINT;
+        nSendCounter: UDINT;
+        sStringToSend: STRING;
+        fbFormatString: FB_FormatString;
+
+        // Parameters for state-machine implementation
+        nStep: INT := 0;
     END_VAR
     fbEL6Ctrl(
-    	Mode:= SERIALLINEMODE_EL6_22B, 
-    	pComIn:= ADR(stIn_EL6), 
-    	pComOut:= ADR(stOut_EL6), 
-    	SizeComIn:= UINT_TO_INT(SIZEOF(stIn_EL6)), 
-    	Error=> , 
-    	ErrorID=> eSerialLineErrorID, 
-    	TxBuffer:= TxBuffer, 
-    	RxBuffer:= RxBuffer );
+        Mode:= SERIALLINEMODE_EL6_22B,
+        pComIn:= ADR(stIn_EL6),
+        pComOut:= ADR(stOut_EL6),
+        SizeComIn:= UINT_TO_INT(SIZEOF(stIn_EL6)),
+        Error=> ,
+        ErrorID=> eSerialLineErrorID,
+        TxBuffer:= TxBuffer,
+        RxBuffer:= RxBuffer );
     IF fbEL6Ctrl.Error THEN
-    	bEL6CtrlError := TRUE;
-    	eEL6CtrlErrorID := fbEL6Ctrl.ErrorID;
+        bEL6CtrlError := TRUE;
+        eEL6CtrlErrorID := fbEL6Ctrl.ErrorID;
     END_IF
     IF bSend THEN
-    	nStep := 10;
-    	bSend := FALSE;
-    	bDone := FALSE;
+        nStep := 10;
+        bSend := FALSE;
+        bDone := FALSE;
     END_IF
     // Attempt at solution that sends one command at a time, not on constant loop
     CASE nStep OF
-    	0:
-    		; // idle
-    	10:
-    		// Clear buffers in case any lingering data
-    		fbClearComBuffer(Buffer:=TxBuffer);
-    		fbClearComBuffer(Buffer:=RxBuffer);
-    		// Prepare string to send
-    		sStringToSend := CONCAT(sSendPrefix, CONCAT(sCmd, sSendSuffix));
-    		// Send string
-    		fbSend(	SendString:= sStringToSend,
-    				TXbuffer:= TxBuffer,
-    				Busy=> bSendBusy,
-    				Error=> eSendErrorID);
-    		IF fbSend.Error <> COMERROR_NOERROR THEN
-    			eLastSendErrorID := fbSend.Error;
-    		ELSE
-    			nSendCounter := nSendCounter + 1;
-    		END_IF
-    		nStep := nStep + 10;
-    	20:
-    		// Finish sending String
-    		IF fbSend.Busy THEN
-    			fbSend(	SendString:= sStringToSend,
-    					TXbuffer:= TxBuffer,
-    					Busy=> bSendBusy,
-    					Error=> eSendErrorID);
-    			IF fbSend.Error <> COMERROR_NOERROR THEN
-    				eLastSendErrorID := fbSend.Error;
-    			ELSE
-    				nSendCounter := nSendCounter + 1;
-    			END_IF
-    		ELSE
-    			nStep := nStep + 10;
-    		END_IF
-    	30:
-    		// Get Reply
-    		fbReceive(
-    			Prefix:= sRecvPrefix,
-    			Suffix:= sRecvSuffix,
-    			Timeout:= tTimeout,
-    			ReceivedString:= sReceivedString,
-    			RXbuffer:= RxBuffer,
-    			StringReceived=> bStringReceived,
-    			Busy=> bReceiveBusy,
-    			Error=> eRecvErrorID,
-    			RxTimeout=> bReceiveTimeout );
-    		IF fbReceive.Error <> COMERROR_NOERROR THEN
-    			eReceiveErrorID := fbReceive.Error;
-    		END_IF
-    		IF bStringReceived THEN
-    			nReceiveCounter := nReceiveCounter + 1;
-    			// Check for response
-    			IF FIND(sReceivedString, sStringToSend)=0 THEN
-    				sResponse := sReceivedString;
-    				bDone := TRUE;
-    				nStep := 0;
-    			END_IF
-    		END_IF
+        0:
+            ; // idle
+        10:
+            // Clear buffers in case any lingering data
+            fbClearComBuffer(Buffer:=TxBuffer);
+            fbClearComBuffer(Buffer:=RxBuffer);
+            // Prepare string to send
+            sStringToSend := CONCAT(sSendPrefix, CONCAT(sCmd, sSendSuffix));
+            // Send string
+            fbSend(	SendString:= sStringToSend,
+                    TXbuffer:= TxBuffer,
+                    Busy=> bSendBusy,
+                    Error=> eSendErrorID);
+            IF fbSend.Error <> COMERROR_NOERROR THEN
+                eLastSendErrorID := fbSend.Error;
+            ELSE
+                nSendCounter := nSendCounter + 1;
+            END_IF
+            nStep := nStep + 10;
+        20:
+            // Finish sending String
+            IF fbSend.Busy THEN
+                fbSend(	SendString:= sStringToSend,
+                        TXbuffer:= TxBuffer,
+                        Busy=> bSendBusy,
+                        Error=> eSendErrorID);
+                IF fbSend.Error <> COMERROR_NOERROR THEN
+                    eLastSendErrorID := fbSend.Error;
+                ELSE
+                    nSendCounter := nSendCounter + 1;
+                END_IF
+            ELSE
+                nStep := nStep + 10;
+            END_IF
+        30:
+            // Get Reply
+            fbReceive(
+                Prefix:= sRecvPrefix,
+                Suffix:= sRecvSuffix,
+                Timeout:= tTimeout,
+                ReceivedString:= sReceivedString,
+                RXbuffer:= RxBuffer,
+                StringReceived=> bStringReceived,
+                Busy=> bReceiveBusy,
+                Error=> eRecvErrorID,
+                RxTimeout=> bReceiveTimeout );
+            IF fbReceive.Error <> COMERROR_NOERROR THEN
+                eReceiveErrorID := fbReceive.Error;
+            END_IF
+            IF bStringReceived THEN
+                nReceiveCounter := nReceiveCounter + 1;
+                // Check for response
+                IF FIND(sReceivedString, sStringToSend)=0 THEN
+                    sResponse := sReceivedString;
+                    bDone := TRUE;
+                    nStep := 0;
+                END_IF
+            END_IF
     END_CASE
 
     END_FUNCTION_BLOCK
@@ -1381,84 +1381,84 @@ FB_EtherCATDiag
 
     FUNCTION_BLOCK FB_EtherCATDiag
     VAR_INPUT
-    	sIPCNetID					: T_AmsNetId; 	// AmsNetId of the IPC 
-    	sMasterNetID				: T_AmsNetId; 	// AmsNetId of the EtherCAT master device 
-    	nMasterDevID				: UINT;			// Device ID of EtherCAT master
-    	nSlaveCount 				: UINT;			// current slave count
-    	nSlaveCountCfg 				: UINT;			// configured slave count
-    	nMasterDevState				: WORD;			// device state of EtherCAT Master
-    	bAllFrameWcStatesOK			: BOOL;			// all FrameWcState OK?
-    	tTimeout					: TIME := T#5S; // ads timeout
+        sIPCNetID					: T_AmsNetId; 	// AmsNetId of the IPC
+        sMasterNetID				: T_AmsNetId; 	// AmsNetId of the EtherCAT master device
+        nMasterDevID				: UINT;			// Device ID of EtherCAT master
+        nSlaveCount 				: UINT;			// current slave count
+        nSlaveCountCfg 				: UINT;			// configured slave count
+        nMasterDevState				: WORD;			// device state of EtherCAT Master
+        bAllFrameWcStatesOK			: BOOL;			// all FrameWcState OK?
+        tTimeout					: TIME := T#5S; // ads timeout
         eSubSystem : E_Subsystem := E_Subsystem.FIELDBUS; // Subsystem, change to (MPS, VACUUM, MOTION, etc)
     END_VAR
     VAR_OUTPUT
-    	bEtherCATOK					: BOOL;			// no problem on EtherCAT
-    	bFrameWcStateError			: BOOL;			// error in at least one frame
-    	bSlaveCountError			: BOOL;			// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
-    	bMasterDevStateError		: BOOL;			// error in master device state
-    	stMasterDevState			: ST_EcMasterDevState; // splitted master device state
-    	bBusy						: BOOL;			// FB busy
-    	bError						: BOOL;			// FB with error
-    	iErrorID					: UDINT;		// FB error ID
+        bEtherCATOK					: BOOL;			// no problem on EtherCAT
+        bFrameWcStateError			: BOOL;			// error in at least one frame
+        bSlaveCountError			: BOOL;			// EtherCAT slave count mismatch (# of cfg slaves <> # of found slaves)
+        bMasterDevStateError		: BOOL;			// error in master device state
+        stMasterDevState			: ST_EcMasterDevState; // splitted master device state
+        bBusy						: BOOL;			// FB busy
+        bError						: BOOL;			// FB with error
+        iErrorID					: UDINT;		// FB error ID
     END_VAR
     VAR_IN_OUT
-    	arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info from configured slaves
-    	arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
+        arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info from configured slaves
+        arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
     END_VAR
     VAR
-    	iState						: E_EcatDiagState;
-    	nMasterDevStatePrev			: WORD;
-    	bSlaveCountErrorPrev		: BOOL;
-    	bAllFrameWcStatesOKPrev		: BOOL;
-    	bDiagReq					: BOOL := TRUE;
-    	I							: UDINT;
+        iState						: E_EcatDiagState;
+        nMasterDevStatePrev			: WORD;
+        bSlaveCountErrorPrev		: BOOL;
+        bAllFrameWcStatesOKPrev		: BOOL;
+        bDiagReq					: BOOL := TRUE;
+        I							: UDINT;
         P							: UDINT;
-        
+
         arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
         rSlaveInfo  :   REFERENCE TO ST_SlaveStateInfo;
 
-    	(* -- Get Slave Addresses *)
-    	fbGetSlaveAddresses 		: FB_EcGetAllSlaveAddr;
-    	arrSlaveAddresses 			: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF UINT;
-    	iNumOfSlavesRead			: UINT;
+        (* -- Get Slave Addresses *)
+        fbGetSlaveAddresses 		: FB_EcGetAllSlaveAddr;
+        arrSlaveAddresses 			: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF UINT;
+        iNumOfSlavesRead			: UINT;
 
-    	(* -- Get Slave States *)
-    	fbGetAllSlaveStates			: FB_EcGetAllSlaveStates;
-    	arrSlaveStates 				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveState;
+        (* -- Get Slave States *)
+        fbGetAllSlaveStates			: FB_EcGetAllSlaveStates;
+        arrSlaveStates 				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveState;
 
-    	(* -- Get Topology Data *)
-    	iTopologyData				: UDINT;
-    	fbGetTopologyData			: ADSREAD;
-    	arrTopologyData				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_TopologyData;
+        (* -- Get Topology Data *)
+        iTopologyData				: UDINT;
+        fbGetTopologyData			: ADSREAD;
+        arrTopologyData				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_TopologyData;
 
-    	(* -- Check Topology *)
-    	aiDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
-        iDiagIndex : UINT;    
-    	aiDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+        (* -- Check Topology *)
+        aiDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
+        iDiagIndex : UINT;
+        aiDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
         iDiagPort : UINT;
-    	iIdx						: DINT;
+        iIdx						: DINT;
 
-    	(* -- Scan Slaves *)
-    	fbEcGetScannedSlaves		: FB_EcGetScannedSlaves;
-    	arrScannedSlaveInfo			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveScannedData; // what...
+        (* -- Scan Slaves *)
+        fbEcGetScannedSlaves		: FB_EcGetScannedSlaves;
+        arrScannedSlaveInfo			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveScannedData; // what...
         rScannedSlaveInfo   :   REFERENCE TO ST_EcSlaveScannedData;
-    	nScannedSlaves				: UINT;
+        nScannedSlaves				: UINT;
 
-    	(* -- Get Slave Identities *)
-    	fbGetSlaveIdentity			: FB_EcGetSlaveIdentity;
-    	stIdentity 					: ST_EcSlaveIdentity;
+        (* -- Get Slave Identities *)
+        fbGetSlaveIdentity			: FB_EcGetSlaveIdentity;
+        stIdentity 					: ST_EcSlaveIdentity;
 
-    	(* -- Get Slave Names *)
-    	fbGetSlaveName 				: IOF_GetBoxNameByAddr;
+        (* -- Get Slave Names *)
+        fbGetSlaveName 				: IOF_GetBoxNameByAddr;
         arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned; // the F
         rSlaveInfoScanned   :   REFERENCE TO ST_SlaveStateInfoScanned;
-    	strName						: STRING;
+        strName						: STRING;
 
-    	
-        
+
+
         // Logging components
         fbLogger : FB_LogMessage := (eSubsystem := eSubsystem);
-        
+
         fbJson : FB_JsonSaxWriter;
         fbJsonDataType : FB_JsonReadWriteDataType;
         rDiagSlaveInfo : REFERENCE TO ST_SlaveStateInfo;
@@ -1473,85 +1473,85 @@ FB_EtherCATDiag
 
     bSlaveCountError := (nSlaveCount <> nSlaveCountCfg) OR (nSlaveCount = 0);
     IF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
-    	bSlaveCountErrorPrev := bSlaveCountError;
-    	bDiagReq := TRUE; // slave count error change detected --> diag required
+        bSlaveCountErrorPrev := bSlaveCountError;
+        bDiagReq := TRUE; // slave count error change detected --> diag required
     END_IF
 
     IF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
-    	bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
-    	bDiagReq := TRUE; // frame error change detected --> diag required
+        bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
+        bDiagReq := TRUE; // frame error change detected --> diag required
     END_IF
 
     IF (nMasterDevState <> nMasterDevStatePrev) THEN
-    	M_CheckMasterDevState();
-    	bDiagReq := TRUE; // devstate change detected --> diag required
+        M_CheckMasterDevState();
+        bDiagReq := TRUE; // devstate change detected --> diag required
     END_IF
 
     (* acyclic diag *)
     CASE iState OF
     E_EcatDiagState.Idle: (* IDLE *)
-    	IF bDiagReq THEN				// diag requested
-    		bDiagReq := FALSE;
+        IF bDiagReq THEN				// diag requested
+            bDiagReq := FALSE;
 
-    		IF sMasterNetID <> '' AND sMasterNetID <> '0.0.0.0.0.0' THEN
-    			iState := E_EcatDiagState.GetSlaveAddresses;	// execute diag
-    			bBusy := TRUE;
-    		ELSE
-    			bError := TRUE;
-    			iErrorID := 7;
-    		END_IF
+            IF sMasterNetID <> '' AND sMasterNetID <> '0.0.0.0.0.0' THEN
+                iState := E_EcatDiagState.GetSlaveAddresses;	// execute diag
+                bBusy := TRUE;
+            ELSE
+                bError := TRUE;
+                iErrorID := 7;
+            END_IF
 
-    		bEtherCATOK := FALSE;
-    	ELSE
-    		// check for changes in idle
-    		IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
-    			bEtherCATOK := FALSE;
-    			bDiagReq := TRUE;//new error --> diag requested    
-    		ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
-    			bSlaveCountErrorPrev := bSlaveCountError;
-    			bEtherCATOK := FALSE;
-    			bDiagReq := TRUE;// slave count error change detected --> diag required
-    		ELSIF (nMasterDevState <> nMasterDevStatePrev) THEN
-    			bEtherCATOK := FALSE;
-    			bDiagReq := TRUE;// devstate change detected --> diag required
-    		ELSIF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
-    			bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
-    			bEtherCATOK := FALSE;
-    			bDiagReq := TRUE;// frame error change detected --> diag required
-    		ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
-    			bEtherCATOK := FALSE;
-    		ELSE
-    			bEtherCATOK := TRUE;
-    		END_IF
-    	END_IF
+            bEtherCATOK := FALSE;
+        ELSE
+            // check for changes in idle
+            IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+                bEtherCATOK := FALSE;
+                bDiagReq := TRUE;//new error --> diag requested
+            ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
+                bSlaveCountErrorPrev := bSlaveCountError;
+                bEtherCATOK := FALSE;
+                bDiagReq := TRUE;// slave count error change detected --> diag required
+            ELSIF (nMasterDevState <> nMasterDevStatePrev) THEN
+                bEtherCATOK := FALSE;
+                bDiagReq := TRUE;// devstate change detected --> diag required
+            ELSIF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
+                bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
+                bEtherCATOK := FALSE;
+                bDiagReq := TRUE;// frame error change detected --> diag required
+            ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+                bEtherCATOK := FALSE;
+            ELSE
+                bEtherCATOK := TRUE;
+            END_IF
+        END_IF
 
     E_EcatDiagState.GetSlaveAddresses: (* get adresses *)
-    	M_GetSlaveAdresses();
+        M_GetSlaveAdresses();
 
     E_EcatDiagState.GetSlaveStates: (* get states *)
-    	M_GetSlaveStates();
+        M_GetSlaveStates();
 
     E_EcatDiagState.GetTopoDataLen:	(* get topology data length *)
-    	M_GetTopoDataLen();
+        M_GetTopoDataLen();
 
     E_EcatDiagState.GetTopoData:	(* get topology data *)
-    	M_GetTopoData();
+        M_GetTopoData();
 
     E_EcatDiagState.ScanSlaves:	(* scan slaves *)
-    	M_ScanSlaves();
+        M_ScanSlaves();
 
     E_EcatDiagState.GetSlaveIdentity:	(* get identity *)
-    	M_GetSlaveIdentity();
+        M_GetSlaveIdentity();
 
     E_EcatDiagState.GetSlaveName:	(* get name *)
-    	M_GetSlaveName();
+        M_GetSlaveName();
 
     E_EcatDiagState.GetScannedSlaveName:	(* get scanned name *)
-    	M_GetScannedSlaveName();
+        M_GetScannedSlaveName();
 
     E_EcatDiagState.LogDiagnostics: (* Log diagnostics *)
-        (* I can't get the fbJsonDataType to actually convert the slave info 
-        structures. I just get nulls. Either I am doing this wrong, or when 
+        (* I can't get the fbJsonDataType to actually convert the slave info
+        structures. I just get nulls. Either I am doing this wrong, or when
         the symbol parser encounters datatypes it can't deal with it nulls
         the whole thing. I'll keep this code commented out until someone figures
         out how to deal with parsing the slave structs into the json payload *)
@@ -1559,17 +1559,17 @@ FB_EtherCATDiag
             jsonIdx := MIN(iSLAVEADDR_ARR_SIZE, jsonIdx);
             rDiagSlaveInfo REF= arrSlaveInfo[jsonIdx];
             DiagnosticJson();
-            fbLogger(sMsg:=CONCAT('Diag Results: ', rDiagSlaveInfo.sName), 
+            fbLogger(sMsg:=CONCAT('Diag Results: ', rDiagSlaveInfo.sName),
                     eSevr:=TcEventSeverity.Info);
             jsonIdx := jsonIdx + 1;
         ELSE
             jsonIdx := 0;
-            iState := E_EcatDiagState.Done;    
-    	END_IF   
-        
+            iState := E_EcatDiagState.Done;
+        END_IF
+
     E_EcatDiagState.Done:	(* DONE *)
-    	bBusy := FALSE;
-    	iState := 0;
+        bBusy := FALSE;
+        iState := 0;
 
     END_CASE
 
@@ -1619,25 +1619,25 @@ FB_EtherCATDiag
     fbJson.StartObject();
         fbJson.AddKey('ecat_diag');
         fbJson.StartObject();
-            
+
             fbJson.AddKey('nECAddr');
             fbJson.AddUdint(rDiagSlaveInfo.nECAddr);
-            
+
             fbJson.AddKey('nIndex');
             fbJson.AddDint(rDiagSlaveInfo.nIndex);
-            
+
             fbJson.AddKey('sName');
             fbJson.AddString(rDiagSlaveInfo.sName);
-            
+
             fbJson.AddKey('sType');
             fbJson.AddString(rDiagSlaveInfo.sType);
-        
+
             fbJson.AddKey('bDiagData');
             fbJson.AddBool(rDiagSlaveInfo.bDiagData);
-            
+
             fbJson.AddKey('stPortCRCErrors');
             fbjson.StartObject();
-            
+
                 fbJson.AddKey('portA');
                 fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portA);
                 fbJson.AddKey('portB');
@@ -1646,15 +1646,15 @@ FB_EtherCATDiag
                 fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portC);
                 fbJson.AddKey('portD');
                 fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portD);
-                
+
             fbJson.EndObject();
-            
+
             fbJson.AddKey('nSumCRCErrors');
             fbjson.AddUdint(rDiagSlaveInfo.nSumCRCErrors);
-            
+
             fbJson.AddKey('stState');
             fbJson.StartObject();
-            
+
                 fbJson.AddKey('eEcState ');
                 fbJson.AddUdint(rDiagSlaveInfo.stState.eEcState);
                 fbJson.AddKey('nReserved');
@@ -1681,11 +1681,11 @@ FB_EtherCATDiag
                 fbJson.AddBool(rDiagSlaveInfo.stState.bPortC);
                 fbJson.AddKey('bPortD');
                 fbJson.AddBool(rDiagSlaveInfo.stState.bPortD);
-        
+
             fbJson.EndObject();
-        
+
         fbJson.EndObject();
-        
+
     fbJson.EndObject();
 
     fbJson.CopyDocument(fbLogger.sJson, SIZEOF(fbLogger.sJson));
@@ -1701,7 +1701,7 @@ FB_EtherCATDiag
     stMasterDevState.bDriverNotFound 	:= (nMasterDevState AND 16#40) = 16#40;
     stMasterDevState.bResetActive 		:= (nMasterDevState AND 16#80) = 16#80;
     stMasterDevState.bAtLeastOneNotInOp := ((nMasterDevState AND 16#100) = 16#100) OR ((nMasterDevState AND 16#200) = 16#200) OR
-    										((nMasterDevState AND 16#400) = 16#400) OR ((nMasterDevState AND 16#800) = 16#800);
+                                            ((nMasterDevState AND 16#400) = 16#400) OR ((nMasterDevState AND 16#800) = 16#800);
     stMasterDevState.bDcNotInSync 		:= (nMasterDevState AND 16#1000) = 16#1000;
     nMasterDevStatePrev 				:= nMasterDevState;
     END_ACTION
@@ -1710,90 +1710,90 @@ FB_EtherCATDiag
     rScannedSlaveInfo REF= arrScannedSlaveInfo[aiDiagIndex[iIdx]];
 
     fbGetSlaveName(
-    	NETID		:= sIPCNetId,
-    	DEVICEID	:= nMasterDevID,
-    	BOXADDR		:= rScannedSlaveInfo.nAddr,
-    	START		:= TRUE,
-    	TMOUT		:= tTimeout,
-    	BOXNAME		=> strName
+        NETID		:= sIPCNetId,
+        DEVICEID	:= nMasterDevID,
+        BOXADDR		:= rScannedSlaveInfo.nAddr,
+        START		:= TRUE,
+        TMOUT		:= tTimeout,
+        BOXNAME		=> strName
     );
 
     IF NOT fbGetSlaveName.BUSY THEN
-    	fbGetSlaveName(START:= FALSE);
+        fbGetSlaveName(START:= FALSE);
 
-    	(* add scanned info *)
-    	rSlaveInfoScanned.nIndex 	:= iDiagIndex + 1;
-    	IF rScannedSlaveInfo.nAddr <> 0 THEN
-    		IF NOT fbGetSlaveName.ERR THEN
-    			rSlaveInfoScanned.sName := strName;
-    		END_IF
-    	ELSE
-    		rSlaveInfoScanned.sType		:= '';
-    	END_IF
+        (* add scanned info *)
+        rSlaveInfoScanned.nIndex 	:= iDiagIndex + 1;
+        IF rScannedSlaveInfo.nAddr <> 0 THEN
+            IF NOT fbGetSlaveName.ERR THEN
+                rSlaveInfoScanned.sName := strName;
+            END_IF
+        ELSE
+            rSlaveInfoScanned.sType		:= '';
+        END_IF
 
-    	IF (iDiagIndex < nScannedSlaves) THEN
-    		rSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
-    	ELSE
-    		rSlaveInfoScanned.sType		:= '';
-    	END_IF
+        IF (iDiagIndex < nScannedSlaves) THEN
+            rSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
+        ELSE
+            rSlaveInfoScanned.sType		:= '';
+        END_IF
 
-    	rSlaveInfoScanned.nECAddr	:= rScannedSlaveInfo.nAddr;
+        rSlaveInfoScanned.nECAddr	:= rScannedSlaveInfo.nAddr;
 
-    	IF rSlaveInfoScanned.sName <> rSlaveInfo.sName THEN
-    		rSlaveInfoScanned.bDifferentName := TRUE;
-    	ELSE
-    		rSlaveInfoScanned.bDifferentName := FALSE;
-    	END_IF
+        IF rSlaveInfoScanned.sName <> rSlaveInfo.sName THEN
+            rSlaveInfoScanned.bDifferentName := TRUE;
+        ELSE
+            rSlaveInfoScanned.bDifferentName := FALSE;
+        END_IF
 
-    	IF rSlaveInfoScanned.nECAddr <> rSlaveInfo.nECAddr THEN
-    		rSlaveInfoScanned.bDifferentAddr := TRUE;
-    	ELSE
-    		rSlaveInfoScanned.bDifferentAddr := FALSE;
-    	END_IF
+        IF rSlaveInfoScanned.nECAddr <> rSlaveInfo.nECAddr THEN
+            rSlaveInfoScanned.bDifferentAddr := TRUE;
+        ELSE
+            rSlaveInfoScanned.bDifferentAddr := FALSE;
+        END_IF
 
-    	IF rSlaveInfoScanned.sType <> rSlaveInfo.sType THEN
-    		rSlaveInfoScanned.bDifferentType := TRUE;
-    	ELSE
-    		rSlaveInfoScanned.bDifferentType := FALSE;
-    	END_IF
+        IF rSlaveInfoScanned.sType <> rSlaveInfo.sType THEN
+            rSlaveInfoScanned.bDifferentType := TRUE;
+        ELSE
+            rSlaveInfoScanned.bDifferentType := FALSE;
+        END_IF
 
-    	IF iIdx < ESC_MAX_PORTS THEN
-    		iIdx := iIdx + 1;
-    		iState := E_EcatDiagState.GetSlaveIdentity; // loop back
-    	ELSE
-    		iIdx := 0;
-    		iState := E_EcatDiagState.LogDiagnostics;
+        IF iIdx < ESC_MAX_PORTS THEN
+            iIdx := iIdx + 1;
+            iState := E_EcatDiagState.GetSlaveIdentity; // loop back
+        ELSE
+            iIdx := 0;
+            iState := E_EcatDiagState.LogDiagnostics;
 
-    		FOR I := 0 TO ESC_MAX_PORTS DO
-    			IF aiDiagPort[I] <> 0 THEN
-    				arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
-    				arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
-    			ELSE
-    				MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
-    				MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
-    			END_IF
-    		END_FOR
-    	END_IF
+            FOR I := 0 TO ESC_MAX_PORTS DO
+                IF aiDiagPort[I] <> 0 THEN
+                    arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
+                    arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
+                ELSE
+                    MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
+                    MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+                END_IF
+            END_FOR
+        END_IF
     END_IF
     END_ACTION
     ACTION M_GetSlaveAdresses:
     fbGetSlaveAddresses(
-    	sNetId		:= sMasterNetID,
-    	pAddrBuf	:= ADR(arrSlaveAddresses),
-    	cbBufLen	:= SIZEOF(arrSlaveAddresses),
-    	bExecute	:= TRUE,
-    	tTimeout	:= tTimeout,
-    	nSlaves		=> iNumOfSlavesRead
+        sNetId		:= sMasterNetID,
+        pAddrBuf	:= ADR(arrSlaveAddresses),
+        cbBufLen	:= SIZEOF(arrSlaveAddresses),
+        bExecute	:= TRUE,
+        tTimeout	:= tTimeout,
+        nSlaves		=> iNumOfSlavesRead
     );
 
     IF NOT fbGetSlaveAddresses.bBusy THEN
-    	fbGetSlaveAddresses(bExecute:= FALSE);
-    	IF NOT fbGetSlaveAddresses.bError THEN
-    		FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
-    			arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
-    		END_FOR
-    	END_IF
-    	iState := GetSlaveStates;
+        fbGetSlaveAddresses(bExecute:= FALSE);
+        IF NOT fbGetSlaveAddresses.bError THEN
+            FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+                arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
+            END_FOR
+        END_IF
+        iState := GetSlaveStates;
     END_IF
     END_ACTION
     ACTION M_GetSlaveIdentity:
@@ -1803,191 +1803,191 @@ FB_EtherCATDiag
     rSlaveInfo REF= arrSlaveInfo[iDiagIndex];
 
     fbGetSlaveIdentity(
-    	sNetId		:= sMasterNetID,
-    	nSlaveAddr	:= rSlaveInfo.nECAddr,
-    	bExecute	:= TRUE,
-    	tTimeout	:= tTimeout,
-    	identity	=> stIdentity
+        sNetId		:= sMasterNetID,
+        nSlaveAddr	:= rSlaveInfo.nECAddr,
+        bExecute	:= TRUE,
+        tTimeout	:= tTimeout,
+        identity	=> stIdentity
     );
 
     IF NOT fbGetSlaveIdentity.bBusy THEN
-    	fbGetSlaveIdentity(bExecute:= FALSE);
+        fbGetSlaveIdentity(bExecute:= FALSE);
 
-    	IF NOT fbGetSlaveIdentity.bError THEN
-    		IF aiDiagPort[iIdx] <> 0 THEN
-    			rSlaveInfo.nIndex	:= aiDiagIndex[iIdx] + 1;
-    			rSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
-    		END_IF
-    	END_IF
-    	iState := E_EcatDiagState.GetSlaveName;
+        IF NOT fbGetSlaveIdentity.bError THEN
+            IF aiDiagPort[iIdx] <> 0 THEN
+                rSlaveInfo.nIndex	:= aiDiagIndex[iIdx] + 1;
+                rSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
+            END_IF
+        END_IF
+        iState := E_EcatDiagState.GetSlaveName;
     END_IF
     END_ACTION
     ACTION M_GetSlaveName:
     fbGetSlaveName(
-    	NETID		:= sIPCNetId,
-    	DEVICEID	:= nMasterDevID,
-    	BOXADDR		:= rSlaveInfo.nECAddr,
-    	START		:= TRUE,
-    	TMOUT		:= tTimeout,
-    	BOXNAME		=> strName
+        NETID		:= sIPCNetId,
+        DEVICEID	:= nMasterDevID,
+        BOXADDR		:= rSlaveInfo.nECAddr,
+        START		:= TRUE,
+        TMOUT		:= tTimeout,
+        BOXNAME		=> strName
     );
 
     IF NOT fbGetSlaveName.BUSY THEN
-    	fbGetSlaveName(START:= FALSE);
+        fbGetSlaveName(START:= FALSE);
 
-    	IF NOT fbGetSlaveName.ERR THEN
-    		IF iDiagPort <> 0 THEN
-    			rSlaveInfo.sName 	:= strName;
-    		END_IF
-    	END_IF
+        IF NOT fbGetSlaveName.ERR THEN
+            IF iDiagPort <> 0 THEN
+                rSlaveInfo.sName 	:= strName;
+            END_IF
+        END_IF
 
-    	iState := E_EcatDiagState.GetScannedSlaveName;
+        iState := E_EcatDiagState.GetScannedSlaveName;
     END_IF
     END_ACTION
     ACTION M_GetSlaveStates:
     fbGetAllSlaveStates(
-    	sNetId		:= sMasterNetID,
-    	pStateBuf	:= ADR(arrSlaveStates),
-    	cbBufLen	:= SIZEOF(arrSlaveStates),
-    	bExecute	:= TRUE,
-    	tTimeout	:= tTimeout,
-    	nSlaves		=> iNumOfSlavesRead
+        sNetId		:= sMasterNetID,
+        pStateBuf	:= ADR(arrSlaveStates),
+        cbBufLen	:= SIZEOF(arrSlaveStates),
+        bExecute	:= TRUE,
+        tTimeout	:= tTimeout,
+        nSlaves		=> iNumOfSlavesRead
     );
 
     IF NOT fbGetAllSlaveStates.bBusy THEN
-    	fbGetAllSlaveStates(bExecute:= FALSE);
+        fbGetAllSlaveStates(bExecute:= FALSE);
 
-    	IF NOT fbGetAllSlaveStates.bError THEN
-    		IF iNumOfSlavesRead = nSlaveCountCfg THEN
-    			FOR I := 0 TO ESC_MAX_PORTS DO
-    				aiDiagIndex[I] := 0;
-    			END_FOR
+        IF NOT fbGetAllSlaveStates.bError THEN
+            IF iNumOfSlavesRead = nSlaveCountCfg THEN
+                FOR I := 0 TO ESC_MAX_PORTS DO
+                    aiDiagIndex[I] := 0;
+                END_FOR
 
-    			(* split slave state and link state *)
-    			FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
-    				(* slave state*)
-    				arrSlaveInfo[I].stState.eEcState 		:= arrSlaveStates[I].deviceState AND 16#0F;
-    				arrSlaveInfo[I].stState.bError 			:= arrSlaveStates[I].deviceState.4;
-    				arrSlaveInfo[I].stState.bInvalidVPRS 	:= arrSlaveStates[I].deviceState.5;
-    				(* link state *)
-    				arrSlaveInfo[I].stState.bNoCommToSlave 	:= arrSlaveStates[I].linkState.0;
-    				arrSlaveInfo[I].stState.bLinkError 		:= arrSlaveStates[I].linkState.1;
-    				arrSlaveInfo[I].stState.bMissingLink 	:= arrSlaveStates[I].linkState.2;
-    				arrSlaveInfo[I].stState.bUnexpectedLink := arrSlaveStates[I].linkState.3;
-    				arrSlaveInfo[I].stState.bPortA 			:= arrSlaveStates[I].linkState.4;
-    				arrSlaveInfo[I].stState.bPortB 			:= arrSlaveStates[I].linkState.5;
-    				arrSlaveInfo[I].stState.bPortC 			:= arrSlaveStates[I].linkState.6;
-    				arrSlaveInfo[I].stState.bPortD 			:= arrSlaveStates[I].linkState.7;
-    				(* DiagData *)
-    				arrSlaveInfo[I].bDiagData	:= ((arrSlaveStates[I].deviceState AND 16#F0) <> 0) OR
-    					(((arrSlaveStates[I].deviceState AND 16#0F) > 0) AND ((arrSlaveStates[I].deviceState AND 16#0F) < 8)) OR
-    					(arrSlaveStates[I].linkState <> 0);
+                (* split slave state and link state *)
+                FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+                    (* slave state*)
+                    arrSlaveInfo[I].stState.eEcState 		:= arrSlaveStates[I].deviceState AND 16#0F;
+                    arrSlaveInfo[I].stState.bError 			:= arrSlaveStates[I].deviceState.4;
+                    arrSlaveInfo[I].stState.bInvalidVPRS 	:= arrSlaveStates[I].deviceState.5;
+                    (* link state *)
+                    arrSlaveInfo[I].stState.bNoCommToSlave 	:= arrSlaveStates[I].linkState.0;
+                    arrSlaveInfo[I].stState.bLinkError 		:= arrSlaveStates[I].linkState.1;
+                    arrSlaveInfo[I].stState.bMissingLink 	:= arrSlaveStates[I].linkState.2;
+                    arrSlaveInfo[I].stState.bUnexpectedLink := arrSlaveStates[I].linkState.3;
+                    arrSlaveInfo[I].stState.bPortA 			:= arrSlaveStates[I].linkState.4;
+                    arrSlaveInfo[I].stState.bPortB 			:= arrSlaveStates[I].linkState.5;
+                    arrSlaveInfo[I].stState.bPortC 			:= arrSlaveStates[I].linkState.6;
+                    arrSlaveInfo[I].stState.bPortD 			:= arrSlaveStates[I].linkState.7;
+                    (* DiagData *)
+                    arrSlaveInfo[I].bDiagData	:= ((arrSlaveStates[I].deviceState AND 16#F0) <> 0) OR
+                        (((arrSlaveStates[I].deviceState AND 16#0F) > 0) AND ((arrSlaveStates[I].deviceState AND 16#0F) < 8)) OR
+                        (arrSlaveStates[I].linkState <> 0);
 
-    				IF arrSlaveInfo[I].bDiagData THEN
-    					IF (I=0) THEN
-    						aiDiagIndex[0] := 0;
-    					ELSE
-    						IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
-    							aiDiagIndex[0] :=  UDINT_TO_UINT(I);
-    						END_IF
-    					END_IF
-    				END_IF
-    			END_FOR
-    		END_IF
-    	END_IF
+                    IF arrSlaveInfo[I].bDiagData THEN
+                        IF (I=0) THEN
+                            aiDiagIndex[0] := 0;
+                        ELSE
+                            IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
+                                aiDiagIndex[0] :=  UDINT_TO_UINT(I);
+                            END_IF
+                        END_IF
+                    END_IF
+                END_FOR
+            END_IF
+        END_IF
 
-    	IF arrSlaveInfo[aiDiagIndex[0]].bDiagData THEN
-    		iState := E_EcatDiagState.GetTopoDataLen;
-    	ELSE
-    		FOR I := 0 TO ESC_MAX_PORTS DO
-    			MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
-    			MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
-    		END_FOR
-    		iState := E_EcatDiagState.Done;
-    	END_IF
+        IF arrSlaveInfo[aiDiagIndex[0]].bDiagData THEN
+            iState := E_EcatDiagState.GetTopoDataLen;
+        ELSE
+            FOR I := 0 TO ESC_MAX_PORTS DO
+                MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
+                MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+            END_FOR
+            iState := E_EcatDiagState.Done;
+        END_IF
     END_IF
     END_ACTION
     ACTION M_GetTopoData:
     fbGetTopologyData(
-    	NETID	:= sMasterNetID,
-    	PORT	:= 16#FFFF,
-    	IDXGRP	:= 16#22,
-    	IDXOFFS	:= 0,
-    	LEN		:= iTopologyData*SIZEOF(arrTopologyData[0]),
-    	DESTADDR:= ADR(arrTopologyData),
-    	READ	:= TRUE,
-    	TMOUT	:= tTimeout,
+        NETID	:= sMasterNetID,
+        PORT	:= 16#FFFF,
+        IDXGRP	:= 16#22,
+        IDXOFFS	:= 0,
+        LEN		:= iTopologyData*SIZEOF(arrTopologyData[0]),
+        DESTADDR:= ADR(arrTopologyData),
+        READ	:= TRUE,
+        TMOUT	:= tTimeout,
     );
 
     IF NOT fbGetTopologyData.BUSY THEN
-    	fbGetTopologyData(READ := FALSE);
+        fbGetTopologyData(READ := FALSE);
 
-    	IF NOT fbGetTopologyData.ERR THEN
-    		aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
-    		aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
-    		aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
-    		aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
+        IF NOT fbGetTopologyData.ERR THEN
+            aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
+            aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
+            aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
+            aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
 
-    		(* clear diag index  *)
-    		aiDiagIndex[1] := 0;
-    		aiDiagIndex[2] := 0;
-    		aiDiagIndex[ESC_MAX_PORTS] := 0;
-            
+            (* clear diag index  *)
+            aiDiagIndex[1] := 0;
+            aiDiagIndex[2] := 0;
+            aiDiagIndex[ESC_MAX_PORTS] := 0;
+
             (* find slaves on PortB-D of first slave with diag *)
             FOR P := 0 TO ESC_MAX_PORTS DO
                 IF aiDiagPort[P] <> 0 THEN
-    			FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-    				IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
-    					aiDiagIndex[P] := UDINT_TO_UINT(I);
-    					EXIT;
-    				END_IF
-    			END_FOR
-    		END_IF
-    		END_FOR
+                FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
+                    IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
+                        aiDiagIndex[P] := UDINT_TO_UINT(I);
+                        EXIT;
+                    END_IF
+                END_FOR
+            END_IF
+            END_FOR
         END_IF
 
-    	iIdx := 0;
-    	iState := E_EcatDiagState.ScanSlaves;
+        iIdx := 0;
+        iState := E_EcatDiagState.ScanSlaves;
     END_IF
     END_ACTION
     ACTION M_GetTopoDataLen:
     fbGetTopologyData(
-    	NETID	:= sMasterNetID,
-    	PORT	:= 16#FFFF,
-    	IDXGRP	:= EC_ADS_IGRP_MASTER_COUNT_SLAVE,
-    	IDXOFFS	:= EC_ADS_IOFFS_MASTER_COUNT_SLAVE,
-    	LEN		:= SIZEOF(iTopologyData),
-    	DESTADDR:= ADR(iTopologyData),
-    	READ	:= TRUE,
-    	TMOUT	:= tTimeout,
+        NETID	:= sMasterNetID,
+        PORT	:= 16#FFFF,
+        IDXGRP	:= EC_ADS_IGRP_MASTER_COUNT_SLAVE,
+        IDXOFFS	:= EC_ADS_IOFFS_MASTER_COUNT_SLAVE,
+        LEN		:= SIZEOF(iTopologyData),
+        DESTADDR:= ADR(iTopologyData),
+        READ	:= TRUE,
+        TMOUT	:= tTimeout,
     );
 
     IF NOT fbGetTopologyData.BUSY THEN
-    	fbGetTopologyData(READ := FALSE);
+        fbGetTopologyData(READ := FALSE);
 
-    	iState := E_EcatDiagState.GetTopoData;
+        iState := E_EcatDiagState.GetTopoData;
     END_IF
     END_ACTION
     ACTION M_ScanSlaves:
     fbEcGetScannedSlaves(
-    	bExecute				:= TRUE,
-    	sNetId					:= sMasterNetID,
-    	pArrEcScannedSlaveInfo	:= ADR(arrScannedSlaveInfo),
-    	cbBufLen				:= SIZEOF(arrScannedSlaveInfo),
-    	tTimeout				:= tTimeout
+        bExecute				:= TRUE,
+        sNetId					:= sMasterNetID,
+        pArrEcScannedSlaveInfo	:= ADR(arrScannedSlaveInfo),
+        cbBufLen				:= SIZEOF(arrScannedSlaveInfo),
+        tTimeout				:= tTimeout
     );
 
     IF NOT fbEcGetScannedSlaves.bBusy THEN
-    	fbEcGetScannedSlaves(bExecute := FALSE);
-    	
-    	IF fbEcGetScannedSlaves.bError THEN
-    		nScannedSlaves := 0;
-    	ELSE
-    		nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
-    	END_IF
-        
+        fbEcGetScannedSlaves(bExecute := FALSE);
+
+        IF fbEcGetScannedSlaves.bError THEN
+            nScannedSlaves := 0;
+        ELSE
+            nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
+        END_IF
+
         iState := E_EcatDiagState.GetSlaveIdentity;
-        
+
     END_IF
     END_ACTION
 
@@ -2009,11 +2009,11 @@ FB_EtherCATFrameDiag
 
     FUNCTION_BLOCK FB_EtherCATFrameDiag
     VAR_INPUT
-    	wFrmXWcState 		: WORD;				// FrmXWcState
-    	wReqZeroMask 		: WORD := 16#FFFF;	// mask, bit TRUE: require wFrmXWcState.bit = FALSE, bit FALSE: ignore wFrmXWcState.bit *)
+        wFrmXWcState 		: WORD;				// FrmXWcState
+        wReqZeroMask 		: WORD := 16#FFFF;	// mask, bit TRUE: require wFrmXWcState.bit = FALSE, bit FALSE: ignore wFrmXWcState.bit *)
     END_VAR
     VAR_OUTPUT
-    	bFrameWcStateOK		: BOOL;				// result of fram state check
+        bFrameWcStateOK		: BOOL;				// result of fram state check
     END_VAR
     VAR
     END_VAR
@@ -2023,6 +2023,114 @@ FB_EtherCATFrameDiag
     END_FUNCTION_BLOCK
 
 
+
+
+FB_GetPLCHostname
+^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_GetPLCHostname
+    VAR_INPUT
+        bEnable			: BOOL;
+        tRetryDelay		: TIME := T#10s;
+    END_VAR
+    VAR_OUTPUT
+        sHostname		: T_MaxString;
+        bDone 			: BOOL;
+        bError			: BOOL;
+    END_VAR
+    VAR
+        fbGetHostName	: FB_GetHostName;
+
+        tRetry 			: TON;
+        bReset			: BOOL;
+        bInitialized	: BOOL := FALSE;
+
+    END_VAR
+    IF bEnable THEN
+        fbGetHostName.sNetID := '';
+
+        IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
+            bReset			:= TRUE;
+            bInitialized	:= TRUE;
+            fbGetHostName(bExecute:=FALSE);
+        END_IF
+
+        tRetry(IN:=bReset, PT:=tRetryDelay);
+
+        bReset := FALSE;
+
+        IF NOT bDone THEN
+            fbGetHostName(bExecute:=TRUE, bError=>bError);
+            IF NOT (fbGetHostName.bBusy OR bError) THEN
+                sHostname	:= fbGetHostName.sHostName;
+                bDone 		:= TRUE;
+            END_IF
+        END_IF
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_GetPLCIPAddress
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_GetPLCIPAddress
+    VAR_INPUT
+        bEnable			: BOOL;
+        tRetryDelay		: TIME := T#10s;
+    END_VAR
+    VAR_OUTPUT
+        sIPAddress		: STRING(15);
+
+        bDone 			: BOOL;
+        bError			: BOOL;
+    END_VAR
+    VAR
+        fbGetAdapterIP 	: FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := ''); // Acquire IP of the correct adapter
+
+        iIndex			: UDINT;
+
+        tRetry 			: TON;
+        bReset			: BOOL;
+        bInitialized	: BOOL := FALSE;
+
+    END_VAR
+    IF bEnable THEN
+        IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
+            bReset			:= TRUE;
+            bInitialized	:= TRUE;
+            fbGetAdapterIP(bExecute:=FALSE);
+        END_IF
+
+        tRetry(IN:=bReset, PT:=tRetryDelay);
+        bReset := FALSE;
+
+        IF NOT bDone THEN
+            fbGetAdapterIP(bExecute:=TRUE, bError=>bError);
+            IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
+                FOR iIndex := 0 TO MAX_LOCAL_ADAPTERS DO
+                    IF FIND(fbGetAdapterIP.arrAdapters[iIndex].sIpAddr, GVL_Logger.sIpTidbit) <> 0 THEN
+                        sIPAddress := fbGetAdapterIP.arrAdapters[iIndex].sIpAddr;
+                        bDone := TRUE;
+                        EXIT;
+                    END_IF
+                END_FOR
+            END_IF
+        END_IF
+
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `GVL_Logger`_
 
 
 FB_Index
@@ -2040,17 +2148,17 @@ FB_Index
     *)
     FUNCTION_BLOCK FB_Index
     VAR_INPUT
-    	{attribute 'naming' := 'off'}
-    	LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
-    	ValInc : INT := 1; //Incrementer increments by this value
-    	UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
-    	{attribute 'naming' := 'off'}
+        {attribute 'naming' := 'off'}
+        LowerLimit : INT := 1; //Incrementer will rollver over to this value (and initialize to this value)
+        ValInc : INT := 1; //Incrementer increments by this value
+        UpperLimit	:	INT := 1; //Incrementer will rollover at this value to lower limit
+        {attribute 'naming' := 'off'}
     END_VAR
     VAR_OUTPUT
-    	
+
     END_VAR
     VAR
-    	nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
+        nVal	:	INT := LowerLimit; //Internal incrementer value, initialized to LowerLimit
     END_VAR
     {analysis -2} //Only the methods and actions are needed
 
@@ -2081,65 +2189,65 @@ FB_Listener
     END_VAR
 
     VAR
-    	nEventIdx			:	UINT := 0;
-    	nPendingEvents		:	UINT := 0;
-    	
-    	{attribute 'pytmc' := '
-    		pv: LogToVisualStudio
-    		io: io
-    	'}
-    	bLogToVisualStudio	:	BOOL := FALSE;
-    	
-    	{attribute 'pytmc' := '
-    		pv: MessagesSent
-    		io: i
-    	'}
-    	nCntMessagesSent 	: UDINT := 0;
+        nEventIdx			:	UINT := 0;
+        nPendingEvents		:	UINT := 0;
 
-    	{attribute 'pytmc' := '
-    		pv: AlarmsRaised
-    		io: i
-    	'}
-    	nCntAlarmsRaised 	: UDINT := 0;
-    	
-    	{attribute 'pytmc' := '
-    		pv: AlarmsConfirmed
-    		io: i
-    	'}
-    	nCntAlarmsConfirmed : UDINT := 0;
-    	
-    	{attribute 'pytmc' := '
-    		pv: AlarmsCleared
-    		io: i
-    	'}
-    	nCntAlarmsCleared 	: UDINT := 0;
-    	
-    	{attribute 'pytmc' := '
-    		pv: MinSeverity
-    		io: io
-    	'}
-    	eMinSeverity	 	: TcEventSeverity;
+        {attribute 'pytmc' := '
+            pv: LogToVisualStudio
+            io: io
+        '}
+        bLogToVisualStudio	:	BOOL := FALSE;
 
-    	{attribute 'pytmc' := '
-    		pv: Log
-    	'}
-    	stEventInfo 		:	REFERENCE TO ST_LoggingEventInfo;
+        {attribute 'pytmc' := '
+            pv: MessagesSent
+            io: i
+        '}
+        nCntMessagesSent 	: UDINT := 0;
 
-    	stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
-    	ipMessageConfig		:	ITcEventFilterConfig;
-    	fbSocket			:	POINTER TO FB_ConnectionlessSocket;
-    	bConfigured			:	BOOL	:= FALSE;
-        
+        {attribute 'pytmc' := '
+            pv: AlarmsRaised
+            io: i
+        '}
+        nCntAlarmsRaised 	: UDINT := 0;
+
+        {attribute 'pytmc' := '
+            pv: AlarmsConfirmed
+            io: i
+        '}
+        nCntAlarmsConfirmed : UDINT := 0;
+
+        {attribute 'pytmc' := '
+            pv: AlarmsCleared
+            io: i
+        '}
+        nCntAlarmsCleared 	: UDINT := 0;
+
+        {attribute 'pytmc' := '
+            pv: MinSeverity
+            io: io
+        '}
+        eMinSeverity	 	: TcEventSeverity;
+
+        {attribute 'pytmc' := '
+            pv: Log
+        '}
+        stEventInfo 		:	REFERENCE TO ST_LoggingEventInfo;
+
+        stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
+        ipMessageConfig		:	ITcEventFilterConfig;
+        fbSocket			:	POINTER TO FB_ConnectionlessSocket;
+        bConfigured			:	BOOL	:= FALSE;
+
 
     END_VAR
 
     VAR_IN_OUT
-    	
+
     END_VAR
 
     VAR CONSTANT
-    	// The maximum number of events allowed *per-cycle*
-    	nMaxEvents			:	UINT := 10;  
+        // The maximum number of events allowed *per-cycle*
+        nMaxEvents			:	UINT := 10;
     END_VAR
 
 
@@ -2157,130 +2265,112 @@ FB_LogHandler
 
     FUNCTION_BLOCK FB_LogHandler
     VAR_INPUT
-    	
-    	{attribute 'pytmc' := '
-    		pv: ADS
-    	'}
-    	fbTcAdsListener : FB_Listener;	
-    	
-    	{attribute 'pytmc' := '
-    		pv: Router
-    	'}
-    	fbTcRouterListener : FB_Listener;
-    	
-    	{attribute 'pytmc' := '
-    		pv: RTime
-    	'}
-    	fbTcRTimeListener : FB_Listener;	
-    	
-    	{attribute 'pytmc' := '
-    		pv: System
-    	'}
-    	fbTcSystemListener : FB_Listener;
-    	
-    	{attribute 'pytmc' := '
-    		pv: Windows
-    	'}
-    	fbWindowsListener : FB_Listener;	
 
-    	{attribute 'pytmc' := '
-    		pv: LCLS
-    	'}
-    	fbLCLSListener 	: FB_Listener;	
+        {attribute 'pytmc' := '
+            pv: ADS
+        '}
+        fbTcAdsListener : FB_Listener;
+
+        {attribute 'pytmc' := '
+            pv: Router
+        '}
+        fbTcRouterListener : FB_Listener;
+
+        {attribute 'pytmc' := '
+            pv: RTime
+        '}
+        fbTcRTimeListener : FB_Listener;
+
+        {attribute 'pytmc' := '
+            pv: System
+        '}
+        fbTcSystemListener : FB_Listener;
+
+        {attribute 'pytmc' := '
+            pv: Windows
+        '}
+        fbWindowsListener : FB_Listener;
+
+        {attribute 'pytmc' := '
+            pv: LCLS
+        '}
+        fbLCLSListener 	: FB_Listener;
 
     END_VAR
     VAR_OUTPUT
     END_VAR
 
     VAR
-    	
-    	bInitialized	:	BOOL	:= FALSE;
-    	bReadyToLog		: 	BOOL	:= FALSE;
-    	rtFirstLog		: 	R_TRIG;
-    	
-    	fbGetHostName		:	FB_GetHostName := (bExecute := TRUE, sNetID := ''); //Acquires name of the PLC
-        fbGetAdapterIP : FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := ''); // Acquire IP of the correct adapter
-    	bHostnameSet	:	BOOL	:= FALSE;
-        idxPortFind : UDINT;
 
-    	fbListener		:	REFERENCE TO FB_Listener;
-    	fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
-    	
-    	// Default minimum severity for subscriptions
-    	eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;	
-    	
-    	{attribute 'naming' := 'omit'}
-    	rtReset				:	R_TRIG; //Reset trigger
-    	bReset				:	BOOL;
-    		
-    	fbSocket	   		:	FB_ConnectionlessSocket;
-    	
-    	nI					:	UINT;
-        
+        bInitialized	:	BOOL	:= FALSE;
+        bReadyToLog		: 	BOOL	:= FALSE;
+        rtFirstLog		: 	R_TRIG;
+
+        fbGetHostName 	: FB_GetPLCHostname;
+        fbGetIP		 	: FB_GetPLCIPAddress;
+
+        fbListener		:	REFERENCE TO FB_Listener;
+        fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
+
+        // Default minimum severity for subscriptions
+        eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;
+
+        {attribute 'naming' := 'omit'}
+        rtReset				:	R_TRIG; //Reset trigger
+        bReset				:	BOOL;
+
+        fbSocket	   		:	FB_ConnectionlessSocket;
+
+        nI					:	UINT;
+
         SocketEnable : BOOL;
-        
-        bAdapterSet : BOOL;
-        
+
         ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
-        
+
         tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
-        
+
         tofTrickleBreakerPre : TOF := (PT:=T#1s);
         tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
-        DisarmCounter   : INT := DisarmCountDefault; 
         bTripCon : BOOL;
     END_VAR
 
     VAR CONSTANT
-    	nNumListeners		:	UINT	:= 6;
+        nNumListeners		:	UINT	:= 6;
         DisarmCountDefault : UINT :=5; // # number of cycles to permit below threshold condition
     END_VAR
-    IF NOT bInitialized THEN 
-    	bInitialized := TRUE;
-    	fbTcAdsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    	fbTcRouterListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRouterEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    	fbTcRTimeListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    	fbTcSystemListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcSystemEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    	fbWindowsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.Win32EventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    	fbLCLSListener.Configure(i_EventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    IF NOT bInitialized THEN
+        bInitialized := TRUE;
+        fbTcAdsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+        fbTcRouterListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRouterEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+        fbTcRTimeListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+        fbTcSystemListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcSystemEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+        fbWindowsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.Win32EventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+        fbLCLSListener.Configure(i_EventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
 
-    	fbListeners[0] := ADR(fbTcAdsListener);
-    	fbListeners[1] := ADR(fbTcRouterListener);
-    	fbListeners[2] := ADR(fbTcRTimeListener);
-    	fbListeners[3] := ADR(fbTcSystemListener);
-    	fbListeners[4] := ADR(fbWindowsListener);
-    	fbListeners[5] := ADR(fbLCLSListener);
-        
-    END_IF 
-    	
-    IF NOT bHostnameSet THEN
-    	fbGetHostName();
-    	IF NOT (fbGetHostName.bBusy OR fbGetHostName.bError) THEN
-    		GVL_Logger.sPlcHostname := fbGetHostName.sHostName;
-    		bHostnameSet 			:= TRUE;
-    	END_IF
+        fbListeners[0] := ADR(fbTcAdsListener);
+        fbListeners[1] := ADR(fbTcRouterListener);
+        fbListeners[2] := ADR(fbTcRTimeListener);
+        fbListeners[3] := ADR(fbTcSystemListener);
+        fbListeners[4] := ADR(fbWindowsListener);
+        fbListeners[5] := ADR(fbLCLSListener);
+
     END_IF
 
-    IF NOT bAdapterSet THEN
-        fbGetAdapterIP();
-        IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
-            FOR idxPortFind := 0 TO MAX_LOCAL_ADAPTERS DO
-                IF FIND(fbGetAdapterIP.arrAdapters[idxPortFind].sIpAddr,
-                   GVL_Logger.sIpTidbit) <> 0 THEN
-                    fbSocket.sLocalHost := fbGetAdapterIP.arrAdapters[idxPortFind].sIpAddr;
-                    SocketEnable := TRUE;
-                    bAdapterSet := TRUE;
-                    EXIT;
-                END_IF
-            END_FOR
-        END_IF
-    END_IF
+    fbGetHostName(
+        bEnable := TRUE,
+        sHostname => GVL_Logger.sPlcHostname,
+    );
+
+    fbGetIP(
+        bEnable := TRUE,
+        sIPAddress => fbSocket.sLocalHost
+    );
 
     (* Ensure the socket is ready for when JSON documents are emitted *)
     rtReset(CLK:=bReset);
 
     IF (rtReset.Q AND fbSocket.bEnable) THEN
-    	fbSocket(bEnable:=FALSE);
+        fbSocket(bEnable:=FALSE);
     END_IF
 
     // Disable fbSocket if too many errors occur
@@ -2291,13 +2381,19 @@ FB_LogHandler
     SocketEnable S= tRetryConnection.Q OR rtReset.Q;
 
     fbSocket(
-    	nLocalPort:=0,
-    	bEnable:=SocketEnable,
-    	nMode:=CONNECT_MODE_ENABLEDBG,
+        nLocalPort:=0,
+        bEnable:=fbGetIP.bDone,
+        nMode:=CONNECT_MODE_ENABLEDBG,
     );
 
-    bReadyToLog := (bAdapterSet AND bHostnameSet AND bInitialized AND 
-                    fbSocket.bEnable AND NOT fbSocket.bError AND fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED);
+    bReadyToLog := (
+        fbGetHostName.bDone AND
+        fbGetIP.bDone AND
+        bInitialized AND
+        fbSocket.bEnable AND
+        NOT fbSocket.bError AND
+        fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED
+    );
     rtFirstLog(CLK:=bReadyToLog);
 
     IF rtFirstLog.Q THEN
@@ -2309,9 +2405,9 @@ FB_LogHandler
 
     (* Poke all of the listeners *)
     FOR nI := 0 TO nNumListeners - 1 DO
-    	fbListener REF= fbListeners[nI]^;
-    	fbListener.Execute();
-    	fbListener.PublishEvents();
+        fbListener REF= fbListeners[nI]^;
+        fbListener.Execute();
+        fbListener.PublishEvents();
     END_FOR
 
     END_FUNCTION_BLOCK
@@ -2321,7 +2417,7 @@ FB_LogHandler
     Logic explanation
     We want to trip if there is a constant stream of messages being emitted by this PLC. We also
     only want the noisy offenders to trip. To target them we set a global trickle tripped flag
-    using this logic here. Then each individual FB_LogMessage evaluates itself to see if it's 
+    using this logic here. Then each individual FB_LogMessage evaluates itself to see if it's
     sending a message too frequently (ie. it's being called to often).
 
     This logic is attempting to implement the following:
@@ -2342,6 +2438,8 @@ FB_LogHandler
 
 Related:
     * `E_Subsystem`_
+    * `FB_GetPLCHostname`_
+    * `FB_GetPLCIPAddress`_
     * `FB_Listener`_
     * `FB_LogMessage`_
     * `GVL_Logger`_
@@ -2355,11 +2453,11 @@ FB_LogMessage
     {attribute 'reflection'}
     FUNCTION_BLOCK FB_LogMessage
     VAR_INPUT
-    	sMsg			: T_MaxString; 					// Message to send
-    	eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
-    	eSubsystem		: E_Subsystem; 					// Subsystem
-    	sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
-        
+        sMsg			: T_MaxString; 					// Message to send
+        eSevr			: TcEventSeverity	:= TcEventSeverity.Verbose;
+        eSubsystem		: E_Subsystem; 					// Subsystem
+        sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
+
         //Circuit breaker settings
         nMinTimeViolationAcceptable : INT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
         nLocalTripThreshold : TIME := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
@@ -2372,34 +2470,34 @@ FB_LogMessage
     END_VAR
 
     VAR
-    	bInitialized		:	BOOL := FALSE;
-    	bInitFailed			:	BOOL := FALSE;
-    	sSubsystemSource	:	STRING;
-    	fbMessage			:	REFERENCE TO FB_TcMessage;
-    	fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
-    	fbSource 			:	FB_TcSourceInfo;
-    	ipResultMessage	 	:	I_TcMessage;
-    	hr 					:	HRESULT;
-    	hrLastInternalError :	HRESULT;
-    	eTraceLevel 		:	TcEventSeverity := TcEventSeverity.Verbose;
+        bInitialized		:	BOOL := FALSE;
+        bInitFailed			:	BOOL := FALSE;
+        sSubsystemSource	:	STRING;
+        fbMessage			:	REFERENCE TO FB_TcMessage;
+        fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
+        fbSource 			:	FB_TcSourceInfo;
+        ipResultMessage	 	:	I_TcMessage;
+        hr 					:	HRESULT;
+        hrLastInternalError :	HRESULT;
+        eTraceLevel 		:	TcEventSeverity := TcEventSeverity.Verbose;
         bFirstCall : BOOL := TRUE;
-    	
-    	{attribute 'instance-path'} 
-        {attribute 'noinit'} 
-    	sPath				:	T_MaxString;
-        
+
+        {attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath				:	T_MaxString;
+
         // Circuit breaker
         ///////////////////////////////
-            nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod 
+            nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod
             nTimesViolated : INT;
-            
+
             LastCallTime : ULINT;
             CurrentCallTime : ULINT;
             DeltaSinceLastCall : ULINT;
-            
+
             WhenTripsCleared : ULINT;
             ftTrippedReleased : F_TRIG;
-     
+
             bLocalTrickleTripped : BOOL;
             bLocalTripped : BOOL;
 
@@ -2416,56 +2514,56 @@ FB_LogMessage
             '}
             bResetBreaker : BOOL;
             rtResetBreaker : R_TRIG;
-            
+
             rtTripped : R_TRIG;
         ////////////////////////////////////////////
 
     END_VAR
     IF NOT bInitialized AND NOT bInitFailed THEN
 
-    	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
-    	IF FAILED(hr) THEN
-    		bInitFailed := TRUE;
-    		hrLastInternalError := hr;
-    	END_IF
+        hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
+        IF FAILED(hr) THEN
+            bInitFailed := TRUE;
+            hrLastInternalError := hr;
+        END_IF
 
-    	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Warning, 0 (*fbSource*) );
-    	IF FAILED(hr) THEN
-    		bInitFailed := TRUE;
-    		hrLastInternalError := hr;
-    	END_IF
+        hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Warning, 0 (*fbSource*) );
+        IF FAILED(hr) THEN
+            bInitFailed := TRUE;
+            hrLastInternalError := hr;
+        END_IF
 
-    	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Info, 0 (*fbSource*) );
-    	IF FAILED(hr) THEN
-    		bInitFailed := TRUE;
-    		hrLastInternalError := hr;
-    	END_IF
+        hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Info, 0 (*fbSource*) );
+        IF FAILED(hr) THEN
+            bInitFailed := TRUE;
+            hrLastInternalError := hr;
+        END_IF
 
-    	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Error, 0 (*fbSource*) );
-    	IF FAILED(hr) THEN
-    		bInitFailed := TRUE;
-    		hrLastInternalError := hr;
-    	END_IF
+        hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Error, 0 (*fbSource*) );
+        IF FAILED(hr) THEN
+            bInitFailed := TRUE;
+            hrLastInternalError := hr;
+        END_IF
 
-    	hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Critical, 0 (*fbSource*) );
-    	IF FAILED(hr) THEN
-    		bInitFailed := TRUE;
-    		hrLastInternalError := hr;
-    	END_IF
-    	
-    	IF bInitFailed THEN
-    		ADSLOGSTR(
-    			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
-    			msgFmtStr   := '[LOGGER] Initialization failed in %s', 
-    			strArg      := sPath,
-    		); 
-    	ELSE
-    		bInitialized := TRUE;
-    	END_IF
+        hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Critical, 0 (*fbSource*) );
+        IF FAILED(hr) THEN
+            bInitFailed := TRUE;
+            hrLastInternalError := hr;
+        END_IF
+
+        IF bInitFailed THEN
+            ADSLOGSTR(
+                msgCtrlMask := ADSLOG_MSGTYPE_ERROR,
+                msgFmtStr   := '[LOGGER] Initialization failed in %s',
+                strArg      := sPath,
+            );
+        ELSE
+            bInitialized := TRUE;
+        END_IF
     END_IF
 
     IF bInitFailed THEN
-    	RETURN;
+        RETURN;
     END_IF
 
 
@@ -2474,31 +2572,31 @@ FB_LogMessage
 
     CircuitBreaker();
     IF bTripped AND NOT rtTripped.Q THEN RETURN; END_IF // Pass on the first one to deliver the message we're going silent
-     
+
     ///////////////////////////////////////////////////////////
 
 
-    	
+
     // Map the message severity to the LCLSGeneralEventClass:
     CASE eSevr OF
-    	TcEventSeverity.Verbose: 	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId];
-    	TcEventSeverity.Warning:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId];
-    	TcEventSeverity.Info:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId];		
-    	TcEventSeverity.Error:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId]; 
-    	TcEventSeverity.Critical:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId];
-    	ELSE
-    		RETURN;
+        TcEventSeverity.Verbose: 	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId];
+        TcEventSeverity.Warning:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId];
+        TcEventSeverity.Info:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId];
+        TcEventSeverity.Error:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId];
+        TcEventSeverity.Critical:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId];
+        ELSE
+            RETURN;
     END_CASE
 
     CASE eSubsystem OF
-    	E_Subsystem.FIELDBUS: 	sSubsystemSource := '/Fieldbus';
-    	E_Subsystem.MOTION: 	sSubsystemSource := '/Motion';
-    	E_Subsystem.MPS: 		sSubsystemSource := '/MPS';
-    	E_Subsystem.SDS: 		sSubsystemSource := '/SDS';
-    	E_Subsystem.VACUUM:		sSubsystemSource := '/Vacuum';
-    	E_Subsystem.OPTICS:     sSubsystemSource := '/Optics';
-    	ELSE
-    		sSubsystemSource := '/Unknown';
+        E_Subsystem.FIELDBUS: 	sSubsystemSource := '/Fieldbus';
+        E_Subsystem.MOTION: 	sSubsystemSource := '/Motion';
+        E_Subsystem.MPS: 		sSubsystemSource := '/MPS';
+        E_Subsystem.SDS: 		sSubsystemSource := '/SDS';
+        E_Subsystem.VACUUM:		sSubsystemSource := '/Vacuum';
+        E_Subsystem.OPTICS:     sSubsystemSource := '/Optics';
+        ELSE
+            sSubsystemSource := '/Unknown';
     END_CASE
 
     // Clearing the source here will clear the event GUID, causing the message to not be resolved.
@@ -2515,13 +2613,13 @@ FB_LogMessage
     IF rtTripped.Q THEN
        fbMessage.ipArguments.AddString('Logging circuit breaker tripped, this will be the last message from this element for a while...');
     ELSIF NOT bTripped THEN
-        fbMessage.ipArguments.AddString(sMsg); 
+        fbMessage.ipArguments.AddString(sMsg);
     END_IF
 
 
     IF LEN(sJson) = 0 THEN
-    	// Ensure there's a valid JSON string here
-    	sJson := '{}';
+        // Ensure there's a valid JSON string here
+        sJson := '{}';
     END_IF
 
     fbMessage.SetJsonAttribute(sJson);
@@ -2530,11 +2628,11 @@ FB_LogMessage
     // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
     // We want to send 1 more message when we trip
     IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND (NOT bTripped OR rtTripped.Q) THEN
-    	hr := fbMessage.Send(0);
+        hr := fbMessage.Send(0);
     END_IF
 
     IF FAILED(hr) THEN
-    	hrLastInternalError := hr;
+        hrLastInternalError := hr;
     END_IF
 
     END_FUNCTION_BLOCK
@@ -2546,7 +2644,7 @@ FB_LogMessage
         DeltaSinceLastCall := 16#FFFF_FFFF;
         bFirstCall := FALSE;
     ELSE
-       DeltaSinceLastCall := CurrentCallTime - LastCallTime; 
+       DeltaSinceLastCall := CurrentCallTime - LastCallTime;
     END_IF
 
     LastCallTime := CurrentCallTime;
@@ -2557,7 +2655,7 @@ FB_LogMessage
     END_IF
     rtResetBreaker(CLK:=bResetBreaker OR
                     bEnableAutoReset AND (CurrentCallTime - WhenTripsCleared > TIME_TO_100NS(nTripResetPeriod)) );
-        
+
     IF rtResetBreaker.Q THEN
        // bLocalTrickleTripped := FALSE;
         //bLocalTripped := FALSE;
@@ -2570,7 +2668,7 @@ FB_LogMessage
     IF DeltaSinceLastCall < TIME_TO_100NS(nLocalTripThreshold) THEN
         nTimesViolated := MIN(nTimesViolated + 1, nMinTimeViolationAcceptable+1);
     ELSE
-        nTimesViolated := MAX(nTimesViolated - 1, 0); 
+        nTimesViolated := MAX(nTimesViolated - 1, 0);
     END_IF
 
     bLocalTripped := nTimesViolated > nMinTimeViolationAcceptable;
@@ -2595,31 +2693,31 @@ FB_LREALBuffer
 
     FUNCTION_BLOCK FB_LREALBuffer
     (*
-    	An example use of FB_DataBuffer for the likely most-common use case.
-    	2019-10-09 Zachary Lentz
+        An example use of FB_DataBuffer for the likely most-common use case.
+        2019-10-09 Zachary Lentz
     *)
     VAR_INPUT
-    	// If TRUE, we'll accumulate a value on this cycle.
-    	bExecute: BOOL;
-    	// The value to accumulate.
-    	fInput: LREAL;
+        // If TRUE, we'll accumulate a value on this cycle.
+        bExecute: BOOL;
+        // The value to accumulate.
+        fInput: LREAL;
     END_VAR
     VAR_OUTPUT
-    	arrOutput: ARRAY [1..1000] OF LREAL;
-    	bNewArray: BOOL;
+        arrOutput: ARRAY [1..1000] OF LREAL;
+        bNewArray: BOOL;
     END_VAR
     VAR
-    	arrPartial: ARRAY [1..1000] OF LREAL;
-    	fbDataBuffer: FB_DataBuffer;
+        arrPartial: ARRAY [1..1000] OF LREAL;
+        fbDataBuffer: FB_DataBuffer;
     END_VAR
     fbDataBuffer(
-    	bExecute := bExecute,
-    	pInputAdr := ADR(fInput),
-    	iInputSize := SIZEOF(fInput),
-    	iElemCount := 1000,
-    	pPartialAdr := ADR(arrPartial),
-    	pOutputAdr := ADR(arrOutput),
-    	bNewArray => bNewArray);
+        bExecute := bExecute,
+        pInputAdr := ADR(fInput),
+        iInputSize := SIZEOF(fInput),
+        iElemCount := 1000,
+        pPartialAdr := ADR(arrPartial),
+        pOutputAdr := ADR(arrOutput),
+        bNewArray => bNewArray);
 
     END_FUNCTION_BLOCK
 
@@ -2638,14 +2736,14 @@ FB_LREALFromEPICS
 
     Usage:
 
-    	{attribute 'pytmc' := '
-    		pv: INTERNAL:RECORD
-    		link: PV:NAME:TO:LINK:TO
-    	'}
-    	fbLinkedValue1 : FB_LREALFromEPICS;
-    	
+        {attribute 'pytmc' := '
+            pv: INTERNAL:RECORD
+            link: PV:NAME:TO:LINK:TO
+        '}
+        fbLinkedValue1 : FB_LREALFromEPICS;
+
     Such that when PV:NAME:TO:LINK:TO changes in EPICS, the INTERNAL:RECORD will be used to
-    push a value through to the PLC with this function block. 
+    push a value through to the PLC with this function block.
 
     As this block takes care of IOC heartbeat signals and monitors the link and value severity,
     the end-user should then only have to look at `.bValid` and `.fValue`. These are guaranteed to
@@ -2659,65 +2757,65 @@ FB_LREALFromEPICS
     END_VAR
 
     VAR_OUTPUT
-    	bValid				: BOOL;
-    	fValue				: LREAL;
+        bValid				: BOOL;
+        fValue				: LREAL;
     END_VAR
 
     VAR
-    	iValueInvalidate	: POINTER TO ULINT;
-    	tonValueTimeout		: TON;
-    	tonSeverityTimeout	: TON;
-    	
-    	fLastValidValue 	: LREAL;
-    	iLastValidSeverity 	: INT;
-    	
-    	{attribute 'pytmc' := '
-    		pv: EPICSLink
-    		link:
-    		field: DESC Internal variable used to monitor EPICS PV in PLC
-    	'}
-    	fPLCInternalValue : LREAL;
+        iValueInvalidate	: POINTER TO ULINT;
+        tonValueTimeout		: TON;
+        tonSeverityTimeout	: TON;
 
-    	// Use special link syntax for now to get EPICSLink.SEVR here:
-    	{attribute 'pytmc' := '
-    		pv: EPICSLink:LinkSeverity
-    		link: *EPICSLink.SEVR
-    		field: DESC Internal variable used to monitor EPICS PV severity in PLC
-    	'}
-    	iPLCInternalSeverity : INT;
+        fLastValidValue 	: LREAL;
+        iLastValidSeverity 	: INT;
+
+        {attribute 'pytmc' := '
+            pv: EPICSLink
+            link:
+            field: DESC Internal variable used to monitor EPICS PV in PLC
+        '}
+        fPLCInternalValue : LREAL;
+
+        // Use special link syntax for now to get EPICSLink.SEVR here:
+        {attribute 'pytmc' := '
+            pv: EPICSLink:LinkSeverity
+            link: *EPICSLink.SEVR
+            field: DESC Internal variable used to monitor EPICS PV severity in PLC
+        '}
+        iPLCInternalSeverity : INT;
 
     END_VAR
     VAR CONSTANT
         // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
-    	tTimeout			: TIME := T#2S;
-    	NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
+        tTimeout			: TIME := T#2S;
+        NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
     END_VAR
     iValueInvalidate := ADR(fPLCInternalValue);
 
     IF iPLCInternalSeverity <> -1 THEN
-    	// New severity value
-    	iLastValidSeverity := iPLCInternalSeverity;
-    	iPLCInternalSeverity := -1;
-    	
-     	// Reset the timer
-    	tonSeverityTimeout(IN:=FALSE);
-    	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+        // New severity value
+        iLastValidSeverity := iPLCInternalSeverity;
+        iPLCInternalSeverity := -1;
+
+         // Reset the timer
+        tonSeverityTimeout(IN:=FALSE);
+        tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
     END_IF
 
     IF iValueInvalidate^ <> NAN_VALUE THEN
-    	// New value from EPICS
-    	fLastValidValue 	:= fPLCInternalValue;
-    	iValueInvalidate^	:= NAN_VALUE;
-    	
-    	// Reset the timer
-    	tonValueTimeout(IN:=FALSE);
-    	tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+        // New value from EPICS
+        fLastValidValue 	:= fPLCInternalValue;
+        iValueInvalidate^	:= NAN_VALUE;
+
+        // Reset the timer
+        tonValueTimeout(IN:=FALSE);
+        tonValueTimeout(IN:=TRUE, PT:=tTimeout);
     END_IF
 
     tonValueTimeout();
     tonSeverityTimeout();
-    bValid := (NOT tonValueTimeout.Q) AND 
-    		  (NOT tonSeverityTimeout.Q) AND 
+    bValid := (NOT tonValueTimeout.Q) AND
+              (NOT tonSeverityTimeout.Q) AND
               (iLastValidSeverity <= iMaximumValidSeverity);
     fValue := fLastValidValue;
 
@@ -2736,24 +2834,24 @@ FB_STRINGFromEPICS
 
     Usage:
 
-    	{attribute 'pytmc' := '
-    		pv: INTERNAL:RECORD
-    		link: PV:NAME:TO:LINK:TO.VAL@
-    	'}
-    	fbLinkedValue1 : FB_STRINGFromEPICS;
-    	
+        {attribute 'pytmc' := '
+            pv: INTERNAL:RECORD
+            link: PV:NAME:TO:LINK:TO.VAL@
+        '}
+        fbLinkedValue1 : FB_STRINGFromEPICS;
+
     Such that when PV:NAME:TO:LINK:TO.VAL$ changes in EPICS, the INTERNAL:RECORD will be used to
     push a value through to the PLC with this function block.
 
-    The usage of "@" above has several layers of complexity, which are not strictly necessary to 
+    The usage of "@" above has several layers of complexity, which are not strictly necessary to
     understand in order to use this function block. The reasons are as follows:
 
-    	1. TwinCAT does not allow the "$" symbol to be used in pragmas.  pytmc uses "@" as an
-    	   alternate character for "$" as the latter is more frequently useful.
-    	2. The "$" is used as a suffix for EPICS string PVs where accessing strings over
-    	   the standard 40 character length is desirable. 
-    	3. Combining the above, using "PV.VAL@" we can direct EPICS to use long string
-    	   handling over the Channel Access link to the link PV ("PV.VAL$").
+        1. TwinCAT does not allow the "$" symbol to be used in pragmas.  pytmc uses "@" as an
+           alternate character for "$" as the latter is more frequently useful.
+        2. The "$" is used as a suffix for EPICS string PVs where accessing strings over
+           the standard 40 character length is desirable.
+        3. Combining the above, using "PV.VAL@" we can direct EPICS to use long string
+           handling over the Channel Access link to the link PV ("PV.VAL$").
 
     As this block takes care of IOC heartbeat signals and monitors the link and value severity,
     the end-user should then only have to look at `.bValid` and `.sValue`. These are guaranteed to
@@ -2767,64 +2865,64 @@ FB_STRINGFromEPICS
     END_VAR
 
     VAR_OUTPUT
-    	bValid				: BOOL;
-    	sValue				: STRING;
+        bValid				: BOOL;
+        sValue				: STRING;
     END_VAR
 
     VAR
-    	tonValueTimeout		: TON;
-    	tonSeverityTimeout	: TON;
-    	
-    	sLastValidValue 	: STRING;
-    	iLastValidSeverity 	: INT;
-    	
-    	{attribute 'pytmc' := '
-    		pv: EPICSLink
-    		link:
-    		field: DESC Internal variable used to monitor EPICS PV in PLC
-    	'}
-    	sPLCInternalValue : STRING;
+        tonValueTimeout		: TON;
+        tonSeverityTimeout	: TON;
 
-    	// Use special link syntax for now to get EPICSLink.SEVR here:
-    	{attribute 'pytmc' := '
-    		pv: EPICSLink:Sevr
-    		link: *EPICSLink.SEVR
-    		field: DESC Internal variable used to monitor EPICS PV severity in PLC
-    	'}
-    	iPLCInternalSeverity : INT;
+        sLastValidValue 	: STRING;
+        iLastValidSeverity 	: INT;
+
+        {attribute 'pytmc' := '
+            pv: EPICSLink
+            link:
+            field: DESC Internal variable used to monitor EPICS PV in PLC
+        '}
+        sPLCInternalValue : STRING;
+
+        // Use special link syntax for now to get EPICSLink.SEVR here:
+        {attribute 'pytmc' := '
+            pv: EPICSLink:Sevr
+            link: *EPICSLink.SEVR
+            field: DESC Internal variable used to monitor EPICS PV severity in PLC
+        '}
+        iPLCInternalSeverity : INT;
 
     END_VAR
     VAR CONSTANT
         // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
-    	tTimeout			: TIME := T#2S;
-    	// This is an arbitrary extended UUID.  If you want to store this value in your IOC 
-    	// and use it with this function block - well, too bad.
-    	sUnsetString   		: STRING := '857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd';
+        tTimeout			: TIME := T#2S;
+        // This is an arbitrary extended UUID.  If you want to store this value in your IOC
+        // and use it with this function block - well, too bad.
+        sUnsetString   		: STRING := '857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd';
     END_VAR
     IF iPLCInternalSeverity <> -1 THEN
-    	// New severity value
-    	iLastValidSeverity := iPLCInternalSeverity;
-    	iPLCInternalSeverity := -1;
-    	
-     	// Reset the timer
-    	tonSeverityTimeout(IN:=FALSE);
-    	tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+        // New severity value
+        iLastValidSeverity := iPLCInternalSeverity;
+        iPLCInternalSeverity := -1;
+
+         // Reset the timer
+        tonSeverityTimeout(IN:=FALSE);
+        tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
     END_IF
 
     IF sPLCInternalValue <> sUnsetString THEN
-    	// New value from EPICS
-    	sLastValidValue 	:= sPLCInternalValue;
-    	sPLCInternalValue	:= sUnsetString;
-    	
-    	// Reset the timer
-    	tonValueTimeout(IN:=FALSE);
-    	tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+        // New value from EPICS
+        sLastValidValue 	:= sPLCInternalValue;
+        sPLCInternalValue	:= sUnsetString;
+
+        // Reset the timer
+        tonValueTimeout(IN:=FALSE);
+        tonValueTimeout(IN:=TRUE, PT:=tTimeout);
     END_IF
 
     tonValueTimeout();
     tonSeverityTimeout();
-    bValid := (NOT tonValueTimeout.Q) AND 
-    		  (NOT tonSeverityTimeout.Q) AND 
+    bValid := (NOT tonValueTimeout.Q) AND
+              (NOT tonSeverityTimeout.Q) AND
               (iLastValidSeverity <= iMaximumValidSeverity);
     sValue := sLastValidValue;
 
@@ -2895,40 +2993,40 @@ FB_ThermoCouple
 
     FUNCTION_BLOCK FB_ThermoCouple
     (*
-    	Deprecated as of 2020-03-02, please use FB_TempSensor instead
-    	2019-10-09 Zachary Lentz
+        Deprecated as of 2020-03-02, please use FB_TempSensor instead
+        2019-10-09 Zachary Lentz
     *)
     {warning 'Function Block FB_ThermoCouple is deprecated and may be removed in a future release'}
     VAR_INPUT
-    	// Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
-    	iScale: INT := 10;
+        // Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
+        iScale: INT := 10;
     END_VAR
     VAR_OUTPUT
-    	{attribute 'pytmc' := '
-    		pv: STC:TEMP
-    		io: input
-    	'}
-    	fTemp: LREAL;
-    	
-    	{attribute 'pytmc' := '
-    		pv: STC:CONN
-    		io: input
-    		field: ONAM Connected
-    		field: ZNAM Disconnected
-    	'}
-    	bConnected: BOOL;
-    	
-    	{attribute 'pytmc' := '
-    		pv: STC:ERR
-    		io: input
-    	'}
-    	bError AT %I*: BOOL;
-    	
-    	bUnderrange AT %I*: BOOL;
-    	bOverrange AT %I*: BOOL;
+        {attribute 'pytmc' := '
+            pv: STC:TEMP
+            io: input
+        '}
+        fTemp: LREAL;
+
+        {attribute 'pytmc' := '
+            pv: STC:CONN
+            io: input
+            field: ONAM Connected
+            field: ZNAM Disconnected
+        '}
+        bConnected: BOOL;
+
+        {attribute 'pytmc' := '
+            pv: STC:ERR
+            io: input
+        '}
+        bError AT %I*: BOOL;
+
+        bUnderrange AT %I*: BOOL;
+        bOverrange AT %I*: BOOL;
     END_VAR
     VAR
-    	iRaw AT %I*: INT;
+        iRaw AT %I*: INT;
     END_VAR
     // The manual states that we are disconnected if we are both overrange and in an error state
     bConnected := NOT (bOverrange AND bError);
@@ -2948,28 +3046,28 @@ FB_TimeStampBuffer
 
     FUNCTION_BLOCK FB_TimeStampBuffer
     (*
-    	A Companion to FB_LREALBuffer that accumulates timestamps
-    	2019-10-09 Zachary Lentz
+        A Companion to FB_LREALBuffer that accumulates timestamps
+        2019-10-09 Zachary Lentz
     *)
     VAR_INPUT
-    	// If TRUE, we'll accumulate a value on this cycle.
-    	bExecute: BOOL;
+        // If TRUE, we'll accumulate a value on this cycle.
+        bExecute: BOOL;
     END_VAR
     VAR_OUTPUT
-    	arrOutput: ARRAY [1..1000] OF LREAL;
-    	bNewArray: BOOL;
+        arrOutput: ARRAY [1..1000] OF LREAL;
+        bNewArray: BOOL;
     END_VAR
     VAR
-    	fbUnixTime: FB_UnixTimestamp;
-    	fbLREALBuffer: FB_LREALBuffer;
+        fbUnixTime: FB_UnixTimestamp;
+        fbLREALBuffer: FB_LREALBuffer;
     END_VAR
     fbUnixTime(
-    	bExecute := bExecute,
-    	fTime => fbLREALBuffer.fInput);
+        bExecute := bExecute,
+        fTime => fbLREALBuffer.fInput);
     fbLREALBuffer(
-    	bExecute := bExecute,
-    	arrOutput => arrOutput,
-    	bNewArray => bNewArray);
+        bExecute := bExecute,
+        arrOutput => arrOutput,
+        bNewArray => bNewArray);
 
     END_FUNCTION_BLOCK
 
@@ -2985,27 +3083,27 @@ FB_TimeStampBufferGlobal
 
     FUNCTION_BLOCK FB_TimeStampBufferGlobal
     (*
-    	A Variant of FB_TimeStampBuffer that uses the global timestamp.
-    	2019-10-09 Zachary Lentz
+        A Variant of FB_TimeStampBuffer that uses the global timestamp.
+        2019-10-09 Zachary Lentz
 
-    	Assumes an instance of FB_UnixTimeStampGlobal is running every cycle.
+        Assumes an instance of FB_UnixTimeStampGlobal is running every cycle.
     *)
     VAR_INPUT
-    	// If TRUE, we'll accumulate a value on this cycle.
-    	bExecute: BOOL;
+        // If TRUE, we'll accumulate a value on this cycle.
+        bExecute: BOOL;
     END_VAR
     VAR_OUTPUT
-    	arrOutput: ARRAY [1..1000] OF LREAL;
-    	bNewArray: BOOL;
+        arrOutput: ARRAY [1..1000] OF LREAL;
+        bNewArray: BOOL;
     END_VAR
     VAR
-    	fbLREALBuffer: FB_LREALBuffer;
+        fbLREALBuffer: FB_LREALBuffer;
     END_VAR
     fbLREALBuffer(
-    	bExecute := bExecute,
-    	fInput := DefaultGlobals.fTimeStamp,
-    	arrOutput => arrOutput,
-    	bNewArray => bNewArray);
+        bExecute := bExecute,
+        fInput := DefaultGlobals.fTimeStamp,
+        arrOutput => arrOutput,
+        bNewArray => bNewArray);
 
     END_FUNCTION_BLOCK
 
@@ -3024,53 +3122,53 @@ FB_UnixTimeStamp
 
     FUNCTION_BLOCK FB_UnixTimeStamp
     (*
-    	Get the unix timestamp equivalent of the PLC's time.
-    	2019-10-09 Zachary Lentz
-    	
-    	This will only sync with the Linux host when both hosts' clocks are correct.
-    	Largely stolen from stack overflow
+        Get the unix timestamp equivalent of the PLC's time.
+        2019-10-09 Zachary Lentz
+
+        This will only sync with the Linux host when both hosts' clocks are correct.
+        Largely stolen from stack overflow
     *)
     VAR_INPUT
-    	// If TRUE, we'll try to update the output on this cycle.
-    	bExecute: BOOL;
+        // If TRUE, we'll try to update the output on this cycle.
+        bExecute: BOOL;
     END_VAR
     VAR_OUTPUT
-    	// Number of seconds in the timestamp
-    	iSeconds: ULINT;
-    	// Number of milliseconds past the seconds
-    	iMilliseconds: ULINT;
-    	// Full raw number
-    	iFull: ULINT;
-    	// Full floating point number in units of seconds
-    	fTime: LREAL;
-    	// TRUE if the output is okay to use on this cycle. Typically the output is zero when this is FALSE.
-    	bValid: BOOL;
+        // Number of seconds in the timestamp
+        iSeconds: ULINT;
+        // Number of milliseconds past the seconds
+        iMilliseconds: ULINT;
+        // Full raw number
+        iFull: ULINT;
+        // Full floating point number in units of seconds
+        fTime: LREAL;
+        // TRUE if the output is okay to use on this cycle. Typically the output is zero when this is FALSE.
+        bValid: BOOL;
     END_VAR
     VAR
-    	bInit: BOOL;
-    	fbLocalTime: FB_LocalSystemTime;
-    	fbGetTimeZone: FB_GetTimeZoneInformation;
-    	fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
-    	fileTime: T_FILETIME;
+        bInit: BOOL;
+        fbLocalTime: FB_LocalSystemTime;
+        fbGetTimeZone: FB_GetTimeZoneInformation;
+        fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
+        fileTime: T_FILETIME;
     END_VAR
     IF NOT bInit THEN
-    	bInit := TRUE;
-    	fbGetTimeZone(bExecute:=TRUE, tzInfo => fbTimeConv.tzInfo);
+        bInit := TRUE;
+        fbGetTimeZone(bExecute:=TRUE, tzInfo => fbTimeConv.tzInfo);
     END_IF
     IF bExecute THEN
-    	fbLocalTime(
-    		bEnable := TRUE,
-    		dwCycle := 1,
-    		bValid => bValid);
-    	IF bValid THEN
-    		fbTimeConv(
-    			in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
-    			out => fileTime);
-    		iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
-    		fTime := ULINT_TO_LREAL(iFull)/1000;
-    		iSeconds := iFull/1000;
-    		iMilliseconds := iFull MOD 1000;
-    	END_IF
+        fbLocalTime(
+            bEnable := TRUE,
+            dwCycle := 1,
+            bValid => bValid);
+        IF bValid THEN
+            fbTimeConv(
+                in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
+                out => fileTime);
+            iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+            fTime := ULINT_TO_LREAL(iFull)/1000;
+            iSeconds := iFull/1000;
+            iMilliseconds := iFull MOD 1000;
+        END_IF
     END_IF
 
     END_FUNCTION_BLOCK
@@ -3085,21 +3183,21 @@ FB_UnixTimeStampGlobal
 
     FUNCTION_BLOCK FB_UnixTimeStampGlobal
     (*
-    	Runs FB_UnixTimeStamp and stuffs the result into this library's GVL
-    	2019-10-09 Zachary Lentz
+        Runs FB_UnixTimeStamp and stuffs the result into this library's GVL
+        2019-10-09 Zachary Lentz
     *)
     VAR_INPUT
-    	// If TRUE, we will update the output on this cycle.
-    	bExecute: BOOL;
+        // If TRUE, we will update the output on this cycle.
+        bExecute: BOOL;
     END_VAR
     VAR_OUTPUT
     END_VAR
     VAR
-    	fbTimeStamp: FB_UnixTimeStamp;
+        fbTimeStamp: FB_UnixTimeStamp;
     END_VAR
     fbTimeStamp(
-    	bExecute := bExecute,
-    	fTime => DefaultGlobals.fTimeStamp);
+        bExecute := bExecute,
+        fTime => DefaultGlobals.fTimeStamp);
 
     END_FUNCTION_BLOCK
 
@@ -3117,27 +3215,27 @@ FB_XKoyoPLCModbus
     //Facilitates communication between Beckhoff and Koyo PLC over the network.
     FUNCTION_BLOCK FB_XKoyoPLCModbus
     VAR
-    	fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils; //FB for reading the coils from the other PLC
-    	anKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE; //Buffer for coil readbacks
-    	{attribute 'naming' := 'omit'}
-    	ftReset	: F_TRIG; //Reset edge sensor
-    	{attribute 'naming' := 'omit'}
-    	tonRetry : TON; //Retry timer
-    	nIndex : INT; //Index for clearing the coil array
+        fbKoyo_PLCInputCoilsRx	:	FB_MBReadCoils; //FB for reading the coils from the other PLC
+        anKoyo_PLC_CnBits	:	ARRAY [0..20] OF BYTE; //Buffer for coil readbacks
+        {attribute 'naming' := 'omit'}
+        ftReset	: F_TRIG; //Reset edge sensor
+        {attribute 'naming' := 'omit'}
+        tonRetry : TON; //Retry timer
+        nIndex : INT; //Index for clearing the coil array
     END_VAR
 
     VAR_INPUT
-    	i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
-    	i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
+        i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
+        i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
     END_VAR
 
     VAR_OUTPUT
-    	q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
-    	q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
-    	q_xError         : BOOL := FALSE; //Transaction or other error
+        q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
+        q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
+        q_xError         : BOOL := FALSE; //Transaction or other error
     END_VAR
     (* Look ma' no wires! *)
-    (* A. Wallace, 2015-7-22 
+    (* A. Wallace, 2015-7-22
     XKoyoPLCModbus
 
     Facilitates communication between Beckhoff and Koyo PLC over the network.
@@ -3174,24 +3272,24 @@ FB_XKoyoPLCModbus
 
     //run some error code for modbus
     IF fbKoyo_PLCInputCoilsRx.bError THEN
-    	//if there's a modbus error, set all incoming bits to zero
-    	{analysis -41} //There are one-liners for resetting an array to zero but they don't comply with 61131
-    	FOR nIndex := 0 TO USINT_TO_INT(SIZEOF(anKoyo_PLC_CnBits))-1 DO //starts at 0
-    		anKoyo_PLC_CnBits[nIndex]:=0;
-    	END_FOR
-    	{analysis +41}
-    	q_xError := TRUE;
-    	
-    ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
-    	fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
-    	q_xNoPLCResponse:= FALSE;
-    	q_xError := FALSE;
+        //if there's a modbus error, set all incoming bits to zero
+        {analysis -41} //There are one-liners for resetting an array to zero but they don't comply with 61131
+        FOR nIndex := 0 TO USINT_TO_INT(SIZEOF(anKoyo_PLC_CnBits))-1 DO //starts at 0
+            anKoyo_PLC_CnBits[nIndex]:=0;
+        END_FOR
+        {analysis +41}
+        q_xError := TRUE;
 
-    //more error code cause we didn't manage to read anything	
+    ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
+        fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
+        q_xNoPLCResponse:= FALSE;
+        q_xError := FALSE;
+
+    //more error code cause we didn't manage to read anything
     ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
-    	q_xError := TRUE;
-    	q_xNoPLCResponse:= TRUE;
-    			
+        q_xError := TRUE;
+        q_xNoPLCResponse:= TRUE;
+
     END_IF
 
     q_anPLCResponse := anKoyo_PLC_CnBits;
@@ -3249,8 +3347,8 @@ SYSTEM_TIME_TO_RFC3339
     {attribute 'analysis' := '-23'}
     FUNCTION SYSTEM_TIME_TO_RFC3339 : STRING(255)
     VAR_INPUT
-    	{attribute 'naming' := 'omit'}
-    	tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
+        {attribute 'naming' := 'omit'}
+        tCurrentTime	:	TIMESTRUCT; //TIMESTRUCT Time to convert to RFC3339
     END_VAR
     VAR
     END_VAR

@@ -90,6 +90,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-el6-com">FB_EL6_Com</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ethercatdiag">FB_EtherCATDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ethercatframediag">FB_EtherCATFrameDiag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-getplchostname">FB_GetPLCHostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-getplcipaddress">FB_GetPLCIPAddress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-index">FB_Index</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-listener">FB_Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-loghandler">FB_LogHandler</a></li>
@@ -270,8 +272,8 @@
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
     <span class="o">//</span><span class="n">Incrementer</span><span class="p">,</span> <span class="n">included</span> <span class="n">here</span> <span class="n">to</span> <span class="n">facilitate</span> <span class="n">using</span> <span class="n">asResults</span>
     <span class="n">resultIdx</span>       <span class="p">:</span>       <span class="n">FB_Index</span> <span class="o">:=</span> <span class="p">(</span>
-            <span class="n">LowerLimit</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">UpperLimit</span> <span class="o">:=</span> <span class="mi">20</span>
+        <span class="n">LowerLimit</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">UpperLimit</span> <span class="o">:=</span> <span class="mi">20</span>
     <span class="p">);</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
     <span class="n">fString</span> <span class="p">:</span>       <span class="n">FB_FormatString</span><span class="p">;</span> <span class="o">//</span><span class="n">Use</span> <span class="n">to</span> <span class="n">create</span> <span class="n">good</span> <span class="n">log</span> <span class="n">messages</span><span class="p">,</span> <span class="n">similar</span> <span class="n">to</span> <span class="n">C</span><span class="o">++</span> <span class="n">fstring</span>
@@ -291,100 +293,100 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>TYPE ST_LoggingEventInfo_WC :
 STRUCT
     (*
-            Message or Alarm{Cleared,Confirmed,Raised} event information
+        Message or Alarm{Cleared,Confirmed,Raised} event information
 
-            ** Working copy - to be used for the pinned ST_LoggingEventInfo **
-            * The process for updating this type is as follows:
-                    1. Copy this structure and rename to ST_LoggingEventInfo
-                    2. Remove the working copy notes section
-                    3. Pin the global data type
-            ** End of working copy information **
+        ** Working copy - to be used for the pinned ST_LoggingEventInfo **
+        * The process for updating this type is as follows:
+            1. Copy this structure and rename to ST_LoggingEventInfo
+            2. Remove the working copy notes section
+            3. Pin the global data type
+        ** End of working copy information **
 
-            Note that elements here do not follow the usual Hungarian notation /
-            variable-type-prefixing naming convention due to the member names being
-            used directly in the generation of the JSON document.
+        Note that elements here do not follow the usual Hungarian notation /
+        variable-type-prefixing naming convention due to the member names being
+        used directly in the generation of the JSON document.
     *)
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: Schema
-            io: i
-            field: DESC Schema string
+        pv: Schema
+        io: i
+        field: DESC Schema string
     &#39;}
     schema          :       STRING := &#39;twincat-event-0&#39;;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: Timestamp
-            io: i
-            field: DESC Unix timestamp
+        pv: Timestamp
+        io: i
+        field: DESC Unix timestamp
     &#39;}
-    ts                      :       LREAL;
+      ts                    :       LREAL;
+
+      {attribute &#39;pytmc&#39; := &#39;
+        pv: Hostname
+        io: i
+        field: DESC PLC Hostname
+    &#39;}
+      plc                   :       STRING;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: Hostname
-            io: i
-            field: DESC PLC Hostname
-    &#39;}
-    plc                     :       STRING;
-
-    {attribute &#39;pytmc&#39; := &#39;
-            pv: Severity
-            io: i
-            field: DESC TcEventSeverity
-            field: ZRST Verbose
-            field: ONST Info
-            field: TWST Warning
-            field: THST Error
+        pv: Severity
+        io: i
+        field: DESC TcEventSeverity
+        field: ZRST Verbose
+        field: ONST Info
+        field: TWST Warning
+        field: THST Error
     &#39;}
     severity        :       TcEventSeverity;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: MessageID
-            io: i
-            field: DESC TwinCAT Message ID
+        pv: MessageID
+        io: i
+        field: DESC TwinCAT Message ID
     &#39;}
     id                      :       UDINT;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: EventClass
-            io: i
-            field: DESC TwinCAT Event class
+        pv: EventClass
+        io: i
+        field: DESC TwinCAT Event class
     &#39;}
     event_class             :       STRING;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: Message
-            io: i
+        pv: Message
+        io: i
     &#39;}
     msg                             : STRING(255);
     // This is actually: T_MaxString
     // which has been expanded due to requirements for pinning global data types.
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: Source
-            io: i
+        pv: Source
+        io: i
     &#39;}
     source                  : STRING(255);
     // This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
     // which has been expanded due to requirements for pinning global data types.
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: EventType
-            io: i
-            field: DESC The event type
+        pv: EventType
+        io: i
+        field: DESC The event type
     &#39;}
     event_type      :        E_LogEventType;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: MessageJSON
-            io: i
-            field: DESC Metadata with the message
+        pv: MessageJSON
+        io: i
+        field: DESC Metadata with the message
     &#39;}
     json            :       STRING(10000);
     (*
     NOTE: this JSON gets inserted as an escaped string in the &quot;json&quot; key.
     TODO: it may be possible to use `fbJson.AddRawObject`, but this would
-              require us to switch back to creating the JSON in a more manual
-              way with AddKey/AddInt (and such).
+          require us to switch back to creating the JSON in a more manual
+          way with AddKey/AddInt (and such).
     *)
 
 END_STRUCT
@@ -398,7 +400,7 @@ END_TYPE
 <span class="n">STRUCT</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span>
+        <span class="n">pv</span><span class="p">:</span>
     <span class="s1">&#39;}</span>
     <span class="n">stEventInfo</span>                     <span class="p">:</span>       <span class="n">ST_LoggingEventInfo</span><span class="p">;</span>
     <span class="n">bInUse</span>                          <span class="p">:</span>       <span class="n">BOOL</span><span class="p">;</span>
@@ -582,16 +584,16 @@ VAR_GLOBAL CONSTANT
     Address: 172.21.32.36
     *)
     {attribute &#39;pytmc&#39; := &#39;
-            pv: @(PREFIX)LCLSGeneral:LogHost
-            io: io
-            field: DESC The log host IP address
+        pv: @(PREFIX)LCLSGeneral:LogHost
+        io: io
+        field: DESC The log host IP address
     &#39;}
     cLogHost                :       STRING(15)      := &#39;172.21.32.36&#39;;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: @(PREFIX)LCLSGeneral:LogPort
-            io: io
-            field: DESC The log host UDP port
+        pv: @(PREFIX)LCLSGeneral:LogPort
+        io: io
+        field: DESC The log host UDP port
     &#39;}
     iLogPort                :       UINT            := 54321;
 
@@ -612,8 +614,8 @@ VAR_GLOBAL
     sPlcHostname    :       STRING          := &#39;unknown&#39;;
 
     (* Ref: https://infosys.beckhoff.com/english.php?content=../content/1033/tcpipserver/html/TcPlcLibTcpIp_FB_SocketUdpSendTo.htm
-            TODO: Activate the &quot;Replace constants&quot; option in the
-            TwinCAT PLC Control-&gt;&quot;Project-&gt;Options...-&gt;Build&quot; dialog window.
+        TODO: Activate the &quot;Replace constants&quot; option in the
+        TwinCAT PLC Control-&gt;&quot;Project-&gt;Options...-&gt;Build&quot; dialog window.
     *)
     TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
 
@@ -622,16 +624,16 @@ VAR_GLOBAL
     {analysis +33}
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
-            io: i
-            field: DESC Tripped by overall log count
+        pv: @(PREFIX)LCLSGeneral:GlobalLogTrickleTrip
+        io: i
+        field: DESC Tripped by overall log count
     &#39;}
     bTrickleTripped :   BOOL; // Global trickle trip flag
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: @(PREFIX)LCLSGeneral:LogMessageCount
-            io: i
-            field: DESC Total log messages on the last cycle
+        pv: @(PREFIX)LCLSGeneral:LogMessageCount
+        io: i
+        field: DESC Total log messages on the last cycle
     &#39;}
     nGlobAccEvents : UDINT; // Global log message count
     nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the
@@ -788,8 +790,8 @@ END_VAR
 <span class="n">VAR_IN_OUT</span>
     <span class="o">//</span> <span class="n">Input</span> <span class="n">array</span> <span class="n">of</span> <span class="n">floats</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">DATA</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">DATA</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">aSignal</span><span class="p">:</span> <span class="n">ARRAY</span><span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">OF</span> <span class="n">LREAL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
@@ -805,46 +807,46 @@ END_VAR
     <span class="n">bReset</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">If</span> <span class="n">nonzero</span><span class="p">,</span> <span class="n">we</span> <span class="n">will</span> <span class="n">only</span> <span class="n">pay</span> <span class="n">attention</span> <span class="n">to</span> <span class="n">the</span> <span class="n">first</span> <span class="n">nElems</span> <span class="n">items</span> <span class="ow">in</span> <span class="n">aSignal</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">NELM</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">NELM</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">nElems</span><span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
     <span class="o">//</span> <span class="n">Average</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">array</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">MEAN</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">MEAN</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">fMean</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">Standard</span> <span class="n">deviation</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">array</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">STDEV</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">STDEV</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">fStDev</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">Largest</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">array</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">MAX</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">MAX</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">fMax</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">Smallest</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">array</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">MIN</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">MIN</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">fMin</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">Largest</span> <span class="n">array</span> <span class="n">element</span> <span class="n">subtracted</span> <span class="n">by</span> <span class="n">the</span> <span class="n">smallest</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">RANGE</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">RANGE</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">fRange</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
     <span class="o">//</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">the</span> <span class="n">other</span> <span class="n">outputs</span> <span class="n">are</span> <span class="n">valid</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">VALID</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STATS</span><span class="p">:</span><span class="n">VALID</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">bValid</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
@@ -874,36 +876,36 @@ END_VAR
     <span class="n">fMax</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)];</span>
     <span class="n">fMin</span> <span class="o">:=</span> <span class="n">fMax</span><span class="p">;</span>
     <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">TO</span> <span class="n">UPPER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">DO</span>
-            <span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="n">nElemsSeen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="n">fSum</span> <span class="o">:=</span> <span class="n">fSum</span> <span class="o">+</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
-            <span class="n">IF</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">fMax</span> <span class="n">THEN</span>
-                    <span class="n">fMax</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
-            <span class="n">ELSIF</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fMin</span> <span class="n">tHEN</span>
-                    <span class="n">fMin</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
-            <span class="n">END_IF</span>
-            <span class="n">IF</span> <span class="n">nElems</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">AND</span> <span class="n">nElemsSeen</span> <span class="o">&gt;=</span> <span class="n">nElems</span> <span class="n">THEN</span>
-                    <span class="n">EXIT</span><span class="p">;</span>
-            <span class="n">END_IF</span>
+        <span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="n">nElemsSeen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">fSum</span> <span class="o">:=</span> <span class="n">fSum</span> <span class="o">+</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+        <span class="n">IF</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">fMax</span> <span class="n">THEN</span>
+            <span class="n">fMax</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+        <span class="n">ELSIF</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fMin</span> <span class="n">tHEN</span>
+            <span class="n">fMin</span> <span class="o">:=</span> <span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+        <span class="n">END_IF</span>
+        <span class="n">IF</span> <span class="n">nElems</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">AND</span> <span class="n">nElemsSeen</span> <span class="o">&gt;=</span> <span class="n">nElems</span> <span class="n">THEN</span>
+            <span class="n">EXIT</span><span class="p">;</span>
+        <span class="n">END_IF</span>
     <span class="n">END_FOR</span>
     <span class="n">IF</span> <span class="n">nElemsSeen</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">THEN</span>
-            <span class="n">fMean</span> <span class="o">:=</span> <span class="n">fSum</span> <span class="o">/</span> <span class="n">nElemsSeen</span><span class="p">;</span>
-            <span class="n">fRange</span> <span class="o">:=</span> <span class="n">fMax</span> <span class="o">-</span> <span class="n">fMin</span><span class="p">;</span>
+        <span class="n">fMean</span> <span class="o">:=</span> <span class="n">fSum</span> <span class="o">/</span> <span class="n">nElemsSeen</span><span class="p">;</span>
+        <span class="n">fRange</span> <span class="o">:=</span> <span class="n">fMax</span> <span class="o">-</span> <span class="n">fMin</span><span class="p">;</span>
 
-            <span class="o">//</span> <span class="n">Second</span> <span class="k">pass</span> <span class="n">through</span> <span class="n">aSignal</span><span class="p">:</span> <span class="n">get</span> <span class="n">the</span> <span class="nb">sum</span> <span class="n">of</span> <span class="n">the</span> <span class="n">variances</span> <span class="ow">and</span> <span class="n">then</span> <span class="n">the</span> <span class="n">stdev</span>
-            <span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="n">fVarianceSum</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">TO</span> <span class="n">UPPER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">DO</span>
-                    <span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="n">nElemsSeen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="n">fVarianceSum</span> <span class="o">:=</span> <span class="n">fVarianceSum</span> <span class="o">+</span> <span class="p">(</span><span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">-</span> <span class="n">fMean</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">-</span> <span class="n">fMean</span><span class="p">);</span>
-                    <span class="n">IF</span> <span class="n">nElems</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">AND</span> <span class="n">nElemsSeen</span> <span class="o">&gt;=</span> <span class="n">nElems</span> <span class="n">THEN</span>
-                            <span class="n">EXIT</span><span class="p">;</span>
-                    <span class="n">END_IF</span>
-            <span class="n">END_FOR</span>
-            <span class="n">IF</span> <span class="n">nElemsSeen</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="n">THEN</span>
-                    <span class="n">fVarianceMean</span> <span class="o">:=</span> <span class="n">fVarianceSum</span> <span class="o">/</span> <span class="p">(</span><span class="n">nElemsSeen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-                    <span class="n">fStDev</span> <span class="o">:=</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">fVarianceMean</span><span class="p">);</span>
-                    <span class="n">bValid</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="o">//</span> <span class="n">Second</span> <span class="k">pass</span> <span class="n">through</span> <span class="n">aSignal</span><span class="p">:</span> <span class="n">get</span> <span class="n">the</span> <span class="nb">sum</span> <span class="n">of</span> <span class="n">the</span> <span class="n">variances</span> <span class="ow">and</span> <span class="n">then</span> <span class="n">the</span> <span class="n">stdev</span>
+        <span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">fVarianceSum</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">LOWER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">TO</span> <span class="n">UPPER_BOUND</span><span class="p">(</span><span class="n">aSignal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">DO</span>
+            <span class="n">nElemsSeen</span> <span class="o">:=</span> <span class="n">nElemsSeen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">fVarianceSum</span> <span class="o">:=</span> <span class="n">fVarianceSum</span> <span class="o">+</span> <span class="p">(</span><span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">-</span> <span class="n">fMean</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">aSignal</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">-</span> <span class="n">fMean</span><span class="p">);</span>
+            <span class="n">IF</span> <span class="n">nElems</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">AND</span> <span class="n">nElemsSeen</span> <span class="o">&gt;=</span> <span class="n">nElems</span> <span class="n">THEN</span>
+                <span class="n">EXIT</span><span class="p">;</span>
             <span class="n">END_IF</span>
+        <span class="n">END_FOR</span>
+        <span class="n">IF</span> <span class="n">nElemsSeen</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="n">THEN</span>
+            <span class="n">fVarianceMean</span> <span class="o">:=</span> <span class="n">fVarianceSum</span> <span class="o">/</span> <span class="p">(</span><span class="n">nElemsSeen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">fStDev</span> <span class="o">:=</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">fVarianceMean</span><span class="p">);</span>
+            <span class="n">bValid</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">END_IF</span>
     <span class="n">END_IF</span>
 <span class="n">END_IF</span>
 
@@ -972,21 +974,21 @@ END_VAR
 <span class="n">IF</span> <span class="n">bExecute</span> <span class="n">THEN</span>
     <span class="o">//</span> <span class="n">You</span> <span class="n">need</span> <span class="n">to</span> <span class="n">do</span> <span class="n">this</span> <span class="n">block</span> <span class="mi">3</span> <span class="n">times</span> <span class="n">per</span> <span class="n">cycle</span> <span class="n">to</span> <span class="n">have</span> <span class="n">a</span> <span class="n">chance</span> <span class="n">at</span> <span class="n">always</span> <span class="n">getting</span> <span class="n">a</span> <span class="n">read</span>
     <span class="n">FOR</span> <span class="n">iLoop</span><span class="o">:=</span> <span class="mi">1</span> <span class="n">TO</span> <span class="mi">3</span> <span class="n">DO</span>
-            <span class="n">fbRead</span><span class="p">(</span>
-                    <span class="n">stDriveRef</span> <span class="o">:=</span> <span class="n">stDriveRef</span><span class="p">,</span>
-                    <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">nIndex</span><span class="p">,</span>
-                    <span class="n">nSubIndex</span> <span class="o">:=</span> <span class="n">nSubIndex</span><span class="p">,</span>
-                    <span class="n">pDstBuf</span> <span class="o">:=</span> <span class="n">pDstBuf</span><span class="p">,</span>
-                    <span class="n">cbBufLen</span> <span class="o">:=</span> <span class="n">cbBufLen</span><span class="p">,</span>
-                    <span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bInnerExec</span><span class="p">,</span>
-                    <span class="n">tTimeout</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#1s);</span>
+        <span class="n">fbRead</span><span class="p">(</span>
+            <span class="n">stDriveRef</span> <span class="o">:=</span> <span class="n">stDriveRef</span><span class="p">,</span>
+            <span class="n">nIndex</span> <span class="o">:=</span> <span class="n">nIndex</span><span class="p">,</span>
+            <span class="n">nSubIndex</span> <span class="o">:=</span> <span class="n">nSubIndex</span><span class="p">,</span>
+            <span class="n">pDstBuf</span> <span class="o">:=</span> <span class="n">pDstBuf</span><span class="p">,</span>
+            <span class="n">cbBufLen</span> <span class="o">:=</span> <span class="n">cbBufLen</span><span class="p">,</span>
+            <span class="n">bExecute</span> <span class="o">:=</span> <span class="n">bInnerExec</span><span class="p">,</span>
+            <span class="n">tTimeout</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#1s);</span>
 
-            <span class="n">IF</span> <span class="n">bInnerExec</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbRead</span><span class="o">.</span><span class="n">bBusy</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbRead</span><span class="o">.</span><span class="n">bError</span> <span class="n">THEN</span>
-                    <span class="n">bInnerExec</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
-                    <span class="n">bNewValue</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">ELSE</span>
-                    <span class="n">bInnerExec</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">END_IF</span>
+        <span class="n">IF</span> <span class="n">bInnerExec</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbRead</span><span class="o">.</span><span class="n">bBusy</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbRead</span><span class="o">.</span><span class="n">bError</span> <span class="n">THEN</span>
+            <span class="n">bInnerExec</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+            <span class="n">bNewValue</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">ELSE</span>
+            <span class="n">bInnerExec</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">END_IF</span>
     <span class="n">END_FOR</span>
 <span class="n">END_IF</span>
 
@@ -1037,17 +1039,17 @@ END_VAR
 <span class="n">bNewArray</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
 <span class="n">IF</span> <span class="n">bExecute</span> <span class="n">THEN</span>
     <span class="n">MEMCPY</span><span class="p">(</span>
-            <span class="n">destAddr</span> <span class="o">:=</span> <span class="n">pPartialAdr</span> <span class="o">+</span> <span class="n">iArrayIndex</span><span class="o">*</span><span class="n">iInputSize</span><span class="p">,</span>
-            <span class="n">srcAddr</span> <span class="o">:=</span> <span class="n">pInputAdr</span><span class="p">,</span>
-            <span class="n">n</span> <span class="o">:=</span> <span class="n">iInputSize</span><span class="p">);</span>
+        <span class="n">destAddr</span> <span class="o">:=</span> <span class="n">pPartialAdr</span> <span class="o">+</span> <span class="n">iArrayIndex</span><span class="o">*</span><span class="n">iInputSize</span><span class="p">,</span>
+        <span class="n">srcAddr</span> <span class="o">:=</span> <span class="n">pInputAdr</span><span class="p">,</span>
+        <span class="n">n</span> <span class="o">:=</span> <span class="n">iInputSize</span><span class="p">);</span>
     <span class="n">iArrayIndex</span> <span class="o">:=</span> <span class="n">iArrayIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
     <span class="n">IF</span> <span class="n">iArrayIndex</span> <span class="o">&gt;=</span> <span class="n">iElemCount</span> <span class="n">THEN</span>
-            <span class="n">MEMCPY</span><span class="p">(</span>
-                    <span class="n">destAddr</span> <span class="o">:=</span> <span class="n">pOutputAdr</span><span class="p">,</span>
-                    <span class="n">srcAddr</span> <span class="o">:=</span> <span class="n">pPartialAdr</span><span class="p">,</span>
-                    <span class="n">n</span> <span class="o">:=</span> <span class="n">iElemCount</span><span class="o">*</span><span class="n">iInputSize</span><span class="p">);</span>
-            <span class="n">iArrayIndex</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="n">bNewArray</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">MEMCPY</span><span class="p">(</span>
+            <span class="n">destAddr</span> <span class="o">:=</span> <span class="n">pOutputAdr</span><span class="p">,</span>
+            <span class="n">srcAddr</span> <span class="o">:=</span> <span class="n">pPartialAdr</span><span class="p">,</span>
+            <span class="n">n</span> <span class="o">:=</span> <span class="n">iElemCount</span><span class="o">*</span><span class="n">iInputSize</span><span class="p">);</span>
+        <span class="n">iArrayIndex</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">bNewArray</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
     <span class="n">END_IF</span>
 <span class="n">END_IF</span>
 
@@ -1117,7 +1119,7 @@ END_VAR
 <span class="n">FOR</span> <span class="n">nIterator</span> <span class="o">:=</span> <span class="mi">1</span> <span class="n">TO</span> <span class="p">(</span><span class="n">UINT_TO_INT</span><span class="p">(</span><span class="n">fbGetAllSlaveStates</span><span class="o">.</span><span class="n">nSlaves</span><span class="p">)</span> <span class="p">)</span> <span class="n">BY</span> <span class="mi">1</span>
     <span class="n">DO</span>
     <span class="n">IF</span> <span class="n">NOT</span><span class="p">(</span> <span class="p">(</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span><span class="o">.</span><span class="n">deviceState</span> <span class="o">=</span> <span class="n">EC_DEVICE_STATE_OP</span><span class="p">)</span> <span class="n">AND</span> <span class="p">(</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span><span class="o">.</span><span class="n">linkState</span> <span class="o">=</span> <span class="n">EC_LINK_STATE_OK</span><span class="p">))</span> <span class="n">THEN</span>
-            <span class="n">q_xAllSlaveStatesGood</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+        <span class="n">q_xAllSlaveStatesGood</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
     <span class="n">END_IF</span>
     <span class="n">q_anTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span> <span class="o">:=</span> <span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span><span class="o">.</span><span class="n">deviceState</span><span class="p">;</span>
     <span class="n">q_astEcConfSlaveInfo</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span><span class="o">.</span><span class="n">nDeviceState</span> <span class="o">:=</span><span class="n">astTermStates</span><span class="p">[</span><span class="n">nIterator</span><span class="p">]</span><span class="o">.</span><span class="n">deviceState</span><span class="p">;</span><span class="o">//</span>
@@ -1131,8 +1133,8 @@ END_VAR
 <span class="o">//</span><span class="n">the</span> <span class="n">State</span> <span class="n">output</span> <span class="n">variable</span> <span class="n">of</span> <span class="nb">type</span> <span class="n">WORD</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">requested</span> <span class="n">status</span> <span class="n">information</span><span class="o">.</span>
 <span class="n">ftMasterReset</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">fbGetMasterState</span><span class="o">.</span><span class="n">bBusy</span> <span class="n">OR</span> <span class="n">i_xFirstPass</span><span class="p">);</span>
 <span class="n">fbGetMasterState</span><span class="p">(</span><span class="n">sNetId</span><span class="o">:=</span> <span class="n">sNetId</span><span class="p">,</span> <span class="n">bExecute</span><span class="o">:=</span><span class="n">ftMasterReset</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span>
-                            <span class="n">state</span> <span class="o">=&gt;</span> <span class="n">q_nMasterState</span><span class="p">,</span><span class="n">bError</span><span class="o">=&gt;</span><span class="p">,</span>
-                            <span class="n">nErrId</span><span class="o">=&gt;</span><span class="p">);</span>
+                <span class="n">state</span> <span class="o">=&gt;</span> <span class="n">q_nMasterState</span><span class="p">,</span><span class="n">bError</span><span class="o">=&gt;</span><span class="p">,</span>
+                <span class="n">nErrId</span><span class="o">=&gt;</span><span class="p">);</span>
 <span class="n">q_xMasterStateGood</span><span class="o">:=</span> <span class="p">(</span><span class="n">fbGetMasterState</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">BYTE_TO_UINT</span><span class="p">(</span><span class="n">EC_DEVICE_STATE_OP</span><span class="p">));</span>
 <span class="n">q_sMasterState</span> <span class="o">:=</span> <span class="n">F_ConvMasterDevStateToString</span><span class="p">(</span><span class="n">fbGetMasterState</span><span class="o">.</span><span class="n">state</span><span class="p">);</span>
 
@@ -1264,15 +1266,15 @@ END_VAR
 <span class="n">VAR_INPUT</span>
     <span class="o">//</span> <span class="n">Command</span> <span class="n">to</span> <span class="n">send</span> <span class="n">to</span> <span class="n">the</span> <span class="n">serial</span> <span class="n">device</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">CMD</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">CMD</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
     <span class="s1">&#39;}</span>
     <span class="n">sCmd</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
 
     <span class="o">//</span> <span class="n">Pulse</span> <span class="n">this</span> <span class="n">to</span> <span class="n">TRUE</span> <span class="ow">and</span> <span class="n">back</span> <span class="n">to</span> <span class="n">FALSE</span> <span class="n">when</span> <span class="n">it</span><span class="s1">&#39;s time to send</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">SEND</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">SEND</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
     <span class="s1">&#39;}</span>
     <span class="n">bSend</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
@@ -1293,33 +1295,33 @@ END_VAR
 <span class="n">VAR_OUTPUT</span>
     <span class="o">//</span> <span class="n">The</span> <span class="n">response</span> <span class="n">recieved</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">serial</span> <span class="n">device</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">RESP</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">RESP</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">sResponse</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
 
     <span class="o">//</span> <span class="n">This</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">TRUE</span> <span class="n">after</span> <span class="n">recieving</span> <span class="n">a</span> <span class="n">response</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">DONE</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">DONE</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">bDone</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">ERR</span><span class="p">:</span><span class="n">SER</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">ERR</span><span class="p">:</span><span class="n">SER</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">eSerialLineErrorID</span><span class="p">:</span> <span class="n">ComError_t</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">ERR</span><span class="p">:</span><span class="n">SEND</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">ERR</span><span class="p">:</span><span class="n">SEND</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">eSendErrorID</span><span class="p">:</span> <span class="n">ComError_t</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">ERR</span><span class="p">:</span><span class="n">RECV</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">ERR</span><span class="p">:</span><span class="n">RECV</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">eRecvErrorID</span><span class="p">:</span> <span class="n">ComError_t</span><span class="p">;</span>
 <span class="n">END_VAR</span>
@@ -1375,63 +1377,63 @@ END_VAR
 <span class="o">//</span> <span class="n">Attempt</span> <span class="n">at</span> <span class="n">solution</span> <span class="n">that</span> <span class="n">sends</span> <span class="n">one</span> <span class="n">command</span> <span class="n">at</span> <span class="n">a</span> <span class="n">time</span><span class="p">,</span> <span class="ow">not</span> <span class="n">on</span> <span class="n">constant</span> <span class="n">loop</span>
 <span class="n">CASE</span> <span class="n">nStep</span> <span class="n">OF</span>
     <span class="mi">0</span><span class="p">:</span>
-            <span class="p">;</span> <span class="o">//</span> <span class="n">idle</span>
+        <span class="p">;</span> <span class="o">//</span> <span class="n">idle</span>
     <span class="mi">10</span><span class="p">:</span>
-            <span class="o">//</span> <span class="n">Clear</span> <span class="n">buffers</span> <span class="ow">in</span> <span class="n">case</span> <span class="nb">any</span> <span class="n">lingering</span> <span class="n">data</span>
-            <span class="n">fbClearComBuffer</span><span class="p">(</span><span class="n">Buffer</span><span class="o">:=</span><span class="n">TxBuffer</span><span class="p">);</span>
-            <span class="n">fbClearComBuffer</span><span class="p">(</span><span class="n">Buffer</span><span class="o">:=</span><span class="n">RxBuffer</span><span class="p">);</span>
-            <span class="o">//</span> <span class="n">Prepare</span> <span class="n">string</span> <span class="n">to</span> <span class="n">send</span>
-            <span class="n">sStringToSend</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">sSendPrefix</span><span class="p">,</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">sCmd</span><span class="p">,</span> <span class="n">sSendSuffix</span><span class="p">));</span>
-            <span class="o">//</span> <span class="n">Send</span> <span class="n">string</span>
-            <span class="n">fbSend</span><span class="p">(</span> <span class="n">SendString</span><span class="o">:=</span> <span class="n">sStringToSend</span><span class="p">,</span>
-                            <span class="n">TXbuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span>
-                            <span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bSendBusy</span><span class="p">,</span>
-                            <span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eSendErrorID</span><span class="p">);</span>
-            <span class="n">IF</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="n">THEN</span>
-                    <span class="n">eLastSendErrorID</span> <span class="o">:=</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span>
-            <span class="n">ELSE</span>
-                    <span class="n">nSendCounter</span> <span class="o">:=</span> <span class="n">nSendCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="n">END_IF</span>
-            <span class="n">nStep</span> <span class="o">:=</span> <span class="n">nStep</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="o">//</span> <span class="n">Clear</span> <span class="n">buffers</span> <span class="ow">in</span> <span class="n">case</span> <span class="nb">any</span> <span class="n">lingering</span> <span class="n">data</span>
+        <span class="n">fbClearComBuffer</span><span class="p">(</span><span class="n">Buffer</span><span class="o">:=</span><span class="n">TxBuffer</span><span class="p">);</span>
+        <span class="n">fbClearComBuffer</span><span class="p">(</span><span class="n">Buffer</span><span class="o">:=</span><span class="n">RxBuffer</span><span class="p">);</span>
+        <span class="o">//</span> <span class="n">Prepare</span> <span class="n">string</span> <span class="n">to</span> <span class="n">send</span>
+        <span class="n">sStringToSend</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">sSendPrefix</span><span class="p">,</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">sCmd</span><span class="p">,</span> <span class="n">sSendSuffix</span><span class="p">));</span>
+        <span class="o">//</span> <span class="n">Send</span> <span class="n">string</span>
+        <span class="n">fbSend</span><span class="p">(</span>     <span class="n">SendString</span><span class="o">:=</span> <span class="n">sStringToSend</span><span class="p">,</span>
+                <span class="n">TXbuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span>
+                <span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bSendBusy</span><span class="p">,</span>
+                <span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eSendErrorID</span><span class="p">);</span>
+        <span class="n">IF</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="n">THEN</span>
+            <span class="n">eLastSendErrorID</span> <span class="o">:=</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span>
+        <span class="n">ELSE</span>
+            <span class="n">nSendCounter</span> <span class="o">:=</span> <span class="n">nSendCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">END_IF</span>
+        <span class="n">nStep</span> <span class="o">:=</span> <span class="n">nStep</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
     <span class="mi">20</span><span class="p">:</span>
-            <span class="o">//</span> <span class="n">Finish</span> <span class="n">sending</span> <span class="n">String</span>
-            <span class="n">IF</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Busy</span> <span class="n">THEN</span>
-                    <span class="n">fbSend</span><span class="p">(</span> <span class="n">SendString</span><span class="o">:=</span> <span class="n">sStringToSend</span><span class="p">,</span>
-                                    <span class="n">TXbuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span>
-                                    <span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bSendBusy</span><span class="p">,</span>
-                                    <span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eSendErrorID</span><span class="p">);</span>
-                    <span class="n">IF</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="n">THEN</span>
-                            <span class="n">eLastSendErrorID</span> <span class="o">:=</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span>
-                    <span class="n">ELSE</span>
-                            <span class="n">nSendCounter</span> <span class="o">:=</span> <span class="n">nSendCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="n">END_IF</span>
+        <span class="o">//</span> <span class="n">Finish</span> <span class="n">sending</span> <span class="n">String</span>
+        <span class="n">IF</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Busy</span> <span class="n">THEN</span>
+            <span class="n">fbSend</span><span class="p">(</span> <span class="n">SendString</span><span class="o">:=</span> <span class="n">sStringToSend</span><span class="p">,</span>
+                    <span class="n">TXbuffer</span><span class="o">:=</span> <span class="n">TxBuffer</span><span class="p">,</span>
+                    <span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bSendBusy</span><span class="p">,</span>
+                    <span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eSendErrorID</span><span class="p">);</span>
+            <span class="n">IF</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="n">THEN</span>
+                <span class="n">eLastSendErrorID</span> <span class="o">:=</span> <span class="n">fbSend</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span>
             <span class="n">ELSE</span>
-                    <span class="n">nStep</span> <span class="o">:=</span> <span class="n">nStep</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+                <span class="n">nSendCounter</span> <span class="o">:=</span> <span class="n">nSendCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
             <span class="n">END_IF</span>
+        <span class="n">ELSE</span>
+            <span class="n">nStep</span> <span class="o">:=</span> <span class="n">nStep</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="n">END_IF</span>
     <span class="mi">30</span><span class="p">:</span>
-            <span class="o">//</span> <span class="n">Get</span> <span class="n">Reply</span>
-            <span class="n">fbReceive</span><span class="p">(</span>
-                    <span class="n">Prefix</span><span class="o">:=</span> <span class="n">sRecvPrefix</span><span class="p">,</span>
-                    <span class="n">Suffix</span><span class="o">:=</span> <span class="n">sRecvSuffix</span><span class="p">,</span>
-                    <span class="n">Timeout</span><span class="o">:=</span> <span class="n">tTimeout</span><span class="p">,</span>
-                    <span class="n">ReceivedString</span><span class="o">:=</span> <span class="n">sReceivedString</span><span class="p">,</span>
-                    <span class="n">RXbuffer</span><span class="o">:=</span> <span class="n">RxBuffer</span><span class="p">,</span>
-                    <span class="n">StringReceived</span><span class="o">=&gt;</span> <span class="n">bStringReceived</span><span class="p">,</span>
-                    <span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bReceiveBusy</span><span class="p">,</span>
-                    <span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eRecvErrorID</span><span class="p">,</span>
-                    <span class="n">RxTimeout</span><span class="o">=&gt;</span> <span class="n">bReceiveTimeout</span> <span class="p">);</span>
-            <span class="n">IF</span> <span class="n">fbReceive</span><span class="o">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="n">THEN</span>
-                    <span class="n">eReceiveErrorID</span> <span class="o">:=</span> <span class="n">fbReceive</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span>
+        <span class="o">//</span> <span class="n">Get</span> <span class="n">Reply</span>
+        <span class="n">fbReceive</span><span class="p">(</span>
+            <span class="n">Prefix</span><span class="o">:=</span> <span class="n">sRecvPrefix</span><span class="p">,</span>
+            <span class="n">Suffix</span><span class="o">:=</span> <span class="n">sRecvSuffix</span><span class="p">,</span>
+            <span class="n">Timeout</span><span class="o">:=</span> <span class="n">tTimeout</span><span class="p">,</span>
+            <span class="n">ReceivedString</span><span class="o">:=</span> <span class="n">sReceivedString</span><span class="p">,</span>
+            <span class="n">RXbuffer</span><span class="o">:=</span> <span class="n">RxBuffer</span><span class="p">,</span>
+            <span class="n">StringReceived</span><span class="o">=&gt;</span> <span class="n">bStringReceived</span><span class="p">,</span>
+            <span class="n">Busy</span><span class="o">=&gt;</span> <span class="n">bReceiveBusy</span><span class="p">,</span>
+            <span class="n">Error</span><span class="o">=&gt;</span> <span class="n">eRecvErrorID</span><span class="p">,</span>
+            <span class="n">RxTimeout</span><span class="o">=&gt;</span> <span class="n">bReceiveTimeout</span> <span class="p">);</span>
+        <span class="n">IF</span> <span class="n">fbReceive</span><span class="o">.</span><span class="n">Error</span> <span class="o">&lt;&gt;</span> <span class="n">COMERROR_NOERROR</span> <span class="n">THEN</span>
+            <span class="n">eReceiveErrorID</span> <span class="o">:=</span> <span class="n">fbReceive</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span>
+        <span class="n">END_IF</span>
+        <span class="n">IF</span> <span class="n">bStringReceived</span> <span class="n">THEN</span>
+            <span class="n">nReceiveCounter</span> <span class="o">:=</span> <span class="n">nReceiveCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="o">//</span> <span class="n">Check</span> <span class="k">for</span> <span class="n">response</span>
+            <span class="n">IF</span> <span class="n">FIND</span><span class="p">(</span><span class="n">sReceivedString</span><span class="p">,</span> <span class="n">sStringToSend</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span> <span class="n">THEN</span>
+                <span class="n">sResponse</span> <span class="o">:=</span> <span class="n">sReceivedString</span><span class="p">;</span>
+                <span class="n">bDone</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+                <span class="n">nStep</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="n">END_IF</span>
-            <span class="n">IF</span> <span class="n">bStringReceived</span> <span class="n">THEN</span>
-                    <span class="n">nReceiveCounter</span> <span class="o">:=</span> <span class="n">nReceiveCounter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="o">//</span> <span class="n">Check</span> <span class="k">for</span> <span class="n">response</span>
-                    <span class="n">IF</span> <span class="n">FIND</span><span class="p">(</span><span class="n">sReceivedString</span><span class="p">,</span> <span class="n">sStringToSend</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span> <span class="n">THEN</span>
-                            <span class="n">sResponse</span> <span class="o">:=</span> <span class="n">sReceivedString</span><span class="p">;</span>
-                            <span class="n">bDone</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-                            <span class="n">nStep</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-                    <span class="n">END_IF</span>
-            <span class="n">END_IF</span>
+        <span class="n">END_IF</span>
 <span class="n">END_CASE</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
@@ -1552,38 +1554,38 @@ END_IF
 CASE iState OF
 E_EcatDiagState.Idle: (* IDLE *)
     IF bDiagReq THEN                                // diag requested
-            bDiagReq := FALSE;
+        bDiagReq := FALSE;
 
-            IF sMasterNetID &lt;&gt; &#39;&#39; AND sMasterNetID &lt;&gt; &#39;0.0.0.0.0.0&#39; THEN
-                    iState := E_EcatDiagState.GetSlaveAddresses;    // execute diag
-                    bBusy := TRUE;
-            ELSE
-                    bError := TRUE;
-                    iErrorID := 7;
-            END_IF
+        IF sMasterNetID &lt;&gt; &#39;&#39; AND sMasterNetID &lt;&gt; &#39;0.0.0.0.0.0&#39; THEN
+            iState := E_EcatDiagState.GetSlaveAddresses;    // execute diag
+            bBusy := TRUE;
+        ELSE
+            bError := TRUE;
+            iErrorID := 7;
+        END_IF
 
-            bEtherCATOK := FALSE;
+        bEtherCATOK := FALSE;
     ELSE
-            // check for changes in idle
-            IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
-                    bEtherCATOK := FALSE;
-                    bDiagReq := TRUE;//new error --&gt; diag requested
-            ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
-                    bSlaveCountErrorPrev := bSlaveCountError;
-                    bEtherCATOK := FALSE;
-                    bDiagReq := TRUE;// slave count error change detected --&gt; diag required
-            ELSIF (nMasterDevState &lt;&gt; nMasterDevStatePrev) THEN
-                    bEtherCATOK := FALSE;
-                    bDiagReq := TRUE;// devstate change detected --&gt; diag required
-            ELSIF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
-                    bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
-                    bEtherCATOK := FALSE;
-                    bDiagReq := TRUE;// frame error change detected --&gt; diag required
-            ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
-                    bEtherCATOK := FALSE;
-            ELSE
-                    bEtherCATOK := TRUE;
-            END_IF
+        // check for changes in idle
+        IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+            bEtherCATOK := FALSE;
+            bDiagReq := TRUE;//new error --&gt; diag requested
+        ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
+            bSlaveCountErrorPrev := bSlaveCountError;
+            bEtherCATOK := FALSE;
+            bDiagReq := TRUE;// slave count error change detected --&gt; diag required
+        ELSIF (nMasterDevState &lt;&gt; nMasterDevStatePrev) THEN
+            bEtherCATOK := FALSE;
+            bDiagReq := TRUE;// devstate change detected --&gt; diag required
+        ELSIF (bAllFrameWcStatesOK AND NOT bAllFrameWcStatesOKPrev) OR (NOT bAllFrameWcStatesOK AND bAllFrameWcStatesOKPrev) THEN
+            bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
+            bEtherCATOK := FALSE;
+            bDiagReq := TRUE;// frame error change detected --&gt; diag required
+        ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+            bEtherCATOK := FALSE;
+        ELSE
+            bEtherCATOK := TRUE;
+        END_IF
     END_IF
 
 E_EcatDiagState.GetSlaveAddresses: (* get adresses *)
@@ -1762,7 +1764,7 @@ stMasterDevState.bWatchdogTriggerd  := (nMasterDevState AND 16#20) = 16#20;
 stMasterDevState.bDriverNotFound    := (nMasterDevState AND 16#40) = 16#40;
 stMasterDevState.bResetActive               := (nMasterDevState AND 16#80) = 16#80;
 stMasterDevState.bAtLeastOneNotInOp := ((nMasterDevState AND 16#100) = 16#100) OR ((nMasterDevState AND 16#200) = 16#200) OR
-                                                                            ((nMasterDevState AND 16#400) = 16#400) OR ((nMasterDevState AND 16#800) = 16#800);
+                                        ((nMasterDevState AND 16#400) = 16#400) OR ((nMasterDevState AND 16#800) = 16#800);
 stMasterDevState.bDcNotInSync               := (nMasterDevState AND 16#1000) = 16#1000;
 nMasterDevStatePrev                                 := nMasterDevState;
 END_ACTION
@@ -1785,55 +1787,55 @@ IF NOT fbGetSlaveName.BUSY THEN
     (* add scanned info *)
     rSlaveInfoScanned.nIndex        := iDiagIndex + 1;
     IF rScannedSlaveInfo.nAddr &lt;&gt; 0 THEN
-            IF NOT fbGetSlaveName.ERR THEN
-                    rSlaveInfoScanned.sName := strName;
-            END_IF
+        IF NOT fbGetSlaveName.ERR THEN
+            rSlaveInfoScanned.sName := strName;
+        END_IF
     ELSE
-            rSlaveInfoScanned.sType         := &#39;&#39;;
+        rSlaveInfoScanned.sType             := &#39;&#39;;
     END_IF
 
     IF (iDiagIndex &lt; nScannedSlaves) THEN
-            rSlaveInfoScanned.sType         := F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
+        rSlaveInfoScanned.sType             := F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
     ELSE
-            rSlaveInfoScanned.sType         := &#39;&#39;;
+        rSlaveInfoScanned.sType             := &#39;&#39;;
     END_IF
 
     rSlaveInfoScanned.nECAddr       := rScannedSlaveInfo.nAddr;
 
     IF rSlaveInfoScanned.sName &lt;&gt; rSlaveInfo.sName THEN
-            rSlaveInfoScanned.bDifferentName := TRUE;
+        rSlaveInfoScanned.bDifferentName := TRUE;
     ELSE
-            rSlaveInfoScanned.bDifferentName := FALSE;
+        rSlaveInfoScanned.bDifferentName := FALSE;
     END_IF
 
     IF rSlaveInfoScanned.nECAddr &lt;&gt; rSlaveInfo.nECAddr THEN
-            rSlaveInfoScanned.bDifferentAddr := TRUE;
+        rSlaveInfoScanned.bDifferentAddr := TRUE;
     ELSE
-            rSlaveInfoScanned.bDifferentAddr := FALSE;
+        rSlaveInfoScanned.bDifferentAddr := FALSE;
     END_IF
 
     IF rSlaveInfoScanned.sType &lt;&gt; rSlaveInfo.sType THEN
-            rSlaveInfoScanned.bDifferentType := TRUE;
+        rSlaveInfoScanned.bDifferentType := TRUE;
     ELSE
-            rSlaveInfoScanned.bDifferentType := FALSE;
+        rSlaveInfoScanned.bDifferentType := FALSE;
     END_IF
 
     IF iIdx &lt; ESC_MAX_PORTS THEN
-            iIdx := iIdx + 1;
-            iState := E_EcatDiagState.GetSlaveIdentity; // loop back
+        iIdx := iIdx + 1;
+        iState := E_EcatDiagState.GetSlaveIdentity; // loop back
     ELSE
-            iIdx := 0;
-            iState := E_EcatDiagState.LogDiagnostics;
+        iIdx := 0;
+        iState := E_EcatDiagState.LogDiagnostics;
 
-            FOR I := 0 TO ESC_MAX_PORTS DO
-                    IF aiDiagPort[I] &lt;&gt; 0 THEN
-                            arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
-                            arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
-                    ELSE
-                            MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
-                            MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
-                    END_IF
-            END_FOR
+        FOR I := 0 TO ESC_MAX_PORTS DO
+            IF aiDiagPort[I] &lt;&gt; 0 THEN
+                arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
+                arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
+            ELSE
+                MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
+                MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+            END_IF
+        END_FOR
     END_IF
 END_IF
 END_ACTION
@@ -1850,9 +1852,9 @@ fbGetSlaveAddresses(
 IF NOT fbGetSlaveAddresses.bBusy THEN
     fbGetSlaveAddresses(bExecute:= FALSE);
     IF NOT fbGetSlaveAddresses.bError THEN
-            FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
-                    arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
-            END_FOR
+        FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+            arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
+        END_FOR
     END_IF
     iState := GetSlaveStates;
 END_IF
@@ -1875,10 +1877,10 @@ IF NOT fbGetSlaveIdentity.bBusy THEN
     fbGetSlaveIdentity(bExecute:= FALSE);
 
     IF NOT fbGetSlaveIdentity.bError THEN
-            IF aiDiagPort[iIdx] &lt;&gt; 0 THEN
-                    rSlaveInfo.nIndex       := aiDiagIndex[iIdx] + 1;
-                    rSlaveInfo.sType        := F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
-            END_IF
+        IF aiDiagPort[iIdx] &lt;&gt; 0 THEN
+            rSlaveInfo.nIndex       := aiDiagIndex[iIdx] + 1;
+            rSlaveInfo.sType        := F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
+        END_IF
     END_IF
     iState := E_EcatDiagState.GetSlaveName;
 END_IF
@@ -1897,9 +1899,9 @@ IF NOT fbGetSlaveName.BUSY THEN
     fbGetSlaveName(START:= FALSE);
 
     IF NOT fbGetSlaveName.ERR THEN
-            IF iDiagPort &lt;&gt; 0 THEN
-                    rSlaveInfo.sName        := strName;
-            END_IF
+        IF iDiagPort &lt;&gt; 0 THEN
+            rSlaveInfo.sName        := strName;
+        END_IF
     END_IF
 
     iState := E_EcatDiagState.GetScannedSlaveName;
@@ -1919,52 +1921,52 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
     fbGetAllSlaveStates(bExecute:= FALSE);
 
     IF NOT fbGetAllSlaveStates.bError THEN
-            IF iNumOfSlavesRead = nSlaveCountCfg THEN
-                    FOR I := 0 TO ESC_MAX_PORTS DO
-                            aiDiagIndex[I] := 0;
-                    END_FOR
+        IF iNumOfSlavesRead = nSlaveCountCfg THEN
+            FOR I := 0 TO ESC_MAX_PORTS DO
+                aiDiagIndex[I] := 0;
+            END_FOR
 
-                    (* split slave state and link state *)
-                    FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
-                            (* slave state*)
-                            arrSlaveInfo[I].stState.eEcState                := arrSlaveStates[I].deviceState AND 16#0F;
-                            arrSlaveInfo[I].stState.bError                  := arrSlaveStates[I].deviceState.4;
-                            arrSlaveInfo[I].stState.bInvalidVPRS    := arrSlaveStates[I].deviceState.5;
-                            (* link state *)
-                            arrSlaveInfo[I].stState.bNoCommToSlave  := arrSlaveStates[I].linkState.0;
-                            arrSlaveInfo[I].stState.bLinkError              := arrSlaveStates[I].linkState.1;
-                            arrSlaveInfo[I].stState.bMissingLink    := arrSlaveStates[I].linkState.2;
-                            arrSlaveInfo[I].stState.bUnexpectedLink := arrSlaveStates[I].linkState.3;
-                            arrSlaveInfo[I].stState.bPortA                  := arrSlaveStates[I].linkState.4;
-                            arrSlaveInfo[I].stState.bPortB                  := arrSlaveStates[I].linkState.5;
-                            arrSlaveInfo[I].stState.bPortC                  := arrSlaveStates[I].linkState.6;
-                            arrSlaveInfo[I].stState.bPortD                  := arrSlaveStates[I].linkState.7;
-                            (* DiagData *)
-                            arrSlaveInfo[I].bDiagData       := ((arrSlaveStates[I].deviceState AND 16#F0) &lt;&gt; 0) OR
-                                    (((arrSlaveStates[I].deviceState AND 16#0F) &gt; 0) AND ((arrSlaveStates[I].deviceState AND 16#0F) &lt; 8)) OR
-                                    (arrSlaveStates[I].linkState &lt;&gt; 0);
+            (* split slave state and link state *)
+            FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+                (* slave state*)
+                arrSlaveInfo[I].stState.eEcState            := arrSlaveStates[I].deviceState AND 16#0F;
+                arrSlaveInfo[I].stState.bError                      := arrSlaveStates[I].deviceState.4;
+                arrSlaveInfo[I].stState.bInvalidVPRS        := arrSlaveStates[I].deviceState.5;
+                (* link state *)
+                arrSlaveInfo[I].stState.bNoCommToSlave      := arrSlaveStates[I].linkState.0;
+                arrSlaveInfo[I].stState.bLinkError          := arrSlaveStates[I].linkState.1;
+                arrSlaveInfo[I].stState.bMissingLink        := arrSlaveStates[I].linkState.2;
+                arrSlaveInfo[I].stState.bUnexpectedLink := arrSlaveStates[I].linkState.3;
+                arrSlaveInfo[I].stState.bPortA                      := arrSlaveStates[I].linkState.4;
+                arrSlaveInfo[I].stState.bPortB                      := arrSlaveStates[I].linkState.5;
+                arrSlaveInfo[I].stState.bPortC                      := arrSlaveStates[I].linkState.6;
+                arrSlaveInfo[I].stState.bPortD                      := arrSlaveStates[I].linkState.7;
+                (* DiagData *)
+                arrSlaveInfo[I].bDiagData   := ((arrSlaveStates[I].deviceState AND 16#F0) &lt;&gt; 0) OR
+                    (((arrSlaveStates[I].deviceState AND 16#0F) &gt; 0) AND ((arrSlaveStates[I].deviceState AND 16#0F) &lt; 8)) OR
+                    (arrSlaveStates[I].linkState &lt;&gt; 0);
 
-                            IF arrSlaveInfo[I].bDiagData THEN
-                                    IF (I=0) THEN
-                                            aiDiagIndex[0] := 0;
-                                    ELSE
-                                            IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
-                                                    aiDiagIndex[0] :=  UDINT_TO_UINT(I);
-                                            END_IF
-                                    END_IF
-                            END_IF
-                    END_FOR
-            END_IF
+                IF arrSlaveInfo[I].bDiagData THEN
+                    IF (I=0) THEN
+                        aiDiagIndex[0] := 0;
+                    ELSE
+                        IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
+                            aiDiagIndex[0] :=  UDINT_TO_UINT(I);
+                        END_IF
+                    END_IF
+                END_IF
+            END_FOR
+        END_IF
     END_IF
 
     IF arrSlaveInfo[aiDiagIndex[0]].bDiagData THEN
-            iState := E_EcatDiagState.GetTopoDataLen;
+        iState := E_EcatDiagState.GetTopoDataLen;
     ELSE
-            FOR I := 0 TO ESC_MAX_PORTS DO
-                    MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
-                    MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
-            END_FOR
-            iState := E_EcatDiagState.Done;
+        FOR I := 0 TO ESC_MAX_PORTS DO
+            MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
+            MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+        END_FOR
+        iState := E_EcatDiagState.Done;
     END_IF
 END_IF
 END_ACTION
@@ -1984,27 +1986,27 @@ IF NOT fbGetTopologyData.BUSY THEN
     fbGetTopologyData(READ := FALSE);
 
     IF NOT fbGetTopologyData.ERR THEN
-            aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
-            aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
-            aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
-            aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
+        aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
+        aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
+        aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
+        aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
 
-            (* clear diag index  *)
-            aiDiagIndex[1] := 0;
-            aiDiagIndex[2] := 0;
-            aiDiagIndex[ESC_MAX_PORTS] := 0;
+        (* clear diag index  *)
+        aiDiagIndex[1] := 0;
+        aiDiagIndex[2] := 0;
+        aiDiagIndex[ESC_MAX_PORTS] := 0;
 
         (* find slaves on PortB-D of first slave with diag *)
         FOR P := 0 TO ESC_MAX_PORTS DO
             IF aiDiagPort[P] &lt;&gt; 0 THEN
-                    FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-                            IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
-                                    aiDiagIndex[P] := UDINT_TO_UINT(I);
-                                    EXIT;
-                            END_IF
-                    END_FOR
-            END_IF
+            FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
+                IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
+                    aiDiagIndex[P] := UDINT_TO_UINT(I);
+                    EXIT;
+                END_IF
             END_FOR
+        END_IF
+        END_FOR
     END_IF
 
     iIdx := 0;
@@ -2042,9 +2044,9 @@ IF NOT fbEcGetScannedSlaves.bBusy THEN
     fbEcGetScannedSlaves(bExecute := FALSE);
 
     IF fbEcGetScannedSlaves.bError THEN
-            nScannedSlaves := 0;
+        nScannedSlaves := 0;
     ELSE
-            nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
+        nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
     END_IF
 
     iState := E_EcatDiagState.GetSlaveIdentity;
@@ -2084,6 +2086,110 @@ END_ACTION
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+</section>
+<section id="fb-getplchostname">
+<h2>FB_GetPLCHostname<a class="headerlink" href="#fb-getplchostname" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_GetPLCHostname</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">bEnable</span>                 <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">tRetryDelay</span>             <span class="p">:</span> <span class="n">TIME</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#10s;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+    <span class="n">sHostname</span>               <span class="p">:</span> <span class="n">T_MaxString</span><span class="p">;</span>
+    <span class="n">bDone</span>                   <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">bError</span>                  <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="n">fbGetHostName</span>   <span class="p">:</span> <span class="n">FB_GetHostName</span><span class="p">;</span>
+
+    <span class="n">tRetry</span>                  <span class="p">:</span> <span class="n">TON</span><span class="p">;</span>
+    <span class="n">bReset</span>                  <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">bInitialized</span>    <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+
+<span class="n">END_VAR</span>
+<span class="n">IF</span> <span class="n">bEnable</span> <span class="n">THEN</span>
+    <span class="n">fbGetHostName</span><span class="o">.</span><span class="n">sNetID</span> <span class="o">:=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+
+    <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInitialized</span> <span class="n">OR</span> <span class="p">(</span><span class="n">tRetry</span><span class="o">.</span><span class="n">Q</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">bDone</span><span class="p">)</span> <span class="n">THEN</span>
+        <span class="n">bReset</span>                      <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">bInitialized</span>        <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">fbGetHostName</span><span class="p">(</span><span class="n">bExecute</span><span class="o">:=</span><span class="n">FALSE</span><span class="p">);</span>
+    <span class="n">END_IF</span>
+
+    <span class="n">tRetry</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">bReset</span><span class="p">,</span> <span class="n">PT</span><span class="o">:=</span><span class="n">tRetryDelay</span><span class="p">);</span>
+
+    <span class="n">bReset</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+
+    <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bDone</span> <span class="n">THEN</span>
+        <span class="n">fbGetHostName</span><span class="p">(</span><span class="n">bExecute</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">,</span> <span class="n">bError</span><span class="o">=&gt;</span><span class="n">bError</span><span class="p">);</span>
+        <span class="n">IF</span> <span class="n">NOT</span> <span class="p">(</span><span class="n">fbGetHostName</span><span class="o">.</span><span class="n">bBusy</span> <span class="n">OR</span> <span class="n">bError</span><span class="p">)</span> <span class="n">THEN</span>
+            <span class="n">sHostname</span>       <span class="o">:=</span> <span class="n">fbGetHostName</span><span class="o">.</span><span class="n">sHostName</span><span class="p">;</span>
+            <span class="n">bDone</span>           <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">END_IF</span>
+    <span class="n">END_IF</span>
+<span class="n">END_IF</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+</pre></div>
+</div>
+</section>
+<section id="fb-getplcipaddress">
+<h2>FB_GetPLCIPAddress<a class="headerlink" href="#fb-getplcipaddress" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_GetPLCIPAddress</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">bEnable</span>                 <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">tRetryDelay</span>             <span class="p">:</span> <span class="n">TIME</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#10s;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+    <span class="n">sIPAddress</span>              <span class="p">:</span> <span class="n">STRING</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+
+    <span class="n">bDone</span>                   <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">bError</span>                  <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="n">fbGetAdapterIP</span>  <span class="p">:</span> <span class="n">FB_GetAdaptersInfo</span> <span class="o">:=</span> <span class="p">(</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">sNetID</span> <span class="o">:=</span> <span class="s1">&#39;&#39;</span><span class="p">);</span> <span class="o">//</span> <span class="n">Acquire</span> <span class="n">IP</span> <span class="n">of</span> <span class="n">the</span> <span class="n">correct</span> <span class="n">adapter</span>
+
+    <span class="n">iIndex</span>                  <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span>
+
+    <span class="n">tRetry</span>                  <span class="p">:</span> <span class="n">TON</span><span class="p">;</span>
+    <span class="n">bReset</span>                  <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">bInitialized</span>    <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+
+<span class="n">END_VAR</span>
+<span class="n">IF</span> <span class="n">bEnable</span> <span class="n">THEN</span>
+    <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInitialized</span> <span class="n">OR</span> <span class="p">(</span><span class="n">tRetry</span><span class="o">.</span><span class="n">Q</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">bDone</span><span class="p">)</span> <span class="n">THEN</span>
+        <span class="n">bReset</span>                      <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">bInitialized</span>        <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">fbGetAdapterIP</span><span class="p">(</span><span class="n">bExecute</span><span class="o">:=</span><span class="n">FALSE</span><span class="p">);</span>
+    <span class="n">END_IF</span>
+
+    <span class="n">tRetry</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">bReset</span><span class="p">,</span> <span class="n">PT</span><span class="o">:=</span><span class="n">tRetryDelay</span><span class="p">);</span>
+    <span class="n">bReset</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+
+    <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bDone</span> <span class="n">THEN</span>
+        <span class="n">fbGetAdapterIP</span><span class="p">(</span><span class="n">bExecute</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">,</span> <span class="n">bError</span><span class="o">=&gt;</span><span class="n">bError</span><span class="p">);</span>
+        <span class="n">IF</span> <span class="n">NOT</span> <span class="p">(</span><span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">bBusy</span> <span class="ow">or</span> <span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">bError</span><span class="p">)</span> <span class="n">THEN</span>
+            <span class="n">FOR</span> <span class="n">iIndex</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">MAX_LOCAL_ADAPTERS</span> <span class="n">DO</span>
+                <span class="n">IF</span> <span class="n">FIND</span><span class="p">(</span><span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">arrAdapters</span><span class="p">[</span><span class="n">iIndex</span><span class="p">]</span><span class="o">.</span><span class="n">sIpAddr</span><span class="p">,</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">sIpTidbit</span><span class="p">)</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span> <span class="n">THEN</span>
+                    <span class="n">sIPAddress</span> <span class="o">:=</span> <span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">arrAdapters</span><span class="p">[</span><span class="n">iIndex</span><span class="p">]</span><span class="o">.</span><span class="n">sIpAddr</span><span class="p">;</span>
+                    <span class="n">bDone</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+                    <span class="n">EXIT</span><span class="p">;</span>
+                <span class="n">END_IF</span>
+            <span class="n">END_FOR</span>
+        <span class="n">END_IF</span>
+    <span class="n">END_IF</span>
+
+<span class="n">END_IF</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#gvl-logger">GVL_Logger</a></p></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section id="fb-index">
 <h2>FB_Index<a class="headerlink" href="#fb-index" title="Permalink to this headline"></a></h2>
@@ -2138,43 +2244,43 @@ END_ACTION
     <span class="n">nPendingEvents</span>          <span class="p">:</span>       <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">LogToVisualStudio</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">LogToVisualStudio</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
     <span class="s1">&#39;}</span>
     <span class="n">bLogToVisualStudio</span>      <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">MessagesSent</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">MessagesSent</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">nCntMessagesSent</span>        <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsRaised</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsRaised</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">nCntAlarmsRaised</span>        <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsConfirmed</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsConfirmed</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">nCntAlarmsConfirmed</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsCleared</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsCleared</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">nCntAlarmsCleared</span>       <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">MinSeverity</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">MinSeverity</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
     <span class="s1">&#39;}</span>
     <span class="n">eMinSeverity</span>            <span class="p">:</span> <span class="n">TcEventSeverity</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">Log</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">Log</span>
     <span class="s1">&#39;}</span>
     <span class="n">stEventInfo</span>             <span class="p">:</span>       <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">ST_LoggingEventInfo</span><span class="p">;</span>
 
@@ -2212,32 +2318,32 @@ END_ACTION
 <span class="n">VAR_INPUT</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">ADS</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">ADS</span>
     <span class="s1">&#39;}</span>
     <span class="n">fbTcAdsListener</span> <span class="p">:</span> <span class="n">FB_Listener</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">Router</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">Router</span>
     <span class="s1">&#39;}</span>
     <span class="n">fbTcRouterListener</span> <span class="p">:</span> <span class="n">FB_Listener</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">RTime</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">RTime</span>
     <span class="s1">&#39;}</span>
     <span class="n">fbTcRTimeListener</span> <span class="p">:</span> <span class="n">FB_Listener</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">System</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">System</span>
     <span class="s1">&#39;}</span>
     <span class="n">fbTcSystemListener</span> <span class="p">:</span> <span class="n">FB_Listener</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">Windows</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">Windows</span>
     <span class="s1">&#39;}</span>
     <span class="n">fbWindowsListener</span> <span class="p">:</span> <span class="n">FB_Listener</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">LCLS</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">LCLS</span>
     <span class="s1">&#39;}</span>
     <span class="n">fbLCLSListener</span>  <span class="p">:</span> <span class="n">FB_Listener</span><span class="p">;</span>
 
@@ -2251,10 +2357,8 @@ END_ACTION
     <span class="n">bReadyToLog</span>             <span class="p">:</span>       <span class="n">BOOL</span>    <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
     <span class="n">rtFirstLog</span>              <span class="p">:</span>       <span class="n">R_TRIG</span><span class="p">;</span>
 
-    <span class="n">fbGetHostName</span>           <span class="p">:</span>       <span class="n">FB_GetHostName</span> <span class="o">:=</span> <span class="p">(</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">sNetID</span> <span class="o">:=</span> <span class="s1">&#39;&#39;</span><span class="p">);</span> <span class="o">//</span><span class="n">Acquires</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">PLC</span>
-    <span class="n">fbGetAdapterIP</span> <span class="p">:</span> <span class="n">FB_GetAdaptersInfo</span> <span class="o">:=</span> <span class="p">(</span><span class="n">bExecute</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">sNetID</span> <span class="o">:=</span> <span class="s1">&#39;&#39;</span><span class="p">);</span> <span class="o">//</span> <span class="n">Acquire</span> <span class="n">IP</span> <span class="n">of</span> <span class="n">the</span> <span class="n">correct</span> <span class="n">adapter</span>
-    <span class="n">bHostnameSet</span>    <span class="p">:</span>       <span class="n">BOOL</span>    <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
-    <span class="n">idxPortFind</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span>
+    <span class="n">fbGetHostName</span>   <span class="p">:</span> <span class="n">FB_GetPLCHostname</span><span class="p">;</span>
+    <span class="n">fbGetIP</span>                 <span class="p">:</span> <span class="n">FB_GetPLCIPAddress</span><span class="p">;</span>
 
     <span class="n">fbListener</span>              <span class="p">:</span>       <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">FB_Listener</span><span class="p">;</span>
     <span class="n">fbListeners</span>             <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="n">nNumListeners</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="n">OF</span> <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">FB_Listener</span><span class="p">;</span>
@@ -2272,15 +2376,12 @@ END_ACTION
 
     <span class="n">SocketEnable</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
-    <span class="n">bAdapterSet</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
-
     <span class="n">ctuSocketError</span> <span class="p">:</span> <span class="n">CTU</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PV</span><span class="o">:=</span><span class="mi">3</span><span class="p">);</span> <span class="o">//</span> <span class="n">Circuit</span> <span class="n">breaker</span> <span class="k">for</span> <span class="n">socket</span> <span class="n">errors</span><span class="o">.</span> <span class="mi">3</span> <span class="n">errors</span> <span class="n">before</span> <span class="n">it</span> <span class="n">stops</span><span class="o">.</span>
 
     <span class="n">tRetryConnection</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#1h); // Retry after an hour</span>
 
     <span class="n">tofTrickleBreakerPre</span> <span class="p">:</span> <span class="n">TOF</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#1s);</span>
     <span class="n">tonTrickleBreaker</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nTrickleTripTime</span><span class="p">);</span>
-    <span class="n">DisarmCounter</span>   <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="n">DisarmCountDefault</span><span class="p">;</span>
     <span class="n">bTripCon</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 
@@ -2306,28 +2407,15 @@ END_ACTION
 
 <span class="n">END_IF</span>
 
-<span class="n">IF</span> <span class="n">NOT</span> <span class="n">bHostnameSet</span> <span class="n">THEN</span>
-    <span class="n">fbGetHostName</span><span class="p">();</span>
-    <span class="n">IF</span> <span class="n">NOT</span> <span class="p">(</span><span class="n">fbGetHostName</span><span class="o">.</span><span class="n">bBusy</span> <span class="n">OR</span> <span class="n">fbGetHostName</span><span class="o">.</span><span class="n">bError</span><span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">sPlcHostname</span> <span class="o">:=</span> <span class="n">fbGetHostName</span><span class="o">.</span><span class="n">sHostName</span><span class="p">;</span>
-            <span class="n">bHostnameSet</span>                    <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-    <span class="n">END_IF</span>
-<span class="n">END_IF</span>
+<span class="n">fbGetHostName</span><span class="p">(</span>
+    <span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span>
+    <span class="n">sHostname</span> <span class="o">=&gt;</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">sPlcHostname</span><span class="p">,</span>
+<span class="p">);</span>
 
-<span class="n">IF</span> <span class="n">NOT</span> <span class="n">bAdapterSet</span> <span class="n">THEN</span>
-    <span class="n">fbGetAdapterIP</span><span class="p">();</span>
-    <span class="n">IF</span> <span class="n">NOT</span> <span class="p">(</span><span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">bBusy</span> <span class="ow">or</span> <span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">bError</span><span class="p">)</span> <span class="n">THEN</span>
-        <span class="n">FOR</span> <span class="n">idxPortFind</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">MAX_LOCAL_ADAPTERS</span> <span class="n">DO</span>
-            <span class="n">IF</span> <span class="n">FIND</span><span class="p">(</span><span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">arrAdapters</span><span class="p">[</span><span class="n">idxPortFind</span><span class="p">]</span><span class="o">.</span><span class="n">sIpAddr</span><span class="p">,</span>
-               <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">sIpTidbit</span><span class="p">)</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span> <span class="n">THEN</span>
-                <span class="n">fbSocket</span><span class="o">.</span><span class="n">sLocalHost</span> <span class="o">:=</span> <span class="n">fbGetAdapterIP</span><span class="o">.</span><span class="n">arrAdapters</span><span class="p">[</span><span class="n">idxPortFind</span><span class="p">]</span><span class="o">.</span><span class="n">sIpAddr</span><span class="p">;</span>
-                <span class="n">SocketEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-                <span class="n">bAdapterSet</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-                <span class="n">EXIT</span><span class="p">;</span>
-            <span class="n">END_IF</span>
-        <span class="n">END_FOR</span>
-    <span class="n">END_IF</span>
-<span class="n">END_IF</span>
+<span class="n">fbGetIP</span><span class="p">(</span>
+    <span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span>
+    <span class="n">sIPAddress</span> <span class="o">=&gt;</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">sLocalHost</span>
+<span class="p">);</span>
 
 <span class="p">(</span><span class="o">*</span> <span class="n">Ensure</span> <span class="n">the</span> <span class="n">socket</span> <span class="ow">is</span> <span class="n">ready</span> <span class="k">for</span> <span class="n">when</span> <span class="n">JSON</span> <span class="n">documents</span> <span class="n">are</span> <span class="n">emitted</span> <span class="o">*</span><span class="p">)</span>
 <span class="n">rtReset</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bReset</span><span class="p">);</span>
@@ -2345,12 +2433,18 @@ END_ACTION
 
 <span class="n">fbSocket</span><span class="p">(</span>
     <span class="n">nLocalPort</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">bEnable</span><span class="o">:=</span><span class="n">SocketEnable</span><span class="p">,</span>
+    <span class="n">bEnable</span><span class="o">:=</span><span class="n">fbGetIP</span><span class="o">.</span><span class="n">bDone</span><span class="p">,</span>
     <span class="n">nMode</span><span class="o">:=</span><span class="n">CONNECT_MODE_ENABLEDBG</span><span class="p">,</span>
 <span class="p">);</span>
 
-<span class="n">bReadyToLog</span> <span class="o">:=</span> <span class="p">(</span><span class="n">bAdapterSet</span> <span class="n">AND</span> <span class="n">bHostnameSet</span> <span class="n">AND</span> <span class="n">bInitialized</span> <span class="n">AND</span>
-                <span class="n">fbSocket</span><span class="o">.</span><span class="n">bEnable</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">bError</span> <span class="n">AND</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">eState</span> <span class="o">=</span> <span class="n">E_SocketConnectionlessState</span><span class="o">.</span><span class="n">eSOCKET_CREATED</span><span class="p">);</span>
+<span class="n">bReadyToLog</span> <span class="o">:=</span> <span class="p">(</span>
+    <span class="n">fbGetHostName</span><span class="o">.</span><span class="n">bDone</span> <span class="n">AND</span>
+    <span class="n">fbGetIP</span><span class="o">.</span><span class="n">bDone</span> <span class="n">AND</span>
+    <span class="n">bInitialized</span> <span class="n">AND</span>
+    <span class="n">fbSocket</span><span class="o">.</span><span class="n">bEnable</span> <span class="n">AND</span>
+    <span class="n">NOT</span> <span class="n">fbSocket</span><span class="o">.</span><span class="n">bError</span> <span class="n">AND</span>
+    <span class="n">fbSocket</span><span class="o">.</span><span class="n">eState</span> <span class="o">=</span> <span class="n">E_SocketConnectionlessState</span><span class="o">.</span><span class="n">eSOCKET_CREATED</span>
+<span class="p">);</span>
 <span class="n">rtFirstLog</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bReadyToLog</span><span class="p">);</span>
 
 <span class="n">IF</span> <span class="n">rtFirstLog</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
@@ -2396,6 +2490,8 @@ END_ACTION
 <dl class="simple">
 <dt>Related:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#e-subsystem">E_Subsystem</a></p></li>
+<li><p><a class="reference internal" href="#fb-getplchostname">FB_GetPLCHostname</a></p></li>
+<li><p><a class="reference internal" href="#fb-getplcipaddress">FB_GetPLCIPAddress</a></p></li>
 <li><p><a class="reference internal" href="#fb-listener">FB_Listener</a></p></li>
 <li><p><a class="reference internal" href="#fb-logmessage">FB_LogMessage</a></p></li>
 <li><p><a class="reference internal" href="#gvl-logger">GVL_Logger</a></p></li>
@@ -2478,42 +2574,42 @@ END_ACTION
 
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Verbose</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
+        <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
     <span class="n">END_IF</span>
 
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Warning</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Warning</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
+        <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
     <span class="n">END_IF</span>
 
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Info</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
+        <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
     <span class="n">END_IF</span>
 
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Error</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
+        <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
     <span class="n">END_IF</span>
 
     <span class="n">hr</span> <span class="o">:=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Critical</span><span class="o">.</span><span class="n">nEventId</span><span class="p">]</span><span class="o">.</span><span class="n">CreateEx</span><span class="p">(</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Critical</span><span class="p">,</span> <span class="mi">0</span> <span class="p">(</span><span class="o">*</span><span class="n">fbSource</span><span class="o">*</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">IF</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
-            <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
+        <span class="n">bInitFailed</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">hrLastInternalError</span> <span class="o">:=</span> <span class="n">hr</span><span class="p">;</span>
     <span class="n">END_IF</span>
 
     <span class="n">IF</span> <span class="n">bInitFailed</span> <span class="n">THEN</span>
-            <span class="n">ADSLOGSTR</span><span class="p">(</span>
-                    <span class="n">msgCtrlMask</span> <span class="o">:=</span> <span class="n">ADSLOG_MSGTYPE_ERROR</span><span class="p">,</span>
-                    <span class="n">msgFmtStr</span>   <span class="o">:=</span> <span class="s1">&#39;[LOGGER] Initialization failed in </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
-                    <span class="n">strArg</span>      <span class="o">:=</span> <span class="n">sPath</span><span class="p">,</span>
-            <span class="p">);</span>
+        <span class="n">ADSLOGSTR</span><span class="p">(</span>
+            <span class="n">msgCtrlMask</span> <span class="o">:=</span> <span class="n">ADSLOG_MSGTYPE_ERROR</span><span class="p">,</span>
+            <span class="n">msgFmtStr</span>   <span class="o">:=</span> <span class="s1">&#39;[LOGGER] Initialization failed in </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">strArg</span>      <span class="o">:=</span> <span class="n">sPath</span><span class="p">,</span>
+        <span class="p">);</span>
     <span class="n">ELSE</span>
-            <span class="n">bInitialized</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">bInitialized</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
     <span class="n">END_IF</span>
 <span class="n">END_IF</span>
 
@@ -2540,7 +2636,7 @@ END_ACTION
     <span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Error</span><span class="p">:</span>          <span class="n">fbMessage</span> <span class="n">REF</span><span class="o">=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">nEventId</span><span class="p">];</span>
     <span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Critical</span><span class="p">:</span>       <span class="n">fbMessage</span> <span class="n">REF</span><span class="o">=</span> <span class="n">fbMessages</span><span class="p">[</span><span class="n">TC_EVENTS</span><span class="o">.</span><span class="n">LCLSGeneralEventClass</span><span class="o">.</span><span class="n">Critical</span><span class="o">.</span><span class="n">nEventId</span><span class="p">];</span>
     <span class="n">ELSE</span>
-            <span class="n">RETURN</span><span class="p">;</span>
+        <span class="n">RETURN</span><span class="p">;</span>
 <span class="n">END_CASE</span>
 
 <span class="n">CASE</span> <span class="n">eSubsystem</span> <span class="n">OF</span>
@@ -2551,7 +2647,7 @@ END_ACTION
     <span class="n">E_Subsystem</span><span class="o">.</span><span class="n">VACUUM</span><span class="p">:</span>             <span class="n">sSubsystemSource</span> <span class="o">:=</span> <span class="s1">&#39;/Vacuum&#39;</span><span class="p">;</span>
     <span class="n">E_Subsystem</span><span class="o">.</span><span class="n">OPTICS</span><span class="p">:</span>     <span class="n">sSubsystemSource</span> <span class="o">:=</span> <span class="s1">&#39;/Optics&#39;</span><span class="p">;</span>
     <span class="n">ELSE</span>
-            <span class="n">sSubsystemSource</span> <span class="o">:=</span> <span class="s1">&#39;/Unknown&#39;</span><span class="p">;</span>
+        <span class="n">sSubsystemSource</span> <span class="o">:=</span> <span class="s1">&#39;/Unknown&#39;</span><span class="p">;</span>
 <span class="n">END_CASE</span>
 
 <span class="o">//</span> <span class="n">Clearing</span> <span class="n">the</span> <span class="n">source</span> <span class="n">here</span> <span class="n">will</span> <span class="n">clear</span> <span class="n">the</span> <span class="n">event</span> <span class="n">GUID</span><span class="p">,</span> <span class="n">causing</span> <span class="n">the</span> <span class="n">message</span> <span class="n">to</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">resolved</span><span class="o">.</span>
@@ -2692,8 +2788,8 @@ Function block to link an analog value from EPICS to an LREAL on the PLC
 Usage:
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: INTERNAL:RECORD
-            link: PV:NAME:TO:LINK:TO
+        pv: INTERNAL:RECORD
+        link: PV:NAME:TO:LINK:TO
     &#39;}
     fbLinkedValue1 : FB_LREALFromEPICS;
 
@@ -2725,17 +2821,17 @@ VAR
     iLastValidSeverity      : INT;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: EPICSLink
-            link:
-            field: DESC Internal variable used to monitor EPICS PV in PLC
+        pv: EPICSLink
+        link:
+        field: DESC Internal variable used to monitor EPICS PV in PLC
     &#39;}
     fPLCInternalValue : LREAL;
 
     // Use special link syntax for now to get EPICSLink.SEVR here:
     {attribute &#39;pytmc&#39; := &#39;
-            pv: EPICSLink:LinkSeverity
-            link: *EPICSLink.SEVR
-            field: DESC Internal variable used to monitor EPICS PV severity in PLC
+        pv: EPICSLink:LinkSeverity
+        link: *EPICSLink.SEVR
+        field: DESC Internal variable used to monitor EPICS PV severity in PLC
     &#39;}
     iPLCInternalSeverity : INT;
 
@@ -2752,7 +2848,7 @@ IF iPLCInternalSeverity &lt;&gt; -1 THEN
     iLastValidSeverity := iPLCInternalSeverity;
     iPLCInternalSeverity := -1;
 
-    // Reset the timer
+     // Reset the timer
     tonSeverityTimeout(IN:=FALSE);
     tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
@@ -2770,7 +2866,7 @@ END_IF
 tonValueTimeout();
 tonSeverityTimeout();
 bValid := (NOT tonValueTimeout.Q) AND
-              (NOT tonSeverityTimeout.Q) AND
+          (NOT tonSeverityTimeout.Q) AND
           (iLastValidSeverity &lt;= iMaximumValidSeverity);
 fValue := fLastValidValue;
 
@@ -2786,8 +2882,8 @@ Function block to link an analog value from EPICS to a STRING on the PLC
 Usage:
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: INTERNAL:RECORD
-            link: PV:NAME:TO:LINK:TO.VAL@
+        pv: INTERNAL:RECORD
+        link: PV:NAME:TO:LINK:TO.VAL@
     &#39;}
     fbLinkedValue1 : FB_STRINGFromEPICS;
 
@@ -2828,17 +2924,17 @@ VAR
     iLastValidSeverity      : INT;
 
     {attribute &#39;pytmc&#39; := &#39;
-            pv: EPICSLink
-            link:
-            field: DESC Internal variable used to monitor EPICS PV in PLC
+        pv: EPICSLink
+        link:
+        field: DESC Internal variable used to monitor EPICS PV in PLC
     &#39;}
     sPLCInternalValue : STRING;
 
     // Use special link syntax for now to get EPICSLink.SEVR here:
     {attribute &#39;pytmc&#39; := &#39;
-            pv: EPICSLink:Sevr
-            link: *EPICSLink.SEVR
-            field: DESC Internal variable used to monitor EPICS PV severity in PLC
+        pv: EPICSLink:Sevr
+        link: *EPICSLink.SEVR
+        field: DESC Internal variable used to monitor EPICS PV severity in PLC
     &#39;}
     iPLCInternalSeverity : INT;
 
@@ -2855,7 +2951,7 @@ IF iPLCInternalSeverity &lt;&gt; -1 THEN
     iLastValidSeverity := iPLCInternalSeverity;
     iPLCInternalSeverity := -1;
 
-    // Reset the timer
+     // Reset the timer
     tonSeverityTimeout(IN:=FALSE);
     tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
 END_IF
@@ -2873,7 +2969,7 @@ END_IF
 tonValueTimeout();
 tonSeverityTimeout();
 bValid := (NOT tonValueTimeout.Q) AND
-              (NOT tonSeverityTimeout.Q) AND
+          (NOT tonSeverityTimeout.Q) AND
           (iLastValidSeverity &lt;= iMaximumValidSeverity);
 sValue := sLastValidValue;
 
@@ -2946,22 +3042,22 @@ END_FUNCTION_BLOCK
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">TEMP</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">TEMP</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">fTemp</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">CONN</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">ONAM</span> <span class="n">Connected</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">ZNAM</span> <span class="n">Disconnected</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">CONN</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">ONAM</span> <span class="n">Connected</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">ZNAM</span> <span class="n">Disconnected</span>
     <span class="s1">&#39;}</span>
     <span class="n">bConnected</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-            <span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">ERR</span>
-            <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">STC</span><span class="p">:</span><span class="n">ERR</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
     <span class="s1">&#39;}</span>
     <span class="n">bError</span> <span class="n">AT</span> <span class="o">%</span><span class="n">I</span><span class="o">*</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
@@ -3100,17 +3196,17 @@ END_FUNCTION_BLOCK
 <span class="n">END_IF</span>
 <span class="n">IF</span> <span class="n">bExecute</span> <span class="n">THEN</span>
     <span class="n">fbLocalTime</span><span class="p">(</span>
-            <span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span>
-            <span class="n">dwCycle</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">bValid</span> <span class="o">=&gt;</span> <span class="n">bValid</span><span class="p">);</span>
+        <span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span>
+        <span class="n">dwCycle</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">bValid</span> <span class="o">=&gt;</span> <span class="n">bValid</span><span class="p">);</span>
     <span class="n">IF</span> <span class="n">bValid</span> <span class="n">THEN</span>
-            <span class="n">fbTimeConv</span><span class="p">(</span>
-                    <span class="ow">in</span> <span class="o">:=</span> <span class="n">SYSTEMTIME_TO_FILETIME</span><span class="p">(</span><span class="n">fbLocalTime</span><span class="o">.</span><span class="n">systemTime</span><span class="p">),</span>
-                    <span class="n">out</span> <span class="o">=&gt;</span> <span class="n">fileTime</span><span class="p">);</span>
-            <span class="n">iFull</span> <span class="o">:=</span> <span class="p">(</span><span class="n">SHL</span><span class="p">(</span><span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="o">.</span><span class="n">dwHighDateTime</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="o">.</span><span class="n">dwLowDateTime</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000</span> <span class="o">-</span> <span class="mi">11644473600000</span><span class="p">;</span>
-            <span class="n">fTime</span> <span class="o">:=</span> <span class="n">ULINT_TO_LREAL</span><span class="p">(</span><span class="n">iFull</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
-            <span class="n">iSeconds</span> <span class="o">:=</span> <span class="n">iFull</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
-            <span class="n">iMilliseconds</span> <span class="o">:=</span> <span class="n">iFull</span> <span class="n">MOD</span> <span class="mi">1000</span><span class="p">;</span>
+        <span class="n">fbTimeConv</span><span class="p">(</span>
+            <span class="ow">in</span> <span class="o">:=</span> <span class="n">SYSTEMTIME_TO_FILETIME</span><span class="p">(</span><span class="n">fbLocalTime</span><span class="o">.</span><span class="n">systemTime</span><span class="p">),</span>
+            <span class="n">out</span> <span class="o">=&gt;</span> <span class="n">fileTime</span><span class="p">);</span>
+        <span class="n">iFull</span> <span class="o">:=</span> <span class="p">(</span><span class="n">SHL</span><span class="p">(</span><span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="o">.</span><span class="n">dwHighDateTime</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="o">.</span><span class="n">dwLowDateTime</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000</span> <span class="o">-</span> <span class="mi">11644473600000</span><span class="p">;</span>
+        <span class="n">fTime</span> <span class="o">:=</span> <span class="n">ULINT_TO_LREAL</span><span class="p">(</span><span class="n">iFull</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
+        <span class="n">iSeconds</span> <span class="o">:=</span> <span class="n">iFull</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
+        <span class="n">iMilliseconds</span> <span class="o">:=</span> <span class="n">iFull</span> <span class="n">MOD</span> <span class="mi">1000</span><span class="p">;</span>
     <span class="n">END_IF</span>
 <span class="n">END_IF</span>
 
@@ -3214,7 +3310,7 @@ END_FUNCTION_BLOCK
     <span class="o">//</span><span class="k">if</span> <span class="n">there</span><span class="s1">&#39;s a modbus error, set all incoming bits to zero</span>
     <span class="p">{</span><span class="n">analysis</span> <span class="o">-</span><span class="mi">41</span><span class="p">}</span> <span class="o">//</span><span class="n">There</span> <span class="n">are</span> <span class="n">one</span><span class="o">-</span><span class="n">liners</span> <span class="k">for</span> <span class="n">resetting</span> <span class="n">an</span> <span class="n">array</span> <span class="n">to</span> <span class="n">zero</span> <span class="n">but</span> <span class="n">they</span> <span class="n">don</span><span class="s1">&#39;t comply with 61131</span>
     <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">USINT_TO_INT</span><span class="p">(</span><span class="n">SIZEOF</span><span class="p">(</span><span class="n">anKoyo_PLC_CnBits</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span> <span class="n">DO</span> <span class="o">//</span><span class="n">starts</span> <span class="n">at</span> <span class="mi">0</span>
-            <span class="n">anKoyo_PLC_CnBits</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span><span class="o">:=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">anKoyo_PLC_CnBits</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span><span class="o">:=</span><span class="mi">0</span><span class="p">;</span>
     <span class="n">END_FOR</span>
     <span class="p">{</span><span class="n">analysis</span> <span class="o">+</span><span class="mi">41</span><span class="p">}</span>
     <span class="n">q_xError</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -3319,7 +3415,7 @@ END_FUNCTION_BLOCK
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, SLAC National Accelerator Laboratory.</p>
+    <p>&#169; Copyright 2022, SLAC National Accelerator Laboratory.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
