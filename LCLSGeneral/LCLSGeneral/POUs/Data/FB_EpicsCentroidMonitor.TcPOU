@@ -4,7 +4,85 @@
     <Declaration><![CDATA[(*
     EPICS AreaDetector Stats Plugin Centroid Monitor
 
-    Requires a "link" pragma to specify the full plugin prefix.
+    Requirements:
+
+    * Requires an existing IOC with an EPICS AreaDetector.
+    * Requires an AreaDetector plugin chain that includes a stats plugin.
+    * Requires a pytmc "link" pragma to specify the plugin PV prefix.
+
+    What information is included?
+
+    * Centroid X position
+    * Centroid Y position
+    * Array count index
+    * The validity of the data, as determined by:
+        - The ArrayCounter_RBV PV changing
+        - Alarm severity of the PVs
+        - The centroid value changing, even minimally
+
+    Example:
+
+        {attribute 'pytmc' := '
+            pv: @(PREFIX):Chk:Centroid1
+            link: AREA:DETECTOR:CAM:01:Stats2:
+        '}
+        fbCentroid : FB_EpicsCentroidMonitor;
+
+        fbCentroid(bEnable:=TRUE, fMinimumValidChange:=1E-6, fNewFrameMinimumChange:=1E-6);
+        IF fbCentroid.bValid AND fbCentroid.bIsUpdating THEN
+            fbCentroid.fCentroidX;
+            fbCentroid.fCentroidY;
+            fbCentroid.nArrayCount;
+            fbCentroid.fFrameTime;
+        END_IF
+
+    Above, ``AREA:DETECTOR:CAM:01:Stats2`` should refer to the PV prefix of a
+    stats plugin.
+    That is, ``caget AREA:DETECTOR:CAM:01:Stats2:ArrayCounter_RBV`` should not
+    fail.
+
+    How does this work?
+
+    pytmc offers the ability to push EPICS process variable data into PLCs by
+    way of link pragmas.  These link pragmas create additional supporting EPICS
+    records that monitor PVs from any IOC on the controls network. In this case,
+    the PLC IOC will monitor vital AreaDetector plugin record data and let your
+    PLC project know of its status.
+
+    Why are there multiple thresholds I have to specify?
+
+    ``fNewFrameMinimumChange`` is the minimum change in pixels to say that
+    when the array counter changes, these are the new values for X and Y.
+    While this seems a bit confusing (or perhaps unnecessary), we do not
+    know when the array counters or centroid values will be updated.  These
+    do not get written in a single, atomic write to the PLC. We may see an
+    updated array count and then a centroid X change and then a Y change.
+    This threshold is a way of working around that complexity and saying
+    the new data is here only when it's changed at least a bit and we have
+    a new frame number.
+
+    ``fMinimumValidChange``, which by default is set to the same as the above
+    threshold, says that if the centroid value doesn't change by at least this
+    on a frame-to-frame basis, consider this a result of a faulty AreaDetector
+    implementation.  The monitor would report values below this threshold as
+    "not updating" - ``bIsUpdating`` as ``FALSE``.
+
+    What needs to happen to get new centroid values?
+
+    - An updated array count
+    - An updated X centroid value (above fNewFrameMinimumChange)
+    - An updated Y centroid value (above fNewFrameMinimumChange)
+    - NO_ALARM severities for all values
+
+    This will result in an updated:
+
+    - fFrameTime (seconds between valid frames)
+
+    What needs to happen for ``bIsUpdating`` to be TRUE?
+
+    - All items from the above "new centroid values"
+    - Frame time below fMaximumFrameTime
+    - Centroid X and Y values above fMinimumValidChange
 
 *)
 FUNCTION_BLOCK FB_EpicsCentroidMonitor
