@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_Test_EpicsMotorMonitor" Id="{311bff34-9bb2-4463-9f15-81af7df4e6ba}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_Test_EpicsMotorMonitor EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestBasics();]]></ST>
+    </Implementation>
+    <Method Name="TestBasics" Id="{874ed43f-1e5d-4a1e-82b9-ab379a271a7c}">
+      <Declaration><![CDATA[METHOD TestBasics
+VAR_INPUT
+END_VAR
+VAR_INST
+    fbMonitor : FB_EpicsMotorMonitor;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Basic');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertTrue(fbMonitor.bValid, Message:='Data valid');
+
+TEST_FINISHED();
+
+
+TEST('Severities');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=2, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertFalse(fbMonitor.bValid, Message:='Invalid RBV');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=2, nMoving_Severity:=0);
+fbMonitor();
+AssertFalse(fbMonitor.bValid, Message:='Invalid status');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=2);
+fbMonitor();
+AssertFalse(fbMonitor.bValid, Message:='Invalid moving');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertTrue(fbMonitor.bValid, Message:='All valid');
+
+TEST_FINISHED();
+
+TEST('Moving');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0 (* DMOV *), nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertTrue(fbMonitor.bIsMoving, Message:='Moving');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=1 (* DMOV *), nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertFalse(fbMonitor.bIsMoving, Message:='Not moving');
+
+TEST_FINISHED();
+
+TEST('Position');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=10.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertEquals_LREAL(Actual:=fbMonitor.fPosition, Expected:=10.0, Delta:=0.1, Message:='Position 1 OK');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=20.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+AssertEquals_LREAL(Actual:=fbMonitor.fPosition, Expected:=20.0, Delta:=0.1, Message:='Position 2 OK');
+
+TEST_FINISHED();
+
+TEST('MSTA set');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=16#0FFFF, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+
+AssertTrue(fbMonitor.stMSTA.bPositiveDirection, Message:='bPositiveDirection True');
+AssertTrue(fbMonitor.stMSTA.bDone, Message:='bDone True');
+AssertTrue(fbMonitor.stMSTA.bPlusLimitSwitch, Message:='bPlusLimitSwitch True');
+AssertTrue(fbMonitor.stMSTA.bHomeLimitSwitch, Message:='bHomeLimitSwitch True');
+AssertTrue(fbMonitor.stMSTA.bUnused0, Message:='bUnused0 True');
+AssertTrue(fbMonitor.stMSTA.bClosedLoop, Message:='bClosedLoop True');
+AssertTrue(fbMonitor.stMSTA.bSlipStall, Message:='bSlipStall True');
+AssertTrue(fbMonitor.stMSTA.bHome, Message:='bHome True');
+AssertTrue(fbMonitor.stMSTA.bEncoderPresent, Message:='bEncoderPresent True');
+AssertTrue(fbMonitor.stMSTA.bHardwareProblem, Message:='bHardwareProblem True');
+AssertTrue(fbMonitor.stMSTA.bMoving, Message:='bMoving True');
+AssertTrue(fbMonitor.stMSTA.bGainSupport, Message:='bGainSupport True');
+AssertTrue(fbMonitor.stMSTA.bCommError, Message:='bCommError True');
+AssertTrue(fbMonitor.stMSTA.bMinusLimitSwitch, Message:='bMinusLimitSwitch True');
+AssertTrue(fbMonitor.stMSTA.bHomed, Message:='bHomed True');
+
+TEST_FINISHED();
+
+
+TEST('MSTA zero');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=16#0000, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+
+AssertFalse(fbMonitor.stMSTA.bPositiveDirection, Message:='bPositiveDirection False');
+AssertFalse(fbMonitor.stMSTA.bDone, Message:='bDone False');
+AssertFalse(fbMonitor.stMSTA.bPlusLimitSwitch, Message:='bPlusLimitSwitch False');
+AssertFalse(fbMonitor.stMSTA.bHomeLimitSwitch, Message:='bHomeLimitSwitch False');
+AssertFalse(fbMonitor.stMSTA.bUnused0, Message:='bUnused0 False');
+AssertFalse(fbMonitor.stMSTA.bClosedLoop, Message:='bClosedLoop False');
+AssertFalse(fbMonitor.stMSTA.bSlipStall, Message:='bSlipStall False');
+AssertFalse(fbMonitor.stMSTA.bHome, Message:='bHome False');
+AssertFalse(fbMonitor.stMSTA.bEncoderPresent, Message:='bEncoderPresent False');
+AssertFalse(fbMonitor.stMSTA.bHardwareProblem, Message:='bHardwareProblem False');
+AssertFalse(fbMonitor.stMSTA.bMoving, Message:='bMoving False');
+AssertFalse(fbMonitor.stMSTA.bGainSupport, Message:='bGainSupport False');
+AssertFalse(fbMonitor.stMSTA.bCommError, Message:='bCommError False');
+AssertFalse(fbMonitor.stMSTA.bMinusLimitSwitch, Message:='bMinusLimitSwitch False');
+AssertFalse(fbMonitor.stMSTA.bHomed, Message:='bHomed False');
+
+TEST_FINISHED();
+
+
+TEST('MSTA something');
+
+WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=2#0100_0011_0000_0110, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+fbMonitor();
+
+AssertFalse(fbMonitor.stMSTA.bPositiveDirection, Message:='bPositiveDirection');
+AssertTrue(fbMonitor.stMSTA.bDone, Message:='bDone');
+AssertTrue(fbMonitor.stMSTA.bPlusLimitSwitch, Message:='bPlusLimitSwitch');
+AssertFalse(fbMonitor.stMSTA.bHomeLimitSwitch, Message:='bHomeLimitSwitch');
+
+AssertFalse(fbMonitor.stMSTA.bUnused0, Message:='bUnused0');
+AssertFalse(fbMonitor.stMSTA.bClosedLoop, Message:='bClosedLoop');
+AssertFalse(fbMonitor.stMSTA.bSlipStall, Message:='bSlipStall');
+AssertFalse(fbMonitor.stMSTA.bHome, Message:='bHome');
+
+AssertTrue(fbMonitor.stMSTA.bEncoderPresent, Message:='bEncoderPresent');
+AssertTrue(fbMonitor.stMSTA.bHardwareProblem, Message:='bHardwareProblem');
+AssertFalse(fbMonitor.stMSTA.bMoving, Message:='bMoving');
+AssertFalse(fbMonitor.stMSTA.bGainSupport, Message:='bGainSupport');
+
+AssertFalse(fbMonitor.stMSTA.bCommError, Message:='bCommError');
+AssertFalse(fbMonitor.stMSTA.bMinusLimitSwitch, Message:='bMinusLimitSwitch');
+AssertTrue(fbMonitor.stMSTA.bHomed, Message:='bHomed');
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteData" Id="{4127bcaf-f066-4306-90c6-57c0f07136fb}">
+      <Declaration><![CDATA[METHOD WriteData
+VAR_IN_OUT
+    fbMonitor : FB_EpicsMotorMonitor;
+END_VAR
+VAR_INPUT
+    fRBV : LREAL;
+    nMoving : INT;
+    nStatus : UINT;
+    nRBV_Severity : INT := 0;
+    nStatus_Severity : INT := 0;
+    nMoving_Severity : INT := 0;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WRITE_PROTECTED_INT(ADR(fbMonitor.fbRBVCheck.iPLCInternalSeverity), nRBV_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbMotorStatusCheck.iPLCInternalSeverity), nStatus_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbMovingCheck.iPLCInternalSeverity), nMoving_Severity);
+
+WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbRBVCheck.fPLCInternalValue), fRBV);
+WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbMotorStatusCheck.fPLCInternalValue), UINT_TO_LREAL(nStatus));
+WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbMovingCheck.fPLCInternalValue), INT_TO_LREAL(nMoving));]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

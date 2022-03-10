@@ -94,6 +94,9 @@
     <Compile Include="POUs\Data\Tests\FB_Test_EpicsCentroidMonitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Data\Tests\FB_Test_EpicsMotorMonitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Diagnostics\DUT\E_EcatDiagState.TcDUT">
       <SubType>Code</SubType>
     </Compile>

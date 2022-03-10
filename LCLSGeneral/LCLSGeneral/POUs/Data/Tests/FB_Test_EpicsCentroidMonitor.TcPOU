@@ -20,7 +20,6 @@ END_VAR
 VAR_INST
     fbMonitor : FB_EpicsCentroidMonitor;
     nCount : INT := 0;
-    bInit : BOOL := FALSE;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('Basic');

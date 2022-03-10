@@ -5,6 +5,8 @@
 VAR
     CbTest    :    FB_CircuitBreaker_Test;
     fbCentroidTest : FB_Test_EpicsCentroidMonitor;
+    fbMotorTest : FB_Test_EpicsMotorMonitor;
+
 END_VAR
 ]]></Declaration>
     <Implementation>

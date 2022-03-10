@@ -51,6 +51,11 @@ bValid := (
     fbMovingCheck.bValid AND
     fbMotorStatusCheck.bValid
 );
+
+(* Moving status is DMOV; this comes in as a floating point value
+     DMOV = 0 -> moving
+     DMOV = 1 -> done moving, or not moving
+*)
 bIsMoving := ABS(fbMovingCheck.fValue) < 1e-5;
 fPosition := fbRBVCheck.fValue;
 
