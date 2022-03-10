@@ -4,7 +4,48 @@
     <Declaration><![CDATA[(*
     EPICS Motor Record Monitoring tool
 
-    Requires a "link" pragma to specify the motor record prefix.
+    Requirements:
+
+    * Requires an existing IOC with an EPICS motor record.
+    * Requires a pytmc "link" pragma to specify the motor record prefix.
+
+    What information is included?
+
+    * The validity of the source data (as determined by alarm severity)
+    * Readback value (scaled encoder position in ``fPosition``)
+    * Motion status (moving or not, ``bIsMoving``)
+    * Homed status, limit status, and others (via ``stMSTA``, see
+      ``ST_EpicsMotorMSTA``).
+
+    Example:
+
+        {attribute 'pytmc' := '
+            pv: @(PREFIX):Internal:Mon
+            link: MOTOR:PV:NAME
+        '}
+        fbMotorMonitor : FB_EpicsMotorMonitor;
+
+        fbMotorMonitor(bEnable:=TRUE);
+        IF fbMotorMonitor.bValid THEN
+            fbMotorMonitor.fPosition;
+            fbMotorMonitor.bIsMoving;
+            fbMotorMonitor.stMSTA.bHomed;
+        END_IF
+    
+    Above, ``MOTOR:PV:NAME`` should refer to an EPICS motor record.
+    That is, ``caget MOTOR:PV:NAME.RTYP`` should return "motor".
+
+    How does this work?
+
+    pytmc offers the ability to push EPICS process variable data into PLCs by
+    way of link pragmas.  These link pragmas create additional supporting EPICS
+    records that monitor PVs from any IOC on the controls network. In this case,
+    the PLC IOC will monitor vital motor record information and let your PLC
+    project know of its status.
+
+    Note that not all motor records may be created equally.  Some of the status
+    fields may not be consistent.  Be sure to check how your motor works and
+    what fields are worth paying attention to when using this.
 
 *)
 FUNCTION_BLOCK FB_EpicsMotorMonitor
