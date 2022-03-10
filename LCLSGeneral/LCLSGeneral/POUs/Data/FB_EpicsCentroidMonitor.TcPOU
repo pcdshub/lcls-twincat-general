@@ -10,7 +10,10 @@
 FUNCTION_BLOCK FB_EpicsCentroidMonitor
 VAR_INPUT
     fMaximumFrameTime : LREAL := 0.2;
-    fMinimumChange : LREAL := 0.05;
+    (* Minimum change to be considered updating correctly - buggy detectors may need this. *)
+    fMinimumValidChange : LREAL := 1E-6;
+    (* Minimum change in pixels to be considered a new value for X, Y *)
+    fNewFrameMinimumChange : LREAL := 1E-6;
     bEnable : BOOL := TRUE;
 END_VAR
 VAR_OUTPUT
@@ -71,9 +74,12 @@ VAR
     tLastUpdate: TIME;
 
     bInit : BOOL;
-    // Did we see a frame update yet?
+    // Did we see a frame update yet? (FALSE at startup; TRUE after first frame.)
     bSawFrame : BOOL;
+    // Do we have a new frame? Has the array count updated, and position change above fNewFrameMinimumChange?
     bHaveNewFrame : BOOL;
+    // For this new frame, is it above the threshold fMinimumValidChange?
+    bAboveThreshold : BOOL;
 
 END_VAR]]></Declaration>
     <Implementation>
@@ -103,14 +109,27 @@ fCentroidX := fbCentroidX.fValue;
 fCentroidY := fbCentroidY.fValue;
 nArrayCount := LREAL_TO_UDINT(fbArrayCounter.fValue);
 
+(*
+    Only consider that we have a new frame if:
+    1. The array count has been updated
+    2. X and Y values have changed even minimally
+        a. With background noise, this should not be a problem.
+        b. With an invalid black/white/stale image, this will indicate
+           'no new frame' despite an increasing array count.
+*)
 bHaveNewFrame := (
     nArrayCount <> nLastArrayCount AND
-    ABS(fLastCentroidX - fCentroidX) >= GVL_BTPS_Retain.fMinCentroidChange AND
-    ABS(fLastCentroidY - fCentroidY) >= GVL_BTPS_Retain.fMinCentroidChange AND
+    ABS(fLastCentroidX - fCentroidX) >= fNewFrameMinimumChange AND
+    ABS(fLastCentroidY - fCentroidY) >= fNewFrameMinimumChange AND
     TRUE
 );
 
 IF bHaveNewFrame THEN
+    bAboveThreshold := (
+        ABS(fLastCentroidX - fCentroidX) >= fMinimumValidChange AND
+        ABS(fLastCentroidY - fCentroidY) >= fMinimumValidChange
+    );
+
     fFrameTime := TIME_TO_LREAL(TIME() - tLastUpdate) * 0.001; // Milliseconds -> seconds
     tLastUpdate := TIME();
     nLastArrayCount := nArrayCount;
@@ -120,7 +139,7 @@ IF bHaveNewFrame THEN
     fLastCentroidY := fCentroidY;
 END_IF
 
-bIsUpdating := bSawFrame AND (fFrameTime <= GVL_BTPS_Retain.fMaximumFrameTime);]]></ST>
+bIsUpdating := bSawFrame AND (fFrameTime <= fMaximumFrameTime) AND bAboveThreshold;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

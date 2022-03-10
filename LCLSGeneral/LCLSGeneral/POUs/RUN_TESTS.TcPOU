@@ -4,6 +4,7 @@
     <Declaration><![CDATA[PROGRAM RUN_TESTS
 VAR
     CbTest    :    FB_CircuitBreaker_Test;
+    fbCentroidTest : FB_Test_EpicsCentroidMonitor;
 END_VAR
 ]]></Declaration>
     <Implementation>

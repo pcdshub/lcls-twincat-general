@@ -34,6 +34,7 @@
     <Folder Include="Data types\EPICS" />
     <Folder Include="GVLs" />
     <Folder Include="POUs" />
+    <Folder Include="POUs\Data\Tests" />
     <Folder Include="POUs\Diagnostics\DUT" />
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
@@ -88,6 +89,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBufferGlobal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Data\Tests\FB_Test_EpicsCentroidMonitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\E_EcatDiagState.TcDUT">

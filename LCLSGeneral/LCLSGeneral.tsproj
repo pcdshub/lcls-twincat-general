@@ -1,371 +1,371 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.30">
-	<DataTypes>
-		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-000000000041}" TcBaseType="true" HideSubItems="true" CName="AmsNetId">AMSNETID</Name>
-			<BitSize>48</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
-			<ArrayInfo>
-				<LBound>0</LBound>
-				<Elements>6</Elements>
-			</ArrayInfo>
-			<Format>
-				<Printf>%d.%d.%d.%d.%d.%d</Printf>
-				<Parameter>[0]</Parameter>
-				<Parameter>[1]</Parameter>
-				<Parameter>[2]</Parameter>
-				<Parameter>[3]</Parameter>
-				<Parameter>[4]</Parameter>
-				<Parameter>[5]</Parameter>
-			</Format>
-		</DataType>
-		<DataType>
-			<Name GUID="{A81A482A-E7CE-49D8-A4DD-8280773A6946}" PersistentType="true">E_LogEventType</Name>
-			<BitSize>16</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
-			<EnumInfo>
-				<Text>
-					<![CDATA[ALARMCLEARED]]>
-				</Text>
-				<Enum>0</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[ALARMCONFIRMED]]>
-				</Text>
-				<Enum>1</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[ALARMRAISED]]>
-				</Text>
-				<Enum>2</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[MESSAGESENT]]>
-				</Text>
-				<Enum>3</Enum>
-			</EnumInfo>
-			<Properties>
-				<Property>
-					<Name>plcAttribute_qualified_only</Name>
-				</Property>
-				<Property>
-					<Name>plcAttribute_strict</Name>
-				</Property>
-			</Properties>
-		</DataType>
-		<DataType>
-			<Name GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}" TcBaseType="true" CName="TcEventSeverity" RemovableEnumPrefix="TCEVENTSEVERITY_">TcEventSeverity</Name>
-			<BitSize>16</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
-			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Verbose]]>
-				</Text>
-				<Enum>0</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Info]]>
-				</Text>
-				<Enum>1</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Warning]]>
-				</Text>
-				<Enum>2</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Error]]>
-				</Text>
-				<Enum>3</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Critical]]>
-				</Text>
-				<Enum>4</Enum>
-			</EnumInfo>
-			<Properties>
-				<Property>
-					<Name>plcAttribute_qualified_only</Name>
-				</Property>
-				<Property>
-					<Name>plcAttribute_strict</Name>
-				</Property>
-			</Properties>
-			<Hides>
-				<Hide GUID="{777FF09F-0B00-4AF2-BD7C-C1E2CE4A0947}"/>
-				<Hide GUID="{EC3C119D-4FEC-4197-96FB-DAE1B7C403FB}"/>
-			</Hides>
-		</DataType>
-		<DataType>
-			<Name GUID="{32DBDCFB-9DE9-4726-B195-4528904D5F40}" PersistentType="true">ST_LoggingEventInfo</Name>
-			<BitSize>86272</BitSize>
-			<SubItem>
-				<Name>schema</Name>
-				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
-				<Comment>
-					<![CDATA[Message or Alarm{Cleared,Confirmed,Raised} event information
+    <DataTypes>
+        <DataType>
+            <Name GUID="{18071995-0000-0000-0000-000000000041}" TcBaseType="true" HideSubItems="true" CName="AmsNetId">AMSNETID</Name>
+            <BitSize>48</BitSize>
+            <BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+            <ArrayInfo>
+                <LBound>0</LBound>
+                <Elements>6</Elements>
+            </ArrayInfo>
+            <Format>
+                <Printf>%d.%d.%d.%d.%d.%d</Printf>
+                <Parameter>[0]</Parameter>
+                <Parameter>[1]</Parameter>
+                <Parameter>[2]</Parameter>
+                <Parameter>[3]</Parameter>
+                <Parameter>[4]</Parameter>
+                <Parameter>[5]</Parameter>
+            </Format>
+        </DataType>
+        <DataType>
+            <Name GUID="{A81A482A-E7CE-49D8-A4DD-8280773A6946}" PersistentType="true">E_LogEventType</Name>
+            <BitSize>16</BitSize>
+            <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[ALARMCLEARED]]>
+                </Text>
+                <Enum>0</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[ALARMCONFIRMED]]>
+                </Text>
+                <Enum>1</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[ALARMRAISED]]>
+                </Text>
+                <Enum>2</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[MESSAGESENT]]>
+                </Text>
+                <Enum>3</Enum>
+            </EnumInfo>
+            <Properties>
+                <Property>
+                    <Name>plcAttribute_qualified_only</Name>
+                </Property>
+                <Property>
+                    <Name>plcAttribute_strict</Name>
+                </Property>
+            </Properties>
+        </DataType>
+        <DataType>
+            <Name GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}" TcBaseType="true" CName="TcEventSeverity" RemovableEnumPrefix="TCEVENTSEVERITY_">TcEventSeverity</Name>
+            <BitSize>16</BitSize>
+            <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[TCEVENTSEVERITY_Verbose]]>
+                </Text>
+                <Enum>0</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[TCEVENTSEVERITY_Info]]>
+                </Text>
+                <Enum>1</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[TCEVENTSEVERITY_Warning]]>
+                </Text>
+                <Enum>2</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[TCEVENTSEVERITY_Error]]>
+                </Text>
+                <Enum>3</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[TCEVENTSEVERITY_Critical]]>
+                </Text>
+                <Enum>4</Enum>
+            </EnumInfo>
+            <Properties>
+                <Property>
+                    <Name>plcAttribute_qualified_only</Name>
+                </Property>
+                <Property>
+                    <Name>plcAttribute_strict</Name>
+                </Property>
+            </Properties>
+            <Hides>
+                <Hide GUID="{777FF09F-0B00-4AF2-BD7C-C1E2CE4A0947}"/>
+                <Hide GUID="{EC3C119D-4FEC-4197-96FB-DAE1B7C403FB}"/>
+            </Hides>
+        </DataType>
+        <DataType>
+            <Name GUID="{32DBDCFB-9DE9-4726-B195-4528904D5F40}" PersistentType="true">ST_LoggingEventInfo</Name>
+            <BitSize>86272</BitSize>
+            <SubItem>
+                <Name>schema</Name>
+                <Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+                <Comment>
+                    <![CDATA[Message or Alarm{Cleared,Confirmed,Raised} event information
 
         Note that elements here do not follow the usual Hungarian notation / 
         variable-type-prefixing naming convention due to the member names being
         used directly in the generation of the JSON document.]]>
-				</Comment>
-				<BitSize>648</BitSize>
-				<BitOffs>0</BitOffs>
-				<Default>
-					<String>
-						<![CDATA[twincat-event-0]]>
-					</String>
-				</Default>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Schema
+                </Comment>
+                <BitSize>648</BitSize>
+                <BitOffs>0</BitOffs>
+                <Default>
+                    <String>
+                        <![CDATA[twincat-event-0]]>
+                    </String>
+                </Default>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: Schema
         io: i
         field: DESC Schema string</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>ts</Name>
-				<Type GUID="{18071995-0000-0000-0000-00000000000E}">LREAL</Type>
-				<BitSize>64</BitSize>
-				<BitOffs>704</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Timestamp 
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>ts</Name>
+                <Type GUID="{18071995-0000-0000-0000-00000000000E}">LREAL</Type>
+                <BitSize>64</BitSize>
+                <BitOffs>704</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: Timestamp 
         io: i
         field: DESC Unix timestamp</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>plc</Name>
-				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
-				<BitSize>648</BitSize>
-				<BitOffs>768</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Hostname 
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>plc</Name>
+                <Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+                <BitSize>648</BitSize>
+                <BitOffs>768</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: Hostname 
         io: i
         field: DESC PLC Hostname</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>severity</Name>
-				<Type GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}">TcEventSeverity</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>1424</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Severity
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>severity</Name>
+                <Type GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}">TcEventSeverity</Type>
+                <BitSize>16</BitSize>
+                <BitOffs>1424</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: Severity
         io: i
         field: DESC TcEventSeverity	
         field: ZRST Verbose
         field: ONST Info
         field: TWST Warning
         field: THST Error</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>id</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
-				<BitSize>32</BitSize>
-				<BitOffs>1440</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: MessageID
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>id</Name>
+                <Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
+                <BitSize>32</BitSize>
+                <BitOffs>1440</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: MessageID
         io: i
         field: DESC TwinCAT Message ID</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>event_class</Name>
-				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
-				<BitSize>648</BitSize>
-				<BitOffs>1472</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: EventClass
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>event_class</Name>
+                <Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+                <BitSize>648</BitSize>
+                <BitOffs>1472</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: EventClass
         io: i
         field: DESC TwinCAT Event class</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>msg</Name>
-				<Type GUID="{18071995-0000-0000-0000-0001000000FF}">STRING(255)</Type>
-				<BitSize>2048</BitSize>
-				<BitOffs>2120</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Message
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>msg</Name>
+                <Type GUID="{18071995-0000-0000-0000-0001000000FF}">STRING(255)</Type>
+                <BitSize>2048</BitSize>
+                <BitOffs>2120</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: Message
         io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>source</Name>
-				<Type GUID="{18071995-0000-0000-0000-0001000000FF}">STRING(255)</Type>
-				<Comment>
-					<![CDATA[This is actually: T_MaxString
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>source</Name>
+                <Type GUID="{18071995-0000-0000-0000-0001000000FF}">STRING(255)</Type>
+                <Comment>
+                    <![CDATA[This is actually: T_MaxString
  which has been expanded due to requirements for pinning global data types.]]>
-				</Comment>
-				<BitSize>2048</BitSize>
-				<BitOffs>4168</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Source
+                </Comment>
+                <BitSize>2048</BitSize>
+                <BitOffs>4168</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: Source
         io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>event_type</Name>
-				<Type GUID="{A81A482A-E7CE-49D8-A4DD-8280773A6946}">E_LogEventType</Type>
-				<Comment>
-					<![CDATA[This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>event_type</Name>
+                <Type GUID="{A81A482A-E7CE-49D8-A4DD-8280773A6946}">E_LogEventType</Type>
+                <Comment>
+                    <![CDATA[This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
  which has been expanded due to requirements for pinning global data types.]]>
-				</Comment>
-				<BitSize>16</BitSize>
-				<BitOffs>6224</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: EventType
+                </Comment>
+                <BitSize>16</BitSize>
+                <BitOffs>6224</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: EventType
         io: i
         field: DESC The event type</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>json</Name>
-				<Type GUID="{18071995-0000-0000-0000-000100002710}">STRING(10000)</Type>
-				<BitSize>80008</BitSize>
-				<BitOffs>6240</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: MessageJSON
+                    </Property>
+                </Properties>
+            </SubItem>
+            <SubItem>
+                <Name>json</Name>
+                <Type GUID="{18071995-0000-0000-0000-000100002710}">STRING(10000)</Type>
+                <BitSize>80008</BitSize>
+                <BitOffs>6240</BitOffs>
+                <Properties>
+                    <Property>
+                        <Name>plcAttribute_pytmc</Name>
+                        <Value>pv: MessageJSON
         io: i
         field: DESC Metadata with the message</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<Hides>
-				<Hide GUID="{91686BB0-81A3-47A0-8E20-449823CCE7F0}"/>
-			</Hides>
-		</DataType>
-		<DataType>
-			<Name GUID="{85DC3E7A-8ADA-435B-9479-25573909A7DB}" Namespace="AX5000" TcBaseType="true">E_AX5000_P_0275_ActiveFeedbackAndMemory</Name>
-			<BitSize>8</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
-			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_MEMORY_NONE]]>
-				</Text>
-				<Enum>0</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_ENCODER]]>
-				</Text>
-				<Enum>1</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_DRIVE]]>
-				</Text>
-				<Enum>2</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_ENCODER]]>
-				</Text>
-				<Enum>8</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_DRIVE]]>
-				</Text>
-				<Enum>16</Enum>
-			</EnumInfo>
-			<Hides>
-				<Hide GUID="{F1A82E04-2D76-4E5D-BB15-437337214D25}"/>
-			</Hides>
-		</DataType>
-		<DataType>
-			<Name GUID="{D7D16A25-71D5-48E0-882D-56AB4D826BC2}" Namespace="AX5000" PersistentType="true">ST_AX5000_P_0275</Name>
-			<BitSize>16</BitSize>
-			<SubItem>
-				<Name>ActiveFeedbackAndMemory</Name>
-				<Type GUID="{85DC3E7A-8ADA-435B-9479-25573909A7DB}" Namespace="AX5000">E_AX5000_P_0275_ActiveFeedbackAndMemory</Type>
-				<BitSize>8</BitSize>
-				<BitOffs>0</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>InitializationErrorBehavior</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
-				<BitSize>1</BitSize>
-				<BitOffs>8</BitOffs>
-			</SubItem>
-			<Hides>
-				<Hide GUID="{0D1A14D3-018F-4F48-88A7-90B490A317B5}"/>
-				<Hide GUID="{43B3CFF1-FA94-4CC1-8B03-C73EF940373B}"/>
-				<Hide GUID="{81B09CD0-943C-4070-AA5B-0A6818251CEB}"/>
-				<Hide GUID="{B6598B95-DC2C-454C-9B12-DE628B32D897}"/>
-			</Hides>
-		</DataType>
-	</DataTypes>
-	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="5.40.55.128.1.1" ShowHideConfigurations="#x6">
-		<System>
-			<Licenses>
-				<Target>
-					<ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>
-				</Target>
-			</Licenses>
-			<Tasks>
-				<Task Id="3" Priority="1" CycleTime="100000" AmsPort="350" AdtTasks="true">
-					<Name>Task 3</Name>
-				</Task>
-			</Tasks>
-		</System>
-		<Plc>
-			<Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc">
-					<Name>LCLSGeneral Instance</Name>
-					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
-					<Vars VarGrpType="1">
-						<Name>Task_3 Inputs</Name>
-						<Var>
-							<Name>DefaultGlobals.stSys.I_EcatMaster1</Name>
-							<Comment>
-								<![CDATA[ AMS Net ID used for FB_EcatDiag, among others ]]>
-							</Comment>
-							<Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
-						</Var>
-					</Vars>
-					<TaskPouOids>
-						<TaskPouOid Prio="1" OTCID="#x08502001"/>
-					</TaskPouOids>
-				</Instance>
-			</Project>
-		</Plc>
-	</Project>
+                    </Property>
+                </Properties>
+            </SubItem>
+            <Hides>
+                <Hide GUID="{91686BB0-81A3-47A0-8E20-449823CCE7F0}"/>
+            </Hides>
+        </DataType>
+        <DataType>
+            <Name GUID="{85DC3E7A-8ADA-435B-9479-25573909A7DB}" Namespace="AX5000" TcBaseType="true">E_AX5000_P_0275_ActiveFeedbackAndMemory</Name>
+            <BitSize>8</BitSize>
+            <BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[EAX5000_P_0275_MEMORY_NONE]]>
+                </Text>
+                <Enum>0</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_ENCODER]]>
+                </Text>
+                <Enum>1</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_DRIVE]]>
+                </Text>
+                <Enum>2</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_ENCODER]]>
+                </Text>
+                <Enum>8</Enum>
+            </EnumInfo>
+            <EnumInfo>
+                <Text>
+                    <![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_DRIVE]]>
+                </Text>
+                <Enum>16</Enum>
+            </EnumInfo>
+            <Hides>
+                <Hide GUID="{F1A82E04-2D76-4E5D-BB15-437337214D25}"/>
+            </Hides>
+        </DataType>
+        <DataType>
+            <Name GUID="{D7D16A25-71D5-48E0-882D-56AB4D826BC2}" Namespace="AX5000" PersistentType="true">ST_AX5000_P_0275</Name>
+            <BitSize>16</BitSize>
+            <SubItem>
+                <Name>ActiveFeedbackAndMemory</Name>
+                <Type GUID="{85DC3E7A-8ADA-435B-9479-25573909A7DB}" Namespace="AX5000">E_AX5000_P_0275_ActiveFeedbackAndMemory</Type>
+                <BitSize>8</BitSize>
+                <BitOffs>0</BitOffs>
+            </SubItem>
+            <SubItem>
+                <Name>InitializationErrorBehavior</Name>
+                <Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+                <BitSize>1</BitSize>
+                <BitOffs>8</BitOffs>
+            </SubItem>
+            <Hides>
+                <Hide GUID="{0D1A14D3-018F-4F48-88A7-90B490A317B5}"/>
+                <Hide GUID="{43B3CFF1-FA94-4CC1-8B03-C73EF940373B}"/>
+                <Hide GUID="{81B09CD0-943C-4070-AA5B-0A6818251CEB}"/>
+                <Hide GUID="{B6598B95-DC2C-454C-9B12-DE628B32D897}"/>
+            </Hides>
+        </DataType>
+    </DataTypes>
+    <Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="172.21.148.145.1.1" ShowHideConfigurations="#x6">
+        <System>
+            <Licenses>
+                <Target>
+                    <ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>
+                </Target>
+            </Licenses>
+            <Tasks>
+                <Task Id="3" Priority="1" CycleTime="100000" AmsPort="350" AdtTasks="true">
+                    <Name>Task 3</Name>
+                </Task>
+            </Tasks>
+        </System>
+        <Plc>
+            <Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
+                <Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc">
+                    <Name>LCLSGeneral Instance</Name>
+                    <CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+                    <Vars VarGrpType="1">
+                        <Name>Task_3 Inputs</Name>
+                        <Var>
+                            <Name>DefaultGlobals.stSys.I_EcatMaster1</Name>
+                            <Comment>
+                                <![CDATA[ AMS Net ID used for FB_EcatDiag, among others ]]>
+                            </Comment>
+                            <Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
+                        </Var>
+                    </Vars>
+                    <TaskPouOids>
+                        <TaskPouOid Prio="1" OTCID="#x08502001"/>
+                    </TaskPouOids>
+                </Instance>
+            </Project>
+        </Plc>
+    </Project>
 </TcSmProject>
