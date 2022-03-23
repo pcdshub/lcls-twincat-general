@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_EpicsCentroidMonitor" Id="{b49e72a7-c7c2-451d-96d1-aade68e9ce98}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+    EPICS AreaDetector Stats Plugin Centroid Monitor
+
+    Requirements:
+
+    * Requires an existing IOC with an EPICS AreaDetector.
+    * Requires an AreaDetector plugin chain that includes a stats plugin.
+    * Requires a pytmc "link" pragma to specify the plugin PV prefix.
+
+    What information is included?
+
+    * Centroid X position
+    * Centroid Y position
+    * Array count index
+    * The validity of the data, as determined by:
+        - The ArrayCounter_RBV PV changing
+        - Alarm severity of the PVs
+        - The centroid value changing, even minimally
+
+    Example:
+
+        {attribute 'pytmc' := '
+            pv: @(PREFIX):Chk:Centroid1
+            link: AREA:DETECTOR:CAM:01:Stats2:
+        '}
+        fbCentroid : FB_EpicsCentroidMonitor;
+
+        fbCentroid(bEnable:=TRUE, fMinimumValidChange:=1E-6, fNewFrameMinimumChange:=1E-6);
+        IF fbCentroid.bValid AND fbCentroid.bIsUpdating THEN
+            fbCentroid.fCentroidX;
+            fbCentroid.fCentroidY;
+            fbCentroid.nArrayCount;
+            fbCentroid.fFrameTime;
+        END_IF
+
+    Above, ``AREA:DETECTOR:CAM:01:Stats2`` should refer to the PV prefix of a
+    stats plugin.
+    That is, ``caget AREA:DETECTOR:CAM:01:Stats2:ArrayCounter_RBV`` should not
+    fail.
+
+    How does this work?
+
+    pytmc offers the ability to push EPICS process variable data into PLCs by
+    way of link pragmas.  These link pragmas create additional supporting EPICS
+    records that monitor PVs from any IOC on the controls network. In this case,
+    the PLC IOC will monitor vital AreaDetector plugin record data and let your
+    PLC project know of its status.
+
+    Why are there multiple thresholds I have to specify?
+
+    ``fNewFrameMinimumChange`` is the minimum change in pixels to say that
+    when the array counter changes, these are the new values for X and Y.
+    While this seems a bit confusing (or perhaps unnecessary), we do not
+    know when the array counters or centroid values will be updated.  These
+    do not get written in a single, atomic write to the PLC. We may see an
+    updated array count and then a centroid X change and then a Y change.
+    This threshold is a way of working around that complexity and saying
+    the new data is here only when it's changed at least a bit and we have
+    a new frame number.
+
+    ``fMinimumValidChange``, which by default is set to the same as the above
+    threshold, says that if the centroid value doesn't change by at least this
+    on a frame-to-frame basis, consider this a result of a faulty AreaDetector
+    implementation.  The monitor would report values below this threshold as
+    "not updating" - ``bIsUpdating`` as ``FALSE``.
+
+    What needs to happen to get new centroid values?
+
+    - An updated array count
+    - An updated X centroid value (above fNewFrameMinimumChange)
+    - An updated Y centroid value (above fNewFrameMinimumChange)
+    - NO_ALARM severities for all values
+
+    This will result in an updated:
+
+    - fFrameTime (seconds between valid frames)
+
+    What needs to happen for ``bIsUpdating`` to be TRUE?
+
+    - All items from the above "new centroid values"
+    - Frame time below fMaximumFrameTime
+    - Centroid X and Y values above fMinimumValidChange
+
+*)
+FUNCTION_BLOCK FB_EpicsCentroidMonitor
+VAR_INPUT
+    fMaximumFrameTime : LREAL := 0.2;
+    (* Minimum change to be considered updating correctly - buggy detectors may need this. *)
+    fMinimumValidChange : LREAL := 1E-6;
+    (* Minimum change in pixels to be considered a new value for X, Y *)
+    fNewFrameMinimumChange : LREAL := 1E-6;
+    bEnable : BOOL := TRUE;
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: IsUpdating
+        io: input
+    '}
+    bIsUpdating : BOOL;
+    {attribute 'pytmc' := '
+        pv: CentroidX
+        io: input
+    '}
+    fCentroidX : LREAL;
+    {attribute 'pytmc' := '
+        pv: CentroidY
+        io: input
+    '}
+    fCentroidY : LREAL;
+    {attribute 'pytmc' := '
+        pv: ArrayCount
+        io: input
+    '}
+    nArrayCount : UDINT;
+    bValid : BOOL;
+    {attribute 'pytmc' := '
+        pv: FrameTime
+        io: input
+        field: DESC Time between frame updates
+        field: EGU sec
+    '}
+    fFrameTime : LREAL;
+END_VAR
+VAR
+    {attribute 'pytmc' := '
+        pv: CX_
+        link: CentroidX_RBV
+    '}
+    fbCentroidX : FB_LREALFromEPICS;
+
+    {attribute 'pytmc' := '
+        pv: CY_
+        link: CentroidY_RBV
+    '}
+    fbCentroidY : FB_LREALFromEPICS;
+
+    fLastCentroidX : LREAL;
+    fLastCentroidY : LREAL;
+
+    {attribute 'pytmc' := '
+        pv: Cnt_
+        link: ArrayCounter_RBV
+    '}
+    fbArrayCounter : FB_LREALFromEPICS;
+
+    // Last array count value
+    nLastArrayCount : UDINT;
+    // Time of the last frame update
+    tLastUpdate: TIME;
+
+    bInit : BOOL;
+    // Did we see a frame update yet? (FALSE at startup; TRUE after first frame.)
+    bSawFrame : BOOL;
+    // Do we have a new frame? Has the array count updated, and position change above fNewFrameMinimumChange?
+    bHaveNewFrame : BOOL;
+    // For this new frame, is it above the threshold fMinimumValidChange?
+    bAboveThreshold : BOOL;
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bEnable THEN
+    bValid := FALSE;
+    RETURN;
+END_IF
+
+IF NOT bInit THEN
+    tLastUpdate := TIME();
+    fFrameTime := 1000.0;
+    bSawFrame := FALSE;
+    bInit := TRUE;
+END_IF
+
+fbCentroidX();
+fbCentroidY();
+fbArrayCounter();
+
+bValid := (
+    fbCentroidX.bValid AND
+    fbCentroidY.bValid AND
+    fbArrayCounter.bValid
+);
+
+fCentroidX := fbCentroidX.fValue;
+fCentroidY := fbCentroidY.fValue;
+nArrayCount := LREAL_TO_UDINT(fbArrayCounter.fValue);
+
+(*
+    Only consider that we have a new frame if:
+    1. The array count has been updated
+    2. X and Y values have changed even minimally
+        a. With background noise, this should not be a problem.
+        b. With an invalid black/white/stale image, this will indicate
+           'no new frame' despite an increasing array count.
+*)
+bHaveNewFrame := (
+    nArrayCount <> nLastArrayCount AND
+    ABS(fLastCentroidX - fCentroidX) >= fNewFrameMinimumChange AND
+    ABS(fLastCentroidY - fCentroidY) >= fNewFrameMinimumChange AND
+    TRUE
+);
+
+IF bHaveNewFrame THEN
+    bAboveThreshold := (
+        ABS(fLastCentroidX - fCentroidX) >= fMinimumValidChange AND
+        ABS(fLastCentroidY - fCentroidY) >= fMinimumValidChange
+    );
+
+    fFrameTime := TIME_TO_LREAL(TIME() - tLastUpdate) * 0.001; // Milliseconds -> seconds
+    tLastUpdate := TIME();
+    nLastArrayCount := nArrayCount;
+    bSawFrame := TRUE;
+
+    fLastCentroidX := fCentroidX;
+    fLastCentroidY := fCentroidY;
+END_IF
+
+bIsUpdating := bSawFrame AND (fFrameTime <= fMaximumFrameTime) AND bAboveThreshold;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_Test_EpicsCentroidMonitor" Id="{f2b9a982-0418-41c7-aafe-94902ffcfe9d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_Test_EpicsCentroidMonitor EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestBasics();]]></ST>
+    </Implementation>
+    <Method Name="TestBasics" Id="{2953f222-cbed-4db0-9aaa-214604e5b113}">
+      <Declaration><![CDATA[METHOD TestBasics
+VAR_INPUT
+END_VAR
+VAR_INST
+    fbMonitor : FB_EpicsCentroidMonitor;
+    nCount : INT := 0;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Basic');
+
+nCount := 0;
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0S);
+fbMonitor();
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.1, fY:=0.1, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0S);
+fbMonitor(fMinimumValidChange:=0.0);
+
+AssertTrue(fbMonitor.bIsUpdating, Message:='Centroid not reporting updating');
+
+TEST_FINISHED();
+
+TEST('Min change');
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0S);
+fbMonitor(fMinimumValidChange:=0.1, fMaximumFrameTime:=0.2);
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.05, fY:=0.05, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.1S);
+fbMonitor(fMinimumValidChange:=0.1, fMaximumFrameTime:=0.2);
+AssertFalse(fbMonitor.bIsUpdating, Message:='Centroid update below threshold and is not updating');
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.5, fY:=0.5, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.1S);
+fbMonitor(fMinimumValidChange:=0.1, fMaximumFrameTime:=0.2);
+AssertTrue(fbMonitor.bIsUpdating, Message:='Centroid update above threshold and is updating');
+
+TEST_FINISHED();
+
+TEST('Severity invalidation');
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=2, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.2S);
+fbMonitor(fMinimumValidChange:=0.0);
+AssertFalse(fbMonitor.bValid, Message:='Invalid data - x severity');
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.1, fY:=0.1, nCount:=nCount, nX_Severity:=0, nY_Severity:=2, nCount_Severity:=0, tLastUpdate:=T#0.2S);
+fbMonitor(fMinimumValidChange:=0.0);
+AssertFalse(fbMonitor.bValid, Message:='Invalid data - y severity');
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.2, fY:=0.2, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=2, tLastUpdate:=T#0.2S);
+fbMonitor(fMinimumValidChange:=0.0);
+AssertFalse(fbMonitor.bValid, Message:='Invalid data - count severity');
+
+nCount := nCount + 1;
+WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.1S);
+fbMonitor(fMinimumValidChange:=0.0);
+AssertTrue(fbMonitor.bValid, Message:='Data valid');
+AssertTrue(fbMonitor.bIsUpdating, Message:='Data valid and updating');
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteCentroidValue" Id="{4e3dbc52-94e8-4849-bc38-c135e919c1aa}">
+      <Declaration><![CDATA[METHOD WriteCentroidValue
+VAR_IN_OUT
+    fbMonitor : FB_EpicsCentroidMonitor;
+END_VAR
+VAR_INPUT
+    fX : LREAL;
+    fY : LREAL;
+    nCount : INT;
+    nX_Severity : INT := 0;
+    nY_Severity : INT := 0;
+    nCount_Severity : INT := 0;
+    tLastUpdate : TIME;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidX.iPLCInternalSeverity), nX_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidY.iPLCInternalSeverity), nY_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbArrayCounter.iPLCInternalSeverity), nCount_Severity);
+
+WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbCentroidX.fPLCInternalValue), fX);
+WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbCentroidY.fPLCInternalValue), fY);
+WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbArrayCounter.fPLCInternalValue), INT_TO_LREAL(nCount));
+
+WRITE_PROTECTED_TIME(ADR(fbMonitor.tLastUpdate), TIME() - tLastUpdate);
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

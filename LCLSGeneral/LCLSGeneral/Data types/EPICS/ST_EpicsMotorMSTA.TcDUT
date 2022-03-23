@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_EpicsMotorMSTA" Id="{8dc1ba89-a69d-4583-94a8-23394c1f2a52}">
+    <Declaration><![CDATA[TYPE ST_EpicsMotorMSTA :
+STRUCT
+
+    (* DIRECTION: last raw direction; (0:Negative, 1:Positive) *)
+    bPositiveDirection : BIT;
+    (* DONE: motion is complete. *)
+    bDone : BIT;
+    (* PLUS_LS: plus limit switch has been hit. *)
+    bPlusLimitSwitch : BIT;
+    (* HOMELS: state of the home limit switch. *)
+    bHomeLimitSwitch : BIT;
+    (* Unused *)
+    bUnused0 : BIT;
+    (* POSITION: closed-loop position control is enabled. *)
+    bClosedLoop : BIT;
+    (* SLIP_STALL: Slip/Stall detected (eg. fatal following error) *)
+    bSlipStall : BIT;
+    (* HOME: if at home position. *)
+    bHome : BIT;
+    (* PRESENT: encoder is present. *)
+    bEncoderPresent : BIT;
+    (* PROBLEM: driver stopped polling, or hardware problem *)
+    bHardwareProblem : BIT;
+    (* MOVING: non-zero velocity present. *)
+    bMoving : BIT;
+    (* GAIN_SUPPORT: motor supports closed-loop position control. *)
+    bGainSupport : BIT;
+    (* COMM_ERR: Controller communication error. *)
+    bCommError : BIT;
+    (* MINUS_LS: minus limit switch has been hit. *)
+    bMinusLimitSwitch : BIT;
+    (* HOMED: the motor has been homed. *)
+    bHomed : BIT;
+
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

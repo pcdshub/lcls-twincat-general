@@ -31,8 +31,10 @@
   <ItemGroup>
     <Folder Include="Data types" />
     <Folder Include="Data types\Misc" />
+    <Folder Include="Data types\EPICS" />
     <Folder Include="GVLs" />
     <Folder Include="POUs" />
+    <Folder Include="POUs\Data\Tests" />
     <Folder Include="POUs\Diagnostics\DUT" />
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
@@ -43,6 +45,9 @@
     <Folder Include="POUs\Logger\Tests" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data types\EPICS\ST_EpicsMotorMSTA.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -65,6 +70,12 @@
     <Compile Include="POUs\Data\FB_DataBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Data\FB_EpicsCentroidMonitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Data\FB_EpicsMotorMonitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Data\FB_LREALBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -78,6 +89,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBufferGlobal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Data\Tests\FB_Test_EpicsCentroidMonitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Data\Tests\FB_Test_EpicsMotorMonitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\E_EcatDiagState.TcDUT">
