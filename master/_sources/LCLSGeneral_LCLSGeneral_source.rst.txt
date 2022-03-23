@@ -139,6 +139,51 @@ Related:
     * `E_EcCommState`_
 
 
+ST_EpicsMotorMSTA
+^^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_EpicsMotorMSTA :
+    STRUCT
+
+        (* DIRECTION: last raw direction; (0:Negative, 1:Positive) *)
+        bPositiveDirection : BIT;
+        (* DONE: motion is complete. *)
+        bDone : BIT;
+        (* PLUS_LS: plus limit switch has been hit. *)
+        bPlusLimitSwitch : BIT;
+        (* HOMELS: state of the home limit switch. *)
+        bHomeLimitSwitch : BIT;
+        (* Unused *)
+        bUnused0 : BIT;
+        (* POSITION: closed-loop position control is enabled. *)
+        bClosedLoop : BIT;
+        (* SLIP_STALL: Slip/Stall detected (eg. fatal following error) *)
+        bSlipStall : BIT;
+        (* HOME: if at home position. *)
+        bHome : BIT;
+        (* PRESENT: encoder is present. *)
+        bEncoderPresent : BIT;
+        (* PROBLEM: driver stopped polling, or hardware problem *)
+        bHardwareProblem : BIT;
+        (* MOVING: non-zero velocity present. *)
+        bMoving : BIT;
+        (* GAIN_SUPPORT: motor supports closed-loop position control. *)
+        bGainSupport : BIT;
+        (* COMM_ERR: Controller communication error. *)
+        bCommError : BIT;
+        (* MINUS_LS: minus limit switch has been hit. *)
+        bMinusLimitSwitch : BIT;
+        (* HOMED: the motor has been homed. *)
+        bHomed : BIT;
+
+    END_STRUCT
+    END_TYPE
+
+
+
+
 ST_FbDiagnostics
 ^^^^^^^^^^^^^^^^
 
@@ -850,7 +895,118 @@ FB_CircuitBreaker_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD AutoReset
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbLog : FB_LogMessage := (
+            bEnableAutoReset:=TRUE,
+            nTripResetPeriod := T#5s);
 
+        //Auto reset test
+        tonAutoResetTest : TON;
+
+        Init : BOOL := TRUE;
+    END_VAR
+    (* Test that the CB resets itself after a cooldown period *)
+    TEST('AutoReset');
+    IF Init THEN
+        fbLog.CircuitBreaker();
+        WRITE_PROTECTED_BOOL(ADR(fbLog.bTripped), TRUE);
+        WRITE_PROTECTED_BOOL(ADR(fbLog.bLocalTripped), TRUE);
+        fbLog.CircuitBreaker();
+        fbLog.CircuitBreaker();
+        Init := FALSE;
+    END_IF
+
+    tonAutoResetTest(IN:=NOT Init, PT:=T#6s);
+
+    IF tonAutoResetTest.Q THEN
+
+        fbLog.CircuitBreaker();
+
+        AssertFalse(fbLog.bTripped,
+            'Circuit breaker should be reset automatically');
+
+        TEST_FINISHED_NAMED('AutoReset');
+    END_IF
+    END_METHOD
+
+    METHOD DeathByManySmall
+    VAR_INPUT
+    END_VAR
+    VAR
+
+    END_VAR
+    VAR_INST
+        fbLogNoisy : FB_LogMessage;
+        tNoisy : TON := (PT:=T#50ms); //50ms is > the local trip threshold default of 1ms
+        fbLogNice : FB_LogMessage := (nTrickleTripThreshold:=T#2s);
+        tNice : TON := (PT:=T#5s);
+        tTrickle : TON := (PT:= GVL_Logger.nTrickleTripTime + T#1s);
+        fbLogHandler : FB_LogHandler;
+    END_VAR
+    TEST('ManySmall');
+    // Create a condition where
+    // a few loggers did their thing, while keeping under the
+    // local logging rate limit until the global trickle trip
+    // was triggered. Then verify only those loggers that
+    // were just a little too noisy, would trip off, while others stayed up.
+
+    fbLogHandler.CircuitBreaker();
+
+    // Call this guy every 50ms or so.
+    tNoisy(IN := NOT tNoisy.Q);
+    IF tNoisy.Q THEN
+        fbLogNoisy.CircuitBreaker();
+    END_IF
+
+    // Call this guy every 5s or so
+    tNice(IN := NOT tNoisy.Q);
+    IF tNice.Q THEN
+        fbLogNice.CircuitBreaker();
+    END_IF
+
+    tTrickle(IN:=TRUE);
+    IF tTrickle.Q THEN
+        AssertTrue(fbLogNoisy.bLocalTrickleTripped AND NOT fbLogNice.bLocalTrickleTripped,
+                'Only Noisy should be tripped.');
+        TEST_FINISHED_NAMED('ManySmall');
+    END_IF
+    END_METHOD
+
+    METHOD SingleBadLogger
+    VAR_INPUT
+    END_VAR
+    VAR
+        idx : UINT;
+    END_VAR
+    VAR_INST
+        fbLog : FB_LogMessage := (
+            bEnableAutoReset:=TRUE,
+            nTripResetPeriod := T#5s);
+    END_VAR
+    ResetCircuitBreakerGlobals();
+
+    (* In this scenario, a logger trips off because it has been called too many times
+    in one cycle, leading to a large excess of messages.
+    *)
+    TEST('LocalFastTrip');
+        FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
+            fbLog.CircuitBreaker();
+        END_FOR
+
+        AssertTrue(fbLog.bLocalTripped AND NOT fbLog.bLocalTrickleTripped,
+            'Only local trip should occur in these conditions');
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `FB_LogHandler`_
+    * `FB_LogMessage`_
+    * `GVL_Logger`_
+    * `ResetCircuitBreakerGlobals`_
 
 
 FB_CoE_FastRead
@@ -1374,6 +1530,363 @@ FB_EL6_Com
 
 
 
+FB_EpicsCentroidMonitor
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+        EPICS AreaDetector Stats Plugin Centroid Monitor
+
+        Requirements:
+
+        * Requires an existing IOC with an EPICS AreaDetector.
+        * Requires an AreaDetector plugin chain that includes a stats plugin.
+        * Requires a pytmc "link" pragma to specify the plugin PV prefix.
+
+        What information is included?
+
+        * Centroid X position
+        * Centroid Y position
+        * Array count index
+        * The validity of the data, as determined by:
+            - The ArrayCounter_RBV PV changing
+            - Alarm severity of the PVs
+            - The centroid value changing, even minimally
+
+        Example:
+
+            {attribute 'pytmc' := '
+                pv: @(PREFIX):Chk:Centroid1
+                link: AREA:DETECTOR:CAM:01:Stats2:
+            '}
+            fbCentroid : FB_EpicsCentroidMonitor;
+
+            fbCentroid(bEnable:=TRUE, fMinimumValidChange:=1E-6, fNewFrameMinimumChange:=1E-6);
+            IF fbCentroid.bValid AND fbCentroid.bIsUpdating THEN
+                fbCentroid.fCentroidX;
+                fbCentroid.fCentroidY;
+                fbCentroid.nArrayCount;
+                fbCentroid.fFrameTime;
+            END_IF
+
+        Above, ``AREA:DETECTOR:CAM:01:Stats2`` should refer to the PV prefix of a
+        stats plugin.
+        That is, ``caget AREA:DETECTOR:CAM:01:Stats2:ArrayCounter_RBV`` should not
+        fail.
+
+        How does this work?
+
+        pytmc offers the ability to push EPICS process variable data into PLCs by
+        way of link pragmas.  These link pragmas create additional supporting EPICS
+        records that monitor PVs from any IOC on the controls network. In this case,
+        the PLC IOC will monitor vital AreaDetector plugin record data and let your
+        PLC project know of its status.
+
+        Why are there multiple thresholds I have to specify?
+
+        ``fNewFrameMinimumChange`` is the minimum change in pixels to say that
+        when the array counter changes, these are the new values for X and Y.
+        While this seems a bit confusing (or perhaps unnecessary), we do not
+        know when the array counters or centroid values will be updated.  These
+        do not get written in a single, atomic write to the PLC. We may see an
+        updated array count and then a centroid X change and then a Y change.
+        This threshold is a way of working around that complexity and saying
+        the new data is here only when it's changed at least a bit and we have
+        a new frame number.
+
+        ``fMinimumValidChange``, which by default is set to the same as the above
+        threshold, says that if the centroid value doesn't change by at least this
+        on a frame-to-frame basis, consider this a result of a faulty AreaDetector
+        implementation.  The monitor would report values below this threshold as
+        "not updating" - ``bIsUpdating`` as ``FALSE``.
+
+        What needs to happen to get new centroid values?
+
+        - An updated array count
+        - An updated X centroid value (above fNewFrameMinimumChange)
+        - An updated Y centroid value (above fNewFrameMinimumChange)
+        - NO_ALARM severities for all values
+
+        This will result in an updated:
+
+        - fFrameTime (seconds between valid frames)
+
+        What needs to happen for ``bIsUpdating`` to be TRUE?
+
+        - All items from the above "new centroid values"
+        - Frame time below fMaximumFrameTime
+        - Centroid X and Y values above fMinimumValidChange
+
+    *)
+    FUNCTION_BLOCK FB_EpicsCentroidMonitor
+    VAR_INPUT
+        fMaximumFrameTime : LREAL := 0.2;
+        (* Minimum change to be considered updating correctly - buggy detectors may need this. *)
+        fMinimumValidChange : LREAL := 1E-6;
+        (* Minimum change in pixels to be considered a new value for X, Y *)
+        fNewFrameMinimumChange : LREAL := 1E-6;
+        bEnable : BOOL := TRUE;
+    END_VAR
+    VAR_OUTPUT
+        {attribute 'pytmc' := '
+            pv: IsUpdating
+            io: input
+        '}
+        bIsUpdating : BOOL;
+        {attribute 'pytmc' := '
+            pv: CentroidX
+            io: input
+        '}
+        fCentroidX : LREAL;
+        {attribute 'pytmc' := '
+            pv: CentroidY
+            io: input
+        '}
+        fCentroidY : LREAL;
+        {attribute 'pytmc' := '
+            pv: ArrayCount
+            io: input
+        '}
+        nArrayCount : UDINT;
+        bValid : BOOL;
+        {attribute 'pytmc' := '
+            pv: FrameTime
+            io: input
+            field: DESC Time between frame updates
+            field: EGU sec
+        '}
+        fFrameTime : LREAL;
+    END_VAR
+    VAR
+        {attribute 'pytmc' := '
+            pv: CX_
+            link: CentroidX_RBV
+        '}
+        fbCentroidX : FB_LREALFromEPICS;
+
+        {attribute 'pytmc' := '
+            pv: CY_
+            link: CentroidY_RBV
+        '}
+        fbCentroidY : FB_LREALFromEPICS;
+
+        fLastCentroidX : LREAL;
+        fLastCentroidY : LREAL;
+
+        {attribute 'pytmc' := '
+            pv: Cnt_
+            link: ArrayCounter_RBV
+        '}
+        fbArrayCounter : FB_LREALFromEPICS;
+
+        // Last array count value
+        nLastArrayCount : UDINT;
+        // Time of the last frame update
+        tLastUpdate: TIME;
+
+        bInit : BOOL;
+        // Did we see a frame update yet? (FALSE at startup; TRUE after first frame.)
+        bSawFrame : BOOL;
+        // Do we have a new frame? Has the array count updated, and position change above fNewFrameMinimumChange?
+        bHaveNewFrame : BOOL;
+        // For this new frame, is it above the threshold fMinimumValidChange?
+        bAboveThreshold : BOOL;
+
+    END_VAR
+    IF NOT bEnable THEN
+        bValid := FALSE;
+        RETURN;
+    END_IF
+
+    IF NOT bInit THEN
+        tLastUpdate := TIME();
+        fFrameTime := 1000.0;
+        bSawFrame := FALSE;
+        bInit := TRUE;
+    END_IF
+
+    fbCentroidX();
+    fbCentroidY();
+    fbArrayCounter();
+
+    bValid := (
+        fbCentroidX.bValid AND
+        fbCentroidY.bValid AND
+        fbArrayCounter.bValid
+    );
+
+    fCentroidX := fbCentroidX.fValue;
+    fCentroidY := fbCentroidY.fValue;
+    nArrayCount := LREAL_TO_UDINT(fbArrayCounter.fValue);
+
+    (*
+        Only consider that we have a new frame if:
+        1. The array count has been updated
+        2. X and Y values have changed even minimally
+            a. With background noise, this should not be a problem.
+            b. With an invalid black/white/stale image, this will indicate
+               'no new frame' despite an increasing array count.
+    *)
+    bHaveNewFrame := (
+        nArrayCount <> nLastArrayCount AND
+        ABS(fLastCentroidX - fCentroidX) >= fNewFrameMinimumChange AND
+        ABS(fLastCentroidY - fCentroidY) >= fNewFrameMinimumChange AND
+        TRUE
+    );
+
+    IF bHaveNewFrame THEN
+        bAboveThreshold := (
+            ABS(fLastCentroidX - fCentroidX) >= fMinimumValidChange AND
+            ABS(fLastCentroidY - fCentroidY) >= fMinimumValidChange
+        );
+
+        fFrameTime := TIME_TO_LREAL(TIME() - tLastUpdate) * 0.001; // Milliseconds -> seconds
+        tLastUpdate := TIME();
+        nLastArrayCount := nArrayCount;
+        bSawFrame := TRUE;
+
+        fLastCentroidX := fCentroidX;
+        fLastCentroidY := fCentroidY;
+    END_IF
+
+    bIsUpdating := bSawFrame AND (fFrameTime <= fMaximumFrameTime) AND bAboveThreshold;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_LREALFromEPICS`_
+
+
+FB_EpicsMotorMonitor
+^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+        EPICS Motor Record Monitoring tool
+
+        Requirements:
+
+        * Requires an existing IOC with an EPICS motor record.
+        * Requires a pytmc "link" pragma to specify the motor record prefix.
+
+        What information is included?
+
+        * The validity of the source data (as determined by alarm severity)
+        * Readback value (scaled encoder position in ``fPosition``)
+        * Motion status (moving or not, ``bIsMoving``)
+        * Homed status, limit status, and others (via ``stMSTA``, see
+          ``ST_EpicsMotorMSTA``).
+
+        Example:
+
+            {attribute 'pytmc' := '
+                pv: @(PREFIX):Internal:Mon
+                link: MOTOR:PV:NAME
+            '}
+            fbMotorMonitor : FB_EpicsMotorMonitor;
+
+            fbMotorMonitor(bEnable:=TRUE);
+            IF fbMotorMonitor.bValid THEN
+                fbMotorMonitor.fPosition;
+                fbMotorMonitor.bIsMoving;
+                fbMotorMonitor.stMSTA.bHomed;
+            END_IF
+        
+        Above, ``MOTOR:PV:NAME`` should refer to an EPICS motor record.
+        That is, ``caget MOTOR:PV:NAME.RTYP`` should return "motor".
+
+        How does this work?
+
+        pytmc offers the ability to push EPICS process variable data into PLCs by
+        way of link pragmas.  These link pragmas create additional supporting EPICS
+        records that monitor PVs from any IOC on the controls network. In this case,
+        the PLC IOC will monitor vital motor record information and let your PLC
+        project know of its status.
+
+        Note that not all motor records may be created equally.  Some of the status
+        fields may not be consistent.  Be sure to check how your motor works and
+        what fields are worth paying attention to when using this.
+
+    *)
+    FUNCTION_BLOCK FB_EpicsMotorMonitor
+    VAR_INPUT
+        bEnable : BOOL := TRUE;
+    END_VAR
+    VAR_OUTPUT
+        bIsMoving : BOOL;
+        fPosition : LREAL;
+        nMSTA_Raw : UINT;
+        stMSTA : ST_EpicsMotorMSTA;
+        bValid : BOOL;
+    END_VAR
+    VAR
+        {attribute 'pytmc' := '
+            pv: RBV_
+            link: .RBV
+        '}
+        fbRBVCheck : FB_LREALFromEPICS;
+
+        {attribute 'pytmc' := '
+            pv: Dmov_
+            link: .DMOV
+        '}
+        fbMovingCheck : FB_LREALFromEPICS;
+
+        {attribute 'pytmc' := '
+            pv: Msta_
+            link: .MSTA
+        '}
+        fbMotorStatusCheck : FB_LREALFromEPICS;
+    END_VAR
+    IF NOT bEnable THEN
+        bValid := FALSE;
+        RETURN;
+    END_IF
+
+    fbRBVCheck();
+    fbMovingCheck();
+    fbMotorStatusCheck();
+    bValid := (
+        fbRBVCheck.bValid AND
+        fbMovingCheck.bValid AND
+        fbMotorStatusCheck.bValid
+    );
+
+    (* Moving status is DMOV; this comes in as a floating point value
+         DMOV = 0 -> moving
+         DMOV = 1 -> done moving, or not moving
+    *)
+    bIsMoving := ABS(fbMovingCheck.fValue) < 1e-5;
+    fPosition := fbRBVCheck.fValue;
+
+    nMSTA_Raw := LREAL_TO_UINT(fbMotorStatusCheck.fValue);
+    stMSTA.bPositiveDirection := nMSTA_Raw.0;
+    stMSTA.bDone := nMSTA_Raw.1;
+    stMSTA.bPlusLimitSwitch := nMSTA_Raw.2;
+    stMSTA.bHomeLimitSwitch := nMSTA_Raw.3;
+    stMSTA.bUnused0 := nMSTA_Raw.4;
+    stMSTA.bClosedLoop := nMSTA_Raw.5;
+    stMSTA.bSlipStall := nMSTA_Raw.6;
+    stMSTA.bHome := nMSTA_Raw.7;
+    stMSTA.bEncoderPresent := nMSTA_Raw.8;
+    stMSTA.bHardwareProblem := nMSTA_Raw.9;
+    stMSTA.bMoving := nMSTA_Raw.10;
+    stMSTA.bGainSupport := nMSTA_Raw.11;
+    stMSTA.bCommError := nMSTA_Raw.12;
+    stMSTA.bMinusLimitSwitch := nMSTA_Raw.13;
+    stMSTA.bHomed := nMSTA_Raw.14;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_LREALFromEPICS`_
+    * `ST_EpicsMotorMSTA`_
+
+
 FB_EtherCATDiag
 ^^^^^^^^^^^^^^^
 
@@ -1615,6 +2128,7 @@ FB_EtherCATDiag
     END_IF
 
     END_FUNCTION_BLOCK
+
     ACTION DiagnosticJson:
     fbJson.StartObject();
         fbJson.AddKey('ecat_diag');
@@ -1691,6 +2205,7 @@ FB_EtherCATDiag
     fbJson.CopyDocument(fbLogger.sJson, SIZEOF(fbLogger.sJson));
     fbJson.ResetDocument();
     END_ACTION
+
     ACTION M_CheckMasterDevState:
     (* check master errors based on devstate *)
     bMasterDevStateError 				:= nMasterDevState <> 0;
@@ -1705,6 +2220,7 @@ FB_EtherCATDiag
     stMasterDevState.bDcNotInSync 		:= (nMasterDevState AND 16#1000) = 16#1000;
     nMasterDevStatePrev 				:= nMasterDevState;
     END_ACTION
+
     ACTION M_GetScannedSlaveName:
     rSlaveInfoScanned REF= arrSlaveInfoScanned[aiDiagIndex[iIdx]];
     rScannedSlaveInfo REF= arrScannedSlaveInfo[aiDiagIndex[iIdx]];
@@ -1776,6 +2292,7 @@ FB_EtherCATDiag
         END_IF
     END_IF
     END_ACTION
+
     ACTION M_GetSlaveAdresses:
     fbGetSlaveAddresses(
         sNetId		:= sMasterNetID,
@@ -1796,6 +2313,7 @@ FB_EtherCATDiag
         iState := GetSlaveStates;
     END_IF
     END_ACTION
+
     ACTION M_GetSlaveIdentity:
     iDiagIndex := aiDiagIndex[iIdx];
     iDiagPort := aiDiagPort[iIdx];
@@ -1822,6 +2340,7 @@ FB_EtherCATDiag
         iState := E_EcatDiagState.GetSlaveName;
     END_IF
     END_ACTION
+
     ACTION M_GetSlaveName:
     fbGetSlaveName(
         NETID		:= sIPCNetId,
@@ -1844,6 +2363,7 @@ FB_EtherCATDiag
         iState := E_EcatDiagState.GetScannedSlaveName;
     END_IF
     END_ACTION
+
     ACTION M_GetSlaveStates:
     fbGetAllSlaveStates(
         sNetId		:= sMasterNetID,
@@ -1907,6 +2427,7 @@ FB_EtherCATDiag
         END_IF
     END_IF
     END_ACTION
+
     ACTION M_GetTopoData:
     fbGetTopologyData(
         NETID	:= sMasterNetID,
@@ -1950,6 +2471,7 @@ FB_EtherCATDiag
         iState := E_EcatDiagState.ScanSlaves;
     END_IF
     END_ACTION
+
     ACTION M_GetTopoDataLen:
     fbGetTopologyData(
         NETID	:= sMasterNetID,
@@ -1968,6 +2490,7 @@ FB_EtherCATDiag
         iState := E_EcatDiagState.GetTopoData;
     END_IF
     END_ACTION
+
     ACTION M_ScanSlaves:
     fbEcGetScannedSlaves(
         bExecute				:= TRUE,
@@ -2163,15 +2686,33 @@ FB_Index
     {analysis -2} //Only the methods and actions are needed
 
     END_FUNCTION_BLOCK
+
     ACTION Dec:
     nVal := nVal - ValInc;
     IF nVal < LowerLimit THEN nVal := UpperLimit; END_IF
     END_ACTION
+
     ACTION Inc:
     // Dont use this, use ValInc
     nVal := nVal + ValInc;
     IF nVal >  UpperLimit THEN nVal := LowerLimit; END_IF
     END_ACTION
+
+    //Decrement the counter and return new value
+    METHOD DecVal : INT
+    VAR_INPUT
+    END_VAR
+    Dec();
+    DecVal := nVal;
+    END_METHOD
+
+    //Increment the counter and return new value
+    METHOD PUBLIC IncVal : INT
+    VAR_INPUT
+    END_VAR
+    Inc();
+    IncVal := nVal;
+    END_METHOD
 
 
 
@@ -2253,8 +2794,230 @@ FB_Listener
 
     END_FUNCTION_BLOCK
 
+    (*
+        Configure an event class + severity
+    *)
+    METHOD Configure : HRESULT
+    VAR_INPUT
+        i_EventClass 	:	GUID;
+        i_MinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;
+        i_fbSocket		:	POINTER TO FB_ConnectionlessSocket;
+    END_VAR
+
+    VAR_INST
+        bSubscribed		:	BOOL := FALSE;
+    END_VAR
+    IF bSubscribed THEN
+        Unsubscribe();
+    END_IF
+
+    THIS^.Subscribe(ADR(ipMessageConfig), 0);
+    bSubscribed 	:= TRUE;
+    eMinSeverity 	:= i_MinSeverity;
+    fbSocket	  	:= i_fbSocket;
+
+    IF (ipMessageConfig = 0) THEN
+        Configure 	:= 1;
+        bConfigured := FALSE;
+    ELSE
+        ipMessageConfig.AddEventClass(i_EventClass, i_MinSeverity);
+        Configure 	:= 0;
+        bConfigured := TRUE;
+    END_IF
+    END_METHOD
+
+    METHOD OnAlarmCleared
+    VAR_INPUT
+        fbEvent : REFERENCE TO FB_TcEvent;
+    END_VAR
+    (* Callback run from THIS^.Execute() *)
+    nCntAlarmsCleared := nCntAlarmsCleared + 1;
+    StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmCleared);
+    END_METHOD
+
+    METHOD OnAlarmConfirmed
+    VAR_INPUT
+        fbEvent : REFERENCE TO FB_TcEvent;
+    END_VAR
+    (* Callback run from THIS^.Execute() *)
+    nCntAlarmsConfirmed := nCntAlarmsConfirmed + 1;
+    StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmConfirmed);
+    END_METHOD
+
+    METHOD OnAlarmRaised
+    VAR_INPUT
+        fbEvent : REFERENCE TO FB_TcEvent;
+    END_VAR
+    (* Callback run from THIS^.Execute() *)
+    nCntAlarmsRaised := nCntAlarmsRaised + 1;
+    StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmRaised);
+    END_METHOD
+
+    METHOD OnMessageSent
+    VAR_INPUT
+        fbEvent : REFERENCE TO FB_TcEvent;
+    END_VAR
+    (* Callback run from THIS^.Execute() *)
+    nCntMessagesSent := nCntMessagesSent + 1;
+    StoreEvent(fbEvent, eEventType:=E_LogEventType.MessageSent);
+    END_METHOD
+
+    METHOD PublishEvents : HRESULT
+    VAR
+        nEvent				:	UINT;
+        stPendingEvent		:	REFERENCE TO ST_PendingEvent;
+        stEventInfo			:	REFERENCE TO ST_LoggingEventInfo;
+        fbRequestEventText	:	REFERENCE TO FB_RequestEventText;
+    END_VAR
+
+    VAR_INST
+        fbJson				:	FB_JsonSaxWriter;
+        fbJsonDataType		:	FB_JsonReadWriteDataType;
+        sJsonDoc			:	STRING(10000);
+
+    END_VAR
+    IF nPendingEvents = 0 THEN
+        RETURN;
+    END_IF
+
+    FOR nEvent := 0 TO nMaxEvents - 1 DO
+        stPendingEvent REF= stPendingEvents[nEvent];
+        IF NOT stPendingEvent.bInUse THEN
+            CONTINUE;
+        END_IF
+
+        fbRequestEventText REF= stPendingEvent.fbRequestEventText;
+        stEventInfo 	   REF= stPendingEvent.stEventInfo;
+
+        IF fbRequestEventText.bError THEN
+            stEventInfo.Msg := '(Unable to retrieve message)';
+        ELSIF NOT fbRequestEventText.bBusy THEN
+            fbRequestEventText.GetString(stEventInfo.msg, SIZEOF(stEventInfo.msg));
+        ELSE
+            CONTINUE;
+        END_IF
+
+        IF bConfigured THEN
+            stEventInfo.plc := GVL_Logger.sPlcHostname;
+
+            // Generate the JSON message
+            fbJson.ResetDocument();
+            fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_LoggingEventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
+            fbJson.CopyDocument(sJsonDoc, SIZEOF(sJsonDoc));
+
+            SendMessage(sMessage:=ADR(sJsonDoc));
+        END_IF
+
+        // Mark as not in use, and fill in this event in the next StoreEvent call
+        nPendingEvents			:= nPendingEvents - 1;
+        stPendingEvent.bInUse 	:= FALSE;
+        nEventIdx 				:= nEvent;
+
+    END_FOR
+    END_METHOD
+
+    METHOD SendMessage : HRESULT
+    VAR_INPUT
+        sMessage		:	POINTER TO STRING;
+    END_VAR
+
+    VAR
+        sLogStr			:	T_MaxString;
+    END_VAR
+    (* For subclasses to override, if necessary *)
+    IF sMessage = 0 THEN
+        RETURN;
+    END_IF
+
+    // Optionally log it to Visual Studio's message list
+    IF bLogToVisualStudio THEN
+         // Keep the message length under 255 (extended string function for LEFT/MID do not exist)
+        STRNCPY(ADR(sLogStr), sMessage, MIN(220, SIZEOF(sLogStr)));
+        ADSLOGSTR(
+            msgCtrlMask := ADSLOG_MSGTYPE_HINT,
+            msgFmtStr   := '[Logger JSON Debug] %s',
+            strArg      := sLogStr
+        );
+    END_IF
+
+    IF fbSocket <> 0 THEN
+        // And send it along to logstash
+        F_SendUDPMessage(sMessage:=sMessage, fbSocket:=fbSocket^,
+                         sHost:=GVL_Logger.cLogHost, iPort:=GVL_Logger.iLogPort);
+    END_IF
+    END_METHOD
+
+    METHOD PRIVATE StoreEvent : HRESULT
+    VAR_INPUT
+        fbEvent		:	REFERENCE TO FB_TcEvent;
+        eEventType	:	E_LogEventType;
+    END_VAR
+
+    VAR
+        stPendingEvent	:	REFERENCE TO ST_PendingEvent;
+        stEventInfo		:	REFERENCE TO ST_LoggingEventInfo;
+        nFailures		:	UINT := 0;
+    END_VAR
+    IF fbEvent.eSeverity < eMinSeverity THEN
+        // Ignore all messages below the minimum severity
+        RETURN;
+    ELSIF NOT __ISVALIDREF(fbEvent) THEN
+        RETURN;
+    END_IF
+
+    // Find the next slot to use in stPendingEvents
+    WHILE stPendingEvents[nEventIdx].bInUse AND nFailures < nMaxEvents DO
+        nFailures := nFailures + 1;
+        IF ((nEventIdx := (nEventIdx + 1)) = nMaxEvents) THEN
+            nEventIdx := 0;
+        END_IF
+    END_WHILE
+
+    IF (nFailures = nMaxEvents) THEN
+        ADSLOGSTR(
+            msgCtrlMask := ADSLOG_MSGTYPE_ERROR,
+            msgFmtStr   := 'Logging message buffer full (%s)',
+            strArg		:= UINT_TO_STRING(nMaxEvents),
+        );
+        RETURN;
+    END_IF
+
+    nPendingEvents			:=	nPendingEvents + 1;
+    nCntMessagesSent 		:=	nCntMessagesSent + 1;
+
+    stPendingEvent			REF= stPendingEvents[nEventIdx];
+    stEventInfo 			REF= stPendingEvent.stEventInfo;
+    stPendingEvent.bInUse 	:= TRUE;
+
+    stEventInfo.id 			:= fbEvent.nEventId;
+    stEventInfo.event_class	:= GUID_TO_STRING(fbEvent.EventClass);
+    stEventInfo.severity 	:= fbEvent.eSeverity;
+    stEventInfo.ts			:= F_ConvertTicksToUnixTimestamp(fbEvent.nTimestamp);
+    stEventInfo.source 		:= fbEvent.ipSourceInfo.sName;
+    stEventInfo.event_type	:= eEventType;
+
+    fbEvent.GetJsonAttribute(stEventInfo.json, SIZEOF(stEventInfo.json));
+    stPendingEvent.fbRequestEventText.Request(eventClass:=fbEvent.EventClass, nEventId:=fbEvent.nEventId, nLangId:=1033, ipArgs:=fbEvent.ipArguments);
+    END_METHOD
+
+    PROPERTY PUBLIC LogToVisualStudio : BOOL
+    VAR
+    END_VAR
+    LogToVisualStudio := bLogToVisualStudio;
+    END_PROPERTY
+
+    PROPERTY PUBLIC LogToVisualStudio : BOOL
+    VAR
+        bValue : BOOL;
+    END_VAR
+    THIS^.bLogToVisualStudio := bValue;
+    END_PROPERTY
+
 
 Related:
+    * `F_ConvertTicksToUnixTimestamp`_
+    * `F_SendUDPMessage`_
+    * `GVL_Logger`_
     * `ST_PendingEvent`_
 
 
@@ -2411,6 +3174,7 @@ FB_LogHandler
     END_FOR
 
     END_FUNCTION_BLOCK
+
     ACTION CircuitBreaker:
     // Global log circuit breaker
     (*
@@ -2636,6 +3400,7 @@ FB_LogMessage
     END_IF
 
     END_FUNCTION_BLOCK
+
     ACTION CircuitBreaker:
     GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
 
@@ -2986,6 +3751,296 @@ FB_TempSensor
 
 
 
+FB_Test_EpicsCentroidMonitor
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_Test_EpicsCentroidMonitor EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    TestBasics();
+
+    END_FUNCTION_BLOCK
+
+    METHOD TestBasics
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbMonitor : FB_EpicsCentroidMonitor;
+        nCount : INT := 0;
+    END_VAR
+    TEST('Basic');
+
+    nCount := 0;
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0S);
+    fbMonitor();
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.1, fY:=0.1, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0S);
+    fbMonitor(fMinimumValidChange:=0.0);
+
+    AssertTrue(fbMonitor.bIsUpdating, Message:='Centroid not reporting updating');
+
+    TEST_FINISHED();
+
+    TEST('Min change');
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0S);
+    fbMonitor(fMinimumValidChange:=0.1, fMaximumFrameTime:=0.2);
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.05, fY:=0.05, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.1S);
+    fbMonitor(fMinimumValidChange:=0.1, fMaximumFrameTime:=0.2);
+    AssertFalse(fbMonitor.bIsUpdating, Message:='Centroid update below threshold and is not updating');
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.5, fY:=0.5, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.1S);
+    fbMonitor(fMinimumValidChange:=0.1, fMaximumFrameTime:=0.2);
+    AssertTrue(fbMonitor.bIsUpdating, Message:='Centroid update above threshold and is updating');
+
+    TEST_FINISHED();
+
+    TEST('Severity invalidation');
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=2, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.2S);
+    fbMonitor(fMinimumValidChange:=0.0);
+    AssertFalse(fbMonitor.bValid, Message:='Invalid data - x severity');
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.1, fY:=0.1, nCount:=nCount, nX_Severity:=0, nY_Severity:=2, nCount_Severity:=0, tLastUpdate:=T#0.2S);
+    fbMonitor(fMinimumValidChange:=0.0);
+    AssertFalse(fbMonitor.bValid, Message:='Invalid data - y severity');
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.2, fY:=0.2, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=2, tLastUpdate:=T#0.2S);
+    fbMonitor(fMinimumValidChange:=0.0);
+    AssertFalse(fbMonitor.bValid, Message:='Invalid data - count severity');
+
+    nCount := nCount + 1;
+    WriteCentroidValue(fbMonitor:=fbMonitor, fX:=0.0, fY:=0.0, nCount:=nCount, nX_Severity:=0, nY_Severity:=0, nCount_Severity:=0, tLastUpdate:=T#0.1S);
+    fbMonitor(fMinimumValidChange:=0.0);
+    AssertTrue(fbMonitor.bValid, Message:='Data valid');
+    AssertTrue(fbMonitor.bIsUpdating, Message:='Data valid and updating');
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD WriteCentroidValue
+    VAR_IN_OUT
+        fbMonitor : FB_EpicsCentroidMonitor;
+    END_VAR
+    VAR_INPUT
+        fX : LREAL;
+        fY : LREAL;
+        nCount : INT;
+        nX_Severity : INT := 0;
+        nY_Severity : INT := 0;
+        nCount_Severity : INT := 0;
+        tLastUpdate : TIME;
+    END_VAR
+    WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidX.iPLCInternalSeverity), nX_Severity);
+    WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidY.iPLCInternalSeverity), nY_Severity);
+    WRITE_PROTECTED_INT(ADR(fbMonitor.fbArrayCounter.iPLCInternalSeverity), nCount_Severity);
+
+    WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbCentroidX.fPLCInternalValue), fX);
+    WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbCentroidY.fPLCInternalValue), fY);
+    WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbArrayCounter.fPLCInternalValue), INT_TO_LREAL(nCount));
+
+    WRITE_PROTECTED_TIME(ADR(fbMonitor.tLastUpdate), TIME() - tLastUpdate);
+    END_METHOD
+
+
+Related:
+    * `FB_EpicsCentroidMonitor`_
+
+
+FB_Test_EpicsMotorMonitor
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_Test_EpicsMotorMonitor EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    TestBasics();
+
+    END_FUNCTION_BLOCK
+
+    METHOD TestBasics
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbMonitor : FB_EpicsMotorMonitor;
+    END_VAR
+    TEST('Basic');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertTrue(fbMonitor.bValid, Message:='Data valid');
+
+    TEST_FINISHED();
+
+
+    TEST('Severities');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=2, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertFalse(fbMonitor.bValid, Message:='Invalid RBV');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=2, nMoving_Severity:=0);
+    fbMonitor();
+    AssertFalse(fbMonitor.bValid, Message:='Invalid status');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=2);
+    fbMonitor();
+    AssertFalse(fbMonitor.bValid, Message:='Invalid moving');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertTrue(fbMonitor.bValid, Message:='All valid');
+
+    TEST_FINISHED();
+
+    TEST('Moving');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0 (* DMOV *), nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertTrue(fbMonitor.bIsMoving, Message:='Moving');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=1 (* DMOV *), nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertFalse(fbMonitor.bIsMoving, Message:='Not moving');
+
+    TEST_FINISHED();
+
+    TEST('Position');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=10.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertEquals_LREAL(Actual:=fbMonitor.fPosition, Expected:=10.0, Delta:=0.1, Message:='Position 1 OK');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=20.0, nMoving:=0, nStatus:=0, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+    AssertEquals_LREAL(Actual:=fbMonitor.fPosition, Expected:=20.0, Delta:=0.1, Message:='Position 2 OK');
+
+    TEST_FINISHED();
+
+    TEST('MSTA set');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=16#0FFFF, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+
+    AssertTrue(fbMonitor.stMSTA.bPositiveDirection, Message:='bPositiveDirection True');
+    AssertTrue(fbMonitor.stMSTA.bDone, Message:='bDone True');
+    AssertTrue(fbMonitor.stMSTA.bPlusLimitSwitch, Message:='bPlusLimitSwitch True');
+    AssertTrue(fbMonitor.stMSTA.bHomeLimitSwitch, Message:='bHomeLimitSwitch True');
+    AssertTrue(fbMonitor.stMSTA.bUnused0, Message:='bUnused0 True');
+    AssertTrue(fbMonitor.stMSTA.bClosedLoop, Message:='bClosedLoop True');
+    AssertTrue(fbMonitor.stMSTA.bSlipStall, Message:='bSlipStall True');
+    AssertTrue(fbMonitor.stMSTA.bHome, Message:='bHome True');
+    AssertTrue(fbMonitor.stMSTA.bEncoderPresent, Message:='bEncoderPresent True');
+    AssertTrue(fbMonitor.stMSTA.bHardwareProblem, Message:='bHardwareProblem True');
+    AssertTrue(fbMonitor.stMSTA.bMoving, Message:='bMoving True');
+    AssertTrue(fbMonitor.stMSTA.bGainSupport, Message:='bGainSupport True');
+    AssertTrue(fbMonitor.stMSTA.bCommError, Message:='bCommError True');
+    AssertTrue(fbMonitor.stMSTA.bMinusLimitSwitch, Message:='bMinusLimitSwitch True');
+    AssertTrue(fbMonitor.stMSTA.bHomed, Message:='bHomed True');
+
+    TEST_FINISHED();
+
+
+    TEST('MSTA zero');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=16#0000, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+
+    AssertFalse(fbMonitor.stMSTA.bPositiveDirection, Message:='bPositiveDirection False');
+    AssertFalse(fbMonitor.stMSTA.bDone, Message:='bDone False');
+    AssertFalse(fbMonitor.stMSTA.bPlusLimitSwitch, Message:='bPlusLimitSwitch False');
+    AssertFalse(fbMonitor.stMSTA.bHomeLimitSwitch, Message:='bHomeLimitSwitch False');
+    AssertFalse(fbMonitor.stMSTA.bUnused0, Message:='bUnused0 False');
+    AssertFalse(fbMonitor.stMSTA.bClosedLoop, Message:='bClosedLoop False');
+    AssertFalse(fbMonitor.stMSTA.bSlipStall, Message:='bSlipStall False');
+    AssertFalse(fbMonitor.stMSTA.bHome, Message:='bHome False');
+    AssertFalse(fbMonitor.stMSTA.bEncoderPresent, Message:='bEncoderPresent False');
+    AssertFalse(fbMonitor.stMSTA.bHardwareProblem, Message:='bHardwareProblem False');
+    AssertFalse(fbMonitor.stMSTA.bMoving, Message:='bMoving False');
+    AssertFalse(fbMonitor.stMSTA.bGainSupport, Message:='bGainSupport False');
+    AssertFalse(fbMonitor.stMSTA.bCommError, Message:='bCommError False');
+    AssertFalse(fbMonitor.stMSTA.bMinusLimitSwitch, Message:='bMinusLimitSwitch False');
+    AssertFalse(fbMonitor.stMSTA.bHomed, Message:='bHomed False');
+
+    TEST_FINISHED();
+
+
+    TEST('MSTA something');
+
+    WriteData(fbMonitor:=fbMonitor, fRBV:=0.0, nMoving:=0, nStatus:=2#0100_0011_0000_0110, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);
+    fbMonitor();
+
+    AssertFalse(fbMonitor.stMSTA.bPositiveDirection, Message:='bPositiveDirection');
+    AssertTrue(fbMonitor.stMSTA.bDone, Message:='bDone');
+    AssertTrue(fbMonitor.stMSTA.bPlusLimitSwitch, Message:='bPlusLimitSwitch');
+    AssertFalse(fbMonitor.stMSTA.bHomeLimitSwitch, Message:='bHomeLimitSwitch');
+
+    AssertFalse(fbMonitor.stMSTA.bUnused0, Message:='bUnused0');
+    AssertFalse(fbMonitor.stMSTA.bClosedLoop, Message:='bClosedLoop');
+    AssertFalse(fbMonitor.stMSTA.bSlipStall, Message:='bSlipStall');
+    AssertFalse(fbMonitor.stMSTA.bHome, Message:='bHome');
+
+    AssertTrue(fbMonitor.stMSTA.bEncoderPresent, Message:='bEncoderPresent');
+    AssertTrue(fbMonitor.stMSTA.bHardwareProblem, Message:='bHardwareProblem');
+    AssertFalse(fbMonitor.stMSTA.bMoving, Message:='bMoving');
+    AssertFalse(fbMonitor.stMSTA.bGainSupport, Message:='bGainSupport');
+
+    AssertFalse(fbMonitor.stMSTA.bCommError, Message:='bCommError');
+    AssertFalse(fbMonitor.stMSTA.bMinusLimitSwitch, Message:='bMinusLimitSwitch');
+    AssertTrue(fbMonitor.stMSTA.bHomed, Message:='bHomed');
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD WriteData
+    VAR_IN_OUT
+        fbMonitor : FB_EpicsMotorMonitor;
+    END_VAR
+    VAR_INPUT
+        fRBV : LREAL;
+        nMoving : INT;
+        nStatus : UINT;
+        nRBV_Severity : INT := 0;
+        nStatus_Severity : INT := 0;
+        nMoving_Severity : INT := 0;
+    END_VAR
+    WRITE_PROTECTED_INT(ADR(fbMonitor.fbRBVCheck.iPLCInternalSeverity), nRBV_Severity);
+    WRITE_PROTECTED_INT(ADR(fbMonitor.fbMotorStatusCheck.iPLCInternalSeverity), nStatus_Severity);
+    WRITE_PROTECTED_INT(ADR(fbMonitor.fbMovingCheck.iPLCInternalSeverity), nMoving_Severity);
+
+    WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbRBVCheck.fPLCInternalValue), fRBV);
+    WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbMotorStatusCheck.fPLCInternalValue), UINT_TO_LREAL(nStatus));
+    WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbMovingCheck.fPLCInternalValue), INT_TO_LREAL(nMoving));
+    END_METHOD
+
+
+Related:
+    * `FB_EpicsMotorMonitor`_
+
+
 FB_ThermoCouple
 ^^^^^^^^^^^^^^^
 
@@ -3327,6 +4382,9 @@ RUN_TESTS
     PROGRAM RUN_TESTS
     VAR
         CbTest    :    FB_CircuitBreaker_Test;
+        fbCentroidTest : FB_Test_EpicsCentroidMonitor;
+        fbMotorTest : FB_Test_EpicsMotorMonitor;
+
     END_VAR
     TcUnit.RUN();
 
@@ -3335,6 +4393,8 @@ RUN_TESTS
 
 Related:
     * `FB_CircuitBreaker_Test`_
+    * `FB_Test_EpicsCentroidMonitor`_
+    * `FB_Test_EpicsMotorMonitor`_
 
 
 SYSTEM_TIME_TO_RFC3339

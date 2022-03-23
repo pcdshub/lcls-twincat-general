@@ -59,6 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#e-subsystem">E_Subsystem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-ecdevice">ST_EcDevice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-ecmasterdevstate">ST_EcMasterDevState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#st-epicsmotormsta">ST_EpicsMotorMSTA</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-fbdiagnostics">ST_FbDiagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-loggingeventinfo-wc">ST_LoggingEventInfo_WC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-pendingevent">ST_PendingEvent</a></li>
@@ -88,6 +89,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-ecatdiag">FB_EcatDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ecatdiagwrapper">FB_EcatDiagWrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-el6-com">FB_EL6_Com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-epicscentroidmonitor">FB_EpicsCentroidMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-epicsmotormonitor">FB_EpicsMotorMonitor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ethercatdiag">FB_EtherCATDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ethercatframediag">FB_EtherCATFrameDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-getplchostname">FB_GetPLCHostname</a></li>
@@ -100,6 +103,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-lrealfromepics">FB_LREALFromEPICS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-stringfromepics">FB_STRINGFromEPICS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-tempsensor">FB_TempSensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-test-epicscentroidmonitor">FB_Test_EpicsCentroidMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-test-epicsmotormonitor">FB_Test_EpicsMotorMonitor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-thermocouple">FB_ThermoCouple</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-timestampbuffer">FB_TimeStampBuffer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-timestampbufferglobal">FB_TimeStampBufferGlobal</a></li>
@@ -262,6 +267,47 @@
 </ul>
 </dd>
 </dl>
+</section>
+<section id="st-epicsmotormsta">
+<h2>ST_EpicsMotorMSTA<a class="headerlink" href="#st-epicsmotormsta" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_EpicsMotorMSTA</span> <span class="p">:</span>
+<span class="n">STRUCT</span>
+
+    <span class="p">(</span><span class="o">*</span> <span class="n">DIRECTION</span><span class="p">:</span> <span class="n">last</span> <span class="n">raw</span> <span class="n">direction</span><span class="p">;</span> <span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Negative</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Positive</span><span class="p">)</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bPositiveDirection</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">DONE</span><span class="p">:</span> <span class="n">motion</span> <span class="ow">is</span> <span class="n">complete</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bDone</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">PLUS_LS</span><span class="p">:</span> <span class="n">plus</span> <span class="n">limit</span> <span class="n">switch</span> <span class="n">has</span> <span class="n">been</span> <span class="n">hit</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bPlusLimitSwitch</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">HOMELS</span><span class="p">:</span> <span class="n">state</span> <span class="n">of</span> <span class="n">the</span> <span class="n">home</span> <span class="n">limit</span> <span class="n">switch</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bHomeLimitSwitch</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">Unused</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bUnused0</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">POSITION</span><span class="p">:</span> <span class="n">closed</span><span class="o">-</span><span class="n">loop</span> <span class="n">position</span> <span class="n">control</span> <span class="ow">is</span> <span class="n">enabled</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bClosedLoop</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">SLIP_STALL</span><span class="p">:</span> <span class="n">Slip</span><span class="o">/</span><span class="n">Stall</span> <span class="n">detected</span> <span class="p">(</span><span class="n">eg</span><span class="o">.</span> <span class="n">fatal</span> <span class="n">following</span> <span class="n">error</span><span class="p">)</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bSlipStall</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">HOME</span><span class="p">:</span> <span class="k">if</span> <span class="n">at</span> <span class="n">home</span> <span class="n">position</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bHome</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">PRESENT</span><span class="p">:</span> <span class="n">encoder</span> <span class="ow">is</span> <span class="n">present</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bEncoderPresent</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">PROBLEM</span><span class="p">:</span> <span class="n">driver</span> <span class="n">stopped</span> <span class="n">polling</span><span class="p">,</span> <span class="ow">or</span> <span class="n">hardware</span> <span class="n">problem</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bHardwareProblem</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">MOVING</span><span class="p">:</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="n">velocity</span> <span class="n">present</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bMoving</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">GAIN_SUPPORT</span><span class="p">:</span> <span class="n">motor</span> <span class="n">supports</span> <span class="n">closed</span><span class="o">-</span><span class="n">loop</span> <span class="n">position</span> <span class="n">control</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bGainSupport</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">COMM_ERR</span><span class="p">:</span> <span class="n">Controller</span> <span class="n">communication</span> <span class="n">error</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bCommError</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">MINUS_LS</span><span class="p">:</span> <span class="n">minus</span> <span class="n">limit</span> <span class="n">switch</span> <span class="n">has</span> <span class="n">been</span> <span class="n">hit</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bMinusLimitSwitch</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+    <span class="p">(</span><span class="o">*</span> <span class="n">HOMED</span><span class="p">:</span> <span class="n">the</span> <span class="n">motor</span> <span class="n">has</span> <span class="n">been</span> <span class="n">homed</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">bHomed</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>
+
+<span class="n">END_STRUCT</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
 </section>
 <section id="st-fbdiagnostics">
 <h2>ST_FbDiagnostics<a class="headerlink" href="#st-fbdiagnostics" title="Permalink to this headline"></a></h2>
@@ -928,8 +974,123 @@ END_VAR
 <span class="n">DeathByManySmall</span><span class="p">();</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
+
+<span class="n">METHOD</span> <span class="n">AutoReset</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_INST</span>
+    <span class="n">fbLog</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span>
+        <span class="n">bEnableAutoReset</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">,</span>
+        <span class="n">nTripResetPeriod</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#5s);</span>
+
+    <span class="o">//</span><span class="n">Auto</span> <span class="n">reset</span> <span class="n">test</span>
+    <span class="n">tonAutoResetTest</span> <span class="p">:</span> <span class="n">TON</span><span class="p">;</span>
+
+    <span class="n">Init</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="p">(</span><span class="o">*</span> <span class="n">Test</span> <span class="n">that</span> <span class="n">the</span> <span class="n">CB</span> <span class="n">resets</span> <span class="n">itself</span> <span class="n">after</span> <span class="n">a</span> <span class="n">cooldown</span> <span class="n">period</span> <span class="o">*</span><span class="p">)</span>
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;AutoReset&#39;</span><span class="p">);</span>
+<span class="n">IF</span> <span class="n">Init</span> <span class="n">THEN</span>
+    <span class="n">fbLog</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+    <span class="n">WRITE_PROTECTED_BOOL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbLog</span><span class="o">.</span><span class="n">bTripped</span><span class="p">),</span> <span class="n">TRUE</span><span class="p">);</span>
+    <span class="n">WRITE_PROTECTED_BOOL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbLog</span><span class="o">.</span><span class="n">bLocalTripped</span><span class="p">),</span> <span class="n">TRUE</span><span class="p">);</span>
+    <span class="n">fbLog</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+    <span class="n">fbLog</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+    <span class="n">Init</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">tonAutoResetTest</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">NOT</span> <span class="n">Init</span><span class="p">,</span> <span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#6s);</span>
+
+<span class="n">IF</span> <span class="n">tonAutoResetTest</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+
+    <span class="n">fbLog</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+
+    <span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbLog</span><span class="o">.</span><span class="n">bTripped</span><span class="p">,</span>
+        <span class="s1">&#39;Circuit breaker should be reset automatically&#39;</span><span class="p">);</span>
+
+    <span class="n">TEST_FINISHED_NAMED</span><span class="p">(</span><span class="s1">&#39;AutoReset&#39;</span><span class="p">);</span>
+<span class="n">END_IF</span>
+<span class="n">END_METHOD</span>
+
+<span class="n">METHOD</span> <span class="n">DeathByManySmall</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+
+<span class="n">END_VAR</span>
+<span class="n">VAR_INST</span>
+    <span class="n">fbLogNoisy</span> <span class="p">:</span> <span class="n">FB_LogMessage</span><span class="p">;</span>
+    <span class="n">tNoisy</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#50ms); //50ms is &gt; the local trip threshold default of 1ms</span>
+    <span class="n">fbLogNice</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span><span class="n">nTrickleTripThreshold</span><span class="o">:=</span><span class="n">T</span><span class="c1">#2s);</span>
+    <span class="n">tNice</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span><span class="n">T</span><span class="c1">#5s);</span>
+    <span class="n">tTrickle</span> <span class="p">:</span> <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span><span class="n">PT</span><span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nTrickleTripTime</span> <span class="o">+</span> <span class="n">T</span><span class="c1">#1s);</span>
+    <span class="n">fbLogHandler</span> <span class="p">:</span> <span class="n">FB_LogHandler</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;ManySmall&#39;</span><span class="p">);</span>
+<span class="o">//</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">condition</span> <span class="n">where</span>
+<span class="o">//</span> <span class="n">a</span> <span class="n">few</span> <span class="n">loggers</span> <span class="n">did</span> <span class="n">their</span> <span class="n">thing</span><span class="p">,</span> <span class="k">while</span> <span class="n">keeping</span> <span class="n">under</span> <span class="n">the</span>
+<span class="o">//</span> <span class="n">local</span> <span class="n">logging</span> <span class="n">rate</span> <span class="n">limit</span> <span class="n">until</span> <span class="n">the</span> <span class="k">global</span> <span class="n">trickle</span> <span class="n">trip</span>
+<span class="o">//</span> <span class="n">was</span> <span class="n">triggered</span><span class="o">.</span> <span class="n">Then</span> <span class="n">verify</span> <span class="n">only</span> <span class="n">those</span> <span class="n">loggers</span> <span class="n">that</span>
+<span class="o">//</span> <span class="n">were</span> <span class="n">just</span> <span class="n">a</span> <span class="n">little</span> <span class="n">too</span> <span class="n">noisy</span><span class="p">,</span> <span class="n">would</span> <span class="n">trip</span> <span class="n">off</span><span class="p">,</span> <span class="k">while</span> <span class="n">others</span> <span class="n">stayed</span> <span class="n">up</span><span class="o">.</span>
+
+<span class="n">fbLogHandler</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+
+<span class="o">//</span> <span class="n">Call</span> <span class="n">this</span> <span class="n">guy</span> <span class="n">every</span> <span class="mi">50</span><span class="n">ms</span> <span class="ow">or</span> <span class="n">so</span><span class="o">.</span>
+<span class="n">tNoisy</span><span class="p">(</span><span class="n">IN</span> <span class="o">:=</span> <span class="n">NOT</span> <span class="n">tNoisy</span><span class="o">.</span><span class="n">Q</span><span class="p">);</span>
+<span class="n">IF</span> <span class="n">tNoisy</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+    <span class="n">fbLogNoisy</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+<span class="n">END_IF</span>
+
+<span class="o">//</span> <span class="n">Call</span> <span class="n">this</span> <span class="n">guy</span> <span class="n">every</span> <span class="mi">5</span><span class="n">s</span> <span class="ow">or</span> <span class="n">so</span>
+<span class="n">tNice</span><span class="p">(</span><span class="n">IN</span> <span class="o">:=</span> <span class="n">NOT</span> <span class="n">tNoisy</span><span class="o">.</span><span class="n">Q</span><span class="p">);</span>
+<span class="n">IF</span> <span class="n">tNice</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+    <span class="n">fbLogNice</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+<span class="n">END_IF</span>
+
+<span class="n">tTrickle</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">);</span>
+<span class="n">IF</span> <span class="n">tTrickle</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+    <span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbLogNoisy</span><span class="o">.</span><span class="n">bLocalTrickleTripped</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbLogNice</span><span class="o">.</span><span class="n">bLocalTrickleTripped</span><span class="p">,</span>
+            <span class="s1">&#39;Only Noisy should be tripped.&#39;</span><span class="p">);</span>
+    <span class="n">TEST_FINISHED_NAMED</span><span class="p">(</span><span class="s1">&#39;ManySmall&#39;</span><span class="p">);</span>
+<span class="n">END_IF</span>
+<span class="n">END_METHOD</span>
+
+<span class="n">METHOD</span> <span class="n">SingleBadLogger</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="n">idx</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_INST</span>
+    <span class="n">fbLog</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span>
+        <span class="n">bEnableAutoReset</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">,</span>
+        <span class="n">nTripResetPeriod</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#5s);</span>
+<span class="n">END_VAR</span>
+<span class="n">ResetCircuitBreakerGlobals</span><span class="p">();</span>
+
+<span class="p">(</span><span class="o">*</span> <span class="n">In</span> <span class="n">this</span> <span class="n">scenario</span><span class="p">,</span> <span class="n">a</span> <span class="n">logger</span> <span class="n">trips</span> <span class="n">off</span> <span class="n">because</span> <span class="n">it</span> <span class="n">has</span> <span class="n">been</span> <span class="n">called</span> <span class="n">too</span> <span class="n">many</span> <span class="n">times</span>
+<span class="ow">in</span> <span class="n">one</span> <span class="n">cycle</span><span class="p">,</span> <span class="n">leading</span> <span class="n">to</span> <span class="n">a</span> <span class="n">large</span> <span class="n">excess</span> <span class="n">of</span> <span class="n">messages</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;LocalFastTrip&#39;</span><span class="p">);</span>
+    <span class="n">FOR</span> <span class="n">idx</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">GVL_LOGGER</span><span class="o">.</span><span class="n">nMinTimeViolationAcceptable</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">DO</span>
+        <span class="n">fbLog</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
+    <span class="n">END_FOR</span>
+
+    <span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbLog</span><span class="o">.</span><span class="n">bLocalTripped</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">fbLog</span><span class="o">.</span><span class="n">bLocalTrickleTripped</span><span class="p">,</span>
+        <span class="s1">&#39;Only local trip should occur in these conditions&#39;</span><span class="p">);</span>
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+<span class="n">END_METHOD</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-loghandler">FB_LogHandler</a></p></li>
+<li><p><a class="reference internal" href="#fb-logmessage">FB_LogMessage</a></p></li>
+<li><p><a class="reference internal" href="#gvl-logger">GVL_Logger</a></p></li>
+<li><p><a class="reference internal" href="#resetcircuitbreakerglobals">ResetCircuitBreakerGlobals</a></p></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section id="fb-coe-fastread">
 <h2>FB_CoE_FastRead<a class="headerlink" href="#fb-coe-fastread" title="Permalink to this headline"></a></h2>
@@ -1440,6 +1601,363 @@ END_VAR
 </pre></div>
 </div>
 </section>
+<section id="fb-epicscentroidmonitor">
+<h2>FB_EpicsCentroidMonitor<a class="headerlink" href="#fb-epicscentroidmonitor" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
+    EPICS AreaDetector Stats Plugin Centroid Monitor
+
+    Requirements:
+
+    * Requires an existing IOC with an EPICS AreaDetector.
+    * Requires an AreaDetector plugin chain that includes a stats plugin.
+    * Requires a pytmc &quot;link&quot; pragma to specify the plugin PV prefix.
+
+    What information is included?
+
+    * Centroid X position
+    * Centroid Y position
+    * Array count index
+    * The validity of the data, as determined by:
+        - The ArrayCounter_RBV PV changing
+        - Alarm severity of the PVs
+        - The centroid value changing, even minimally
+
+    Example:
+
+        {attribute &#39;pytmc&#39; := &#39;
+            pv: @(PREFIX):Chk:Centroid1
+            link: AREA:DETECTOR:CAM:01:Stats2:
+        &#39;}
+        fbCentroid : FB_EpicsCentroidMonitor;
+
+        fbCentroid(bEnable:=TRUE, fMinimumValidChange:=1E-6, fNewFrameMinimumChange:=1E-6);
+        IF fbCentroid.bValid AND fbCentroid.bIsUpdating THEN
+            fbCentroid.fCentroidX;
+            fbCentroid.fCentroidY;
+            fbCentroid.nArrayCount;
+            fbCentroid.fFrameTime;
+        END_IF
+
+    Above, ``AREA:DETECTOR:CAM:01:Stats2`` should refer to the PV prefix of a
+    stats plugin.
+    That is, ``caget AREA:DETECTOR:CAM:01:Stats2:ArrayCounter_RBV`` should not
+    fail.
+
+    How does this work?
+
+    pytmc offers the ability to push EPICS process variable data into PLCs by
+    way of link pragmas.  These link pragmas create additional supporting EPICS
+    records that monitor PVs from any IOC on the controls network. In this case,
+    the PLC IOC will monitor vital AreaDetector plugin record data and let your
+    PLC project know of its status.
+
+    Why are there multiple thresholds I have to specify?
+
+    ``fNewFrameMinimumChange`` is the minimum change in pixels to say that
+    when the array counter changes, these are the new values for X and Y.
+    While this seems a bit confusing (or perhaps unnecessary), we do not
+    know when the array counters or centroid values will be updated.  These
+    do not get written in a single, atomic write to the PLC. We may see an
+    updated array count and then a centroid X change and then a Y change.
+    This threshold is a way of working around that complexity and saying
+    the new data is here only when it&#39;s changed at least a bit and we have
+    a new frame number.
+
+    ``fMinimumValidChange``, which by default is set to the same as the above
+    threshold, says that if the centroid value doesn&#39;t change by at least this
+    on a frame-to-frame basis, consider this a result of a faulty AreaDetector
+    implementation.  The monitor would report values below this threshold as
+    &quot;not updating&quot; - ``bIsUpdating`` as ``FALSE``.
+
+    What needs to happen to get new centroid values?
+
+    - An updated array count
+    - An updated X centroid value (above fNewFrameMinimumChange)
+    - An updated Y centroid value (above fNewFrameMinimumChange)
+    - NO_ALARM severities for all values
+
+    This will result in an updated:
+
+    - fFrameTime (seconds between valid frames)
+
+    What needs to happen for ``bIsUpdating`` to be TRUE?
+
+    - All items from the above &quot;new centroid values&quot;
+    - Frame time below fMaximumFrameTime
+    - Centroid X and Y values above fMinimumValidChange
+
+*)
+FUNCTION_BLOCK FB_EpicsCentroidMonitor
+VAR_INPUT
+    fMaximumFrameTime : LREAL := 0.2;
+    (* Minimum change to be considered updating correctly - buggy detectors may need this. *)
+    fMinimumValidChange : LREAL := 1E-6;
+    (* Minimum change in pixels to be considered a new value for X, Y *)
+    fNewFrameMinimumChange : LREAL := 1E-6;
+    bEnable : BOOL := TRUE;
+END_VAR
+VAR_OUTPUT
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: IsUpdating
+        io: input
+    &#39;}
+    bIsUpdating : BOOL;
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: CentroidX
+        io: input
+    &#39;}
+    fCentroidX : LREAL;
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: CentroidY
+        io: input
+    &#39;}
+    fCentroidY : LREAL;
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: ArrayCount
+        io: input
+    &#39;}
+    nArrayCount : UDINT;
+    bValid : BOOL;
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: FrameTime
+        io: input
+        field: DESC Time between frame updates
+        field: EGU sec
+    &#39;}
+    fFrameTime : LREAL;
+END_VAR
+VAR
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: CX_
+        link: CentroidX_RBV
+    &#39;}
+    fbCentroidX : FB_LREALFromEPICS;
+
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: CY_
+        link: CentroidY_RBV
+    &#39;}
+    fbCentroidY : FB_LREALFromEPICS;
+
+    fLastCentroidX : LREAL;
+    fLastCentroidY : LREAL;
+
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: Cnt_
+        link: ArrayCounter_RBV
+    &#39;}
+    fbArrayCounter : FB_LREALFromEPICS;
+
+    // Last array count value
+    nLastArrayCount : UDINT;
+    // Time of the last frame update
+    tLastUpdate: TIME;
+
+    bInit : BOOL;
+    // Did we see a frame update yet? (FALSE at startup; TRUE after first frame.)
+    bSawFrame : BOOL;
+    // Do we have a new frame? Has the array count updated, and position change above fNewFrameMinimumChange?
+    bHaveNewFrame : BOOL;
+    // For this new frame, is it above the threshold fMinimumValidChange?
+    bAboveThreshold : BOOL;
+
+END_VAR
+IF NOT bEnable THEN
+    bValid := FALSE;
+    RETURN;
+END_IF
+
+IF NOT bInit THEN
+    tLastUpdate := TIME();
+    fFrameTime := 1000.0;
+    bSawFrame := FALSE;
+    bInit := TRUE;
+END_IF
+
+fbCentroidX();
+fbCentroidY();
+fbArrayCounter();
+
+bValid := (
+    fbCentroidX.bValid AND
+    fbCentroidY.bValid AND
+    fbArrayCounter.bValid
+);
+
+fCentroidX := fbCentroidX.fValue;
+fCentroidY := fbCentroidY.fValue;
+nArrayCount := LREAL_TO_UDINT(fbArrayCounter.fValue);
+
+(*
+    Only consider that we have a new frame if:
+    1. The array count has been updated
+    2. X and Y values have changed even minimally
+        a. With background noise, this should not be a problem.
+        b. With an invalid black/white/stale image, this will indicate
+           &#39;no new frame&#39; despite an increasing array count.
+*)
+bHaveNewFrame := (
+    nArrayCount &lt;&gt; nLastArrayCount AND
+    ABS(fLastCentroidX - fCentroidX) &gt;= fNewFrameMinimumChange AND
+    ABS(fLastCentroidY - fCentroidY) &gt;= fNewFrameMinimumChange AND
+    TRUE
+);
+
+IF bHaveNewFrame THEN
+    bAboveThreshold := (
+        ABS(fLastCentroidX - fCentroidX) &gt;= fMinimumValidChange AND
+        ABS(fLastCentroidY - fCentroidY) &gt;= fMinimumValidChange
+    );
+
+    fFrameTime := TIME_TO_LREAL(TIME() - tLastUpdate) * 0.001; // Milliseconds -&gt; seconds
+    tLastUpdate := TIME();
+    nLastArrayCount := nArrayCount;
+    bSawFrame := TRUE;
+
+    fLastCentroidX := fCentroidX;
+    fLastCentroidY := fCentroidY;
+END_IF
+
+bIsUpdating := bSawFrame AND (fFrameTime &lt;= fMaximumFrameTime) AND bAboveThreshold;
+
+END_FUNCTION_BLOCK
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-lrealfromepics">FB_LREALFromEPICS</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="fb-epicsmotormonitor">
+<h2>FB_EpicsMotorMonitor<a class="headerlink" href="#fb-epicsmotormonitor" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
+    EPICS Motor Record Monitoring tool
+
+    Requirements:
+
+    * Requires an existing IOC with an EPICS motor record.
+    * Requires a pytmc &quot;link&quot; pragma to specify the motor record prefix.
+
+    What information is included?
+
+    * The validity of the source data (as determined by alarm severity)
+    * Readback value (scaled encoder position in ``fPosition``)
+    * Motion status (moving or not, ``bIsMoving``)
+    * Homed status, limit status, and others (via ``stMSTA``, see
+      ``ST_EpicsMotorMSTA``).
+
+    Example:
+
+        {attribute &#39;pytmc&#39; := &#39;
+            pv: @(PREFIX):Internal:Mon
+            link: MOTOR:PV:NAME
+        &#39;}
+        fbMotorMonitor : FB_EpicsMotorMonitor;
+
+        fbMotorMonitor(bEnable:=TRUE);
+        IF fbMotorMonitor.bValid THEN
+            fbMotorMonitor.fPosition;
+            fbMotorMonitor.bIsMoving;
+            fbMotorMonitor.stMSTA.bHomed;
+        END_IF
+
+    Above, ``MOTOR:PV:NAME`` should refer to an EPICS motor record.
+    That is, ``caget MOTOR:PV:NAME.RTYP`` should return &quot;motor&quot;.
+
+    How does this work?
+
+    pytmc offers the ability to push EPICS process variable data into PLCs by
+    way of link pragmas.  These link pragmas create additional supporting EPICS
+    records that monitor PVs from any IOC on the controls network. In this case,
+    the PLC IOC will monitor vital motor record information and let your PLC
+    project know of its status.
+
+    Note that not all motor records may be created equally.  Some of the status
+    fields may not be consistent.  Be sure to check how your motor works and
+    what fields are worth paying attention to when using this.
+
+*)
+FUNCTION_BLOCK FB_EpicsMotorMonitor
+VAR_INPUT
+    bEnable : BOOL := TRUE;
+END_VAR
+VAR_OUTPUT
+    bIsMoving : BOOL;
+    fPosition : LREAL;
+    nMSTA_Raw : UINT;
+    stMSTA : ST_EpicsMotorMSTA;
+    bValid : BOOL;
+END_VAR
+VAR
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: RBV_
+        link: .RBV
+    &#39;}
+    fbRBVCheck : FB_LREALFromEPICS;
+
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: Dmov_
+        link: .DMOV
+    &#39;}
+    fbMovingCheck : FB_LREALFromEPICS;
+
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: Msta_
+        link: .MSTA
+    &#39;}
+    fbMotorStatusCheck : FB_LREALFromEPICS;
+END_VAR
+IF NOT bEnable THEN
+    bValid := FALSE;
+    RETURN;
+END_IF
+
+fbRBVCheck();
+fbMovingCheck();
+fbMotorStatusCheck();
+bValid := (
+    fbRBVCheck.bValid AND
+    fbMovingCheck.bValid AND
+    fbMotorStatusCheck.bValid
+);
+
+(* Moving status is DMOV; this comes in as a floating point value
+     DMOV = 0 -&gt; moving
+     DMOV = 1 -&gt; done moving, or not moving
+*)
+bIsMoving := ABS(fbMovingCheck.fValue) &lt; 1e-5;
+fPosition := fbRBVCheck.fValue;
+
+nMSTA_Raw := LREAL_TO_UINT(fbMotorStatusCheck.fValue);
+stMSTA.bPositiveDirection := nMSTA_Raw.0;
+stMSTA.bDone := nMSTA_Raw.1;
+stMSTA.bPlusLimitSwitch := nMSTA_Raw.2;
+stMSTA.bHomeLimitSwitch := nMSTA_Raw.3;
+stMSTA.bUnused0 := nMSTA_Raw.4;
+stMSTA.bClosedLoop := nMSTA_Raw.5;
+stMSTA.bSlipStall := nMSTA_Raw.6;
+stMSTA.bHome := nMSTA_Raw.7;
+stMSTA.bEncoderPresent := nMSTA_Raw.8;
+stMSTA.bHardwareProblem := nMSTA_Raw.9;
+stMSTA.bMoving := nMSTA_Raw.10;
+stMSTA.bGainSupport := nMSTA_Raw.11;
+stMSTA.bCommError := nMSTA_Raw.12;
+stMSTA.bMinusLimitSwitch := nMSTA_Raw.13;
+stMSTA.bHomed := nMSTA_Raw.14;
+
+END_FUNCTION_BLOCK
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-lrealfromepics">FB_LREALFromEPICS</a></p></li>
+<li><p><a class="reference internal" href="#st-epicsmotormsta">ST_EpicsMotorMSTA</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
 <section id="fb-ethercatdiag">
 <h2>FB_EtherCATDiag<a class="headerlink" href="#fb-ethercatdiag" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_EtherCATDiag
@@ -1678,6 +2196,7 @@ IF tMasterError.Q THEN
 END_IF
 
 END_FUNCTION_BLOCK
+
 ACTION DiagnosticJson:
 fbJson.StartObject();
     fbJson.AddKey(&#39;ecat_diag&#39;);
@@ -1754,6 +2273,7 @@ fbJson.EndObject();
 fbJson.CopyDocument(fbLogger.sJson, SIZEOF(fbLogger.sJson));
 fbJson.ResetDocument();
 END_ACTION
+
 ACTION M_CheckMasterDevState:
 (* check master errors based on devstate *)
 bMasterDevStateError                                := nMasterDevState &lt;&gt; 0;
@@ -1768,6 +2288,7 @@ stMasterDevState.bAtLeastOneNotInOp := ((nMasterDevState AND 16#100) = 16#100) O
 stMasterDevState.bDcNotInSync               := (nMasterDevState AND 16#1000) = 16#1000;
 nMasterDevStatePrev                                 := nMasterDevState;
 END_ACTION
+
 ACTION M_GetScannedSlaveName:
 rSlaveInfoScanned REF= arrSlaveInfoScanned[aiDiagIndex[iIdx]];
 rScannedSlaveInfo REF= arrScannedSlaveInfo[aiDiagIndex[iIdx]];
@@ -1839,6 +2360,7 @@ IF NOT fbGetSlaveName.BUSY THEN
     END_IF
 END_IF
 END_ACTION
+
 ACTION M_GetSlaveAdresses:
 fbGetSlaveAddresses(
     sNetId          := sMasterNetID,
@@ -1859,6 +2381,7 @@ IF NOT fbGetSlaveAddresses.bBusy THEN
     iState := GetSlaveStates;
 END_IF
 END_ACTION
+
 ACTION M_GetSlaveIdentity:
 iDiagIndex := aiDiagIndex[iIdx];
 iDiagPort := aiDiagPort[iIdx];
@@ -1885,6 +2408,7 @@ IF NOT fbGetSlaveIdentity.bBusy THEN
     iState := E_EcatDiagState.GetSlaveName;
 END_IF
 END_ACTION
+
 ACTION M_GetSlaveName:
 fbGetSlaveName(
     NETID           := sIPCNetId,
@@ -1907,6 +2431,7 @@ IF NOT fbGetSlaveName.BUSY THEN
     iState := E_EcatDiagState.GetScannedSlaveName;
 END_IF
 END_ACTION
+
 ACTION M_GetSlaveStates:
 fbGetAllSlaveStates(
     sNetId          := sMasterNetID,
@@ -1970,6 +2495,7 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
     END_IF
 END_IF
 END_ACTION
+
 ACTION M_GetTopoData:
 fbGetTopologyData(
     NETID   := sMasterNetID,
@@ -2013,6 +2539,7 @@ IF NOT fbGetTopologyData.BUSY THEN
     iState := E_EcatDiagState.ScanSlaves;
 END_IF
 END_ACTION
+
 ACTION M_GetTopoDataLen:
 fbGetTopologyData(
     NETID   := sMasterNetID,
@@ -2031,6 +2558,7 @@ IF NOT fbGetTopologyData.BUSY THEN
     iState := E_EcatDiagState.GetTopoData;
 END_IF
 END_ACTION
+
 ACTION M_ScanSlaves:
 fbEcGetScannedSlaves(
     bExecute                                := TRUE,
@@ -2218,95 +2746,335 @@ END_ACTION
 <span class="p">{</span><span class="n">analysis</span> <span class="o">-</span><span class="mi">2</span><span class="p">}</span> <span class="o">//</span><span class="n">Only</span> <span class="n">the</span> <span class="n">methods</span> <span class="ow">and</span> <span class="n">actions</span> <span class="n">are</span> <span class="n">needed</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
+
 <span class="n">ACTION</span> <span class="n">Dec</span><span class="p">:</span>
 <span class="n">nVal</span> <span class="o">:=</span> <span class="n">nVal</span> <span class="o">-</span> <span class="n">ValInc</span><span class="p">;</span>
 <span class="n">IF</span> <span class="n">nVal</span> <span class="o">&lt;</span> <span class="n">LowerLimit</span> <span class="n">THEN</span> <span class="n">nVal</span> <span class="o">:=</span> <span class="n">UpperLimit</span><span class="p">;</span> <span class="n">END_IF</span>
 <span class="n">END_ACTION</span>
+
 <span class="n">ACTION</span> <span class="n">Inc</span><span class="p">:</span>
 <span class="o">//</span> <span class="n">Dont</span> <span class="n">use</span> <span class="n">this</span><span class="p">,</span> <span class="n">use</span> <span class="n">ValInc</span>
 <span class="n">nVal</span> <span class="o">:=</span> <span class="n">nVal</span> <span class="o">+</span> <span class="n">ValInc</span><span class="p">;</span>
 <span class="n">IF</span> <span class="n">nVal</span> <span class="o">&gt;</span>  <span class="n">UpperLimit</span> <span class="n">THEN</span> <span class="n">nVal</span> <span class="o">:=</span> <span class="n">LowerLimit</span><span class="p">;</span> <span class="n">END_IF</span>
 <span class="n">END_ACTION</span>
+
+<span class="o">//</span><span class="n">Decrement</span> <span class="n">the</span> <span class="n">counter</span> <span class="ow">and</span> <span class="k">return</span> <span class="n">new</span> <span class="n">value</span>
+<span class="n">METHOD</span> <span class="n">DecVal</span> <span class="p">:</span> <span class="n">INT</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">Dec</span><span class="p">();</span>
+<span class="n">DecVal</span> <span class="o">:=</span> <span class="n">nVal</span><span class="p">;</span>
+<span class="n">END_METHOD</span>
+
+<span class="o">//</span><span class="n">Increment</span> <span class="n">the</span> <span class="n">counter</span> <span class="ow">and</span> <span class="k">return</span> <span class="n">new</span> <span class="n">value</span>
+<span class="n">METHOD</span> <span class="n">PUBLIC</span> <span class="n">IncVal</span> <span class="p">:</span> <span class="n">INT</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">Inc</span><span class="p">();</span>
+<span class="n">IncVal</span> <span class="o">:=</span> <span class="n">nVal</span><span class="p">;</span>
+<span class="n">END_METHOD</span>
 </pre></div>
 </div>
 </section>
 <section id="fb-listener">
 <h2>FB_Listener<a class="headerlink" href="#fb-listener" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_Listener</span> <span class="n">EXTENDS</span> <span class="n">FB_ListenerBase</span>
-<span class="n">VAR_INPUT</span>
-<span class="n">END_VAR</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_Listener EXTENDS FB_ListenerBase
+VAR_INPUT
+END_VAR
 
-<span class="n">VAR_OUTPUT</span>
-<span class="n">END_VAR</span>
+VAR_OUTPUT
+END_VAR
 
-<span class="n">VAR</span>
-    <span class="n">nEventIdx</span>                       <span class="p">:</span>       <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">nPendingEvents</span>          <span class="p">:</span>       <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+VAR
+    nEventIdx                       :       UINT := 0;
+    nPendingEvents          :       UINT := 0;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">LogToVisualStudio</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">bLogToVisualStudio</span>      <span class="p">:</span>       <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: LogToVisualStudio
+        io: io
+    &#39;}
+    bLogToVisualStudio      :       BOOL := FALSE;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">MessagesSent</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">nCntMessagesSent</span>        <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: MessagesSent
+        io: i
+    &#39;}
+    nCntMessagesSent        : UDINT := 0;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsRaised</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">nCntAlarmsRaised</span>        <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: AlarmsRaised
+        io: i
+    &#39;}
+    nCntAlarmsRaised        : UDINT := 0;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsConfirmed</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">nCntAlarmsConfirmed</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: AlarmsConfirmed
+        io: i
+    &#39;}
+    nCntAlarmsConfirmed : UDINT := 0;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">AlarmsCleared</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">nCntAlarmsCleared</span>       <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: AlarmsCleared
+        io: i
+    &#39;}
+    nCntAlarmsCleared       : UDINT := 0;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">MinSeverity</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">eMinSeverity</span>            <span class="p">:</span> <span class="n">TcEventSeverity</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: MinSeverity
+        io: io
+    &#39;}
+    eMinSeverity            : TcEventSeverity;
 
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">Log</span>
-    <span class="s1">&#39;}</span>
-    <span class="n">stEventInfo</span>             <span class="p">:</span>       <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">ST_LoggingEventInfo</span><span class="p">;</span>
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: Log
+    &#39;}
+    stEventInfo             :       REFERENCE TO ST_LoggingEventInfo;
 
-    <span class="n">stPendingEvents</span>         <span class="p">:</span>       <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="n">nMaxEvents</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_PendingEvent</span><span class="p">;</span>
-    <span class="n">ipMessageConfig</span>         <span class="p">:</span>       <span class="n">ITcEventFilterConfig</span><span class="p">;</span>
-    <span class="n">fbSocket</span>                        <span class="p">:</span>       <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">FB_ConnectionlessSocket</span><span class="p">;</span>
-    <span class="n">bConfigured</span>                     <span class="p">:</span>       <span class="n">BOOL</span>    <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
-
-
-<span class="n">END_VAR</span>
-
-<span class="n">VAR_IN_OUT</span>
-
-<span class="n">END_VAR</span>
-
-<span class="n">VAR</span> <span class="n">CONSTANT</span>
-    <span class="o">//</span> <span class="n">The</span> <span class="n">maximum</span> <span class="n">number</span> <span class="n">of</span> <span class="n">events</span> <span class="n">allowed</span> <span class="o">*</span><span class="n">per</span><span class="o">-</span><span class="n">cycle</span><span class="o">*</span>
-    <span class="n">nMaxEvents</span>                      <span class="p">:</span>       <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">10</span><span class="p">;</span>
-<span class="n">END_VAR</span>
+    stPendingEvents         :       ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
+    ipMessageConfig         :       ITcEventFilterConfig;
+    fbSocket                        :       POINTER TO FB_ConnectionlessSocket;
+    bConfigured                     :       BOOL    := FALSE;
 
 
-<span class="n">END_FUNCTION_BLOCK</span>
+END_VAR
+
+VAR_IN_OUT
+
+END_VAR
+
+VAR CONSTANT
+    // The maximum number of events allowed *per-cycle*
+    nMaxEvents                      :       UINT := 10;
+END_VAR
+
+
+END_FUNCTION_BLOCK
+
+(*
+    Configure an event class + severity
+*)
+METHOD Configure : HRESULT
+VAR_INPUT
+    i_EventClass    :       GUID;
+    i_MinSeverity   :       TcEventSeverity := TcEventSeverity.Verbose;
+    i_fbSocket              :       POINTER TO FB_ConnectionlessSocket;
+END_VAR
+
+VAR_INST
+    bSubscribed             :       BOOL := FALSE;
+END_VAR
+IF bSubscribed THEN
+    Unsubscribe();
+END_IF
+
+THIS^.Subscribe(ADR(ipMessageConfig), 0);
+bSubscribed         := TRUE;
+eMinSeverity        := i_MinSeverity;
+fbSocket            := i_fbSocket;
+
+IF (ipMessageConfig = 0) THEN
+    Configure       := 1;
+    bConfigured := FALSE;
+ELSE
+    ipMessageConfig.AddEventClass(i_EventClass, i_MinSeverity);
+    Configure       := 0;
+    bConfigured := TRUE;
+END_IF
+END_METHOD
+
+METHOD OnAlarmCleared
+VAR_INPUT
+    fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+(* Callback run from THIS^.Execute() *)
+nCntAlarmsCleared := nCntAlarmsCleared + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmCleared);
+END_METHOD
+
+METHOD OnAlarmConfirmed
+VAR_INPUT
+    fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+(* Callback run from THIS^.Execute() *)
+nCntAlarmsConfirmed := nCntAlarmsConfirmed + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmConfirmed);
+END_METHOD
+
+METHOD OnAlarmRaised
+VAR_INPUT
+    fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+(* Callback run from THIS^.Execute() *)
+nCntAlarmsRaised := nCntAlarmsRaised + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.AlarmRaised);
+END_METHOD
+
+METHOD OnMessageSent
+VAR_INPUT
+    fbEvent : REFERENCE TO FB_TcEvent;
+END_VAR
+(* Callback run from THIS^.Execute() *)
+nCntMessagesSent := nCntMessagesSent + 1;
+StoreEvent(fbEvent, eEventType:=E_LogEventType.MessageSent);
+END_METHOD
+
+METHOD PublishEvents : HRESULT
+VAR
+    nEvent                          :       UINT;
+    stPendingEvent          :       REFERENCE TO ST_PendingEvent;
+    stEventInfo                     :       REFERENCE TO ST_LoggingEventInfo;
+    fbRequestEventText      :       REFERENCE TO FB_RequestEventText;
+END_VAR
+
+VAR_INST
+    fbJson                          :       FB_JsonSaxWriter;
+    fbJsonDataType          :       FB_JsonReadWriteDataType;
+    sJsonDoc                        :       STRING(10000);
+
+END_VAR
+IF nPendingEvents = 0 THEN
+    RETURN;
+END_IF
+
+FOR nEvent := 0 TO nMaxEvents - 1 DO
+    stPendingEvent REF= stPendingEvents[nEvent];
+    IF NOT stPendingEvent.bInUse THEN
+        CONTINUE;
+    END_IF
+
+    fbRequestEventText REF= stPendingEvent.fbRequestEventText;
+    stEventInfo        REF= stPendingEvent.stEventInfo;
+
+    IF fbRequestEventText.bError THEN
+        stEventInfo.Msg := &#39;(Unable to retrieve message)&#39;;
+    ELSIF NOT fbRequestEventText.bBusy THEN
+        fbRequestEventText.GetString(stEventInfo.msg, SIZEOF(stEventInfo.msg));
+    ELSE
+        CONTINUE;
+    END_IF
+
+    IF bConfigured THEN
+        stEventInfo.plc := GVL_Logger.sPlcHostname;
+
+        // Generate the JSON message
+        fbJson.ResetDocument();
+        fbJsonDataType.AddJsonValueFromSymbol(fbJson, &#39;ST_LoggingEventInfo&#39;, SIZEOF(stEventInfo), ADR(stEventInfo));
+        fbJson.CopyDocument(sJsonDoc, SIZEOF(sJsonDoc));
+
+        SendMessage(sMessage:=ADR(sJsonDoc));
+    END_IF
+
+    // Mark as not in use, and fill in this event in the next StoreEvent call
+    nPendingEvents                  := nPendingEvents - 1;
+    stPendingEvent.bInUse   := FALSE;
+    nEventIdx                               := nEvent;
+
+END_FOR
+END_METHOD
+
+METHOD SendMessage : HRESULT
+VAR_INPUT
+    sMessage                :       POINTER TO STRING;
+END_VAR
+
+VAR
+    sLogStr                 :       T_MaxString;
+END_VAR
+(* For subclasses to override, if necessary *)
+IF sMessage = 0 THEN
+    RETURN;
+END_IF
+
+// Optionally log it to Visual Studio&#39;s message list
+IF bLogToVisualStudio THEN
+     // Keep the message length under 255 (extended string function for LEFT/MID do not exist)
+    STRNCPY(ADR(sLogStr), sMessage, MIN(220, SIZEOF(sLogStr)));
+    ADSLOGSTR(
+        msgCtrlMask := ADSLOG_MSGTYPE_HINT,
+        msgFmtStr   := &#39;[Logger JSON Debug] %s&#39;,
+        strArg      := sLogStr
+    );
+END_IF
+
+IF fbSocket &lt;&gt; 0 THEN
+    // And send it along to logstash
+    F_SendUDPMessage(sMessage:=sMessage, fbSocket:=fbSocket^,
+                     sHost:=GVL_Logger.cLogHost, iPort:=GVL_Logger.iLogPort);
+END_IF
+END_METHOD
+
+METHOD PRIVATE StoreEvent : HRESULT
+VAR_INPUT
+    fbEvent         :       REFERENCE TO FB_TcEvent;
+    eEventType      :       E_LogEventType;
+END_VAR
+
+VAR
+    stPendingEvent  :       REFERENCE TO ST_PendingEvent;
+    stEventInfo             :       REFERENCE TO ST_LoggingEventInfo;
+    nFailures               :       UINT := 0;
+END_VAR
+IF fbEvent.eSeverity &lt; eMinSeverity THEN
+    // Ignore all messages below the minimum severity
+    RETURN;
+ELSIF NOT __ISVALIDREF(fbEvent) THEN
+    RETURN;
+END_IF
+
+// Find the next slot to use in stPendingEvents
+WHILE stPendingEvents[nEventIdx].bInUse AND nFailures &lt; nMaxEvents DO
+    nFailures := nFailures + 1;
+    IF ((nEventIdx := (nEventIdx + 1)) = nMaxEvents) THEN
+        nEventIdx := 0;
+    END_IF
+END_WHILE
+
+IF (nFailures = nMaxEvents) THEN
+    ADSLOGSTR(
+        msgCtrlMask := ADSLOG_MSGTYPE_ERROR,
+        msgFmtStr   := &#39;Logging message buffer full (%s)&#39;,
+        strArg              := UINT_TO_STRING(nMaxEvents),
+    );
+    RETURN;
+END_IF
+
+nPendingEvents                      :=      nPendingEvents + 1;
+nCntMessagesSent            :=      nCntMessagesSent + 1;
+
+stPendingEvent                      REF= stPendingEvents[nEventIdx];
+stEventInfo                         REF= stPendingEvent.stEventInfo;
+stPendingEvent.bInUse       := TRUE;
+
+stEventInfo.id                      := fbEvent.nEventId;
+stEventInfo.event_class     := GUID_TO_STRING(fbEvent.EventClass);
+stEventInfo.severity        := fbEvent.eSeverity;
+stEventInfo.ts                      := F_ConvertTicksToUnixTimestamp(fbEvent.nTimestamp);
+stEventInfo.source          := fbEvent.ipSourceInfo.sName;
+stEventInfo.event_type      := eEventType;
+
+fbEvent.GetJsonAttribute(stEventInfo.json, SIZEOF(stEventInfo.json));
+stPendingEvent.fbRequestEventText.Request(eventClass:=fbEvent.EventClass, nEventId:=fbEvent.nEventId, nLangId:=1033, ipArgs:=fbEvent.ipArguments);
+END_METHOD
+
+PROPERTY PUBLIC LogToVisualStudio : BOOL
+VAR
+END_VAR
+LogToVisualStudio := bLogToVisualStudio;
+END_PROPERTY
+
+PROPERTY PUBLIC LogToVisualStudio : BOOL
+VAR
+    bValue : BOOL;
+END_VAR
+THIS^.bLogToVisualStudio := bValue;
+END_PROPERTY
 </pre></div>
 </div>
 <dl class="simple">
 <dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-converttickstounixtimestamp">F_ConvertTicksToUnixTimestamp</a></p></li>
+<li><p><a class="reference internal" href="#f-sendudpmessage">F_SendUDPMessage</a></p></li>
+<li><p><a class="reference internal" href="#gvl-logger">GVL_Logger</a></p></li>
 <li><p><a class="reference internal" href="#st-pendingevent">ST_PendingEvent</a></p></li>
 </ul>
 </dd>
@@ -2462,6 +3230,7 @@ END_ACTION
 <span class="n">END_FOR</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
+
 <span class="n">ACTION</span> <span class="n">CircuitBreaker</span><span class="p">:</span>
 <span class="o">//</span> <span class="n">Global</span> <span class="n">log</span> <span class="n">circuit</span> <span class="n">breaker</span>
 <span class="p">(</span><span class="o">*</span>
@@ -2687,6 +3456,7 @@ END_ACTION
 <span class="n">END_IF</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
+
 <span class="n">ACTION</span> <span class="n">CircuitBreaker</span><span class="p">:</span>
 <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">:=</span> <span class="n">GVL_Logger</span><span class="o">.</span><span class="n">nGlobAccEvents</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 
@@ -3028,6 +3798,296 @@ END_FUNCTION_BLOCK
 </pre></div>
 </div>
 </section>
+<section id="fb-test-epicscentroidmonitor">
+<h2>FB_Test_EpicsCentroidMonitor<a class="headerlink" href="#fb-test-epicscentroidmonitor" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;call_after_init&#39;</span><span class="p">}</span>
+<span class="n">FUNCTION_BLOCK</span> <span class="n">FB_Test_EpicsCentroidMonitor</span> <span class="n">EXTENDS</span> <span class="n">TcUnit</span><span class="o">.</span><span class="n">FB_TestSuite</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">TestBasics</span><span class="p">();</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+
+<span class="n">METHOD</span> <span class="n">TestBasics</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_INST</span>
+    <span class="n">fbMonitor</span> <span class="p">:</span> <span class="n">FB_EpicsCentroidMonitor</span><span class="p">;</span>
+    <span class="n">nCount</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Basic&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0S);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">);</span>
+
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bIsUpdating</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Centroid not reporting updating&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Min change&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fMaximumFrameTime</span><span class="o">:=</span><span class="mf">0.2</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0.1S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fMaximumFrameTime</span><span class="o">:=</span><span class="mf">0.2</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bIsUpdating</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Centroid update below threshold and is not updating&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0.1S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fMaximumFrameTime</span><span class="o">:=</span><span class="mf">0.2</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bIsUpdating</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Centroid update above threshold and is updating&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Severity invalidation&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0.2S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Invalid data - x severity&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0.2S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Invalid data - y severity&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0.2S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Invalid data - count severity&#39;</span><span class="p">);</span>
+
+<span class="n">nCount</span> <span class="o">:=</span> <span class="n">nCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">WriteCentroidValue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fX</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fY</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nCount</span><span class="o">:=</span><span class="n">nCount</span><span class="p">,</span> <span class="n">nX_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nY_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nCount_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tLastUpdate</span><span class="o">:=</span><span class="n">T</span><span class="c1">#0.1S);</span>
+<span class="n">fbMonitor</span><span class="p">(</span><span class="n">fMinimumValidChange</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Data valid&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bIsUpdating</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Data valid and updating&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+<span class="n">END_METHOD</span>
+
+<span class="n">METHOD</span> <span class="n">WriteCentroidValue</span>
+<span class="n">VAR_IN_OUT</span>
+    <span class="n">fbMonitor</span> <span class="p">:</span> <span class="n">FB_EpicsCentroidMonitor</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">fX</span> <span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">fY</span> <span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">nCount</span> <span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
+    <span class="n">nX_Severity</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nY_Severity</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nCount_Severity</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">tLastUpdate</span> <span class="p">:</span> <span class="n">TIME</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">WRITE_PROTECTED_INT</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbCentroidX</span><span class="o">.</span><span class="n">iPLCInternalSeverity</span><span class="p">),</span> <span class="n">nX_Severity</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_INT</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbCentroidY</span><span class="o">.</span><span class="n">iPLCInternalSeverity</span><span class="p">),</span> <span class="n">nY_Severity</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_INT</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbArrayCounter</span><span class="o">.</span><span class="n">iPLCInternalSeverity</span><span class="p">),</span> <span class="n">nCount_Severity</span><span class="p">);</span>
+
+<span class="n">WRITE_PROTECTED_LREAL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbCentroidX</span><span class="o">.</span><span class="n">fPLCInternalValue</span><span class="p">),</span> <span class="n">fX</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_LREAL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbCentroidY</span><span class="o">.</span><span class="n">fPLCInternalValue</span><span class="p">),</span> <span class="n">fY</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_LREAL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbArrayCounter</span><span class="o">.</span><span class="n">fPLCInternalValue</span><span class="p">),</span> <span class="n">INT_TO_LREAL</span><span class="p">(</span><span class="n">nCount</span><span class="p">));</span>
+
+<span class="n">WRITE_PROTECTED_TIME</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">tLastUpdate</span><span class="p">),</span> <span class="n">TIME</span><span class="p">()</span> <span class="o">-</span> <span class="n">tLastUpdate</span><span class="p">);</span>
+<span class="n">END_METHOD</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-epicscentroidmonitor">FB_EpicsCentroidMonitor</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="fb-test-epicsmotormonitor">
+<h2>FB_Test_EpicsMotorMonitor<a class="headerlink" href="#fb-test-epicsmotormonitor" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;call_after_init&#39;</span><span class="p">}</span>
+<span class="n">FUNCTION_BLOCK</span> <span class="n">FB_Test_EpicsMotorMonitor</span> <span class="n">EXTENDS</span> <span class="n">TcUnit</span><span class="o">.</span><span class="n">FB_TestSuite</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">TestBasics</span><span class="p">();</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+
+<span class="n">METHOD</span> <span class="n">TestBasics</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_INST</span>
+    <span class="n">fbMonitor</span> <span class="p">:</span> <span class="n">FB_EpicsMotorMonitor</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Basic&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Data valid&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Severities&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Invalid RBV&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Invalid status&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Invalid moving&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;All valid&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Moving&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span> <span class="p">(</span><span class="o">*</span> <span class="n">DMOV</span> <span class="o">*</span><span class="p">),</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bIsMoving</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Moving&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">1</span> <span class="p">(</span><span class="o">*</span> <span class="n">DMOV</span> <span class="o">*</span><span class="p">),</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">bIsMoving</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Not moving&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;Position&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertEquals_LREAL</span><span class="p">(</span><span class="n">Actual</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fPosition</span><span class="p">,</span> <span class="n">Expected</span><span class="o">:=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Delta</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Position 1 OK&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nRBV_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nMoving_Severity</span><span class="o">:=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+<span class="n">AssertEquals_LREAL</span><span class="p">(</span><span class="n">Actual</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fPosition</span><span class="p">,</span> <span class="n">Expected</span><span class="o">:=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">Delta</span><span class="o">:=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;Position 2 OK&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;MSTA set&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">16</span><span class="c1">#0FFFF, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bPositiveDirection</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bPositiveDirection True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bDone</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bDone True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bPlusLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bPlusLimitSwitch True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHomeLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHomeLimitSwitch True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bUnused0</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bUnused0 True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bClosedLoop</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bClosedLoop True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bSlipStall</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bSlipStall True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHome</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHome True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bEncoderPresent</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bEncoderPresent True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHardwareProblem</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHardwareProblem True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bMoving</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bMoving True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bGainSupport</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bGainSupport True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bCommError</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bCommError True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bMinusLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bMinusLimitSwitch True&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHomed</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHomed True&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;MSTA zero&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">16</span><span class="c1">#0000, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bPositiveDirection</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bPositiveDirection False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bDone</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bDone False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bPlusLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bPlusLimitSwitch False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHomeLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHomeLimitSwitch False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bUnused0</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bUnused0 False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bClosedLoop</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bClosedLoop False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bSlipStall</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bSlipStall False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHome</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHome False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bEncoderPresent</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bEncoderPresent False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHardwareProblem</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHardwareProblem False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bMoving</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bMoving False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bGainSupport</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bGainSupport False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bCommError</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bCommError False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bMinusLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bMinusLimitSwitch False&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHomed</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHomed False&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+
+
+<span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;MSTA something&#39;</span><span class="p">);</span>
+
+<span class="n">WriteData</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">:=</span><span class="n">fbMonitor</span><span class="p">,</span> <span class="n">fRBV</span><span class="o">:=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nMoving</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nStatus</span><span class="o">:=</span><span class="mi">2</span><span class="c1">#0100_0011_0000_0110, nRBV_Severity:=0, nStatus_Severity:=0, nMoving_Severity:=0);</span>
+<span class="n">fbMonitor</span><span class="p">();</span>
+
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bPositiveDirection</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bPositiveDirection&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bDone</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bDone&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bPlusLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bPlusLimitSwitch&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHomeLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHomeLimitSwitch&#39;</span><span class="p">);</span>
+
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bUnused0</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bUnused0&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bClosedLoop</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bClosedLoop&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bSlipStall</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bSlipStall&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHome</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHome&#39;</span><span class="p">);</span>
+
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bEncoderPresent</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bEncoderPresent&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHardwareProblem</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHardwareProblem&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bMoving</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bMoving&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bGainSupport</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bGainSupport&#39;</span><span class="p">);</span>
+
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bCommError</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bCommError&#39;</span><span class="p">);</span>
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bMinusLimitSwitch</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bMinusLimitSwitch&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">stMSTA</span><span class="o">.</span><span class="n">bHomed</span><span class="p">,</span> <span class="n">Message</span><span class="o">:=</span><span class="s1">&#39;bHomed&#39;</span><span class="p">);</span>
+
+<span class="n">TEST_FINISHED</span><span class="p">();</span>
+<span class="n">END_METHOD</span>
+
+<span class="n">METHOD</span> <span class="n">WriteData</span>
+<span class="n">VAR_IN_OUT</span>
+    <span class="n">fbMonitor</span> <span class="p">:</span> <span class="n">FB_EpicsMotorMonitor</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">fRBV</span> <span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
+    <span class="n">nMoving</span> <span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
+    <span class="n">nStatus</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
+    <span class="n">nRBV_Severity</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nStatus_Severity</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nMoving_Severity</span> <span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">WRITE_PROTECTED_INT</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbRBVCheck</span><span class="o">.</span><span class="n">iPLCInternalSeverity</span><span class="p">),</span> <span class="n">nRBV_Severity</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_INT</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbMotorStatusCheck</span><span class="o">.</span><span class="n">iPLCInternalSeverity</span><span class="p">),</span> <span class="n">nStatus_Severity</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_INT</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbMovingCheck</span><span class="o">.</span><span class="n">iPLCInternalSeverity</span><span class="p">),</span> <span class="n">nMoving_Severity</span><span class="p">);</span>
+
+<span class="n">WRITE_PROTECTED_LREAL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbRBVCheck</span><span class="o">.</span><span class="n">fPLCInternalValue</span><span class="p">),</span> <span class="n">fRBV</span><span class="p">);</span>
+<span class="n">WRITE_PROTECTED_LREAL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbMotorStatusCheck</span><span class="o">.</span><span class="n">fPLCInternalValue</span><span class="p">),</span> <span class="n">UINT_TO_LREAL</span><span class="p">(</span><span class="n">nStatus</span><span class="p">));</span>
+<span class="n">WRITE_PROTECTED_LREAL</span><span class="p">(</span><span class="n">ADR</span><span class="p">(</span><span class="n">fbMonitor</span><span class="o">.</span><span class="n">fbMovingCheck</span><span class="o">.</span><span class="n">fPLCInternalValue</span><span class="p">),</span> <span class="n">INT_TO_LREAL</span><span class="p">(</span><span class="n">nMoving</span><span class="p">));</span>
+<span class="n">END_METHOD</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-epicsmotormonitor">FB_EpicsMotorMonitor</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
 <section id="fb-thermocouple">
 <h2>FB_ThermoCouple<a class="headerlink" href="#fb-thermocouple" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_ThermoCouple</span>
@@ -3358,6 +4418,9 @@ END_FUNCTION_BLOCK
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROGRAM</span> <span class="n">RUN_TESTS</span>
 <span class="n">VAR</span>
     <span class="n">CbTest</span>    <span class="p">:</span>    <span class="n">FB_CircuitBreaker_Test</span><span class="p">;</span>
+    <span class="n">fbCentroidTest</span> <span class="p">:</span> <span class="n">FB_Test_EpicsCentroidMonitor</span><span class="p">;</span>
+    <span class="n">fbMotorTest</span> <span class="p">:</span> <span class="n">FB_Test_EpicsMotorMonitor</span><span class="p">;</span>
+
 <span class="n">END_VAR</span>
 <span class="n">TcUnit</span><span class="o">.</span><span class="n">RUN</span><span class="p">();</span>
 
@@ -3367,6 +4430,8 @@ END_FUNCTION_BLOCK
 <dl class="simple">
 <dt>Related:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#fb-circuitbreaker-test">FB_CircuitBreaker_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-test-epicscentroidmonitor">FB_Test_EpicsCentroidMonitor</a></p></li>
+<li><p><a class="reference internal" href="#fb-test-epicsmotormonitor">FB_Test_EpicsMotorMonitor</a></p></li>
 </ul>
 </dd>
 </dl>

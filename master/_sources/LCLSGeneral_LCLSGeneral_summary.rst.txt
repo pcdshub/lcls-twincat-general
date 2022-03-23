@@ -10,10 +10,10 @@ Settings
       - Value
       - Description
     * - AMS Net ID
-      - 5.40.55.128.1.1
+      - 172.21.148.145.1.1
       -
     * - Target IP address
-      - 5.40.55.128
+      - 172.21.148.145
       - Based on AMS Net ID by convention
     * - AMS Port
       - 851
@@ -24,7 +24,7 @@ Settings
 Pragmas
 -------
 
-Total pragmas found: 87
+Total pragmas found: 102
 Total linter errors: 0
 
 
