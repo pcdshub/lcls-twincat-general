@@ -169,6 +169,9 @@
     <Compile Include="POUs\Hardware\FB_GetPLCIPAddress.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Hardware\FB_LED_PWM.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_ThermoCouple.TcPOU">
       <SubType>Code</SubType>
     </Compile>
