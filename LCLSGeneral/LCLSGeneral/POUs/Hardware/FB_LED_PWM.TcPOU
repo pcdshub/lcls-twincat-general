@@ -2,6 +2,11 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_LED_PWM" Id="{5fae4b24-b1d6-4ac5-a010-9aff4e2893db}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LED_PWM
+(*
+    Reads an percentage of illumination determined by the user and converts it to a raw value
+    to send to the terminal output via the FB_AnalogOutput.
+    2022-5-03 Maarten Thomas-Bosum
+*)
 VAR
 	iIlluminatorINT AT %Q*: INT;
 
@@ -19,30 +24,22 @@ VAR
     fIlluminatorPercent: LREAL;
 	
     fbSetIllPercent: FB_AnalogOutput;
-	
-    bLedInit: BOOL := FALSE; // do i need this variable declaration?
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Turn the LED off by default
-// Clean this up a bit
-IF not bLedInit THEN
-    bLedPower := FALSE;
-//    bLedInit := TRUE;
-END_IF
-
-// Illuminator conversion to percentage
+      <ST><![CDATA[// Illuminator conversion to percentage
 fbSetIllPercent(
     fReal:=fIlluminatorPercent,
     fSafeMax:=100,
     fSafeMin:=0,
-    iTermBits:=14, // want to set scaling to 50% duty cycle = maximum
+    iTermBits:=14, // want to set scaling to 50% duty cycle = maximum raw bits sent to terminal output
     fTermMax:=100,
     fTermMin:=0,
     iRaw=>iIlluminatorINT);
 
 IF  fIlluminatorPercent > 0 THEN
 	bLedPower := TRUE;
+ELSE
+	bLEDPower := FALSE;
 END_IF]]></ST>
     </Implementation>
     <Method Name="M_Set_IllPercentage" Id="{dbd69c00-c8e8-4492-8041-fbc83238a849}">
