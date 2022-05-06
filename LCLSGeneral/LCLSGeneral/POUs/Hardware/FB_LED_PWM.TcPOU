@@ -42,15 +42,5 @@ ELSE
 	bLEDPower := FALSE;
 END_IF]]></ST>
     </Implementation>
-    <Method Name="M_Set_IllPercentage" Id="{dbd69c00-c8e8-4492-8041-fbc83238a849}">
-      <Declaration><![CDATA[METHOD M_Set_IllPercentage : LREAL
-VAR_INPUT
-	IlluminatorPercent : LREAL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[This^.fIlluminatorPercent := IlluminatorPercent;]]></ST>
-      </Implementation>
-    </Method>
   </POU>
 </TcPlcObject>
