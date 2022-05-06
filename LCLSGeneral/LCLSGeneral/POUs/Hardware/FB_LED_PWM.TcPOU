@@ -7,6 +7,9 @@
     to send to the terminal output via the FB_AnalogOutput.
     2022-5-03 Maarten Thomas-Bosum
 *)
+VAR_INPUT
+	iTermBits : UINT;
+END_VAR
 VAR
 	iIlluminatorINT AT %Q*: INT;
 
@@ -31,7 +34,7 @@ fbSetIllPercent(
     fReal:=fIlluminatorPercent,
     fSafeMax:=100,
     fSafeMin:=0,
-    iTermBits:=14, // want to set scaling to 50% duty cycle = maximum raw bits sent to terminal output
+    iTermBits:=iTermBits, 
     fTermMax:=100,
     fTermMin:=0,
     iRaw=>iIlluminatorINT);
