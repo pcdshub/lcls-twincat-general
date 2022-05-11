@@ -35,7 +35,7 @@ VAR
 
     {attribute 'pytmc' := '
         pv: CIL:PCT
-        EGU: %
+        field: EGU %
     '}
     fIlluminatorPercent: LREAL;
 	
