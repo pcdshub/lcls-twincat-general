@@ -22,6 +22,12 @@
 *)
 VAR_INPUT
 	iTermBits : UINT;
+	
+	{attribute 'pytmc' := '
+        pv: CIL:PCT
+        field: EGU %
+    '}
+    fIlluminatorPercent: LREAL;
 END_VAR
 VAR
 	iIlluminatorINT AT %Q*: INT;
@@ -32,12 +38,6 @@ VAR
         field: ONAM ON
     '}
     bLedPower AT %Q*: BOOL;
-
-    {attribute 'pytmc' := '
-        pv: CIL:PCT
-        field: EGU %
-    '}
-    fIlluminatorPercent: LREAL;
 	
     fbSetIllPercent: FB_AnalogOutput;
 END_VAR]]></Declaration>
