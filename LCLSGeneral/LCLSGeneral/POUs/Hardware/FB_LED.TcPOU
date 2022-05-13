@@ -24,7 +24,7 @@ VAR_INPUT
 	iTermBits : UINT;
 	
 	{attribute 'pytmc' := '
-        pv: CIL:PCT
+        pv: ILL:PCT
         field: EGU %
     '}
     fIlluminatorPercent: LREAL;
