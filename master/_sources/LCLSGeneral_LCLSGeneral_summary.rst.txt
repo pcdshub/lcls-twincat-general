@@ -24,7 +24,7 @@ Settings
 Pragmas
 -------
 
-Total pragmas found: 102
+Total pragmas found: 104
 Total linter errors: 0
 
 
@@ -91,94 +91,6 @@ DefaultGlobals
         DefaultGlobals.fTimeStamp, LREAL, 674190144 (64)
         DefaultGlobals.stSys, ST_System, 674190048 (88)
         DefaultGlobals.stSys.I_EcatMaster1, AMSNETID, 674190088 (48)
-
-
-GVL
-^^^
-
-.. csv-table::
-    :header: Symbol, Type, Offset/Size
-    :align: center
-
-        GVL.nLangId_OnlineMonitoring, DINT, 4305376 (32)
-
-
-GVL_INTERNAL
-^^^^^^^^^^^^
-
-.. csv-table::
-    :header: Symbol, Type, Offset/Size
-    :align: center
-
-        GVL_INTERNAL.UNINITIALIZED_CLASS_GUID, GUID, 4305728 (128)
-
-
-GVL_Logger
-^^^^^^^^^^
-
-.. raw:: html
-
-   <details>
-       <summary>14 Symbols</summary>
-
-.. csv-table::
-    :header: Symbol, Type, Offset/Size
-    :align: center
-
-        GVL_Logger.bTrickleTripped, BOOL, 634519656 (8)
-        GVL_Logger.cLogHost, STRING(15), 674190224 (128)
-        GVL_Logger.fbRootLogger, FB_LogMessage, 674191296 (81600)
-        GVL_Logger.iLogPort, UINT, 674190352 (16)
-        GVL_Logger.nGlobAccEvents, UDINT, 674272896 (32)
-        GVL_Logger.nLocalTrickleTripThreshold, TIME, 674190496 (32)
-        GVL_Logger.nLocalTripThreshold, TIME, 674190432 (32)
-        GVL_Logger.nMinTimeViolationAcceptable, INT, 674190464 (16)
-        GVL_Logger.nTrickleThreshold, UDINT, 674272928 (32)
-        GVL_Logger.nTrickleTripTime, TIME, 674190528 (32)
-        GVL_Logger.nTripResetPeriod, TIME, 674190560 (32)
-        GVL_Logger.sIpTidbit, STRING(6), 674190368 (56)
-        GVL_Logger.sPlcHostname, STRING(80), 674190592 (648)
-        GVL_Logger.TCPADS_MAXUDP_BUFFSIZE, UDINT, 674191264 (32)
-
-.. raw:: html
-
-   </details>
-   <br />
-
-
-GVL_Param_TcUnit
-^^^^^^^^^^^^^^^^
-
-.. csv-table::
-    :header: Symbol, Type, Offset/Size
-    :align: center
-
-        GVL_Param_TcUnit.AdsLogMessageFifoRingBufferSize, UINT, 4310176 (16)
-        GVL_Param_TcUnit.LogExtendedResults, BOOL, 4303320 (8)
-        GVL_Param_TcUnit.MaxNumberOfAssertsForEachTestSuite, UINT, 4308064 (16)
-        GVL_Param_TcUnit.MaxNumberOfTestsForEachTestSuite, UINT, 4308048 (16)
-        GVL_Param_TcUnit.MaxNumberOfTestSuites, UINT, 4308032 (16)
-        GVL_Param_TcUnit.xUnitBufferSize, UDINT, 4308096 (32)
-        GVL_Param_TcUnit.xUnitEnablePublish, BOOL, 4308080 (8)
-        GVL_Param_TcUnit.xUnitFilePath, STRING(255), 4308128 (2048)
-
-
-GVL_TcUnit
-^^^^^^^^^^
-
-.. csv-table::
-    :header: Symbol, Type, Offset/Size
-    :align: center
-
-        GVL_TcUnit.AdsMessageQueue, FB_AdsLogStringMessageFifoQueue, 626171264 (8320864)
-        GVL_TcUnit.CurrentTestIsFinished, BOOL, 4310192 (8)
-        GVL_TcUnit.CurrentTestNameBeingCalled, STRING(255), 626137184 (2048)
-        GVL_TcUnit.CurrentTestSuiteBeingCalled, POINTER TO FB_TestSuite, 626137152 (32)
-        GVL_TcUnit.IgnoreCurrentTest, BOOL, 4310200 (8)
-        GVL_TcUnit.NumberOfInitializedTestSuites, UINT, 626139232 (16)
-        GVL_TcUnit.TcUnitRunner, FB_TcUnitRunner, 4310208 (621826944)
-        GVL_TcUnit.TestSuiteAddresses, POINTER TO FB_TestSuite, 626139264 (32000)
-        GVL_TcUnit.TestSuiteIsRegistered, BOOL, 4308088 (8)
 
 
 Global_Constants
@@ -493,6 +405,94 @@ Global_Version
    <br />
 
 
+GVL
+^^^
+
+.. csv-table::
+    :header: Symbol, Type, Offset/Size
+    :align: center
+
+        GVL.nLangId_OnlineMonitoring, DINT, 4305376 (32)
+
+
+GVL_INTERNAL
+^^^^^^^^^^^^
+
+.. csv-table::
+    :header: Symbol, Type, Offset/Size
+    :align: center
+
+        GVL_INTERNAL.UNINITIALIZED_CLASS_GUID, GUID, 4305728 (128)
+
+
+GVL_Logger
+^^^^^^^^^^
+
+.. raw:: html
+
+   <details>
+       <summary>14 Symbols</summary>
+
+.. csv-table::
+    :header: Symbol, Type, Offset/Size
+    :align: center
+
+        GVL_Logger.bTrickleTripped, BOOL, 634519656 (8)
+        GVL_Logger.cLogHost, STRING(15), 674190224 (128)
+        GVL_Logger.fbRootLogger, FB_LogMessage, 674191296 (81600)
+        GVL_Logger.iLogPort, UINT, 674190352 (16)
+        GVL_Logger.nGlobAccEvents, UDINT, 674272896 (32)
+        GVL_Logger.nLocalTrickleTripThreshold, TIME, 674190496 (32)
+        GVL_Logger.nLocalTripThreshold, TIME, 674190432 (32)
+        GVL_Logger.nMinTimeViolationAcceptable, INT, 674190464 (16)
+        GVL_Logger.nTrickleThreshold, UDINT, 674272928 (32)
+        GVL_Logger.nTrickleTripTime, TIME, 674190528 (32)
+        GVL_Logger.nTripResetPeriod, TIME, 674190560 (32)
+        GVL_Logger.sIpTidbit, STRING(6), 674190368 (56)
+        GVL_Logger.sPlcHostname, STRING(80), 674190592 (648)
+        GVL_Logger.TCPADS_MAXUDP_BUFFSIZE, UDINT, 674191264 (32)
+
+.. raw:: html
+
+   </details>
+   <br />
+
+
+GVL_Param_TcUnit
+^^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: Symbol, Type, Offset/Size
+    :align: center
+
+        GVL_Param_TcUnit.AdsLogMessageFifoRingBufferSize, UINT, 4310176 (16)
+        GVL_Param_TcUnit.LogExtendedResults, BOOL, 4303320 (8)
+        GVL_Param_TcUnit.MaxNumberOfAssertsForEachTestSuite, UINT, 4308064 (16)
+        GVL_Param_TcUnit.MaxNumberOfTestsForEachTestSuite, UINT, 4308048 (16)
+        GVL_Param_TcUnit.MaxNumberOfTestSuites, UINT, 4308032 (16)
+        GVL_Param_TcUnit.xUnitBufferSize, UDINT, 4308096 (32)
+        GVL_Param_TcUnit.xUnitEnablePublish, BOOL, 4308080 (8)
+        GVL_Param_TcUnit.xUnitFilePath, STRING(255), 4308128 (2048)
+
+
+GVL_TcUnit
+^^^^^^^^^^
+
+.. csv-table::
+    :header: Symbol, Type, Offset/Size
+    :align: center
+
+        GVL_TcUnit.AdsMessageQueue, FB_AdsLogStringMessageFifoQueue, 626171264 (8320864)
+        GVL_TcUnit.CurrentTestIsFinished, BOOL, 4310192 (8)
+        GVL_TcUnit.CurrentTestNameBeingCalled, STRING(255), 626137184 (2048)
+        GVL_TcUnit.CurrentTestSuiteBeingCalled, POINTER TO FB_TestSuite, 626137152 (32)
+        GVL_TcUnit.IgnoreCurrentTest, BOOL, 4310200 (8)
+        GVL_TcUnit.NumberOfInitializedTestSuites, UINT, 626139232 (16)
+        GVL_TcUnit.TcUnitRunner, FB_TcUnitRunner, 4310208 (621826944)
+        GVL_TcUnit.TestSuiteAddresses, POINTER TO FB_TestSuite, 626139264 (32000)
+        GVL_TcUnit.TestSuiteIsRegistered, BOOL, 4308088 (8)
+
+
 ParameterList
 ^^^^^^^^^^^^^
 
@@ -513,16 +513,6 @@ RUN_TESTS
         RUN_TESTS.CbTest, FB_CircuitBreaker_Test, 634519680 (39667840)
 
 
-TC_EVENTS
-^^^^^^^^^
-
-.. csv-table::
-    :header: Symbol, Type, Offset/Size
-    :align: center
-
-        TC_EVENTS.LCLSGeneralEventClass, LCLSGeneralEventClass, 674319648 (960)
-
-
 TC_EVENT_CLASSES
 ^^^^^^^^^^^^^^^^
 
@@ -536,6 +526,16 @@ TC_EVENT_CLASSES
         TC_EVENT_CLASSES.TcRTimeEventClass, GUID, 674329056 (128)
         TC_EVENT_CLASSES.TcSystemEventClass, GUID, 674328672 (128)
         TC_EVENT_CLASSES.Win32EventClass, GUID, 674329184 (128)
+
+
+TC_EVENTS
+^^^^^^^^^
+
+.. csv-table::
+    :header: Symbol, Type, Offset/Size
+    :align: center
+
+        TC_EVENTS.LCLSGeneralEventClass, LCLSGeneralEventClass, 674319648 (960)
 
 
 TwinCAT_SystemInfoVarList

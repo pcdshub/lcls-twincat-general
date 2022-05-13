@@ -96,6 +96,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-getplchostname">FB_GetPLCHostname</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-getplcipaddress">FB_GetPLCIPAddress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-index">FB_Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-led">FB_LED</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-listener">FB_Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-loghandler">FB_LogHandler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-logmessage">FB_LogMessage</a></li>
@@ -2775,6 +2776,73 @@ END_ACTION
 <span class="n">END_METHOD</span>
 </pre></div>
 </div>
+</section>
+<section id="fb-led">
+<h2>FB_LED<a class="headerlink" href="#fb-led" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LED</span>
+<span class="p">(</span><span class="o">*</span>
+    <span class="n">Reads</span> <span class="n">a</span> <span class="n">percentage</span> <span class="n">of</span> <span class="n">illumination</span> <span class="n">determined</span> <span class="n">by</span> <span class="n">the</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">converts</span> <span class="n">it</span> <span class="n">to</span> <span class="n">a</span> <span class="n">raw</span> <span class="n">value</span>
+    <span class="n">to</span> <span class="n">send</span> <span class="n">to</span> <span class="n">the</span> <span class="n">terminal</span> <span class="n">output</span> <span class="n">via</span> <span class="n">the</span> <span class="n">FB_AnalogOutput</span><span class="o">.</span>
+
+    <span class="n">The</span> <span class="n">determination</span> <span class="n">of</span> <span class="n">the</span> <span class="n">full</span> <span class="n">scale</span> <span class="n">raw</span> <span class="n">value</span> <span class="p">(</span><span class="n">FSV</span><span class="p">)</span> <span class="ow">is</span> <span class="n">calculated</span> <span class="n">via</span> <span class="n">the</span> <span class="n">iTermBits</span><span class="p">,</span>
+    <span class="n">which</span> <span class="ow">is</span> <span class="n">setup</span> <span class="k">as</span> <span class="n">an</span> <span class="nb">input</span> <span class="n">variable</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">according</span> <span class="n">to</span> <span class="n">the</span> <span class="n">situation</span><span class="o">.</span> <span class="n">This</span> <span class="n">value</span>
+    <span class="ow">is</span> <span class="n">bounded</span> <span class="n">by</span> <span class="n">the</span> <span class="n">FSV</span> <span class="n">of</span> <span class="n">the</span> <span class="n">terminal</span> <span class="nb">set</span> <span class="n">by</span> <span class="n">the</span> <span class="n">Beckhoff</span> <span class="n">architecture</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="o">^</span><span class="mi">15</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">32767.</span>
+
+    <span class="n">Through</span> <span class="n">the</span> <span class="n">configurable</span> <span class="nb">max</span> <span class="n">raw</span> <span class="n">value</span> <span class="n">sent</span> <span class="n">to</span> <span class="n">the</span> <span class="n">terminal</span> <span class="n">output</span><span class="p">,</span> <span class="n">this</span> <span class="n">LED</span> <span class="n">function</span> <span class="n">block</span>
+    <span class="ow">is</span> <span class="n">applicable</span> <span class="n">to</span> <span class="n">a</span> <span class="n">wider</span> <span class="n">variety</span> <span class="n">of</span> <span class="n">hardware</span><span class="p">:</span> <span class="n">whether</span> <span class="n">it</span> <span class="n">be</span> <span class="n">simple</span> <span class="n">Analog</span> <span class="n">Voltage</span> <span class="n">control</span><span class="p">,</span>
+    <span class="n">PWM</span> <span class="n">voltage</span> <span class="n">output</span><span class="p">,</span> <span class="ow">or</span> <span class="n">current</span> <span class="n">controlled</span> <span class="n">output</span><span class="o">.</span>
+
+    <span class="n">As</span> <span class="n">an</span> <span class="n">initial</span> <span class="n">application</span><span class="p">,</span> <span class="n">this</span> <span class="n">FB</span> <span class="n">will</span> <span class="n">be</span> <span class="n">instituted</span> <span class="k">for</span> <span class="n">systems</span> <span class="n">of</span> <span class="n">vaccum</span> <span class="n">chamber</span> <span class="n">LED</span>
+    <span class="n">illuminators</span> <span class="n">on</span> <span class="n">TMO</span> <span class="n">endstations</span><span class="p">,</span> <span class="n">which</span> <span class="n">are</span> <span class="n">rated</span> <span class="k">for</span> <span class="mi">12</span> <span class="n">V</span> <span class="nb">max</span><span class="o">.</span> <span class="n">They</span> <span class="n">will</span> <span class="n">be</span> <span class="n">dimmed</span> <span class="n">via</span> <span class="n">the</span>
+    <span class="n">EL2502</span> <span class="n">terminal</span> <span class="mi">24</span> <span class="n">V</span> <span class="n">PWM</span> <span class="n">output</span> <span class="n">voltage</span> <span class="n">control</span> <span class="kn">from</span> <span class="mi">0</span><span class="o">-</span><span class="mi">50</span><span class="o">%</span> <span class="n">duty</span> <span class="n">cycle</span><span class="o">.</span>
+
+    <span class="mi">2022</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="mi">03</span> <span class="n">Maarten</span> <span class="n">Thomas</span><span class="o">-</span><span class="n">Bosum</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">iTermBits</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">ILL</span><span class="p">:</span><span class="n">PCT</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="o">%</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">fIlluminatorPercent</span><span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">PWR</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">ZNAM</span> <span class="n">OFF</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">ONAM</span> <span class="n">ON</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">bLedPower</span> <span class="n">AT</span> <span class="o">%</span><span class="n">Q</span><span class="o">*</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="n">iIlluminatorINT</span> <span class="n">AT</span> <span class="o">%</span><span class="n">Q</span><span class="o">*</span><span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
+    <span class="n">fbSetIllPercent</span><span class="p">:</span> <span class="n">FB_AnalogOutput</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Illuminator</span> <span class="n">conversion</span> <span class="n">to</span> <span class="n">percentage</span>
+<span class="n">fbSetIllPercent</span><span class="p">(</span>
+    <span class="n">fReal</span><span class="o">:=</span><span class="n">fIlluminatorPercent</span><span class="p">,</span>
+    <span class="n">fSafeMax</span><span class="o">:=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">fSafeMin</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">iTermBits</span><span class="o">:=</span><span class="n">iTermBits</span><span class="p">,</span>
+    <span class="n">fTermMax</span><span class="o">:=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">fTermMin</span><span class="o">:=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">iRaw</span><span class="o">=&gt;</span><span class="n">iIlluminatorINT</span><span class="p">);</span>
+
+<span class="n">IF</span>  <span class="n">fIlluminatorPercent</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">THEN</span>
+    <span class="n">bLedPower</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">bLEDPower</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-analogoutput">FB_AnalogOutput</a></p></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section id="fb-listener">
 <h2>FB_Listener<a class="headerlink" href="#fb-listener" title="Permalink to this headline"></a></h2>
