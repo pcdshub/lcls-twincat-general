@@ -24,6 +24,8 @@ VAR_INPUT
 	{attribute 'pytmc' := '
         pv: NAME
         io: io 
+		field: DESC Descriptive name for the LED
+        autosave_pass0: VAL DESC
     '}
 	ledName : STRING;
 	
