@@ -21,6 +21,12 @@
     2022-5-03 Maarten Thomas-Bosum
 *)
 VAR_INPUT
+	{attribute 'pytmc' := '
+        pv: NAME
+        io: io 
+    '}
+	ledName : STRING;
+	
 	iTermBits : UINT;
 	
 	{attribute 'pytmc' := '
