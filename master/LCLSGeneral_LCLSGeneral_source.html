@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/doctr-versions-menu.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -145,9 +146,9 @@
            <div itemprop="articleBody">
              
   <section id="duts">
-<h1>DUTs<a class="headerlink" href="#duts" title="Permalink to this headline"></a></h1>
+<h1>DUTs<a class="headerlink" href="#duts" title="Permalink to this heading"></a></h1>
 <section id="e-ecatdiagstate">
-<h2>E_EcatDiagState<a class="headerlink" href="#e-ecatdiagstate" title="Permalink to this headline"></a></h2>
+<h2>E_EcatDiagState<a class="headerlink" href="#e-ecatdiagstate" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">E_EcatDiagState</span> <span class="p">:</span>
 <span class="p">(</span>
     <span class="n">Idle</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
@@ -173,7 +174,7 @@
 </dl>
 </section>
 <section id="e-eccommstate">
-<h2>E_EcCommState<a class="headerlink" href="#e-eccommstate" title="Permalink to this headline"></a></h2>
+<h2>E_EcCommState<a class="headerlink" href="#e-eccommstate" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">E_EcCommState</span> <span class="p">:</span> <span class="p">(</span>
     <span class="n">eEcState_UNDEFINED</span>      <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">eEcState_INIT</span>           <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
@@ -187,7 +188,7 @@
 </div>
 </section>
 <section id="e-logeventtype-wc">
-<h2>E_LogEventType_WC<a class="headerlink" href="#e-logeventtype-wc" title="Permalink to this headline"></a></h2>
+<h2>E_LogEventType_WC<a class="headerlink" href="#e-logeventtype-wc" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
 <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
 <span class="n">TYPE</span> <span class="n">E_LogEventType_WC</span> <span class="p">:</span>
@@ -205,7 +206,7 @@
 </div>
 </section>
 <section id="e-subsystem">
-<h2>E_Subsystem<a class="headerlink" href="#e-subsystem" title="Permalink to this headline"></a></h2>
+<h2>E_Subsystem<a class="headerlink" href="#e-subsystem" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">LCLS</span> <span class="n">Defined</span> <span class="n">subsystems</span><span class="p">,</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">these</span> <span class="n">correspond</span> <span class="k">with</span> <span class="n">casSubsystems</span> <span class="ow">in</span> <span class="n">FB_LogMessage</span>
 <span class="n">TYPE</span> <span class="n">E_Subsystem</span> <span class="p">:</span>
 <span class="p">(</span>
@@ -228,7 +229,7 @@
 </dl>
 </section>
 <section id="st-ecdevice">
-<h2>ST_EcDevice<a class="headerlink" href="#st-ecdevice" title="Permalink to this headline"></a></h2>
+<h2>ST_EcDevice<a class="headerlink" href="#st-ecdevice" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">EtherCAT</span> <span class="n">Device</span> <span class="n">struct</span> <span class="k">for</span> <span class="n">EtherCAT</span> <span class="n">diagnostics</span>
 <span class="n">TYPE</span> <span class="n">ST_EcDevice</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
@@ -244,7 +245,7 @@
 </div>
 </section>
 <section id="st-ecmasterdevstate">
-<h2>ST_EcMasterDevState<a class="headerlink" href="#st-ecmasterdevstate" title="Permalink to this headline"></a></h2>
+<h2>ST_EcMasterDevState<a class="headerlink" href="#st-ecmasterdevstate" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_EcMasterDevState</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="n">eEcState</span>                        <span class="p">:</span> <span class="n">E_EcCommState</span><span class="p">;</span>
@@ -270,7 +271,7 @@
 </dl>
 </section>
 <section id="st-epicsmotormsta">
-<h2>ST_EpicsMotorMSTA<a class="headerlink" href="#st-epicsmotormsta" title="Permalink to this headline"></a></h2>
+<h2>ST_EpicsMotorMSTA<a class="headerlink" href="#st-epicsmotormsta" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_EpicsMotorMSTA</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
 
@@ -311,7 +312,7 @@
 </div>
 </section>
 <section id="st-fbdiagnostics">
-<h2>ST_FbDiagnostics<a class="headerlink" href="#st-fbdiagnostics" title="Permalink to this headline"></a></h2>
+<h2>ST_FbDiagnostics<a class="headerlink" href="#st-fbdiagnostics" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Stuff</span> <span class="n">to</span> <span class="n">log</span> <span class="n">messages</span> <span class="n">within</span> <span class="n">function</span> <span class="n">blocks</span>
 <span class="n">TYPE</span> <span class="n">ST_FbDiagnostics</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
@@ -336,7 +337,7 @@
 </dl>
 </section>
 <section id="st-loggingeventinfo-wc">
-<h2>ST_LoggingEventInfo_WC<a class="headerlink" href="#st-loggingeventinfo-wc" title="Permalink to this headline"></a></h2>
+<h2>ST_LoggingEventInfo_WC<a class="headerlink" href="#st-loggingeventinfo-wc" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>TYPE ST_LoggingEventInfo_WC :
 STRUCT
     (*
@@ -442,7 +443,7 @@ END_TYPE
 </div>
 </section>
 <section id="st-pendingevent">
-<h2>ST_PendingEvent<a class="headerlink" href="#st-pendingevent" title="Permalink to this headline"></a></h2>
+<h2>ST_PendingEvent<a class="headerlink" href="#st-pendingevent" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_PendingEvent</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
 
@@ -459,7 +460,7 @@ END_TYPE
 </div>
 </section>
 <section id="st-portaddr">
-<h2>ST_PortAddr<a class="headerlink" href="#st-portaddr" title="Permalink to this headline"></a></h2>
+<h2>ST_PortAddr<a class="headerlink" href="#st-portaddr" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_PortAddr</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="n">portA</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
@@ -472,7 +473,7 @@ END_TYPE
 </div>
 </section>
 <section id="st-slavestate">
-<h2>ST_SlaveState<a class="headerlink" href="#st-slavestate" title="Permalink to this headline"></a></h2>
+<h2>ST_SlaveState<a class="headerlink" href="#st-slavestate" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_SlaveState</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="p">(</span><span class="o">*</span> <span class="n">slave</span> <span class="n">state</span> <span class="o">*</span><span class="p">)</span>
@@ -503,7 +504,7 @@ END_TYPE
 </dl>
 </section>
 <section id="st-slavestateinfo">
-<h2>ST_SlaveStateInfo<a class="headerlink" href="#st-slavestateinfo" title="Permalink to this headline"></a></h2>
+<h2>ST_SlaveStateInfo<a class="headerlink" href="#st-slavestateinfo" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_SlaveStateInfo</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="n">nIndex</span>                  <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span>
@@ -526,7 +527,7 @@ END_TYPE
 </dl>
 </section>
 <section id="st-slavestateinfoscanned">
-<h2>ST_SlaveStateInfoScanned<a class="headerlink" href="#st-slavestateinfoscanned" title="Permalink to this headline"></a></h2>
+<h2>ST_SlaveStateInfoScanned<a class="headerlink" href="#st-slavestateinfoscanned" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_SlaveStateInfoScanned</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="n">nIndex</span>                  <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span>
@@ -542,7 +543,7 @@ END_TYPE
 </div>
 </section>
 <section id="st-system">
-<h2>ST_System<a class="headerlink" href="#st-system" title="Permalink to this headline"></a></h2>
+<h2>ST_System<a class="headerlink" href="#st-system" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Defacto</span> <span class="n">system</span> <span class="n">structure</span><span class="p">,</span> <span class="n">must</span> <span class="n">be</span> <span class="n">included</span> <span class="ow">in</span> <span class="nb">all</span> <span class="n">projects</span>
 <span class="n">TYPE</span> <span class="n">ST_System</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
@@ -567,7 +568,7 @@ END_TYPE
 </dl>
 </section>
 <section id="st-topologydata">
-<h2>ST_TopologyData<a class="headerlink" href="#st-topologydata" title="Permalink to this headline"></a></h2>
+<h2>ST_TopologyData<a class="headerlink" href="#st-topologydata" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_TopologyData</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
     <span class="n">iOwnPhysicalAddr</span>        <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
@@ -589,9 +590,9 @@ END_TYPE
 </section>
 </section>
 <section id="gvls">
-<h1>GVLs<a class="headerlink" href="#gvls" title="Permalink to this headline"></a></h1>
+<h1>GVLs<a class="headerlink" href="#gvls" title="Permalink to this heading"></a></h1>
 <section id="defaultglobals">
-<h2>DefaultGlobals<a class="headerlink" href="#defaultglobals" title="Permalink to this headline"></a></h2>
+<h2>DefaultGlobals<a class="headerlink" href="#defaultglobals" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">These</span> <span class="n">are</span> <span class="n">variables</span> <span class="n">every</span> <span class="n">PLC</span> <span class="n">project</span> <span class="n">should</span> <span class="n">have</span>
 <span class="n">VAR_GLOBAL</span>
 
@@ -608,7 +609,7 @@ END_TYPE
 </dl>
 </section>
 <section id="global-variables-ethercat">
-<h2>Global_Variables_EtherCAT<a class="headerlink" href="#global-variables-ethercat" title="Permalink to this headline"></a></h2>
+<h2>Global_Variables_EtherCAT<a class="headerlink" href="#global-variables-ethercat" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
     <span class="n">iSLAVEADDR_ARR_SIZE</span>     <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">256</span><span class="p">;</span>
     <span class="n">ESC_MAX_PORTS</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">;</span> <span class="o">//</span> <span class="n">Maximum</span> <span class="n">number</span> <span class="n">of</span> <span class="n">ports</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="n">on</span> <span class="n">ESC</span>
@@ -617,7 +618,7 @@ END_TYPE
 </div>
 </section>
 <section id="gvl-logger">
-<h2>GVL_Logger<a class="headerlink" href="#gvl-logger" title="Permalink to this headline"></a></h2>
+<h2>GVL_Logger<a class="headerlink" href="#gvl-logger" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{attribute &#39;qualified only&#39;}
 //Global variables for logging to syslog
 VAR_GLOBAL CONSTANT
@@ -696,9 +697,9 @@ END_VAR
 </section>
 </section>
 <section id="pous">
-<h1>POUs<a class="headerlink" href="#pous" title="Permalink to this headline"></a></h1>
+<h1>POUs<a class="headerlink" href="#pous" title="Permalink to this heading"></a></h1>
 <section id="f-converttickstounixtimestamp">
-<h2>F_ConvertTicksToUnixTimestamp<a class="headerlink" href="#f-converttickstounixtimestamp" title="Permalink to this headline"></a></h2>
+<h2>F_ConvertTicksToUnixTimestamp<a class="headerlink" href="#f-converttickstounixtimestamp" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">F_ConvertTicksToUnixTimestamp</span> <span class="p">:</span> <span class="n">LREAL</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">nTimestamp</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
@@ -716,7 +717,7 @@ END_VAR
 </div>
 </section>
 <section id="f-sendudpmessage">
-<h2>F_SendUDPMessage<a class="headerlink" href="#f-sendudpmessage" title="Permalink to this headline"></a></h2>
+<h2>F_SendUDPMessage<a class="headerlink" href="#f-sendudpmessage" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">F_SendUDPMessage</span> <span class="p">:</span> <span class="n">HRESULT</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">sMessage</span>                        <span class="p">:</span>       <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">STRING</span><span class="p">;</span>
@@ -745,7 +746,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-analoginput">
-<h2>FB_AnalogInput<a class="headerlink" href="#fb-analoginput" title="Permalink to this headline"></a></h2>
+<h2>FB_AnalogInput<a class="headerlink" href="#fb-analoginput" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_AnalogInput</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Converts</span> <span class="n">the</span> <span class="n">integer</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">analog</span> <span class="nb">input</span> <span class="n">terminal</span> <span class="n">to</span> <span class="n">a</span> <span class="n">real</span> <span class="n">unit</span> <span class="n">value</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="n">volts</span><span class="p">)</span>
@@ -780,7 +781,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-analogoutput">
-<h2>FB_AnalogOutput<a class="headerlink" href="#fb-analogoutput" title="Permalink to this headline"></a></h2>
+<h2>FB_AnalogOutput<a class="headerlink" href="#fb-analogoutput" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_AnalogOutput</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Converts</span> <span class="n">a</span> <span class="n">real</span> <span class="n">unit</span> <span class="n">value</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="n">volts</span><span class="p">)</span> <span class="n">to</span> <span class="n">the</span> <span class="n">integer</span> <span class="n">needed</span> <span class="k">for</span> <span class="n">an</span> <span class="n">analog</span> <span class="n">output</span> <span class="n">terminal</span><span class="o">.</span>
@@ -824,7 +825,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-basicstats">
-<h2>FB_BasicStats<a class="headerlink" href="#fb-basicstats" title="Permalink to this headline"></a></h2>
+<h2>FB_BasicStats<a class="headerlink" href="#fb-basicstats" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_BasicStats</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Minimalist</span> <span class="n">Array</span> <span class="n">Stats</span> <span class="k">for</span> <span class="n">LREALs</span>
@@ -961,7 +962,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-circuitbreaker-test">
-<h2>FB_CircuitBreaker_Test<a class="headerlink" href="#fb-circuitbreaker-test" title="Permalink to this headline"></a></h2>
+<h2>FB_CircuitBreaker_Test<a class="headerlink" href="#fb-circuitbreaker-test" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;call_after_init&#39;</span><span class="p">}</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_CircuitBreaker_Test</span> <span class="n">EXTENDS</span> <span class="n">TcUnit</span><span class="o">.</span><span class="n">FB_TestSuite</span>
 <span class="n">VAR_INPUT</span>
@@ -1094,7 +1095,7 @@ END_VAR
 </dl>
 </section>
 <section id="fb-coe-fastread">
-<h2>FB_CoE_FastRead<a class="headerlink" href="#fb-coe-fastread" title="Permalink to this headline"></a></h2>
+<h2>FB_CoE_FastRead<a class="headerlink" href="#fb-coe-fastread" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_CoE_FastRead</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Utility</span> <span class="n">to</span> <span class="n">repeatedly</span> <span class="n">read</span> <span class="n">a</span> <span class="n">CoE</span> <span class="n">parameter</span>
@@ -1159,7 +1160,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-databuffer">
-<h2>FB_DataBuffer<a class="headerlink" href="#fb-databuffer" title="Permalink to this headline"></a></h2>
+<h2>FB_DataBuffer<a class="headerlink" href="#fb-databuffer" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_DataBuffer</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Function</span> <span class="n">Block</span> <span class="n">to</span> <span class="n">accumulate</span> <span class="n">data</span> <span class="n">into</span> <span class="n">an</span> <span class="n">array</span><span class="o">.</span>
@@ -1220,7 +1221,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-ecatdiag">
-<h2>FB_EcatDiag<a class="headerlink" href="#fb-ecatdiag" title="Permalink to this headline"></a></h2>
+<h2>FB_EcatDiag<a class="headerlink" href="#fb-ecatdiag" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span>
 <span class="n">Ecat</span> <span class="n">bus</span> <span class="n">diagnostic</span> <span class="n">tool</span>
 <span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">4</span> <span class="n">Alex</span> <span class="n">Wallace</span>
@@ -1326,7 +1327,7 @@ END_VAR
 </dl>
 </section>
 <section id="fb-ecatdiagwrapper">
-<h2>FB_EcatDiagWrapper<a class="headerlink" href="#fb-ecatdiagwrapper" title="Permalink to this headline"></a></h2>
+<h2>FB_EcatDiagWrapper<a class="headerlink" href="#fb-ecatdiagwrapper" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_EcatDiagWrapper</span>
 <span class="n">VAR_INPUT</span>
 <span class="n">END_VAR</span>
@@ -1417,7 +1418,7 @@ END_VAR
 </dl>
 </section>
 <section id="fb-el6-com">
-<h2>FB_EL6_Com<a class="headerlink" href="#fb-el6-com" title="Permalink to this headline"></a></h2>
+<h2>FB_EL6_Com<a class="headerlink" href="#fb-el6-com" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_EL6_Com</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Communicate</span> <span class="k">with</span> <span class="n">a</span> <span class="n">serial</span> <span class="n">device</span> <span class="n">connected</span> <span class="n">to</span> <span class="n">an</span> <span class="n">EL6XXX</span>
@@ -1603,7 +1604,7 @@ END_VAR
 </div>
 </section>
 <section id="fb-epicscentroidmonitor">
-<h2>FB_EpicsCentroidMonitor<a class="headerlink" href="#fb-epicscentroidmonitor" title="Permalink to this headline"></a></h2>
+<h2>FB_EpicsCentroidMonitor<a class="headerlink" href="#fb-epicscentroidmonitor" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
     EPICS AreaDetector Stats Plugin Centroid Monitor
 
@@ -1832,7 +1833,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-epicsmotormonitor">
-<h2>FB_EpicsMotorMonitor<a class="headerlink" href="#fb-epicsmotormonitor" title="Permalink to this headline"></a></h2>
+<h2>FB_EpicsMotorMonitor<a class="headerlink" href="#fb-epicsmotormonitor" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
     EPICS Motor Record Monitoring tool
 
@@ -1960,7 +1961,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-ethercatdiag">
-<h2>FB_EtherCATDiag<a class="headerlink" href="#fb-ethercatdiag" title="Permalink to this headline"></a></h2>
+<h2>FB_EtherCATDiag<a class="headerlink" href="#fb-ethercatdiag" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_EtherCATDiag
 VAR_INPUT
     sIPCNetID                                       : T_AmsNetId;   // AmsNetId of the IPC
@@ -2598,7 +2599,7 @@ END_ACTION
 </dl>
 </section>
 <section id="fb-ethercatframediag">
-<h2>FB_EtherCATFrameDiag<a class="headerlink" href="#fb-ethercatframediag" title="Permalink to this headline"></a></h2>
+<h2>FB_EtherCATFrameDiag<a class="headerlink" href="#fb-ethercatframediag" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_EtherCATFrameDiag</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">wFrmXWcState</span>            <span class="p">:</span> <span class="n">WORD</span><span class="p">;</span>                         <span class="o">//</span> <span class="n">FrmXWcState</span>
@@ -2617,7 +2618,7 @@ END_ACTION
 </div>
 </section>
 <section id="fb-getplchostname">
-<h2>FB_GetPLCHostname<a class="headerlink" href="#fb-getplchostname" title="Permalink to this headline"></a></h2>
+<h2>FB_GetPLCHostname<a class="headerlink" href="#fb-getplchostname" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_GetPLCHostname</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">bEnable</span>                 <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
@@ -2663,7 +2664,7 @@ END_ACTION
 </div>
 </section>
 <section id="fb-getplcipaddress">
-<h2>FB_GetPLCIPAddress<a class="headerlink" href="#fb-getplcipaddress" title="Permalink to this headline"></a></h2>
+<h2>FB_GetPLCIPAddress<a class="headerlink" href="#fb-getplcipaddress" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_GetPLCIPAddress</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">bEnable</span>                 <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
@@ -2721,7 +2722,7 @@ END_ACTION
 </dl>
 </section>
 <section id="fb-index">
-<h2>FB_Index<a class="headerlink" href="#fb-index" title="Permalink to this headline"></a></h2>
+<h2>FB_Index<a class="headerlink" href="#fb-index" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span> <span class="n">Index</span> <span class="n">FB</span>
 <span class="n">A</span><span class="o">.</span> <span class="n">Wallace</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">9</span><span class="o">-</span><span class="mi">3</span>
 
@@ -2778,7 +2779,7 @@ END_ACTION
 </div>
 </section>
 <section id="fb-led">
-<h2>FB_LED<a class="headerlink" href="#fb-led" title="Permalink to this headline"></a></h2>
+<h2>FB_LED<a class="headerlink" href="#fb-led" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LED</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Reads</span> <span class="n">a</span> <span class="n">percentage</span> <span class="n">of</span> <span class="n">illumination</span> <span class="n">determined</span> <span class="n">by</span> <span class="n">the</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">converts</span> <span class="n">it</span> <span class="n">to</span> <span class="n">a</span> <span class="n">raw</span> <span class="n">value</span>
@@ -2799,6 +2800,14 @@ END_ACTION
     <span class="mi">2022</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="mi">03</span> <span class="n">Maarten</span> <span class="n">Thomas</span><span class="o">-</span><span class="n">Bosum</span>
 <span class="o">*</span><span class="p">)</span>
 <span class="n">VAR_INPUT</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">NAME</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
+            <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Descriptive</span> <span class="n">name</span> <span class="k">for</span> <span class="n">the</span> <span class="n">LED</span>
+        <span class="n">autosave_pass0</span><span class="p">:</span> <span class="n">VAL</span> <span class="n">DESC</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">ledName</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+
     <span class="n">iTermBits</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
@@ -2845,7 +2854,7 @@ END_ACTION
 </dl>
 </section>
 <section id="fb-listener">
-<h2>FB_Listener<a class="headerlink" href="#fb-listener" title="Permalink to this headline"></a></h2>
+<h2>FB_Listener<a class="headerlink" href="#fb-listener" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_Listener EXTENDS FB_ListenerBase
 VAR_INPUT
 END_VAR
@@ -3149,7 +3158,7 @@ END_PROPERTY
 </dl>
 </section>
 <section id="fb-loghandler">
-<h2>FB_LogHandler<a class="headerlink" href="#fb-loghandler" title="Permalink to this headline"></a></h2>
+<h2>FB_LogHandler<a class="headerlink" href="#fb-loghandler" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LogHandler</span>
 <span class="n">VAR_INPUT</span>
 
@@ -3337,7 +3346,7 @@ END_PROPERTY
 </dl>
 </section>
 <section id="fb-logmessage">
-<h2>FB_LogMessage<a class="headerlink" href="#fb-logmessage" title="Permalink to this headline"></a></h2>
+<h2>FB_LogMessage<a class="headerlink" href="#fb-logmessage" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;reflection&#39;</span><span class="p">}</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LogMessage</span>
 <span class="n">VAR_INPUT</span>
@@ -3579,7 +3588,7 @@ END_PROPERTY
 </dl>
 </section>
 <section id="fb-lrealbuffer">
-<h2>FB_LREALBuffer<a class="headerlink" href="#fb-lrealbuffer" title="Permalink to this headline"></a></h2>
+<h2>FB_LREALBuffer<a class="headerlink" href="#fb-lrealbuffer" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LREALBuffer</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">An</span> <span class="n">example</span> <span class="n">use</span> <span class="n">of</span> <span class="n">FB_DataBuffer</span> <span class="k">for</span> <span class="n">the</span> <span class="n">likely</span> <span class="n">most</span><span class="o">-</span><span class="n">common</span> <span class="n">use</span> <span class="n">case</span><span class="o">.</span>
@@ -3619,7 +3628,7 @@ END_PROPERTY
 </dl>
 </section>
 <section id="fb-lrealfromepics">
-<h2>FB_LREALFromEPICS<a class="headerlink" href="#fb-lrealfromepics" title="Permalink to this headline"></a></h2>
+<h2>FB_LREALFromEPICS<a class="headerlink" href="#fb-lrealfromepics" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
 Function block to link an analog value from EPICS to an LREAL on the PLC
 
@@ -3713,7 +3722,7 @@ END_FUNCTION_BLOCK
 </div>
 </section>
 <section id="fb-stringfromepics">
-<h2>FB_STRINGFromEPICS<a class="headerlink" href="#fb-stringfromepics" title="Permalink to this headline"></a></h2>
+<h2>FB_STRINGFromEPICS<a class="headerlink" href="#fb-stringfromepics" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(*
 Function block to link an analog value from EPICS to a STRING on the PLC
 
@@ -3816,7 +3825,7 @@ END_FUNCTION_BLOCK
 </div>
 </section>
 <section id="fb-tempsensor">
-<h2>FB_TempSensor<a class="headerlink" href="#fb-tempsensor" title="Permalink to this headline"></a></h2>
+<h2>FB_TempSensor<a class="headerlink" href="#fb-tempsensor" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_TempSensor</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Handles</span> <span class="n">scaling</span> <span class="ow">and</span> <span class="n">default</span> <span class="n">diagnostics</span> <span class="k">for</span> <span class="n">temperature</span> <span class="n">sensors</span><span class="p">,</span>
@@ -3867,7 +3876,7 @@ END_FUNCTION_BLOCK
 </div>
 </section>
 <section id="fb-test-epicscentroidmonitor">
-<h2>FB_Test_EpicsCentroidMonitor<a class="headerlink" href="#fb-test-epicscentroidmonitor" title="Permalink to this headline"></a></h2>
+<h2>FB_Test_EpicsCentroidMonitor<a class="headerlink" href="#fb-test-epicscentroidmonitor" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;call_after_init&#39;</span><span class="p">}</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_Test_EpicsCentroidMonitor</span> <span class="n">EXTENDS</span> <span class="n">TcUnit</span><span class="o">.</span><span class="n">FB_TestSuite</span>
 <span class="n">VAR_INPUT</span>
@@ -3980,7 +3989,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-test-epicsmotormonitor">
-<h2>FB_Test_EpicsMotorMonitor<a class="headerlink" href="#fb-test-epicsmotormonitor" title="Permalink to this headline"></a></h2>
+<h2>FB_Test_EpicsMotorMonitor<a class="headerlink" href="#fb-test-epicsmotormonitor" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;call_after_init&#39;</span><span class="p">}</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_Test_EpicsMotorMonitor</span> <span class="n">EXTENDS</span> <span class="n">TcUnit</span><span class="o">.</span><span class="n">FB_TestSuite</span>
 <span class="n">VAR_INPUT</span>
@@ -4157,7 +4166,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-thermocouple">
-<h2>FB_ThermoCouple<a class="headerlink" href="#fb-thermocouple" title="Permalink to this headline"></a></h2>
+<h2>FB_ThermoCouple<a class="headerlink" href="#fb-thermocouple" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_ThermoCouple</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Deprecated</span> <span class="k">as</span> <span class="n">of</span> <span class="mi">2020</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">02</span><span class="p">,</span> <span class="n">please</span> <span class="n">use</span> <span class="n">FB_TempSensor</span> <span class="n">instead</span>
@@ -4210,7 +4219,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-timestampbuffer">
-<h2>FB_TimeStampBuffer<a class="headerlink" href="#fb-timestampbuffer" title="Permalink to this headline"></a></h2>
+<h2>FB_TimeStampBuffer<a class="headerlink" href="#fb-timestampbuffer" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_TimeStampBuffer</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">A</span> <span class="n">Companion</span> <span class="n">to</span> <span class="n">FB_LREALBuffer</span> <span class="n">that</span> <span class="n">accumulates</span> <span class="n">timestamps</span>
@@ -4247,7 +4256,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-timestampbufferglobal">
-<h2>FB_TimeStampBufferGlobal<a class="headerlink" href="#fb-timestampbufferglobal" title="Permalink to this headline"></a></h2>
+<h2>FB_TimeStampBufferGlobal<a class="headerlink" href="#fb-timestampbufferglobal" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_TimeStampBufferGlobal</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">A</span> <span class="n">Variant</span> <span class="n">of</span> <span class="n">FB_TimeStampBuffer</span> <span class="n">that</span> <span class="n">uses</span> <span class="n">the</span> <span class="k">global</span> <span class="n">timestamp</span><span class="o">.</span>
@@ -4286,7 +4295,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-unixtimestamp">
-<h2>FB_UnixTimeStamp<a class="headerlink" href="#fb-unixtimestamp" title="Permalink to this headline"></a></h2>
+<h2>FB_UnixTimeStamp<a class="headerlink" href="#fb-unixtimestamp" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_UnixTimeStamp</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Get</span> <span class="n">the</span> <span class="n">unix</span> <span class="n">timestamp</span> <span class="n">equivalent</span> <span class="n">of</span> <span class="n">the</span> <span class="n">PLC</span><span class="s1">&#39;s time.</span>
@@ -4343,7 +4352,7 @@ END_FUNCTION_BLOCK
 </div>
 </section>
 <section id="fb-unixtimestampglobal">
-<h2>FB_UnixTimeStampGlobal<a class="headerlink" href="#fb-unixtimestampglobal" title="Permalink to this headline"></a></h2>
+<h2>FB_UnixTimeStampGlobal<a class="headerlink" href="#fb-unixtimestampglobal" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_UnixTimeStampGlobal</span>
 <span class="p">(</span><span class="o">*</span>
     <span class="n">Runs</span> <span class="n">FB_UnixTimeStamp</span> <span class="ow">and</span> <span class="n">stuffs</span> <span class="n">the</span> <span class="n">result</span> <span class="n">into</span> <span class="n">this</span> <span class="n">library</span><span class="s1">&#39;s GVL</span>
@@ -4374,7 +4383,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="fb-xkoyoplcmodbus">
-<h2>FB_XKoyoPLCModbus<a class="headerlink" href="#fb-xkoyoplcmodbus" title="Permalink to this headline"></a></h2>
+<h2>FB_XKoyoPLCModbus<a class="headerlink" href="#fb-xkoyoplcmodbus" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Facilitates</span> <span class="n">communication</span> <span class="n">between</span> <span class="n">Beckhoff</span> <span class="ow">and</span> <span class="n">Koyo</span> <span class="n">PLC</span> <span class="n">over</span> <span class="n">the</span> <span class="n">network</span><span class="o">.</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_XKoyoPLCModbus</span>
 <span class="n">VAR</span>
@@ -4462,7 +4471,7 @@ END_FUNCTION_BLOCK
 </div>
 </section>
 <section id="resetcircuitbreakerglobals">
-<h2>ResetCircuitBreakerGlobals<a class="headerlink" href="#resetcircuitbreakerglobals" title="Permalink to this headline"></a></h2>
+<h2>ResetCircuitBreakerGlobals<a class="headerlink" href="#resetcircuitbreakerglobals" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">ResetCircuitBreakerGlobals</span> <span class="p">:</span> <span class="n">BOOL</span>
 <span class="n">VAR_INPUT</span>
 <span class="n">END_VAR</span>
@@ -4482,7 +4491,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="run-tests">
-<h2>RUN_TESTS<a class="headerlink" href="#run-tests" title="Permalink to this headline"></a></h2>
+<h2>RUN_TESTS<a class="headerlink" href="#run-tests" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROGRAM</span> <span class="n">RUN_TESTS</span>
 <span class="n">VAR</span>
     <span class="n">CbTest</span>    <span class="p">:</span>    <span class="n">FB_CircuitBreaker_Test</span><span class="p">;</span>
@@ -4505,7 +4514,7 @@ END_FUNCTION_BLOCK
 </dl>
 </section>
 <section id="system-time-to-rfc3339">
-<h2>SYSTEM_TIME_TO_RFC3339<a class="headerlink" href="#system-time-to-rfc3339" title="Permalink to this headline"></a></h2>
+<h2>SYSTEM_TIME_TO_RFC3339<a class="headerlink" href="#system-time-to-rfc3339" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Converts</span> <span class="n">Beckhoff</span> <span class="n">PLC</span> <span class="n">SYSTEMTIME</span> <span class="n">to</span> <span class="n">RFC3339</span> <span class="n">time</span> <span class="nb">format</span> <span class="k">as</span> <span class="n">a</span> <span class="n">string</span>
 <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
 <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-23&#39;</span><span class="p">}</span>
@@ -4523,7 +4532,7 @@ END_FUNCTION_BLOCK
 </div>
 </section>
 <section id="time-to-100ns">
-<h2>TIME_TO_100NS<a class="headerlink" href="#time-to-100ns" title="Permalink to this headline"></a></h2>
+<h2>TIME_TO_100NS<a class="headerlink" href="#time-to-100ns" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">TIME_TO_100NS</span> <span class="p">:</span> <span class="n">ULINT</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">nTime</span> <span class="p">:</span> <span class="n">TIME</span><span class="p">;</span>
