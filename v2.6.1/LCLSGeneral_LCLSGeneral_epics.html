@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Types &mdash; pcdshub/lcls-twincat-general  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/doctr-versions-menu.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DUTs" href="LCLSGeneral_LCLSGeneral_source.html" />
+    <link rel="prev" title="Settings" href="LCLSGeneral_LCLSGeneral_summary.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pcdshub/lcls-twincat-general
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LCLSGeneral</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_pragmas.html">Pragmas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LCLSGeneral</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#pragmas">Pragmas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#libraries">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#symbols">Symbols</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fb-listener">FB_Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-loghandler">FB_LogHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-logmessage">FB_LogMessage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#st-loggingeventinfo">ST_LoggingEventInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#st-pendingevent">ST_PendingEvent</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#database-records">Database Records</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html">DUTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#gvls">GVLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#pous">POUs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pcdshub/lcls-twincat-general</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Data Types</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/LCLSGeneral_LCLSGeneral_epics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-types">
+<h1>Data Types<a class="headerlink" href="#data-types" title="Permalink to this heading"></a></h1>
+<section id="fb-listener">
+<h2>FB_Listener<a class="headerlink" href="#fb-listener" title="Permalink to this heading"></a></h2>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Record</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Pragma</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$(PREFIX):AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fb-loghandler">
+<h2>FB_LogHandler<a class="headerlink" href="#fb-loghandler" title="Permalink to this heading"></a></h2>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Record</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Pragma</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$(PREFIX):ADS:AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):ADS:MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):ADS:MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).fbTcAdsListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):LCLS:MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):LCLS:MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).fbLCLSListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Router:MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Router:MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).fbTcRouterListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):RTime:MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):RTime:MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).fbTcRTimeListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):System:MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):System:MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).fbTcSystemListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:AlarmsCleared_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.nCntAlarmsCleared</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:AlarmsConfirmed_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.nCntAlarmsConfirmed</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:AlarmsRaised_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.nCntAlarmsRaised</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:Log:EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:Log:EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:Log:Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:Log:Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:Log:MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:Log:MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:Log:Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:Log:Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:Log:Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:Log:Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:LogToVisualStudio</p></td>
+<td><p>bo</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:LogToVisualStudio_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.bLogToVisualStudio</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:MessagesSent_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.nCntMessagesSent</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Windows:MinSeverity</p></td>
+<td><p>mbbo</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Windows:MinSeverity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>$(SYMBOL).fbWindowsListener.eMinSeverity</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fb-logmessage">
+<h2>FB_LogMessage<a class="headerlink" href="#fb-logmessage" title="Permalink to this heading"></a></h2>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Record</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Pragma</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$(PREFIX):Reset</p></td>
+<td><p>bo</p></td>
+<td><p>Rising-edge reset of trip</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Reset_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>Rising-edge reset of trip</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Tripped_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>Log message FB tripped</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="st-loggingeventinfo">
+<h2>ST_LoggingEventInfo<a class="headerlink" href="#st-loggingeventinfo" title="Permalink to this heading"></a></h2>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Record</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Pragma</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$(PREFIX):EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="st-pendingevent">
+<h2>ST_PendingEvent<a class="headerlink" href="#st-pendingevent" title="Permalink to this heading"></a></h2>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Record</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Pragma</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$(PREFIX):EventClass_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>TwinCAT Event class</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):EventType_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>The event type</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Hostname_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>PLC Hostname</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Message_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).stEventInfo.msg</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):MessageID_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>TwinCAT Message ID</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):MessageJSON_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Metadata with the message</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Schema_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>Schema string</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Severity_RBV</p></td>
+<td><p>mbbi</p></td>
+<td><p>TcEventSeverity</p></td>
+<td><div class="line-block">
+<div class="line">field: ONST Info</div>
+<div class="line">field: THST Error</div>
+<div class="line">field: TWST Warning</div>
+<div class="line">field: ZRST Verbose</div>
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX):Source_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>$(SYMBOL).stEventInfo.source</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX):Timestamp_RBV</p></td>
+<td><p>ai</p></td>
+<td><p>Unix timestamp</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="database-records">
+<h1>Database Records<a class="headerlink" href="#database-records" title="Permalink to this heading"></a></h1>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Record</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Pragma</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$(PREFIX)LCLSGeneral:GlobalLogTrickleTrip_RBV</p></td>
+<td><p>bi</p></td>
+<td><p>Tripped by overall log count</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogHost</p></td>
+<td><p>waveform</p></td>
+<td><p>The log host IP address</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX)LCLSGeneral:LogHost_RBV</p></td>
+<td><p>waveform</p></td>
+<td><p>The log host IP address</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogMessageCount_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>Total log messages on the last cycle</p></td>
+<td><div class="line-block">
+<div class="line">io: input</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>$(PREFIX)LCLSGeneral:LogPort</p></td>
+<td><p>longout</p></td>
+<td><p>The log host UDP port</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogPort_RBV</p></td>
+<td><p>longin</p></td>
+<td><p>The log host UDP port</p></td>
+<td><div class="line-block">
+<div class="line">io: output</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="LCLSGeneral_LCLSGeneral_summary.html" class="btn btn-neutral float-left" title="Settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LCLSGeneral_LCLSGeneral_source.html" class="btn btn-neutral float-right" title="DUTs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, SLAC National Accelerator Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
