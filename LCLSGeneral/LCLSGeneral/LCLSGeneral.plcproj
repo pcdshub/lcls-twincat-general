@@ -57,6 +57,10 @@
     <Compile Include="Data types\Misc\ST_System.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GVLs\Constants.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\DefaultGlobals.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

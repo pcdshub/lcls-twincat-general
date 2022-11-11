@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <GVL Name="Constants" Id="{57f2f1ff-0c58-4e70-a147-fb0d6c2bb252}">
+    <Declaration><![CDATA[
+VAR_GLOBAL CONSTANT
+    // 16 including "Unknown" is the max for an EPICS MBBI
+    // This is the max number of user-defined states (OUT, TARGET1, YAG...)
+    MAX_STATES: INT := 15;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
