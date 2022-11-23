@@ -32,7 +32,6 @@
     <Folder Include="Data types" />
     <Folder Include="Data types\Misc" />
     <Folder Include="Data types\EPICS" />
-    <Folder Include="Data types\Motion" />
     <Folder Include="GVLs" />
     <Folder Include="POUs" />
     <Folder Include="POUs\Data\Tests" />
@@ -56,9 +55,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data types\Misc\ST_System.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data types\Motion\DUT_PositionState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\Constants.TcGVL">
