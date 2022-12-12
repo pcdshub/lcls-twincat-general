@@ -1011,22 +1011,22 @@ Database Records
       - | io: input
 
 
-    * - $(PREFIX)LCLSGeneral:LogHost
-      - waveform
-      - The log host IP address
-      - | io: output
-
-
     * - $(PREFIX)LCLSGeneral:LogHost_RBV
       - waveform
       - The log host IP address
       - | io: output
 
 
-    * - $(PREFIX)LCLSGeneral:LogMessageCount_RBV
+    * - $(PREFIX)LCLSGeneral:LogHost
+      - waveform
+      - The log host IP address
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogPort_RBV
       - longin
-      - Total log messages on the last cycle
-      - | io: input
+      - The log host UDP port
+      - | io: output
 
 
     * - $(PREFIX)LCLSGeneral:LogPort
@@ -1035,10 +1035,10 @@ Database Records
       - | io: output
 
 
-    * - $(PREFIX)LCLSGeneral:LogPort_RBV
+    * - $(PREFIX)LCLSGeneral:LogMessageCount_RBV
       - longin
-      - The log host UDP port
-      - | io: output
+      - Total log messages on the last cycle
+      - | io: input
 
 
 

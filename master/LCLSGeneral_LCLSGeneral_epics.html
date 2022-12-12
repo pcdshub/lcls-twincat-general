@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/doctr-versions-menu.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -79,8 +80,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Data Types</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Data Types</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/LCLSGeneral_LCLSGeneral_epics.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -1446,7 +1447,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogHost</p></td>
+<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogHost_RBV</p></td>
 <td><p>waveform</p></td>
 <td><p>The log host IP address</p></td>
 <td><div class="line-block">
@@ -1454,7 +1455,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>$(PREFIX)LCLSGeneral:LogHost_RBV</p></td>
+<tr class="row-even"><td><p>$(PREFIX)LCLSGeneral:LogHost</p></td>
 <td><p>waveform</p></td>
 <td><p>The log host IP address</p></td>
 <td><div class="line-block">
@@ -1462,11 +1463,11 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogMessageCount_RBV</p></td>
+<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogPort_RBV</p></td>
 <td><p>longin</p></td>
-<td><p>Total log messages on the last cycle</p></td>
+<td><p>The log host UDP port</p></td>
 <td><div class="line-block">
-<div class="line">io: input</div>
+<div class="line">io: output</div>
 </div>
 </td>
 </tr>
@@ -1478,11 +1479,11 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogPort_RBV</p></td>
+<tr class="row-odd"><td><p>$(PREFIX)LCLSGeneral:LogMessageCount_RBV</p></td>
 <td><p>longin</p></td>
-<td><p>The log host UDP port</p></td>
+<td><p>Total log messages on the last cycle</p></td>
 <td><div class="line-block">
-<div class="line">io: output</div>
+<div class="line">io: input</div>
 </div>
 </td>
 </tr>

@@ -6,7 +6,7 @@ Pragmas
     :header: PLC Name, Total Pragmas, Errors
     :align: center
 
-    :ref:`LCLSGeneral <LCLSGeneral_overview_pragmas>`, 105, 0
+    :ref:`LCLSGeneral <LCLSGeneral_overview_pragmas>`, 106, 0
 
 
 .. _LCLSGeneral_overview_pragmas:
@@ -15,7 +15,7 @@ Pragmas
 LCLSGeneral
 ^^^^^^^^^^^
 
-Total pragmas found: 105
+Total pragmas found: 106
 Total linter errors: 0
 
 

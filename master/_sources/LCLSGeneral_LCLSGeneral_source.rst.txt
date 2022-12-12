@@ -498,6 +498,21 @@ Related:
     * `ST_System`_
 
 
+GeneralConstants
+^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    VAR_GLOBAL CONSTANT
+        // 16 including "Unknown" is the max for an EPICS MBBI
+        // This is the max number of user-defined states (OUT, TARGET1, YAG...)
+        MAX_STATES: INT := 15;
+    END_VAR
+
+
+
+
 Global_Variables_EtherCAT
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 

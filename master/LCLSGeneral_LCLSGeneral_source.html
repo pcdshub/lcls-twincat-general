@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/doctr-versions-menu.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -74,6 +75,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#gvls">GVLs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#defaultglobals">DefaultGlobals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generalconstants">GeneralConstants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#global-variables-ethercat">Global_Variables_EtherCAT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gvl-logger">GVL_Logger</a></li>
 </ul>
@@ -134,8 +136,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>DUTs</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">DUTs</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/LCLSGeneral_LCLSGeneral_source.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -607,6 +609,17 @@ END_TYPE
 </ul>
 </dd>
 </dl>
+</section>
+<section id="generalconstants">
+<h2>GeneralConstants<a class="headerlink" href="#generalconstants" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
+    <span class="o">//</span> <span class="mi">16</span> <span class="n">including</span> <span class="s2">&quot;Unknown&quot;</span> <span class="ow">is</span> <span class="n">the</span> <span class="nb">max</span> <span class="k">for</span> <span class="n">an</span> <span class="n">EPICS</span> <span class="n">MBBI</span>
+    <span class="o">//</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="nb">max</span> <span class="n">number</span> <span class="n">of</span> <span class="n">user</span><span class="o">-</span><span class="n">defined</span> <span class="n">states</span> <span class="p">(</span><span class="n">OUT</span><span class="p">,</span> <span class="n">TARGET1</span><span class="p">,</span> <span class="n">YAG</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">MAX_STATES</span><span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">15</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+</pre></div>
+</div>
 </section>
 <section id="global-variables-ethercat">
 <h2>Global_Variables_EtherCAT<a class="headerlink" href="#global-variables-ethercat" title="Permalink to this heading"></a></h2>
