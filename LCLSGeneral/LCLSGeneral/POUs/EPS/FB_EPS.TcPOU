@@ -7,7 +7,7 @@ VAR_IN_OUT
 END_VAR
 VAR_OUTPUT
 END_VAR
-VAR 
+VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -17,11 +17,11 @@ END_VAR
       <Declaration><![CDATA[METHOD setBit : BOOL
 VAR_INPUT
     nBits : BYTE;
-	bValue : BOOL;
+    bValue : BOOL;
 END_VAR
 VAR
     nMask : UDINT := 1;
-	nBitValue : UDINT := 0;
+    nBitValue : UDINT := 0;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -29,14 +29,14 @@ END_VAR
 nBitValue := SHR((nMask AND eps.nFlags), nBits);
 
 IF (TO_BOOL(nBitValue)) <> bValue THEN
-	eps.nFlags := eps.nFlags XOR nmask;
+    eps.nFlags := eps.nFlags XOR nmask;
 END_IF
 
 // Check if all values are true
 IF eps.nFlags = 16#FFFFFFFF THEN
-	eps.bEPS_OK := TRUE;
+    eps.bEPS_OK := TRUE;
 ELSE
-	eps.bEPS_OK := FALSE;
+    eps.bEPS_OK := FALSE;
 END_IF
 ]]></ST>
       </Implementation>
@@ -44,7 +44,7 @@ END_IF
     <Method Name="setDescription" Id="{84797ad0-c375-4675-8998-ec2e912fbbdd}">
       <Declaration><![CDATA[METHOD setDescription : BOOL
 VAR_INPUT
-	desciption : STRING;
+    desciption : STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
