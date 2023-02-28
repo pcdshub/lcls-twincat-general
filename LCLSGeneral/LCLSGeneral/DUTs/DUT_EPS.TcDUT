@@ -5,7 +5,7 @@
 STRUCT
     // Contains EPS flags
     {attribute 'pytmc' := '
-        pv: EPS:nFlags
+        pv: nFlags
         io: i
         field: DESC Contains EPS flags
     '}
@@ -13,15 +13,15 @@ STRUCT
 
     // Desciption of values nFlags contains
     {attribute 'pytmc' := '
-        pv: EPS:sFlagDesc
+        pv: sFlagDesc
         io: i
-        field: DESC of nFlag variable
+        field: DESC of nFlag variable, using ';' seperated list.
     '}
     sFlagDesc: STRING;
 
     // Name to use for log messages.
     {attribute 'pytmc' := '
-        pv: EPS:sMessage
+        pv: sMessage
         io: i
         field: DESC Message from EPS to usr
     '}
@@ -29,7 +29,7 @@ STRUCT
 
     // Keep Track if nFlags are all true
     {atribute 'pytmc' := '
-        pv: EPS:bEPS_OK
+        pv: bEPS_OK
         io: i
         field: DESC check if nFlags are all true;
     '}

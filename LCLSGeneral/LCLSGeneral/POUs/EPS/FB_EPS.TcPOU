@@ -29,7 +29,7 @@ END_VAR
 nBitValue := SHR((nMask AND eps.nFlags), nBits);
 
 IF (TO_BOOL(nBitValue)) <> bValue THEN
-    eps.nFlags := eps.nFlags XOR nmask;
+    eps.nFlags := eps.nFlags XOR nMask;
 END_IF
 
 // Check if all values are true
