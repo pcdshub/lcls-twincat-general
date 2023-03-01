@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_EPS" Id="{0c78cf58-96ea-4c52-b0ca-64b7290d1ef9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EPS
+VAR_IN_OUT
+    eps : DUT_EPS;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="setBit" Id="{243035d2-b889-46d7-b89e-610b76586068}">
+      <Declaration><![CDATA[METHOD setBit : BOOL
+VAR_INPUT
+    nBits : BYTE;
+    bValue : BOOL;
+END_VAR
+VAR
+    nMask : UDINT := 1;
+    nBitValue : UDINT := 0;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nMask := SHL(nMask, nBits);
+nBitValue := SHR((nMask AND eps.nFlags), nBits);
+
+IF (TO_BOOL(nBitValue)) <> bValue THEN
+    eps.nFlags := eps.nFlags XOR nMask;
+END_IF
+
+// Check if all values are true
+IF eps.nFlags = 16#FFFFFFFF THEN
+    eps.bEPS_OK := TRUE;
+ELSE
+    eps.bEPS_OK := FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="setDescription" Id="{84797ad0-c375-4675-8998-ec2e912fbbdd}">
+      <Declaration><![CDATA[METHOD setDescription : BOOL
+VAR_INPUT
+    desciption : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eps.sFlagDesc := desciption;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="setMessage" Id="{50553b5a-8e8e-441f-8a78-c5cb5c67e718}">
+      <Declaration><![CDATA[METHOD setMessage : BOOL
+VAR_INPUT
+    message : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eps.sMessage := message;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
