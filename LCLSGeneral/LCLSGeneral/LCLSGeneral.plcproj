@@ -33,6 +33,7 @@
     <Folder Include="Data types\Misc" />
     <Folder Include="Data types\EPICS" />
     <Folder Include="GVLs" />
+    <Folder Include="DUTs" />
     <Folder Include="POUs" />
     <Folder Include="POUs\Data\Tests" />
     <Folder Include="POUs\Diagnostics\DUT" />
@@ -43,6 +44,7 @@
     <Folder Include="POUs\Hardware" />
     <Folder Include="POUs\Diagnostics" />
     <Folder Include="POUs\Logger\Tests" />
+    <Folder Include="POUs\EPS" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\EPICS\ST_EpicsMotorMSTA.TcDUT">
@@ -55,6 +57,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data types\Misc\ST_System.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\DUT_EPS.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\GeneralConstants.TcGVL">
@@ -132,6 +137,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\FB_EtherCATFrameDiag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\EPS\FB_EPS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
