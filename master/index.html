@@ -11,7 +11,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -45,6 +46,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_pragmas.html">Pragmas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">Box Hierarchy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
 </ul>
@@ -95,6 +97,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">Box Hierarchy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
 </ul>
@@ -105,35 +108,11 @@
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#pragmas">Pragmas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#libraries">Libraries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#symbols">Symbols</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#defaultglobals">DefaultGlobals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#global-constants">Global_Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#global-variables">Global_Variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#global-variables-ethercat">Global_Variables_EtherCAT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#global-version">Global_Version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#gvl">GVL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#gvl-internal">GVL_INTERNAL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#gvl-logger">GVL_Logger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#gvl-param-tcunit">GVL_Param_TcUnit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#gvl-tcunit">GVL_TcUnit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#parameterlist">ParameterList</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#run-tests">RUN_TESTS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#tc-event-classes">TC_EVENT_CLASSES</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#tc-events">TC_EVENTS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#twincat-systeminfovarlist">TwinCAT_SystemInfoVarList</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html">Data Types</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#fb-listener">FB_Listener</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#fb-loghandler">FB_LogHandler</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#fb-logmessage">FB_LogMessage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#st-loggingeventinfo">ST_LoggingEventInfo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#st-pendingevent">ST_PendingEvent</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_summary.html#symbols">Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html">Data Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#database-records">Database Records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html">DUTs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#dut-eps">DUT_EPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#e-ecatdiagstate">E_EcatDiagState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#e-eccommstate">E_EcCommState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#e-logeventtype-wc">E_LogEventType_WC</a></li>
@@ -144,7 +123,6 @@
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-fbdiagnostics">ST_FbDiagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-loggingeventinfo-wc">ST_LoggingEventInfo_WC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-pendingevent">ST_PendingEvent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-portaddr">ST_PortAddr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-slavestate">ST_SlaveState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-slavestateinfo">ST_SlaveStateInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#st-slavestateinfoscanned">ST_SlaveStateInfoScanned</a></li>
@@ -156,7 +134,6 @@
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#defaultglobals">DefaultGlobals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#generalconstants">GeneralConstants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#global-variables-ethercat">Global_Variables_EtherCAT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#global-version">Global_Version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#gvl-logger">GVL_Logger</a></li>
 </ul>
 </li>
@@ -174,6 +151,7 @@
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-el6-com">FB_EL6_Com</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-epicscentroidmonitor">FB_EpicsCentroidMonitor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-epicsmotormonitor">FB_EpicsMotorMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-eps">FB_EPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ethercatdiag">FB_EtherCATDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ethercatframediag">FB_EtherCATFrameDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-getplchostname">FB_GetPLCHostname</a></li>

@@ -4,6 +4,52 @@ DUTs
 ----
 
 
+DUT_EPS
+^^^^^^^
+
+::
+
+    TYPE DUT_EPS :
+    STRUCT
+        // Contains EPS flags
+        {attribute 'pytmc' := '
+            pv: nFlags
+            io: i
+            field: DESC Contains EPS flags
+        '}
+        nFlags: UDINT := 16#FFFFFFFF;
+
+        // Desciption of values nFlags contains
+        {attribute 'pytmc' := '
+            pv: sFlagDesc
+            io: i
+            field: DESC semicolon-delimited nFlag variable
+        '}
+        sFlagDesc: STRING;
+
+        // Name to use for log messages.
+        {attribute 'pytmc' := '
+            pv: sMessage
+            io: i
+            field: DESC Message from EPS to usr
+        '}
+        sMessage: STRING;
+
+        // Keep Track if nFlags are all true
+        {atribute 'pytmc' := '
+            pv: bEPS_OK
+            io: i
+            field: DESC check if nFlags are all true;
+        '}
+        bEPS_OK : BOOL := TRUE;
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `DUT_EPS`_
+
+
 E_EcatDiagState
 ^^^^^^^^^^^^^^^
 
@@ -26,8 +72,6 @@ E_EcatDiagState
     END_TYPE
 
 
-Related:
-    * `E_EcatDiagState`_
 
 
 E_EcCommState
@@ -340,23 +384,6 @@ ST_PendingEvent
 
 
 
-ST_PortAddr
-^^^^^^^^^^^
-
-::
-
-    TYPE ST_PortAddr :
-    STRUCT
-        portA : UINT;
-        portB : UINT;
-        portC : UINT;
-        portD : UINT;
-    END_STRUCT
-    END_TYPE
-
-
-
-
 ST_SlaveState
 ^^^^^^^^^^^^^
 
@@ -437,6 +464,7 @@ ST_System
 ::
 
     //Defacto system structure, must be included in all projects
+    {attribute 'analysis' := '-33'}
     TYPE ST_System :
     STRUCT
 
@@ -445,15 +473,11 @@ ST_System
         xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
         xOverrideMode	: BOOL; //This bit is set when using the override features of the system
         xIOState        : BOOL; (* ECat Bus Health *)
-        {attribute 'naming' := 'omit'}
-        I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
 
     END_STRUCT
     END_TYPE
 
 
-Related:
-    * `FB_EcatDiag`_
 
 
 ST_TopologyData
@@ -473,8 +497,6 @@ ST_TopologyData
     END_TYPE
 
 
-Related:
-    * `ST_PortAddr`_
 
 
 GVLs
@@ -487,6 +509,7 @@ DefaultGlobals
 ::
 
     //These are variables every PLC project should have
+    {attribute 'analysis' := '-33'}
     VAR_GLOBAL
 
         stSys	:	ST_System; //Included for you
@@ -504,10 +527,13 @@ GeneralConstants
 ::
 
     {attribute 'qualified_only'}
+    {attribute 'analysis' := '-33'}
     VAR_GLOBAL CONSTANT
-        // 16 including "Unknown" is the max for an EPICS MBBI
+        // 16 including "Unknown" is the max for an EPICS MBBI/MBBO
         // This is the max number of user-defined states (OUT, TARGET1, YAG...)
-        MAX_STATES: INT := 15;
+        // You can make this smaller if you want to use less memory in your program in exchange for limiting your max state count
+        // You can make this larger if you want to use states-based FBs sized beyond the EPICS enum limit
+        MAX_STATES: UINT := 15;
     END_VAR
 
 
@@ -518,25 +544,10 @@ Global_Variables_EtherCAT
 
 ::
 
+    {attribute 'analysis' := '-33'}
     VAR_GLOBAL CONSTANT
         iSLAVEADDR_ARR_SIZE	: UINT := 256;
         ESC_MAX_PORTS : UINT := 3; // Maximum number of ports (4) on ESC
-    END_VAR
-
-
-
-
-Global_Version
-^^^^^^^^^^^^^^
-
-::
-
-    {attribute 'TcGenerated'}
-    // This function has been automatically generated from the project information.
-    VAR_GLOBAL CONSTANT
-        {attribute 'const_non_replaced'}
-        {attribute 'linkalways'}
-        stLibVersion_LCLS_General : ST_LibVersion := (iMajor := 2, iMinor := 8, iBuild := 0, iRevision := 0, sVersion := '2.8.0');
     END_VAR
 
 
@@ -593,6 +604,7 @@ GVL_Logger
             TODO: Activate the "Replace constants" option in the
             TwinCAT PLC Control->"Project->Options...->Build" dialog window.
         *)
+        {attribute 'analysis' := '-33'}
         TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
 
         {analysis -33}
@@ -612,7 +624,6 @@ GVL_Logger
             field: DESC Total log messages on the last cycle
         '}
         nGlobAccEvents : UDINT; // Global log message count
-        nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the
     END_VAR
 
 
@@ -937,6 +948,7 @@ FB_CircuitBreaker_Test
         //Auto reset test
         tonAutoResetTest : TON;
 
+        {attribute 'analysis' := '-27'}
         Init : BOOL := TRUE;
     END_VAR
     (* Test that the CB resets itself after a cooldown period *)
@@ -1825,7 +1837,7 @@ FB_EpicsMotorMonitor
                 fbMotorMonitor.bIsMoving;
                 fbMotorMonitor.stMSTA.bHomed;
             END_IF
-        
+
         Above, ``MOTOR:PV:NAME`` should refer to an EPICS motor record.
         That is, ``caget MOTOR:PV:NAME.RTYP`` should return "motor".
 
@@ -1916,6 +1928,66 @@ FB_EpicsMotorMonitor
 Related:
     * `FB_LREALFromEPICS`_
     * `ST_EpicsMotorMSTA`_
+
+
+FB_EPS
+^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_EPS
+    VAR_IN_OUT
+        eps : DUT_EPS;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+
+
+    END_FUNCTION_BLOCK
+
+    METHOD setBit : BOOL
+    VAR_INPUT
+        nBits : BYTE;
+        bValue : BOOL;
+    END_VAR
+    VAR
+        nMask : UDINT := 1;
+        nBitValue : UDINT := 0;
+    END_VAR
+    nMask := SHL(nMask, nBits);
+    nBitValue := SHR((nMask AND eps.nFlags), nBits);
+
+    IF (TO_BOOL(nBitValue)) <> bValue THEN
+        eps.nFlags := eps.nFlags XOR nMask;
+    END_IF
+
+    // Check if all values are true
+    IF eps.nFlags = 16#FFFFFFFF THEN
+        eps.bEPS_OK := TRUE;
+    ELSE
+        eps.bEPS_OK := FALSE;
+    END_IF
+    END_METHOD
+
+    METHOD setDescription : BOOL
+    VAR_INPUT
+        desciption : STRING;
+    END_VAR
+    eps.sFlagDesc := desciption;
+    END_METHOD
+
+    METHOD setMessage : BOOL
+    VAR_INPUT
+        message : STRING;
+    END_VAR
+    eps.sMessage := message;
+    END_METHOD
+
+
+Related:
+    * `DUT_EPS`_
 
 
 FB_EtherCATDiag
@@ -2010,6 +2082,7 @@ FB_EtherCATDiag
         tFrameWcStateError : R_TRIG;
         tMasterError : R_TRIG;
         jsonIdx : UINT;
+        {attribute 'analysis' := '-27'}
         test : T_MaxString;
     END_VAR
     (* cyclic diag *)
@@ -2757,39 +2830,39 @@ FB_LED
     (*
         Reads a percentage of illumination determined by the user and converts it to a raw value
         to send to the terminal output via the FB_AnalogOutput.
-    	
-    	The determination of the full scale raw value (FSV) is calculated via the iTermBits,
-        which is setup as an input variable to be set according to the situation. This value
-        is bounded by the FSV of the terminal set by the Beckhoff architecture: (2^15 - 1) = 32767.  
-    	
-    	Through the configurable max raw value sent to the terminal output, this LED function block
-        is applicable to a wider variety of hardware: whether it be simple Analog Voltage control,
-        PWM voltage output, or current controlled output. 
 
-        As an initial application, this FB will be instituted for systems of vaccum chamber LED 
+        The determination of the full scale raw value (FSV) is calculated via the iTermBits,
+        which is setup as an input variable to be set according to the situation. This value
+        is bounded by the FSV of the terminal set by the Beckhoff architecture: (2^15 - 1) = 32767.
+
+        Through the configurable max raw value sent to the terminal output, this LED function block
+        is applicable to a wider variety of hardware: whether it be simple Analog Voltage control,
+        PWM voltage output, or current controlled output.
+
+        As an initial application, this FB will be instituted for systems of vaccum chamber LED
         illuminators on TMO endstations, which are rated for 12 V max. They will be dimmed via the
         EL2502 terminal 24 V PWM output voltage control from 0-50% duty cycle.
-    	
+
         2022-5-03 Maarten Thomas-Bosum
     *)
     VAR_INPUT
-    	{attribute 'pytmc' := '
+        {attribute 'pytmc' := '
             pv: NAME
-            io: io 
-    		field: DESC Descriptive name for the LED
+            io: io
+            field: DESC Descriptive name for the LED
             autosave_pass0: VAL DESC
         '}
-    	ledName : STRING;
-    	
-    	iTermBits : UINT;
-    	
-    	{attribute 'pytmc' := '
+        ledName : STRING;
+
+        iTermBits : UINT;
+
+        {attribute 'pytmc' := '
             pv: ILL:PCT
             field: EGU %
         '}
         fIlluminatorPercent: LREAL;
-    	
-    	{attribute 'pytmc' := '
+
+        {attribute 'pytmc' := '
             pv: PWR
             field: ZNAM OFF
             field: ONAM ON
@@ -2797,7 +2870,7 @@ FB_LED
         bLedPower AT %Q*: BOOL;
     END_VAR
     VAR
-    	iIlluminatorINT AT %Q*: INT;
+        iIlluminatorINT AT %Q*: INT;
         fbSetIllPercent: FB_AnalogOutput;
     END_VAR
     // Illuminator conversion to percentage
@@ -2805,15 +2878,15 @@ FB_LED
         fReal:=fIlluminatorPercent,
         fSafeMax:=100,
         fSafeMin:=0,
-        iTermBits:=iTermBits, 
+        iTermBits:=iTermBits,
         fTermMax:=100,
         fTermMin:=0,
         iRaw=>iIlluminatorINT);
 
     IF  fIlluminatorPercent > 0 THEN
-    	bLedPower := TRUE;
+        bLedPower := TRUE;
     ELSE
-    	bLEDPower := FALSE;
+        bLEDPower := FALSE;
     END_IF
 
     END_FUNCTION_BLOCK
@@ -2875,6 +2948,7 @@ FB_Listener
         '}
         eMinSeverity	 	: TcEventSeverity;
 
+        {attribute 'analysis' := '-33'}
         {attribute 'pytmc' := '
             pv: Log
         '}
@@ -3106,12 +3180,14 @@ FB_Listener
     stPendingEvent.fbRequestEventText.Request(eventClass:=fbEvent.EventClass, nEventId:=fbEvent.nEventId, nLangId:=1033, ipArgs:=fbEvent.ipArguments);
     END_METHOD
 
+    {attribute 'analysis' := '-33'}
     PROPERTY PUBLIC LogToVisualStudio : BOOL
     VAR
     END_VAR
     LogToVisualStudio := bLogToVisualStudio;
     END_PROPERTY
 
+    {attribute 'analysis' := '-33'}
     PROPERTY PUBLIC LogToVisualStudio : BOOL
     VAR
         bValue : BOOL;
@@ -3205,7 +3281,6 @@ FB_LogHandler
 
     VAR CONSTANT
         nNumListeners		:	UINT	:= 6;
-        DisarmCountDefault : UINT :=5; // # number of cycles to permit below threshold condition
     END_VAR
     IF NOT bInitialized THEN
         bInitialized := TRUE;
@@ -3358,7 +3433,6 @@ FB_LogMessage
 
         // Circuit breaker
         ///////////////////////////////
-            nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod
             nTimesViolated : INT;
 
             LastCallTime : ULINT;
@@ -4487,10 +4561,12 @@ RUN_TESTS
 
     PROGRAM RUN_TESTS
     VAR
-        CbTest    :    FB_CircuitBreaker_Test;
+        {attribute 'analysis' := '-33'}
+        fbCbTest : FB_CircuitBreaker_Test;
+        {attribute 'analysis' := '-33'}
         fbCentroidTest : FB_Test_EpicsCentroidMonitor;
+        {attribute 'analysis' := '-33'}
         fbMotorTest : FB_Test_EpicsMotorMonitor;
-
     END_VAR
     TcUnit.RUN();
 

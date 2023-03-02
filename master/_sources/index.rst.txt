@@ -7,6 +7,7 @@ lcls-twincat-general
 
     LCLSGeneral_pragmas
     LCLSGeneral_nc
+    LCLSGeneral_ethercat
     LCLSGeneral_boxes
     LCLSGeneral_links
 

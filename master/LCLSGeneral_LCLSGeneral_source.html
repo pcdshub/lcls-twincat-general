@@ -11,7 +11,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -45,6 +46,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_pragmas.html">Pragmas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">Box Hierarchy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
 </ul>
@@ -57,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html">Data Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_epics.html#database-records">Database Records</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DUTs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dut-eps">DUT_EPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-ecatdiagstate">E_EcatDiagState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-eccommstate">E_EcCommState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-logeventtype-wc">E_LogEventType_WC</a></li>
@@ -67,7 +70,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#st-fbdiagnostics">ST_FbDiagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-loggingeventinfo-wc">ST_LoggingEventInfo_WC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-pendingevent">ST_PendingEvent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#st-portaddr">ST_PortAddr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-slavestate">ST_SlaveState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-slavestateinfo">ST_SlaveStateInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-slavestateinfoscanned">ST_SlaveStateInfoScanned</a></li>
@@ -79,7 +81,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#defaultglobals">DefaultGlobals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generalconstants">GeneralConstants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#global-variables-ethercat">Global_Variables_EtherCAT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#global-version">Global_Version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gvl-logger">GVL_Logger</a></li>
 </ul>
 </li>
@@ -97,6 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-el6-com">FB_EL6_Com</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-epicscentroidmonitor">FB_EpicsCentroidMonitor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-epicsmotormonitor">FB_EpicsMotorMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-eps">FB_EPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ethercatdiag">FB_EtherCATDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-ethercatframediag">FB_EtherCATFrameDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-getplchostname">FB_GetPLCHostname</a></li>
@@ -152,6 +154,52 @@
              
   <section id="duts">
 <h1>DUTs<a class="headerlink" href="#duts" title="Permalink to this heading"></a></h1>
+<section id="dut-eps">
+<h2>DUT_EPS<a class="headerlink" href="#dut-eps" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">DUT_EPS</span> <span class="p">:</span>
+<span class="n">STRUCT</span>
+    <span class="o">//</span> <span class="n">Contains</span> <span class="n">EPS</span> <span class="n">flags</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">nFlags</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Contains</span> <span class="n">EPS</span> <span class="n">flags</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">nFlags</span><span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#FFFFFFFF;</span>
+
+    <span class="o">//</span> <span class="n">Desciption</span> <span class="n">of</span> <span class="n">values</span> <span class="n">nFlags</span> <span class="n">contains</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">sFlagDesc</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">semicolon</span><span class="o">-</span><span class="n">delimited</span> <span class="n">nFlag</span> <span class="n">variable</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">sFlagDesc</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">Name</span> <span class="n">to</span> <span class="n">use</span> <span class="k">for</span> <span class="n">log</span> <span class="n">messages</span><span class="o">.</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">sMessage</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Message</span> <span class="kn">from</span> <span class="nn">EPS</span> <span class="n">to</span> <span class="n">usr</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">sMessage</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">Keep</span> <span class="n">Track</span> <span class="k">if</span> <span class="n">nFlags</span> <span class="n">are</span> <span class="nb">all</span> <span class="n">true</span>
+    <span class="p">{</span><span class="n">atribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">bEPS_OK</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">check</span> <span class="k">if</span> <span class="n">nFlags</span> <span class="n">are</span> <span class="nb">all</span> <span class="n">true</span><span class="p">;</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">bEPS_OK</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">END_STRUCT</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#dut-eps">DUT_EPS</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
 <section id="e-ecatdiagstate">
 <h2>E_EcatDiagState<a class="headerlink" href="#e-ecatdiagstate" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">E_EcatDiagState</span> <span class="p">:</span>
@@ -171,12 +219,6 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Related:</dt><dd><ul class="simple">
-<li><p><a class="reference internal" href="#e-ecatdiagstate">E_EcatDiagState</a></p></li>
-</ul>
-</dd>
-</dl>
 </section>
 <section id="e-eccommstate">
 <h2>E_EcCommState<a class="headerlink" href="#e-eccommstate" title="Permalink to this heading"></a></h2>
@@ -464,19 +506,6 @@ END_TYPE
 </pre></div>
 </div>
 </section>
-<section id="st-portaddr">
-<h2>ST_PortAddr<a class="headerlink" href="#st-portaddr" title="Permalink to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_PortAddr</span> <span class="p">:</span>
-<span class="n">STRUCT</span>
-    <span class="n">portA</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
-    <span class="n">portB</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
-    <span class="n">portC</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
-    <span class="n">portD</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
-<span class="n">END_STRUCT</span>
-<span class="n">END_TYPE</span>
-</pre></div>
-</div>
-</section>
 <section id="st-slavestate">
 <h2>ST_SlaveState<a class="headerlink" href="#st-slavestate" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_SlaveState</span> <span class="p">:</span>
@@ -550,6 +579,7 @@ END_TYPE
 <section id="st-system">
 <h2>ST_System<a class="headerlink" href="#st-system" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Defacto</span> <span class="n">system</span> <span class="n">structure</span><span class="p">,</span> <span class="n">must</span> <span class="n">be</span> <span class="n">included</span> <span class="ow">in</span> <span class="nb">all</span> <span class="n">projects</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
 <span class="n">TYPE</span> <span class="n">ST_System</span> <span class="p">:</span>
 <span class="n">STRUCT</span>
 
@@ -558,19 +588,11 @@ END_TYPE
     <span class="n">xFirstScan</span>          <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="p">(</span><span class="o">*</span> <span class="n">This</span> <span class="n">boolean</span> <span class="ow">is</span> <span class="n">true</span> <span class="k">for</span> <span class="n">the</span> <span class="n">first</span> <span class="n">scan</span><span class="p">,</span> <span class="ow">and</span> <span class="ow">is</span> <span class="n">false</span> <span class="n">thereafter</span><span class="p">,</span> <span class="n">use</span> <span class="k">for</span> <span class="n">initialization</span> <span class="n">of</span> <span class="n">stuff</span> <span class="o">*</span><span class="p">)</span>
     <span class="n">xOverrideMode</span>   <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span><span class="n">This</span> <span class="n">bit</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">when</span> <span class="n">using</span> <span class="n">the</span> <span class="n">override</span> <span class="n">features</span> <span class="n">of</span> <span class="n">the</span> <span class="n">system</span>
     <span class="n">xIOState</span>        <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="p">(</span><span class="o">*</span> <span class="n">ECat</span> <span class="n">Bus</span> <span class="n">Health</span> <span class="o">*</span><span class="p">)</span>
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;naming&#39;</span> <span class="o">:=</span> <span class="s1">&#39;omit&#39;</span><span class="p">}</span>
-    <span class="n">I_EcatMaster1</span> <span class="n">AT</span> <span class="o">%</span><span class="n">I</span><span class="o">*</span> <span class="p">:</span> <span class="n">AMSNETID</span><span class="p">;</span> <span class="p">(</span><span class="o">*</span> <span class="n">AMS</span> <span class="n">Net</span> <span class="n">ID</span> <span class="n">used</span> <span class="k">for</span> <span class="n">FB_EcatDiag</span><span class="p">,</span> <span class="n">among</span> <span class="n">others</span> <span class="o">*</span><span class="p">)</span>
 
 <span class="n">END_STRUCT</span>
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Related:</dt><dd><ul class="simple">
-<li><p><a class="reference internal" href="#fb-ecatdiag">FB_EcatDiag</a></p></li>
-</ul>
-</dd>
-</dl>
 </section>
 <section id="st-topologydata">
 <h2>ST_TopologyData<a class="headerlink" href="#st-topologydata" title="Permalink to this heading"></a></h2>
@@ -586,12 +608,6 @@ END_TYPE
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Related:</dt><dd><ul class="simple">
-<li><p><a class="reference internal" href="#st-portaddr">ST_PortAddr</a></p></li>
-</ul>
-</dd>
-</dl>
 </section>
 </section>
 <section id="gvls">
@@ -599,6 +615,7 @@ END_TYPE
 <section id="defaultglobals">
 <h2>DefaultGlobals<a class="headerlink" href="#defaultglobals" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">These</span> <span class="n">are</span> <span class="n">variables</span> <span class="n">every</span> <span class="n">PLC</span> <span class="n">project</span> <span class="n">should</span> <span class="n">have</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
 <span class="n">VAR_GLOBAL</span>
 
     <span class="n">stSys</span>   <span class="p">:</span>       <span class="n">ST_System</span><span class="p">;</span> <span class="o">//</span><span class="n">Included</span> <span class="k">for</span> <span class="n">you</span>
@@ -616,31 +633,23 @@ END_TYPE
 <section id="generalconstants">
 <h2>GeneralConstants<a class="headerlink" href="#generalconstants" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
 <span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
-    <span class="o">//</span> <span class="mi">16</span> <span class="n">including</span> <span class="s2">&quot;Unknown&quot;</span> <span class="ow">is</span> <span class="n">the</span> <span class="nb">max</span> <span class="k">for</span> <span class="n">an</span> <span class="n">EPICS</span> <span class="n">MBBI</span>
+    <span class="o">//</span> <span class="mi">16</span> <span class="n">including</span> <span class="s2">&quot;Unknown&quot;</span> <span class="ow">is</span> <span class="n">the</span> <span class="nb">max</span> <span class="k">for</span> <span class="n">an</span> <span class="n">EPICS</span> <span class="n">MBBI</span><span class="o">/</span><span class="n">MBBO</span>
     <span class="o">//</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="nb">max</span> <span class="n">number</span> <span class="n">of</span> <span class="n">user</span><span class="o">-</span><span class="n">defined</span> <span class="n">states</span> <span class="p">(</span><span class="n">OUT</span><span class="p">,</span> <span class="n">TARGET1</span><span class="p">,</span> <span class="n">YAG</span><span class="o">...</span><span class="p">)</span>
-    <span class="n">MAX_STATES</span><span class="p">:</span> <span class="n">INT</span> <span class="o">:=</span> <span class="mi">15</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">You</span> <span class="n">can</span> <span class="n">make</span> <span class="n">this</span> <span class="n">smaller</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">use</span> <span class="n">less</span> <span class="n">memory</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">program</span> <span class="ow">in</span> <span class="n">exchange</span> <span class="k">for</span> <span class="n">limiting</span> <span class="n">your</span> <span class="nb">max</span> <span class="n">state</span> <span class="n">count</span>
+    <span class="o">//</span> <span class="n">You</span> <span class="n">can</span> <span class="n">make</span> <span class="n">this</span> <span class="n">larger</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">use</span> <span class="n">states</span><span class="o">-</span><span class="n">based</span> <span class="n">FBs</span> <span class="n">sized</span> <span class="n">beyond</span> <span class="n">the</span> <span class="n">EPICS</span> <span class="n">enum</span> <span class="n">limit</span>
+    <span class="n">MAX_STATES</span><span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">15</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 </pre></div>
 </div>
 </section>
 <section id="global-variables-ethercat">
 <h2>Global_Variables_EtherCAT<a class="headerlink" href="#global-variables-ethercat" title="Permalink to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
+<span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
     <span class="n">iSLAVEADDR_ARR_SIZE</span>     <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">256</span><span class="p">;</span>
     <span class="n">ESC_MAX_PORTS</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">;</span> <span class="o">//</span> <span class="n">Maximum</span> <span class="n">number</span> <span class="n">of</span> <span class="n">ports</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="n">on</span> <span class="n">ESC</span>
-<span class="n">END_VAR</span>
-</pre></div>
-</div>
-</section>
-<section id="global-version">
-<h2>Global_Version<a class="headerlink" href="#global-version" title="Permalink to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;TcGenerated&#39;</span><span class="p">}</span>
-<span class="o">//</span> <span class="n">This</span> <span class="n">function</span> <span class="n">has</span> <span class="n">been</span> <span class="n">automatically</span> <span class="n">generated</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">project</span> <span class="n">information</span><span class="o">.</span>
-<span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;const_non_replaced&#39;</span><span class="p">}</span>
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;linkalways&#39;</span><span class="p">}</span>
-    <span class="n">stLibVersion_LCLS_General</span> <span class="p">:</span> <span class="n">ST_LibVersion</span> <span class="o">:=</span> <span class="p">(</span><span class="n">iMajor</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">iMinor</span> <span class="o">:=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">iBuild</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">iRevision</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sVersion</span> <span class="o">:=</span> <span class="s1">&#39;2.8.0&#39;</span><span class="p">);</span>
 <span class="n">END_VAR</span>
 </pre></div>
 </div>
@@ -693,6 +702,7 @@ VAR_GLOBAL
         TODO: Activate the &quot;Replace constants&quot; option in the
         TwinCAT PLC Control-&gt;&quot;Project-&gt;Options...-&gt;Build&quot; dialog window.
     *)
+    {attribute &#39;analysis&#39; := &#39;-33&#39;}
     TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
 
     {analysis -33}
@@ -712,7 +722,6 @@ VAR_GLOBAL
         field: DESC Total log messages on the last cycle
     &#39;}
     nGlobAccEvents : UDINT; // Global log message count
-    nTrickleThreshold : UDINT := 2; // If GlobAccEvents goes over this level for longer than the
 END_VAR
 </pre></div>
 </div>
@@ -1016,6 +1025,7 @@ END_VAR
     <span class="o">//</span><span class="n">Auto</span> <span class="n">reset</span> <span class="n">test</span>
     <span class="n">tonAutoResetTest</span> <span class="p">:</span> <span class="n">TON</span><span class="p">;</span>
 
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-27&#39;</span><span class="p">}</span>
     <span class="n">Init</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="p">(</span><span class="o">*</span> <span class="n">Test</span> <span class="n">that</span> <span class="n">the</span> <span class="n">CB</span> <span class="n">resets</span> <span class="n">itself</span> <span class="n">after</span> <span class="n">a</span> <span class="n">cooldown</span> <span class="n">period</span> <span class="o">*</span><span class="p">)</span>
@@ -1988,6 +1998,66 @@ END_FUNCTION_BLOCK
 </dd>
 </dl>
 </section>
+<section id="fb-eps">
+<h2>FB_EPS<a class="headerlink" href="#fb-eps" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_EPS</span>
+<span class="n">VAR_IN_OUT</span>
+    <span class="n">eps</span> <span class="p">:</span> <span class="n">DUT_EPS</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+
+
+<span class="n">END_FUNCTION_BLOCK</span>
+
+<span class="n">METHOD</span> <span class="n">setBit</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">nBits</span> <span class="p">:</span> <span class="n">BYTE</span><span class="p">;</span>
+    <span class="n">bValue</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="n">nMask</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">nBitValue</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">nMask</span> <span class="o">:=</span> <span class="n">SHL</span><span class="p">(</span><span class="n">nMask</span><span class="p">,</span> <span class="n">nBits</span><span class="p">);</span>
+<span class="n">nBitValue</span> <span class="o">:=</span> <span class="n">SHR</span><span class="p">((</span><span class="n">nMask</span> <span class="n">AND</span> <span class="n">eps</span><span class="o">.</span><span class="n">nFlags</span><span class="p">),</span> <span class="n">nBits</span><span class="p">);</span>
+
+<span class="n">IF</span> <span class="p">(</span><span class="n">TO_BOOL</span><span class="p">(</span><span class="n">nBitValue</span><span class="p">))</span> <span class="o">&lt;&gt;</span> <span class="n">bValue</span> <span class="n">THEN</span>
+    <span class="n">eps</span><span class="o">.</span><span class="n">nFlags</span> <span class="o">:=</span> <span class="n">eps</span><span class="o">.</span><span class="n">nFlags</span> <span class="n">XOR</span> <span class="n">nMask</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="o">//</span> <span class="n">Check</span> <span class="k">if</span> <span class="nb">all</span> <span class="n">values</span> <span class="n">are</span> <span class="n">true</span>
+<span class="n">IF</span> <span class="n">eps</span><span class="o">.</span><span class="n">nFlags</span> <span class="o">=</span> <span class="mi">16</span><span class="c1">#FFFFFFFF THEN</span>
+    <span class="n">eps</span><span class="o">.</span><span class="n">bEPS_OK</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">eps</span><span class="o">.</span><span class="n">bEPS_OK</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="n">END_METHOD</span>
+
+<span class="n">METHOD</span> <span class="n">setDescription</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">desciption</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">eps</span><span class="o">.</span><span class="n">sFlagDesc</span> <span class="o">:=</span> <span class="n">desciption</span><span class="p">;</span>
+<span class="n">END_METHOD</span>
+
+<span class="n">METHOD</span> <span class="n">setMessage</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">message</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">eps</span><span class="o">.</span><span class="n">sMessage</span> <span class="o">:=</span> <span class="n">message</span><span class="p">;</span>
+<span class="n">END_METHOD</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#dut-eps">DUT_EPS</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
 <section id="fb-ethercatdiag">
 <h2>FB_EtherCATDiag<a class="headerlink" href="#fb-ethercatdiag" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FUNCTION_BLOCK FB_EtherCATDiag
@@ -2077,6 +2147,7 @@ VAR
     tFrameWcStateError : R_TRIG;
     tMasterError : R_TRIG;
     jsonIdx : UINT;
+    {attribute &#39;analysis&#39; := &#39;-27&#39;}
     test : T_MaxString;
 END_VAR
 (* cyclic diag *)
@@ -2831,7 +2902,7 @@ END_ACTION
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">NAME</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">io</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Descriptive</span> <span class="n">name</span> <span class="k">for</span> <span class="n">the</span> <span class="n">LED</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Descriptive</span> <span class="n">name</span> <span class="k">for</span> <span class="n">the</span> <span class="n">LED</span>
         <span class="n">autosave_pass0</span><span class="p">:</span> <span class="n">VAL</span> <span class="n">DESC</span>
     <span class="s1">&#39;}</span>
     <span class="n">ledName</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
@@ -2930,6 +3001,7 @@ VAR
     &#39;}
     eMinSeverity            : TcEventSeverity;
 
+    {attribute &#39;analysis&#39; := &#39;-33&#39;}
     {attribute &#39;pytmc&#39; := &#39;
         pv: Log
     &#39;}
@@ -3161,12 +3233,14 @@ fbEvent.GetJsonAttribute(stEventInfo.json, SIZEOF(stEventInfo.json));
 stPendingEvent.fbRequestEventText.Request(eventClass:=fbEvent.EventClass, nEventId:=fbEvent.nEventId, nLangId:=1033, ipArgs:=fbEvent.ipArguments);
 END_METHOD
 
+{attribute &#39;analysis&#39; := &#39;-33&#39;}
 PROPERTY PUBLIC LogToVisualStudio : BOOL
 VAR
 END_VAR
 LogToVisualStudio := bLogToVisualStudio;
 END_PROPERTY
 
+{attribute &#39;analysis&#39; := &#39;-33&#39;}
 PROPERTY PUBLIC LogToVisualStudio : BOOL
 VAR
     bValue : BOOL;
@@ -3260,7 +3334,6 @@ END_PROPERTY
 
 <span class="n">VAR</span> <span class="n">CONSTANT</span>
     <span class="n">nNumListeners</span>           <span class="p">:</span>       <span class="n">UINT</span>    <span class="o">:=</span> <span class="mi">6</span><span class="p">;</span>
-    <span class="n">DisarmCountDefault</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span><span class="mi">5</span><span class="p">;</span> <span class="o">//</span> <span class="c1"># number of cycles to permit below threshold condition</span>
 <span class="n">END_VAR</span>
 <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInitialized</span> <span class="n">THEN</span>
     <span class="n">bInitialized</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -3413,7 +3486,6 @@ END_PROPERTY
 
     <span class="o">//</span> <span class="n">Circuit</span> <span class="n">breaker</span>
     <span class="o">///////////////////////////////</span>
-        <span class="n">nTotalEvents</span>       <span class="p">:</span>   <span class="n">UINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">events</span> <span class="n">accumulated</span> <span class="n">over</span> <span class="n">the</span> <span class="n">last</span> <span class="n">nAccWidth</span><span class="o">*</span><span class="n">nEventTripPeriod</span>
         <span class="n">nTimesViolated</span> <span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
 
         <span class="n">LastCallTime</span> <span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
@@ -4522,10 +4594,12 @@ END_FUNCTION_BLOCK
 <h2>RUN_TESTS<a class="headerlink" href="#run-tests" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROGRAM</span> <span class="n">RUN_TESTS</span>
 <span class="n">VAR</span>
-    <span class="n">CbTest</span>    <span class="p">:</span>    <span class="n">FB_CircuitBreaker_Test</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
+    <span class="n">fbCbTest</span> <span class="p">:</span> <span class="n">FB_CircuitBreaker_Test</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
     <span class="n">fbCentroidTest</span> <span class="p">:</span> <span class="n">FB_Test_EpicsCentroidMonitor</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">:=</span> <span class="s1">&#39;-33&#39;</span><span class="p">}</span>
     <span class="n">fbMotorTest</span> <span class="p">:</span> <span class="n">FB_Test_EpicsMotorMonitor</span><span class="p">;</span>
-
 <span class="n">END_VAR</span>
 <span class="n">TcUnit</span><span class="o">.</span><span class="n">RUN</span><span class="p">();</span>
 
