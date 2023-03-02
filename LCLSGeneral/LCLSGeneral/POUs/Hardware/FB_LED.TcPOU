@@ -5,39 +5,39 @@
 (*
     Reads a percentage of illumination determined by the user and converts it to a raw value
     to send to the terminal output via the FB_AnalogOutput.
-	
-	The determination of the full scale raw value (FSV) is calculated via the iTermBits,
-    which is setup as an input variable to be set according to the situation. This value
-    is bounded by the FSV of the terminal set by the Beckhoff architecture: (2^15 - 1) = 32767.  
-	
-	Through the configurable max raw value sent to the terminal output, this LED function block
-    is applicable to a wider variety of hardware: whether it be simple Analog Voltage control,
-    PWM voltage output, or current controlled output. 
 
-    As an initial application, this FB will be instituted for systems of vaccum chamber LED 
+    The determination of the full scale raw value (FSV) is calculated via the iTermBits,
+    which is setup as an input variable to be set according to the situation. This value
+    is bounded by the FSV of the terminal set by the Beckhoff architecture: (2^15 - 1) = 32767.
+
+    Through the configurable max raw value sent to the terminal output, this LED function block
+    is applicable to a wider variety of hardware: whether it be simple Analog Voltage control,
+    PWM voltage output, or current controlled output.
+
+    As an initial application, this FB will be instituted for systems of vaccum chamber LED
     illuminators on TMO endstations, which are rated for 12 V max. They will be dimmed via the
     EL2502 terminal 24 V PWM output voltage control from 0-50% duty cycle.
-	
+
     2022-5-03 Maarten Thomas-Bosum
 *)
 VAR_INPUT
-	{attribute 'pytmc' := '
+    {attribute 'pytmc' := '
         pv: NAME
-        io: io 
-		field: DESC Descriptive name for the LED
+        io: io
+        field: DESC Descriptive name for the LED
         autosave_pass0: VAL DESC
     '}
-	ledName : STRING;
-	
-	iTermBits : UINT;
-	
-	{attribute 'pytmc' := '
+    ledName : STRING;
+
+    iTermBits : UINT;
+
+    {attribute 'pytmc' := '
         pv: ILL:PCT
         field: EGU %
     '}
     fIlluminatorPercent: LREAL;
-	
-	{attribute 'pytmc' := '
+
+    {attribute 'pytmc' := '
         pv: PWR
         field: ZNAM OFF
         field: ONAM ON
@@ -45,7 +45,7 @@ VAR_INPUT
     bLedPower AT %Q*: BOOL;
 END_VAR
 VAR
-	iIlluminatorINT AT %Q*: INT;
+    iIlluminatorINT AT %Q*: INT;
     fbSetIllPercent: FB_AnalogOutput;
 END_VAR]]></Declaration>
     <Implementation>
@@ -54,15 +54,15 @@ fbSetIllPercent(
     fReal:=fIlluminatorPercent,
     fSafeMax:=100,
     fSafeMin:=0,
-    iTermBits:=iTermBits, 
+    iTermBits:=iTermBits,
     fTermMax:=100,
     fTermMin:=0,
     iRaw=>iIlluminatorINT);
 
 IF  fIlluminatorPercent > 0 THEN
-	bLedPower := TRUE;
+    bLedPower := TRUE;
 ELSE
-	bLEDPower := FALSE;
+    bLEDPower := FALSE;
 END_IF]]></ST>
     </Implementation>
   </POU>
