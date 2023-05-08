@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <DUT Name="DUT_EPS" Id="{0134451e-57c2-478a-9365-5d6570cca7b2}">
     <Declaration><![CDATA[TYPE DUT_EPS :
 STRUCT
@@ -15,7 +15,7 @@ STRUCT
     {attribute 'pytmc' := '
         pv: sFlagDesc
         io: i
-        field: DESC of nFlag variable, using ';' seperated list.
+        field: DESC of nFlag variable, using ; separated list.
     '}
     sFlagDesc: STRING;
 
