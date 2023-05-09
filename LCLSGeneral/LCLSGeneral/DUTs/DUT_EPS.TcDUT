@@ -15,7 +15,7 @@ STRUCT
     {attribute 'pytmc' := '
         pv: sFlagDesc
         io: i
-        field: DESC of nFlag variable, using ; separated list.
+        field: DESC semicolon-delimited nFlag variable
     '}
     sFlagDesc: STRING;
 
