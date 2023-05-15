@@ -7,7 +7,7 @@ VAR_GLOBAL CONSTANT
     // This is the max number of user-defined states (OUT, TARGET1, YAG...)
     // You can make this smaller if you want to use less memory in your program in exchange for limiting your max state count
     // You can make this larger if you want to use states-based FBs sized beyond the EPICS enum limit
-    MAX_STATES: INT := 15;
+    MAX_STATES: UINT := 15;
 END_VAR
 ]]></Declaration>
   </GVL>
