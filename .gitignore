@@ -11,3 +11,12 @@ _CompileInfo
 *.swp
 *.dbg
 *.tclrs
+*.tmc
+*.compiled-library
+*.compileinfo
+*.library
+*.project.~u
+*.tsproj.bak
+*.xti.bak
+LineIDs.dbg
+LineIDs.dbg.bak
