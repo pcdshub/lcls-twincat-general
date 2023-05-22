@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="ResetCircuitBreakerGlobals" Id="{af07064f-81b8-4e8e-bacc-84cfa4b1f877}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION ResetCircuitBreakerGlobals : BOOL
 VAR_INPUT

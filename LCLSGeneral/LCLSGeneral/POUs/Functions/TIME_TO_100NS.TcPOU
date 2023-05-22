@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="TIME_TO_100NS" Id="{ee77a1b2-f30d-4a79-9ca8-80e9b00aec3d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION TIME_TO_100NS : ULINT
 VAR_INPUT

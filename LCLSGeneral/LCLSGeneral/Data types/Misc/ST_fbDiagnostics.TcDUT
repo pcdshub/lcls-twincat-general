@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="ST_FbDiagnostics" Id="{07dcfd66-d6ab-4320-bb04-7a16ac42f205}">
     <Declaration><![CDATA[//Stuff to log messages within function blocks
 TYPE ST_FbDiagnostics :

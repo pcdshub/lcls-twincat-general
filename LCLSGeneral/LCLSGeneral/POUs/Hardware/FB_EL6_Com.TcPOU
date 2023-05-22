@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_EL6_Com" Id="{b4ce63ed-a08f-4c98-b824-d65c9e8a72f4}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EL6_Com
 (*

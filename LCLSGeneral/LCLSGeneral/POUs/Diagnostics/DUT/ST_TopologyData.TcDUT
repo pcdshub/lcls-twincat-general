@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="ST_TopologyData" Id="{5d08a84e-1f56-46ac-aaa4-2ed7c29c3705}">
     <Declaration><![CDATA[TYPE ST_TopologyData :
 STRUCT
