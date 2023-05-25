@@ -1,4 +1,4 @@
-
+# https://confluence.slac.stanford.edu/display/PCDS/TwinCAT+3+Git+Setup+and+Best+Practices
 _Boot
 _Libraries
 _CompileInfo
@@ -7,7 +7,16 @@ _CompileInfo
 *.tpy
 *.bak
 *.~u
-*.tmcRefac
-*.swp
+*.csv
+*.svd
 *.dbg
-*.tclrs
+TrialLicense.tclrs
+*.library
+*.tmcRefac
+.pytmc_build
+
+# Library doesn't need tmc, no IOC
+*.tmc
+
+# In case you vim for some reason
+*.swp

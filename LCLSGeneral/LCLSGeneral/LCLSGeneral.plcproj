@@ -116,9 +116,6 @@
     <Compile Include="POUs\Diagnostics\DUT\ST_EcMasterDevState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Diagnostics\DUT\ST_PortAddr.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\Diagnostics\DUT\ST_SlaveState.TcDUT">
       <SubType>Code</SubType>
     </Compile>

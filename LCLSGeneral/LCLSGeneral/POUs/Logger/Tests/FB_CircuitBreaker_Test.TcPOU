@@ -28,6 +28,7 @@ VAR_INST
     //Auto reset test
     tonAutoResetTest : TON;
 
+    {attribute 'analysis' := '-27'}
     Init : BOOL := TRUE;
 END_VAR]]></Declaration>
       <Implementation>

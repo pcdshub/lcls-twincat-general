@@ -39,7 +39,6 @@ VAR
 
     // Circuit breaker
     ///////////////////////////////
-        nTotalEvents       :   UINT; // Number of events accumulated over the last nAccWidth*nEventTripPeriod
         nTimesViolated : INT;
 
         LastCallTime : ULINT;

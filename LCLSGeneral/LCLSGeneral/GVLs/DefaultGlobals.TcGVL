@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1">
   <GVL Name="DefaultGlobals" Id="{2d2569a9-cdb9-4b2c-9048-e9448cd0d09e}">
     <Declaration><![CDATA[//These are variables every PLC project should have
+{attribute 'analysis' := '-33'}
 VAR_GLOBAL
 
     stSys	:	ST_System; //Included for you
