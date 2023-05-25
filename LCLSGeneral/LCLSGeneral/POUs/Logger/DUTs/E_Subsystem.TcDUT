@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="E_Subsystem" Id="{0625d196-cb6d-4bee-9ee7-7900621abd78}">
     <Declaration><![CDATA[//LCLS Defined subsystems, make sure these correspond with casSubsystems in FB_LogMessage
 TYPE E_Subsystem :

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_Test_EpicsMotorMonitor" Id="{311bff34-9bb2-4463-9f15-81af7df4e6ba}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_Test_EpicsMotorMonitor EXTENDS TcUnit.FB_TestSuite

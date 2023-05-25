@@ -24,6 +24,7 @@
 - FB diagnostics
 - EtherCAT diagnostic</Description>
     <ProjectVersion>0.0.0</ProjectVersion>
+    <WriteProductVersion>false</WriteProductVersion>
     <!--    <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>-->

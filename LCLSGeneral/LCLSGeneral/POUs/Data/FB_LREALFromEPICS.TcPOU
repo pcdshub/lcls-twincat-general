@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_LREALFromEPICS" Id="{1404ab4d-b135-464e-bd7c-11d3ea997668}" SpecialFunc="None">
     <Declaration><![CDATA[(*
 Function block to link an analog value from EPICS to an LREAL on the PLC

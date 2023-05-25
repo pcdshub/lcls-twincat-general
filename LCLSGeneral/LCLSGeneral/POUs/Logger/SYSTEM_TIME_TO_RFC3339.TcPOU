@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="SYSTEM_TIME_TO_RFC3339" Id="{8224a586-2295-4f0e-ba2f-710d1a2cbe6b}" SpecialFunc="None">
     <Declaration><![CDATA[//Converts Beckhoff PLC SYSTEMTIME to RFC3339 time format as a string
 {attribute 'naming' := 'omit'}
