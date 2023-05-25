@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="RUN_TESTS" Id="{e6fc24fd-e279-490c-8a71-fd69372c3aaa}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM RUN_TESTS
 VAR
-    CbTest    :    FB_CircuitBreaker_Test;
+    {attribute 'analysis' := '-33'}
+    fbCbTest : FB_CircuitBreaker_Test;
+    {attribute 'analysis' := '-33'}
     fbCentroidTest : FB_Test_EpicsCentroidMonitor;
+    {attribute 'analysis' := '-33'}
     fbMotorTest : FB_Test_EpicsMotorMonitor;
-
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[TcUnit.RUN();]]></ST>
     </Implementation>

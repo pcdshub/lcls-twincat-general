@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_XKoyoPLCModbus" Id="{a477c376-dd06-40c3-b569-438369655d9b}" SpecialFunc="None">
     <Declaration><![CDATA[//Facilitates communication between Beckhoff and Koyo PLC over the network.
 FUNCTION_BLOCK FB_XKoyoPLCModbus
