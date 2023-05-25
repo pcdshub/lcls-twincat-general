@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <GVL Name="GeneralConstants" Id="{57f2f1ff-0c58-4e70-a147-fb0d6c2bb252}">
+  <GVL Name="GeneralConstants" Id="{5fbde5e2-29c8-4193-ba17-69759df29f93}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-    // 16 including "Unknown" is the max for an EPICS MBBI
+    // 16 including "Unknown" is the max for an EPICS MBBI/MBBO
     // This is the max number of user-defined states (OUT, TARGET1, YAG...)
-    MAX_STATES: INT := 15;
+    // You can make this smaller if you want to use less memory in your program in exchange for limiting your max state count
+    // You can make this larger if you want to use states-based FBs sized beyond the EPICS enum limit
+    MAX_STATES: UINT := 15;
 END_VAR
 ]]></Declaration>
   </GVL>

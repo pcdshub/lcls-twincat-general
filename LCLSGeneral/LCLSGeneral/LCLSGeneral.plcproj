@@ -63,16 +63,16 @@
     <Compile Include="DUTs\DUT_EPS.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GVLs\GeneralConstants.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="GVLs\DefaultGlobals.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="GVLs\Global_Variables_EtherCAT.TcGVL">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GeneralConstants.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\Data\FB_BasicStats.TcPOU">
       <SubType>Code</SubType>
