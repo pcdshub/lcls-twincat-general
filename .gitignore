@@ -15,8 +15,5 @@ TrialLicense.tclrs
 *.tmcRefac
 .pytmc_build
 
-# Library doesn't need tmc, no IOC
-*.tmc
-
 # In case you vim for some reason
 *.swp
