@@ -74,7 +74,6 @@ END_VAR
 
 VAR CONSTANT
     nNumListeners		:	UINT	:= 6;
-    DisarmCountDefault : UINT :=5; // # number of cycles to permit below threshold condition
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized THEN
