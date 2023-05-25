@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1">
   <GVL Name="GeneralConstants" Id="{5fbde5e2-29c8-4193-ba17-69759df29f93}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'analysis' := '-33'}
 VAR_GLOBAL CONSTANT
     // 16 including "Unknown" is the max for an EPICS MBBI/MBBO
     // This is the max number of user-defined states (OUT, TARGET1, YAG...)

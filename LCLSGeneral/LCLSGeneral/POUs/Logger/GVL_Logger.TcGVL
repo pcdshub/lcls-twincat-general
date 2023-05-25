@@ -47,6 +47,7 @@ VAR_GLOBAL
         TODO: Activate the "Replace constants" option in the
         TwinCAT PLC Control->"Project->Options...->Build" dialog window.
     *)
+    {attribute 'analysis' := '-33'}
     TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
 
     {analysis -33}

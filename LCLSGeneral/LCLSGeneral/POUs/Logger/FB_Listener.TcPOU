@@ -48,6 +48,7 @@ VAR
     '}
     eMinSeverity	 	: TcEventSeverity;
 
+    {attribute 'analysis' := '-33'}
     {attribute 'pytmc' := '
         pv: Log
     '}
@@ -107,7 +108,8 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="LogToVisualStudio" Id="{e44fed4e-ab41-44aa-babb-83d5524e2738}">
-      <Declaration><![CDATA[PROPERTY PUBLIC LogToVisualStudio : BOOL
+      <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+PROPERTY PUBLIC LogToVisualStudio : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{7014778a-8e7f-4086-92a6-b27eb8c1aa6d}">
         <Declaration><![CDATA[VAR
