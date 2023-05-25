@@ -88,6 +88,7 @@ VAR
     tFrameWcStateError : R_TRIG;
     tMasterError : R_TRIG;
     jsonIdx : UINT;
+    {attribute 'analysis' := '-27'}
     test : T_MaxString;
 END_VAR
 
