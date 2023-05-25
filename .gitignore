@@ -15,5 +15,8 @@ TrialLicense.tclrs
 *.tmcRefac
 .pytmc_build
 
+# please do not gitignore *.tmc here
+# this file must be tracked for the pinned global types, even without a pytmc IOC
+
 # In case you vim for some reason
 *.swp
