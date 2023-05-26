@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TcModuleClass>
+  <DataTypes>
+    <DataType>
+      <Name GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}" TcBaseType="true" CName="TcEventSeverity*" RemovableEnumPrefix="TCEVENTSEVERITY_">TcEventSeverity</Name>
+      <BitSize>16</BitSize>
+      <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Verbose</Text>
+        <Enum>0</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Info</Text>
+        <Enum>1</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Warning</Text>
+        <Enum>2</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Error</Text>
+        <Enum>3</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Critical</Text>
+        <Enum>4</Enum>
+      </EnumInfo>
+      <Properties>
+        <Property>
+          <Name>plcAttribute_qualified_only</Name>
+        </Property>
+        <Property>
+          <Name>plcAttribute_strict</Name>
+        </Property>
+      </Properties>
+      <Hides>
+        <Hide GUID="{777FF09F-0B00-4AF2-BD7C-C1E2CE4A0947}"/>
+        <Hide GUID="{EC3C119D-4FEC-4197-96FB-DAE1B7C403FB}"/>
+      </Hides>
+    </DataType>
+    <DataType>
+      <Name GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}" TcBaseType="true" CName="TcEventSeverity*" RemovableEnumPrefix="TCEVENTSEVERITY_">TcEventSeverity</Name>
+      <BitSize>16</BitSize>
+      <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Verbose</Text>
+        <Enum>0</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Info</Text>
+        <Enum>1</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Warning</Text>
+        <Enum>2</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Error</Text>
+        <Enum>3</Enum>
+      </EnumInfo>
+      <EnumInfo>
+        <Text>TCEVENTSEVERITY_Critical</Text>
+        <Enum>4</Enum>
+      </EnumInfo>
+      <Properties>
+        <Property>
+          <Name>plcAttribute_qualified_only</Name>
+        </Property>
+        <Property>
+          <Name>plcAttribute_strict</Name>
+        </Property>
+      </Properties>
+      <Hides>
+        <Hide GUID="{777FF09F-0B00-4AF2-BD7C-C1E2CE4A0947}"/>
+        <Hide GUID="{EC3C119D-4FEC-4197-96FB-DAE1B7C403FB}"/>
+      </Hides>
+    </DataType>
+    <DataType>
+      <Name GUID="{97CF8247-B59C-4E2C-B4B0-7350D0471457}">LCLSGeneralEventClass</Name>
+      <DisplayName TxtId="">Log event</DisplayName>
+      <EventId>
+        <Name Id="0">Critical</Name>
+        <DisplayName TxtId="">Critical</DisplayName>
+        <Severity>Critical</Severity>
+      </EventId>
+      <EventId>
+        <Name Id="1">Error</Name>
+        <DisplayName TxtId="">Error</DisplayName>
+        <Severity>Error</Severity>
+      </EventId>
+      <EventId>
+        <Name Id="2">Warning</Name>
+        <DisplayName TxtId="">Warning</DisplayName>
+        <Severity>Warning</Severity>
+      </EventId>
+      <EventId>
+        <Name Id="3">Info</Name>
+        <DisplayName TxtId="">Info</DisplayName>
+        <Severity>Info</Severity>
+      </EventId>
+      <EventId>
+        <Name Id="4">Verbose</Name>
+        <DisplayName TxtId="">Verbose</DisplayName>
+        <Severity>Verbose</Severity>
+      </EventId>
+      <Hides>
+        <Hide GUID="{E50B8F82-4C54-4F5A-855E-90970D01354A}"/>
+        <Hide GUID="{772B0B6F-412E-46FD-9006-6E00BFFE1C3D}"/>
+        <Hide GUID="{8FAD87A4-C885-4A4F-85AF-8AB324945AE2}"/>
+        <Hide GUID="{16BEE339-E307-4BC2-8E77-D5FB1794DF5A}"/>
+        <Hide GUID="{B7E60A74-CB5C-4A02-B59C-74B86A888DE9}"/>
+        <Hide GUID="{6B58EF80-AB34-4F6C-81D0-B0589F4FC534}"/>
+        <Hide GUID="{9E76D1D7-D744-4E3D-B111-F6F94B60E6AB}"/>
+      </Hides>
+    </DataType>
+  </DataTypes>
+</TcModuleClass>
