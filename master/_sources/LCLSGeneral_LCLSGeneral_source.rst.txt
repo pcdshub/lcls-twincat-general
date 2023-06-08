@@ -709,9 +709,24 @@ FB_AnalogInput
         fTermMax: LREAL;
         // The fReal value correlated with the terminal's min value
         fTermMin: LREAL;
+        // Value to scale the end result to
+        {attribute 'pytmc' := '
+            pv: RES
+            io: io
+        '}
+        fResolution : LREAL := 1;
+        {attribute 'pytmc' := '
+            pv: OFF
+            io: io
+        '}
+        fOffset : LREAL;
     END_VAR
     VAR_OUTPUT
         // The real value read from the output
+        {attribute 'pytmc' := '
+            pv: VAL
+            io: i
+        '}
         fReal: LREAL;
     END_VAR
     VAR
@@ -722,6 +737,7 @@ FB_AnalogInput
     END_IF
     IF fScale <> 0 THEN
         fReal := iRaw / fScale + fTermMin;
+        fReal := fReal * fResolution + fOffset;
     END_IF
 
     END_FUNCTION_BLOCK
