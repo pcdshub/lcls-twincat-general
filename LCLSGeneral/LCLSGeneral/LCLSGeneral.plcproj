@@ -54,7 +54,7 @@
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data types\Misc\ST_FbDiagnostics.TcDUT">
+    <Compile Include="Data types\Misc\ST_fbDiagnostics.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data types\Misc\ST_System.TcDUT">
@@ -95,7 +95,7 @@
     <Compile Include="POUs\Data\FB_STRINGFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Data\FB_TimeStampBuffer.TcPOU">
+    <Compile Include="POUs\Data\FB_TimestampBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBufferGlobal.TcPOU">
