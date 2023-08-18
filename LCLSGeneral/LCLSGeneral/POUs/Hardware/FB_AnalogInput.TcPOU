@@ -20,7 +20,7 @@ VAR_INPUT
         pv: RES
         io: io
     '}
-    fResolution : LREAL := 0.1;
+    fResolution : LREAL := 1;
     {attribute 'pytmc' := '
         pv: OFF
         io: io
