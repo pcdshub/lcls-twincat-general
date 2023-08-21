@@ -1,0 +1,55 @@
+
+Settings
+--------
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Setting
+      - Value
+      - Description
+    * - AMS Net ID
+      - 
+      -
+    * - Target IP address
+      - 
+      - Based on AMS Net ID by convention
+    * - AMS Port
+      - 851
+      -
+
+.. _LCLSGeneral_pragmas:
+
+Pragmas
+-------
+
+Total pragmas found: 126
+Total linter errors: 0
+
+
+
+Libraries
+---------
+
+.. csv-table::
+    :header: Library, Vendor, Default, Version
+    :align: center
+
+        Tc2_EtherCAT, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_IoFunctions, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_ModbusSrv, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_SerialCom, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_Standard, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_System, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_TcpIp, Beckhoff Automation GmbH, Unset, Unset
+        Tc2_Utilities, Beckhoff Automation GmbH, Unset, Unset
+        Tc3_EventLogger, Beckhoff Automation GmbH, Unset, Unset
+        Tc3_JsonXml, Beckhoff Automation GmbH, Unset, Unset
+        Tc3_Module, Beckhoff Automation GmbH, Unset, Unset
+        TcUnit, www.tcunit.org, Unset, Unset
+
+Symbols
+-------
+
+
