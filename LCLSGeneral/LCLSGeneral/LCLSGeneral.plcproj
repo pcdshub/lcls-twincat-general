@@ -17,7 +17,7 @@
     <CombineIds>false</CombineIds>
     <Company>SLAC</Company>
     <Released>false</Released>
-    <Title>LCLS General-nrw</Title>
+    <Title>LCLS General</Title>
     <Author>Alex Wallace</Author>
     <Description>Generally useful POUs:
 - Logger
