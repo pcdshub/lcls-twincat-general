@@ -36,10 +36,10 @@ DUT_EPS
         sMessage: STRING;
 
         // Keep Track if nFlags are all true
-        {atribute 'pytmc' := '
+        {attribute 'pytmc' := '
             pv: bEPS_OK
             io: i
-            field: DESC check if nFlags are all true;
+            field: DESC check if nFlags are all true
         '}
         bEPS_OK : BOOL := TRUE;
     END_STRUCT
