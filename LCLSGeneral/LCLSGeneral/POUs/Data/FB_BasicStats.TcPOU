@@ -102,7 +102,7 @@ IF bReset THEN
 ELSIF NOT (bExecute OR bAlwaysCalc) THEN
     bValid := FALSE;
 ELSIF bAlwaysCalc OR rTrig.Q THEN
-    // First pass through aSignal: get sum, mean, max, min
+    // First pass through aSignal: get sum, mean, max, min, rms
     nElemsSeen := 0;
     fSum := 0;
     fRMSSum := 0;
