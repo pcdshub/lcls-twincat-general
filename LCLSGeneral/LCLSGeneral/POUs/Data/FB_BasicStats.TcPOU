@@ -111,7 +111,7 @@ ELSIF bAlwaysCalc OR rTrig.Q THEN
     FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
         nElemsSeen := nElemsSeen + 1;
         fSum := fSum + aSignal[nIndex];
-        fRMSSum := EXPT(aSignal[nIndex], 2);
+        fRMSSum := fRMSSum + EXPT(aSignal[nIndex], 2);
         IF aSignal[nIndex] > fMax THEN
             fMax := aSignal[nIndex];
         ELSIF aSignal[nIndex] < fMin tHEN
