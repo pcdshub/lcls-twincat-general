@@ -97,6 +97,7 @@ IF bReset THEN
     fMax := 0;
     fMin := 0;
     fRange := 0;
+    fRMS := 0;
     bValid := FALSE;
     bReset := FALSE;
 ELSIF NOT (bExecute OR bAlwaysCalc) THEN
