@@ -863,6 +863,12 @@ FB_BasicStats
             io: i
         '}
         fRange: LREAL;
+        // RMS of all values in the array
+        {attribute 'pytmc' := '
+            pv: STATS:RMS
+            io: i
+        '}
+        fRMS: LREAL;
         // True if the other outputs are valid
         {attribute 'pytmc' := '
             pv: STATS:VALID
@@ -875,6 +881,7 @@ FB_BasicStats
         nIndex: DINT;
         nElemsSeen: UDINT;
         fSum: LREAL;
+        fRMSSum: LREAL;
         fVarianceSum: LREAL;
         fVarianceMean: LREAL;
     END_VAR
@@ -885,19 +892,22 @@ FB_BasicStats
         fMax := 0;
         fMin := 0;
         fRange := 0;
+        fRMS := 0;
         bValid := FALSE;
         bReset := FALSE;
     ELSIF NOT (bExecute OR bAlwaysCalc) THEN
         bValid := FALSE;
     ELSIF bAlwaysCalc OR rTrig.Q THEN
-        // First pass through aSignal: get sum, mean, max, min
+        // First pass through aSignal: get sum, mean, max, min, rms
         nElemsSeen := 0;
         fSum := 0;
+        fRMSSum := 0;
         fMax := aSignal[LOWER_BOUND(aSignal, 1)];
         fMin := fMax;
         FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
             nElemsSeen := nElemsSeen + 1;
             fSum := fSum + aSignal[nIndex];
+            fRMSSum := fRMSSum + EXPT(aSignal[nIndex], 2);
             IF aSignal[nIndex] > fMax THEN
                 fMax := aSignal[nIndex];
             ELSIF aSignal[nIndex] < fMin tHEN
@@ -910,6 +920,7 @@ FB_BasicStats
         IF nElemsSeen > 0 THEN
             fMean := fSum / nElemsSeen;
             fRange := fMax - fMin;
+            fRMS := SQRT(fRMSSum / nElemsSeen);
 
             // Second pass through aSignal: get the sum of the variances and then the stdev
             nElemsSeen := 0;

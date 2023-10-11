@@ -24,7 +24,7 @@ Settings
 Pragmas
 -------
 
-Total pragmas found: 124
+Total pragmas found: 125
 Total linter errors: 0
 
 
