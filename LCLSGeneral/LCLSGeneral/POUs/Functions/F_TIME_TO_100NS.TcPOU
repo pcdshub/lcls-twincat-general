@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_TIME_TO_100NS" Id="{ee77a1b2-f30d-4a79-9ca8-80e9b00aec3d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_TIME_TO_100NS : ULINT
+VAR_INPUT
+    tTime : TIME;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_TIME_TO_100NS := TIME_TO_ULINT(tTime)*10000;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

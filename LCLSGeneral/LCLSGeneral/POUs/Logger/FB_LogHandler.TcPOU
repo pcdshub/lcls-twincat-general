@@ -42,13 +42,13 @@ VAR
 
     bInitialized	:	BOOL	:= FALSE;
     bReadyToLog		: 	BOOL	:= FALSE;
-    rtFirstLog		: 	R_TRIG;
+    fbFirstLog		: 	R_TRIG;
 
     fbGetHostName 	: FB_GetPLCHostname;
     fbGetIP		 	: FB_GetPLCIPAddress;
 
     fbListener		:	REFERENCE TO FB_Listener;
-    fbListeners		: 	ARRAY [0..nNumListeners - 1] OF POINTER TO FB_Listener;
+    apfbListeners		: 	ARRAY [0..cnNumListeners - 1] OF POINTER TO FB_Listener;
 
     // Default minimum severity for subscriptions
     eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;
@@ -61,36 +61,36 @@ VAR
 
     nI					:	UINT;
 
-    SocketEnable : BOOL;
+    bSocketEnable : BOOL;
 
-    ctuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
+    fbCtuSocketError : CTU := (PV:=3); // Circuit breaker for socket errors. 3 errors before it stops.
 
-    tRetryConnection : TON := (PT:=T#1h); // Retry after an hour
+    fbRetryConnection : TON := (PT:=T#1h); // Retry after an hour
 
-    tofTrickleBreakerPre : TOF := (PT:=T#1s);
-    tonTrickleBreaker : TON := (PT := GVL_Logger.nTrickleTripTime);
+    fbTonTrickleBreakerPre : TOF := (PT:=T#1s);
+    fbTonTrickleBreaker : TON := (PT := GVL_Logger.ctTrickleTripTime);
     bTripCon : BOOL;
 END_VAR
 
 VAR CONSTANT
-    nNumListeners		:	UINT	:= 6;
+    cnNumListeners		:	UINT	:= 6;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized THEN
     bInitialized := TRUE;
-    fbTcAdsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    fbTcRouterListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRouterEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    fbTcRTimeListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    fbTcSystemListener.Configure(i_EventClass:=TC_EVENT_CLASSES.TcSystemEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    fbWindowsListener.Configure(i_EventClass:=TC_EVENT_CLASSES.Win32EventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
-    fbLCLSListener.Configure(i_EventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, i_MinSeverity:=eMinSeverity, i_fbSocket:=ADR(fbSocket));
+    fbTcAdsListener.Configure(stEventClass:=TC_EVENT_CLASSES.TcGeneralAdsEventClass, eMinSeverity:=eMinSeverity, pfbSocket:=ADR(fbSocket));
+    fbTcRouterListener.Configure(stEventClass:=TC_EVENT_CLASSES.TcRouterEventClass, eMinSeverity:=eMinSeverity, pfbSocket:=ADR(fbSocket));
+    fbTcRTimeListener.Configure(stEventClass:=TC_EVENT_CLASSES.TcRTimeEventClass, eMinSeverity:=eMinSeverity, pfbSocket:=ADR(fbSocket));
+    fbTcSystemListener.Configure(stEventClass:=TC_EVENT_CLASSES.TcSystemEventClass, eMinSeverity:=eMinSeverity, pfbSocket:=ADR(fbSocket));
+    fbWindowsListener.Configure(stEventClass:=TC_EVENT_CLASSES.Win32EventClass, eMinSeverity:=eMinSeverity, pfbSocket:=ADR(fbSocket));
+    fbLCLSListener.Configure(stEventClass:=TC_EVENT_CLASSES.LCLSGeneralEventClass, eMinSeverity:=eMinSeverity, pfbSocket:=ADR(fbSocket));
 
-    fbListeners[0] := ADR(fbTcAdsListener);
-    fbListeners[1] := ADR(fbTcRouterListener);
-    fbListeners[2] := ADR(fbTcRTimeListener);
-    fbListeners[3] := ADR(fbTcSystemListener);
-    fbListeners[4] := ADR(fbWindowsListener);
-    fbListeners[5] := ADR(fbLCLSListener);
+    apfbListeners[0] := ADR(fbTcAdsListener);
+    apfbListeners[1] := ADR(fbTcRouterListener);
+    apfbListeners[2] := ADR(fbTcRTimeListener);
+    apfbListeners[3] := ADR(fbTcSystemListener);
+    apfbListeners[4] := ADR(fbWindowsListener);
+    apfbListeners[5] := ADR(fbLCLSListener);
 
 END_IF
 
@@ -112,11 +112,11 @@ IF (rtReset.Q AND fbSocket.bEnable) THEN
 END_IF
 
 // Disable fbSocket if too many errors occur
-ctuSocketError(CU:=fbSocket.bError, RESET:=tRetryConnection.Q OR rtReset.Q);
-SocketEnable R= ctuSocketError.Q;
+fbCtuSocketError(CU:=fbSocket.bError, RESET:=fbRetryConnection.Q OR rtReset.Q);
+bSocketEnable R= fbCtuSocketError.Q;
 // Retry an hour later
-tRetryConnection(IN:=ctuSocketError.Q);
-SocketEnable S= tRetryConnection.Q OR rtReset.Q;
+fbRetryConnection(IN:=fbCtuSocketError.Q);
+bSocketEnable S= fbRetryConnection.Q OR rtReset.Q;
 
 fbSocket(
     nLocalPort:=0,
@@ -132,9 +132,9 @@ bReadyToLog := (
     NOT fbSocket.bError AND
     fbSocket.eState = E_SocketConnectionlessState.eSOCKET_CREATED
 );
-rtFirstLog(CLK:=bReadyToLog);
+fbFirstLog(CLK:=bReadyToLog);
 
-IF rtFirstLog.Q THEN
+IF fbFirstLog.Q THEN
     fbRootLogger(sMsg:='Logging system online', eSevr:=TcEventSeverity.Info,
                  eSubsystem:=E_Subsystem.NILVALUE);
 END_IF
@@ -142,8 +142,8 @@ END_IF
 CircuitBreaker();
 
 (* Poke all of the listeners *)
-FOR nI := 0 TO nNumListeners - 1 DO
-    fbListener REF= fbListeners[nI]^;
+FOR nI := 0 TO cnNumListeners - 1 DO
+    fbListener REF= apfbListeners[nI]^;
     fbListener.Execute();
     fbListener.PublishEvents();
 END_FOR]]></ST>
@@ -165,10 +165,10 @@ should not stop the trickle timer.
 *)
 bTripCon := GVL_Logger.nGlobAccEvents >0;
 
-tofTrickleBreakerPre(IN:=bTripCon);
-tonTrickleBreaker(IN:=tofTrickleBreakerPre.Q);
+fbTonTrickleBreakerPre(IN:=bTripCon);
+fbTonTrickleBreaker(IN:=fbTonTrickleBreakerPre.Q);
 
-GVL_Logger.bTrickleTripped S= tonTrickleBreaker.Q AND bTripCon;
+GVL_Logger.bTrickleTripped S= fbTonTrickleBreaker.Q AND bTripCon;
 
 GVL_Logger.nGlobAccEvents := 0; // reset the count for the next cycle]]></ST>
       </Implementation>

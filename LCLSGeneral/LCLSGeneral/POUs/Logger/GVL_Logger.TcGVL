@@ -18,26 +18,26 @@ VAR_GLOBAL CONSTANT
         io: io
         field: DESC The log host IP address
     '}
-    cLogHost		:	STRING(15)	:= '172.21.32.36';
+    csLogHost		:	STRING(15)	:= '172.21.32.36';
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)LCLSGeneral:LogPort
         io: io
         field: DESC The log host UDP port
     '}
-    iLogPort		:	UINT		:= 54321;
+    cnLogPort		:	UINT		:= 54321;
 
-    sIpTidbit : STRING(6) := '172.21';
+    csIpTidbit : STRING(6) := '172.21';
 
     // Log message circuit breaker configuration
 
     // Initialization constants for circuit breakers
-    nLocalTripThreshold : TIME := T#1ms; // Minimum time between log messages
-    nMinTimeViolationAcceptable : INT := 5; // Trip if `nLocalTripThreshold` exceeded `nMinTimeViolationAcceptable` times
-    nLocalTrickleTripThreshold : TIME := T#100ms; // Default trickle trip, activated by global threshold
-    nTrickleTripTime : TIME := T#10s; // Default time for log-handler to recognize a trickle overload condition, many log-message FB occasionally creating a message
+    ctLocalTripThreshold : TIME := T#1MS; // Minimum time between log messages
+    cnMinTimeViolationAcceptable : INT := 5; // Trip if `nLocalTripThreshold` exceeded `nMinTimeViolationAcceptable` times
+    ctLocalTrickleTripThreshold : TIME := T#100MS; // Default trickle trip, activated by global threshold
+    ctTrickleTripTime : TIME := T#10S; // Default time for log-handler to recognize a trickle overload condition, many log-message FB occasionally creating a message
     // such that every PLC cycle is emitting a message (this is considered to be too much).
-    nTripResetPeriod : TIME := T#10m; // Default time for CB auto-reset
+    ctTripResetPeriod : TIME := T#10M; // Default time for CB auto-reset
 END_VAR
 
 VAR_GLOBAL
@@ -48,7 +48,7 @@ VAR_GLOBAL
         TwinCAT PLC Control->"Project->Options...->Build" dialog window.
     *)
     {attribute 'analysis' := '-33'}
-    TCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
+    nTCPADS_MAXUDP_BUFFSIZE : UDINT :=10000;
 
     {analysis -33}
     fbRootLogger : FB_LogMessage; //Instantiated here to be used everywhere

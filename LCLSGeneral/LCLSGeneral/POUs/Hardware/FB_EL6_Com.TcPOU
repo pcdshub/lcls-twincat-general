@@ -72,8 +72,8 @@ VAR_OUTPUT
 END_VAR
 VAR
     // Communication Buffers
-    TxBuffer: ComBuffer;
-    RxBuffer: ComBuffer;
+    stTxBuffer: ComBuffer;
+    stRxBuffer: ComBuffer;
     fbClearComBuffer: ClearComBuffer;
 
     // Parameters for PLC -> EL6
@@ -110,8 +110,8 @@ END_VAR
     SizeComIn:= UINT_TO_INT(SIZEOF(stIn_EL6)),
     Error=> ,
     ErrorID=> eSerialLineErrorID,
-    TxBuffer:= TxBuffer,
-    RxBuffer:= RxBuffer );
+    TxBuffer:= stTxBuffer,
+    RxBuffer:= stRxBuffer );
 IF fbEL6Ctrl.Error THEN
     bEL6CtrlError := TRUE;
     eEL6CtrlErrorID := fbEL6Ctrl.ErrorID;
@@ -127,13 +127,13 @@ CASE nStep OF
         ; // idle
     10:
         // Clear buffers in case any lingering data
-        fbClearComBuffer(Buffer:=TxBuffer);
-        fbClearComBuffer(Buffer:=RxBuffer);
+        fbClearComBuffer(Buffer:=stTxBuffer);
+        fbClearComBuffer(Buffer:=stRxBuffer);
         // Prepare string to send
         sStringToSend := CONCAT(sSendPrefix, CONCAT(sCmd, sSendSuffix));
         // Send string
         fbSend(	SendString:= sStringToSend,
-                TXbuffer:= TxBuffer,
+                TXbuffer:= stTxBuffer,
                 Busy=> bSendBusy,
                 Error=> eSendErrorID);
         IF fbSend.Error <> COMERROR_NOERROR THEN
@@ -146,7 +146,7 @@ CASE nStep OF
         // Finish sending String
         IF fbSend.Busy THEN
             fbSend(	SendString:= sStringToSend,
-                    TXbuffer:= TxBuffer,
+                    TXbuffer:= stTxBuffer,
                     Busy=> bSendBusy,
                     Error=> eSendErrorID);
             IF fbSend.Error <> COMERROR_NOERROR THEN
@@ -164,7 +164,7 @@ CASE nStep OF
             Suffix:= sRecvSuffix,
             Timeout:= tTimeout,
             ReceivedString:= sReceivedString,
-            RXbuffer:= RxBuffer,
+            RXbuffer:= stRxBuffer,
             StringReceived=> bStringReceived,
             Busy=> bReceiveBusy,
             Error=> eRecvErrorID,

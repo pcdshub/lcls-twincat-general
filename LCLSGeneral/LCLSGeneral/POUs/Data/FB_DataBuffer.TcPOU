@@ -24,9 +24,9 @@ VAR_INPUT
     // Address of the value to accumulate
     pInputAdr: PVOID;
     // Size of the accumulated value
-    iInputSize: UDINT;
+    nInputSize: UDINT;
     // Number of values in the output array
-    iElemCount: UDINT;
+    nElemCount: UDINT;
     // Address of the rolling buffer to be filled every cycle
     pPartialAdr: PVOID;
     // Address of the output buffer to be filled when the rolling buffer is full
@@ -37,22 +37,22 @@ VAR_OUTPUT
     bNewArray: BOOL;
 END_VAR
 VAR
-    iArrayIndex: UDINT := 0;
+    nArrayIndex: UDINT := 0;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[bNewArray := FALSE;
 IF bExecute THEN
     MEMCPY(
-        destAddr := pPartialAdr + iArrayIndex*iInputSize,
+        destAddr := pPartialAdr + nArrayIndex*nInputSize,
         srcAddr := pInputAdr,
-        n := iInputSize);
-    iArrayIndex := iArrayIndex + 1;
-    IF iArrayIndex >= iElemCount THEN
+        n := nInputSize);
+    nArrayIndex := nArrayIndex + 1;
+    IF nArrayIndex >= nElemCount THEN
         MEMCPY(
             destAddr := pOutputAdr,
             srcAddr := pPartialAdr,
-            n := iElemCount*iInputSize);
-        iArrayIndex := 0;
+            n := nElemCount*nInputSize);
+        nArrayIndex := 0;
         bNewArray := TRUE;
     END_IF
 END_IF]]></ST>

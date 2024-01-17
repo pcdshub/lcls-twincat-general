@@ -14,7 +14,7 @@ VAR_INPUT
     // The minimum allowed real value for the connected hardware
     fSafeMin: LREAL;
     // The number of bits correlated with the terminal's max output. This is not necessarily the resolution parameter.
-    iTermBits: UINT;
+    nTermBits: UINT;
     // The fReal value correlated with the terminal's max output
     fTermMax: LREAL;
     // The fReal value correlated with the terminal's min output
@@ -22,16 +22,15 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
     // Connect this output to the terminal
-    iRaw AT %Q*: INT;
+    nRaw AT %Q*: INT;
 END_VAR
 VAR
     fScale: LREAL;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// Set the scaling from real to raw
 IF fScale = 0 AND fTermMax > fTermMin THEN
-    fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+    fScale := (EXPT(2, nTermBits) - 1) / (fTermMax - fTermMin);
 END_IF
 
 // Adjust real value to be within the limits
@@ -39,7 +38,7 @@ fReal := MIN(fReal, fSafeMax, fTermMax);
 fReal := MAX(fReal, fSafeMin, fTermMin);
 
 // Scale the output accordingly
-iRaw := LREAL_TO_INT((fReal - fTermMin) * fScale);]]></ST>
+nRaw := LREAL_TO_INT((fReal - fTermMin) * fScale);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

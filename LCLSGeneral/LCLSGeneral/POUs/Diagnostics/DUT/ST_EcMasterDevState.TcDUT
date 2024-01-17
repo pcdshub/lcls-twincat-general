@@ -4,7 +4,7 @@
     <Declaration><![CDATA[TYPE ST_EcMasterDevState :
 STRUCT
     eEcState	 		: E_EcCommState;
-    nReserved			: ARRAY [0..2] OF UINT;
+    anReserved			: ARRAY [0..2] OF UINT;
 
     bLinkError			: BOOL;
     bResetRequired		: BOOL;

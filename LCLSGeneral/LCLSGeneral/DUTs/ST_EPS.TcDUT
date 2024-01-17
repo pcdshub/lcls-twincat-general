@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <DUT Name="DUT_EPS" Id="{0134451e-57c2-478a-9365-5d6570cca7b2}">
-    <Declaration><![CDATA[TYPE DUT_EPS :
+  <DUT Name="ST_EPS" Id="{0134451e-57c2-478a-9365-5d6570cca7b2}">
+    <Declaration><![CDATA[TYPE ST_EPS :
 STRUCT
     // Contains EPS flags
     {attribute 'pytmc' := '

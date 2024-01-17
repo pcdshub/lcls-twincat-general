@@ -13,11 +13,11 @@ VAR_INPUT
     fInput: LREAL;
 END_VAR
 VAR_OUTPUT
-    arrOutput: ARRAY [1..1000] OF LREAL;
+    afOutput: ARRAY [1..1000] OF LREAL;
     bNewArray: BOOL;
 END_VAR
 VAR
-    arrPartial: ARRAY [1..1000] OF LREAL;
+    afPartial: ARRAY [1..1000] OF LREAL;
     fbDataBuffer: FB_DataBuffer;
 END_VAR
 ]]></Declaration>
@@ -25,10 +25,10 @@ END_VAR
       <ST><![CDATA[fbDataBuffer(
     bExecute := bExecute,
     pInputAdr := ADR(fInput),
-    iInputSize := SIZEOF(fInput),
-    iElemCount := 1000,
-    pPartialAdr := ADR(arrPartial),
-    pOutputAdr := ADR(arrOutput),
+    nInputSize := SIZEOF(fInput),
+    nElemCount := 1000,
+    pPartialAdr := ADR(afPartial),
+    pOutputAdr := ADR(afOutput),
     bNewArray => bNewArray);]]></ST>
     </Implementation>
   </POU>

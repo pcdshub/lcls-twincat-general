@@ -40,12 +40,12 @@ VAR_OUTPUT
     bOverrange AT %I*: BOOL;
 END_VAR
 VAR
-    iRaw AT %I*: INT;
+    nRaw AT %I*: INT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
 bConnected := NOT (bOverrange AND bError);
-fTemp := INT_TO_LREAL(iRaw) * fResolution;]]></ST>
+fTemp := INT_TO_LREAL(nRaw) * fResolution;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

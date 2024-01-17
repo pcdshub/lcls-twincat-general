@@ -10,10 +10,10 @@ VAR_INPUT
     sJson			: STRING(7000)	:= '{}';		// JSON to add to the message
 
     //Circuit breaker settings
-    nMinTimeViolationAcceptable : INT := GVL_Logger.nMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
-    nLocalTripThreshold : TIME := GVL_Logger.nLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
-    nTrickleTripThreshold : TIME := GVL_Logger.nLocalTrickleTripThreshold; // Trickle trip, activated by global threshold, should be >> LocalTripThreshold
-    nTripResetPeriod : TIME := GVL_Logger.nTripResetPeriod; // Time for auto-reset
+    nMinTimeViolationAcceptable : INT := GVL_Logger.cnMinTimeViolationAcceptable; // How many times the min. time can be violated before the CB trips
+    tLocalTripThreshold : TIME := GVL_Logger.ctLocalTripThreshold; // Minimum time between calls allowed, pairs with nMinTimeViolationAcceptable
+    tTrickleTripThreshold : TIME := GVL_Logger.ctLocalTrickleTripThreshold; // Trickle trip, activated by global threshold, should be >> LocalTripThreshold
+    tTripResetPeriod : TIME := GVL_Logger.ctTripResetPeriod; // Time for auto-reset
     bEnableAutoReset : BOOL := TRUE; //Enable circuit breaker auto-reset (true by default)
 END_VAR
 
@@ -25,7 +25,7 @@ VAR
     bInitFailed			:	BOOL := FALSE;
     sSubsystemSource	:	STRING;
     fbMessage			:	REFERENCE TO FB_TcMessage;
-    fbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
+    afbMessages 			:	ARRAY [0..4] OF FB_TcMessage;
     fbSource 			:	FB_TcSourceInfo;
     ipResultMessage	 	:	I_TcMessage;
     hr 					:	HRESULT;
@@ -41,12 +41,12 @@ VAR
     ///////////////////////////////
         nTimesViolated : INT;
 
-        LastCallTime : ULINT;
-        CurrentCallTime : ULINT;
-        DeltaSinceLastCall : ULINT;
+        nLastCallTime : ULINT;
+        nCurrentCallTime : ULINT;
+        nDeltaSinceLastCall : ULINT;
 
-        WhenTripsCleared : ULINT;
-        ftTrippedReleased : F_TRIG;
+        nWhenTripsCleared : ULINT;
+        fbFtrigTrippedReleased : F_TRIG;
 
         bLocalTrickleTripped : BOOL;
         bLocalTripped : BOOL;
@@ -63,40 +63,40 @@ VAR
             field: DESC Rising-edge reset of trip
         '}
         bResetBreaker : BOOL;
-        rtResetBreaker : R_TRIG;
+        fbRtrigResetBreaker : R_TRIG;
 
-        rtTripped : R_TRIG;
+        fbRtrigTripped : R_TRIG;
     ////////////////////////////////////////////
 
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized AND NOT bInitFailed THEN
 
-    hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
+    hr := afbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Verbose, 0 (*fbSource*) );
     IF FAILED(hr) THEN
         bInitFailed := TRUE;
         hrLastInternalError := hr;
     END_IF
 
-    hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Warning, 0 (*fbSource*) );
+    hr := afbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Warning, 0 (*fbSource*) );
     IF FAILED(hr) THEN
         bInitFailed := TRUE;
         hrLastInternalError := hr;
     END_IF
 
-    hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Info, 0 (*fbSource*) );
+    hr := afbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Info, 0 (*fbSource*) );
     IF FAILED(hr) THEN
         bInitFailed := TRUE;
         hrLastInternalError := hr;
     END_IF
 
-    hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Error, 0 (*fbSource*) );
+    hr := afbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Error, 0 (*fbSource*) );
     IF FAILED(hr) THEN
         bInitFailed := TRUE;
         hrLastInternalError := hr;
     END_IF
 
-    hr := fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Critical, 0 (*fbSource*) );
+    hr := afbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId].CreateEx(TC_EVENTS.LCLSGeneralEventClass.Critical, 0 (*fbSource*) );
     IF FAILED(hr) THEN
         bInitFailed := TRUE;
         hrLastInternalError := hr;
@@ -122,7 +122,7 @@ END_IF
 // Log message circuit breaker
 
 CircuitBreaker();
-IF bTripped AND NOT rtTripped.Q THEN RETURN; END_IF // Pass on the first one to deliver the message we're going silent
+IF bTripped AND NOT fbRtrigTripped.Q THEN RETURN; END_IF // Pass on the first one to deliver the message we're going silent
 
 ///////////////////////////////////////////////////////////
 
@@ -130,11 +130,11 @@ IF bTripped AND NOT rtTripped.Q THEN RETURN; END_IF // Pass on the first one to 
 
 // Map the message severity to the LCLSGeneralEventClass:
 CASE eSevr OF
-    TcEventSeverity.Verbose: 	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId];
-    TcEventSeverity.Warning:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId];
-    TcEventSeverity.Info:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId];
-    TcEventSeverity.Error:		fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId];
-    TcEventSeverity.Critical:	fbMessage REF= fbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId];
+    TcEventSeverity.Verbose: 	fbMessage REF= afbMessages[TC_EVENTS.LCLSGeneralEventClass.Verbose.nEventId];
+    TcEventSeverity.Warning:	fbMessage REF= afbMessages[TC_EVENTS.LCLSGeneralEventClass.Warning.nEventId];
+    TcEventSeverity.Info:		fbMessage REF= afbMessages[TC_EVENTS.LCLSGeneralEventClass.Info.nEventId];
+    TcEventSeverity.Error:		fbMessage REF= afbMessages[TC_EVENTS.LCLSGeneralEventClass.Error.nEventId];
+    TcEventSeverity.Critical:	fbMessage REF= afbMessages[TC_EVENTS.LCLSGeneralEventClass.Critical.nEventId];
     ELSE
         RETURN;
 END_CASE
@@ -161,7 +161,7 @@ hr := fbMessage.CreateEx(stEventEntry:=ipResultMessage.stEventEntry, ipSourceInf
 // This is where the message text gets appended:
 fbMessage.ipArguments.Clear();
 
-IF rtTripped.Q THEN
+IF fbRtrigTripped.Q THEN
    fbMessage.ipArguments.AddString('Logging circuit breaker tripped, this will be the last message from this element for a while...');
 ELSIF NOT bTripped THEN
     fbMessage.ipArguments.AddString(sMsg);
@@ -178,7 +178,7 @@ fbMessage.SetJsonAttribute(sJson);
 // For a final format of:
 // 'Path.to.FB_LogMessage/Subsystem': {Unknown,Error,Warning,Verbose} (message)
 // We want to send 1 more message when we trip
-IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND (NOT bTripped OR rtTripped.Q) THEN
+IF NOT FAILED(hr) AND fbMessage.eSeverity >= eTraceLevel AND (NOT bTripped OR fbRtrigTripped.Q) THEN
     hr := fbMessage.Send(0);
 END_IF
 
@@ -191,24 +191,24 @@ END_IF]]></ST>
         <ST><![CDATA[
 GVL_Logger.nGlobAccEvents := GVL_Logger.nGlobAccEvents + 1;
 
-CurrentCallTime := F_GetTaskTime();
+nCurrentCallTime := F_GetTaskTime();
 IF bFirstCall THEN
-    DeltaSinceLastCall := 16#FFFF_FFFF;
+    nDeltaSinceLastCall := 16#FFFF_FFFF;
     bFirstCall := FALSE;
 ELSE
-   DeltaSinceLastCall := CurrentCallTime - LastCallTime;
+   nDeltaSinceLastCall := nCurrentCallTime - nLastCallTime;
 END_IF
 
-LastCallTime := CurrentCallTime;
+nLastCallTime := nCurrentCallTime;
 
-ftTrippedReleased(CLK:=bLocalTripped OR bLocalTrickleTripped);
-IF ftTrippedReleased.Q THEN
-    WhenTripsCleared := CurrentCallTime;
+fbFtrigTrippedReleased(CLK:=bLocalTripped OR bLocalTrickleTripped);
+IF fbFtrigTrippedReleased.Q THEN
+    nWhenTripsCleared := nCurrentCallTime;
 END_IF
-rtResetBreaker(CLK:=bResetBreaker OR
-                bEnableAutoReset AND (CurrentCallTime - WhenTripsCleared > TIME_TO_100NS(nTripResetPeriod)) );
+fbRtrigResetBreaker(CLK:=bResetBreaker OR
+                bEnableAutoReset AND (nCurrentCallTime - nWhenTripsCleared > F_TIME_TO_100NS(tTripResetPeriod)) );
 
-IF rtResetBreaker.Q THEN
+IF fbRtrigResetBreaker.Q THEN
    // bLocalTrickleTripped := FALSE;
     //bLocalTripped := FALSE;
     bTripped := FALSE;
@@ -217,7 +217,7 @@ END_IF
 
 bResetBreaker := FALSE;
 
-IF DeltaSinceLastCall < TIME_TO_100NS(nLocalTripThreshold) THEN
+IF nDeltaSinceLastCall < F_TIME_TO_100NS(tLocalTripThreshold) THEN
     nTimesViolated := MIN(nTimesViolated + 1, nMinTimeViolationAcceptable+1);
 ELSE
     nTimesViolated := MAX(nTimesViolated - 1, 0);
@@ -225,10 +225,10 @@ END_IF
 
 bLocalTripped := nTimesViolated > nMinTimeViolationAcceptable;
 
-bLocalTrickleTripped := DeltaSinceLastCall < TIME_TO_100NS(nTrickleTripThreshold) AND GVL_LOGGER.bTrickleTripped;
+bLocalTrickleTripped := nDeltaSinceLastCall < F_TIME_TO_100NS(tTrickleTripThreshold) AND GVL_LOGGER.bTrickleTripped;
 
 bTripped S= bLocalTrickleTripped OR bLocalTripped;
-rtTripped(CLK:=bTripped);
+fbRtrigTripped(CLK:=bTripped);
 
 ]]></ST>
       </Implementation>

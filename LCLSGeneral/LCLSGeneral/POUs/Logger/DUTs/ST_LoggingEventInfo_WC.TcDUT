@@ -23,21 +23,21 @@ STRUCT
         io: i
         field: DESC Schema string
     '}
-    schema		:	STRING := 'twincat-event-0';
+    sSchema		:	STRING := 'twincat-event-0';
 
     {attribute 'pytmc' := '
         pv: Timestamp
         io: i
         field: DESC Unix timestamp
     '}
-      ts			:	LREAL;
+      fTs			:	LREAL;
 
       {attribute 'pytmc' := '
         pv: Hostname
         io: i
         field: DESC PLC Hostname
     '}
-      plc			:	STRING;
+      sPlc			:	STRING;
 
     {attribute 'pytmc' := '
         pv: Severity
@@ -48,27 +48,27 @@ STRUCT
         field: TWST Warning
         field: THST Error
     '}
-    severity	:	TcEventSeverity;
+    eSeverity	:	TcEventSeverity;
 
     {attribute 'pytmc' := '
         pv: MessageID
         io: i
         field: DESC TwinCAT Message ID
     '}
-    id			:	UDINT;
+    nId			:	UDINT;
 
     {attribute 'pytmc' := '
         pv: EventClass
         io: i
         field: DESC TwinCAT Event class
     '}
-    event_class		:	STRING;
+    sEvent_class		:	STRING;
 
     {attribute 'pytmc' := '
         pv: Message
         io: i
     '}
-    msg				: STRING(255);
+    sMsg				: STRING(255);
     // This is actually: T_MaxString
     // which has been expanded due to requirements for pinning global data types.
 
@@ -76,7 +76,7 @@ STRUCT
         pv: Source
         io: i
     '}
-    source			: STRING(255);
+    sSource			: STRING(255);
     // This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
     // which has been expanded due to requirements for pinning global data types.
 
@@ -85,14 +85,14 @@ STRUCT
         io: i
         field: DESC The event type
     '}
-    event_type	:	 E_LogEventType;
+    eEvent_type	:	 E_LogEventType;
 
     {attribute 'pytmc' := '
         pv: MessageJSON
         io: i
         field: DESC Metadata with the message
     '}
-    json 		:	STRING(10000);
+    sJson 		:	STRING(10000);
     (*
     NOTE: this JSON gets inserted as an escaped string in the "json" key.
     TODO: it may be possible to use `fbJson.AddRawObject`, but this would

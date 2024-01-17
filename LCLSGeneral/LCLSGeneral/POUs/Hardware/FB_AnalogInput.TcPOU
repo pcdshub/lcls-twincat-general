@@ -8,9 +8,9 @@
 *)
 VAR_INPUT
     // Connect this input to the terminal
-    iRaw AT %I*: INT;
+    nRaw AT %I*: INT;
     // The number of bits correlated with the terminal's max value. This is not necessarily the resolution parameter.
-    iTermBits: UINT;
+    nTermBits: UINT;
     // The fReal value correlated with the terminal's max value
     fTermMax: LREAL;
     // The fReal value correlated with the terminal's min value
@@ -40,10 +40,10 @@ VAR
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF fScale = 0 AND fTermMax > fTermMin THEN
-    fScale := (EXPT(2, iTermBits) - 1) / (fTermMax - fTermMin);
+    fScale := (EXPT(2, nTermBits) - 1) / (fTermMax - fTermMin);
 END_IF
 IF fScale <> 0 THEN
-    fReal := iRaw / fScale + fTermMin;
+    fReal := nRaw / fScale + fTermMin;
     fReal := fReal * fResolution + fOffset;
 END_IF]]></ST>
     </Implementation>

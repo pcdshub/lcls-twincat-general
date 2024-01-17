@@ -12,16 +12,14 @@ VAR
     tonRetry : TON; //Retry timer
     nIndex : INT; //Index for clearing the coil array
 END_VAR
-
 VAR_INPUT
-    i_tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
-    i_sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
+    tRetryTime : TIME := T#10S; //Retry time if modbus transaction fails
+    sIPAddr	 : STRING[15]; //IP address of the Koyo PLC
 END_VAR
-
 VAR_OUTPUT
-    q_xNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
-    q_anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
-    q_xError         : BOOL := FALSE; //Transaction or other error
+    bNoPLCResponse : BOOL := TRUE; //Could not reach the PLC if true
+    anPLCResponse   : ARRAY [0..20] OF BYTE; //Buffer of coils retrieved from the other PLC
+    bError         : BOOL := FALSE; //Transaction or other error
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Look ma' no wires! *)
@@ -50,7 +48,7 @@ Stage Status Bits (S) 6144 (012000)							1, 5, 15
 (* Begin code *)
 // Retry after some time
 tonRetry.IN := NOT fbKoyo_PLCInputCoilsRx.bBusy;
-tonRetry.PT := i_tRetryTime;
+tonRetry.PT := tRetryTime;
 tonRetry();
 
 ftReset(CLK:=fbKoyo_PLCInputCoilsRx.bBusy);
@@ -68,21 +66,21 @@ IF fbKoyo_PLCInputCoilsRx.bError THEN
         anKoyo_PLC_CnBits[nIndex]:=0;
     END_FOR
     {analysis +41}
-    q_xError := TRUE;
+    bError := TRUE;
 
 ELSIF ftReset.Q AND fbKoyo_PLCInputCoilsRx.cbRead > 0 THEN
     fbKoyo_PLCInputCoilsRx.bExecute := FALSE;
-    q_xNoPLCResponse:= FALSE;
-    q_xError := FALSE;
+    bNoPLCResponse:= FALSE;
+    bError := FALSE;
 
 //more error code cause we didn't manage to read anything
 ELSIF fbKoyo_PLCInputCoilsRx.cbRead = 0 THEN
-    q_xError := TRUE;
-    q_xNoPLCResponse:= TRUE;
+    bError := TRUE;
+    bNoPLCResponse:= TRUE;
 
 END_IF
 
-q_anPLCResponse := anKoyo_PLC_CnBits;
+anPLCResponse := anKoyo_PLC_CnBits;
 ]]></ST>
     </Implementation>
   </POU>

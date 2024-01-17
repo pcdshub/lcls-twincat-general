@@ -16,7 +16,7 @@ VAR_IN_OUT
         pv: STATS:DATA
         io: i
     '}
-    aSignal: ARRAY[*] OF LREAL;
+    pfSignal: ARRAY[*] OF LREAL;
 END_VAR
 VAR_INPUT
     // If TRUE, we will update the results every cycle
@@ -80,7 +80,7 @@ VAR_OUTPUT
     bValid: BOOL;
 END_VAR
 VAR
-    rTrig: R_TRIG;
+    fbTrig: R_TRIG;
     nIndex: DINT;
     nElemsSeen: UDINT;
     fSum: LREAL;
@@ -90,7 +90,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[rTrig(CLK:=bExecute);
+      <ST><![CDATA[fbTrig(CLK:=bExecute);
 IF bReset THEN
     fMean := 0;
     fStDev := 0;
@@ -102,21 +102,21 @@ IF bReset THEN
     bReset := FALSE;
 ELSIF NOT (bExecute OR bAlwaysCalc) THEN
     bValid := FALSE;
-ELSIF bAlwaysCalc OR rTrig.Q THEN
+ELSIF bAlwaysCalc OR fbTrig.Q THEN
     // First pass through aSignal: get sum, mean, max, min, rms
     nElemsSeen := 0;
     fSum := 0;
     fRMSSum := 0;
-    fMax := aSignal[LOWER_BOUND(aSignal, 1)];
+    fMax := pfSignal[LOWER_BOUND(pfSignal, 1)];
     fMin := fMax;
-    FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+    FOR nIndex := LOWER_BOUND(pfSignal, 1) TO UPPER_BOUND(pfSignal, 1) DO
         nElemsSeen := nElemsSeen + 1;
-        fSum := fSum + aSignal[nIndex];
-        fRMSSum := fRMSSum + EXPT(aSignal[nIndex], 2);
-        IF aSignal[nIndex] > fMax THEN
-            fMax := aSignal[nIndex];
-        ELSIF aSignal[nIndex] < fMin tHEN
-            fMin := aSignal[nIndex];
+        fSum := fSum + pfSignal[nIndex];
+        fRMSSum := fRMSSum + EXPT(pfSignal[nIndex], 2);
+        IF pfSignal[nIndex] > fMax THEN
+            fMax := pfSignal[nIndex];
+        ELSIF pfSignal[nIndex] < fMin tHEN
+            fMin := pfSignal[nIndex];
         END_IF
         IF nElems > 0 AND nElemsSeen >= nElems THEN
             EXIT;
@@ -130,9 +130,9 @@ ELSIF bAlwaysCalc OR rTrig.Q THEN
         // Second pass through aSignal: get the sum of the variances and then the stdev
         nElemsSeen := 0;
         fVarianceSum := 0;
-        FOR nIndex := LOWER_BOUND(aSignal, 1) TO UPPER_BOUND(aSignal, 1) DO
+        FOR nIndex := LOWER_BOUND(pfSignal, 1) TO UPPER_BOUND(pfSignal, 1) DO
             nElemsSeen := nElemsSeen + 1;
-            fVarianceSum := fVarianceSum + (aSignal[nIndex] - fMean) * (aSignal[nIndex] - fMean);
+            fVarianceSum := fVarianceSum + (pfSignal[nIndex] - fMean) * (pfSignal[nIndex] - fMean);
             IF nElems > 0 AND nElemsSeen >= nElems THEN
                 EXIT;
             END_IF

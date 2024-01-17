@@ -9,7 +9,7 @@
 {warning 'Function Block FB_ThermoCouple is deprecated and may be removed in a future release'}
 VAR_INPUT
     // Ratio between raw value and actual temperature. Default is 10 for 10 steps per degree (or 0.1 degree resolution)
-    iScale: INT := 10;
+    nScale: INT := 10;
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -36,12 +36,12 @@ VAR_OUTPUT
     bOverrange AT %I*: BOOL;
 END_VAR
 VAR
-    iRaw AT %I*: INT;
+    nRaw AT %I*: INT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// The manual states that we are disconnected if we are both overrange and in an error state
 bConnected := NOT (bOverrange AND bError);
-fTemp := INT_TO_LREAL(iRaw) / iScale;]]></ST>
+fTemp := INT_TO_LREAL(nRaw) / nScale;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

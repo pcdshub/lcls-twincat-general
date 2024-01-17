@@ -3,7 +3,7 @@
   <POU Name="FB_EPS" Id="{0c78cf58-96ea-4c52-b0ca-64b7290d1ef9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EPS
 VAR_IN_OUT
-    eps : DUT_EPS;
+    stEps : ST_EPS;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -26,17 +26,17 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[nMask := SHL(nMask, nBits);
-nBitValue := SHR((nMask AND eps.nFlags), nBits);
+nBitValue := SHR((nMask AND stEps.nFlags), nBits);
 
 IF (TO_BOOL(nBitValue)) <> bValue THEN
-    eps.nFlags := eps.nFlags XOR nMask;
+    stEps.nFlags := stEps.nFlags XOR nMask;
 END_IF
 
 // Check if all values are true
-IF eps.nFlags = 16#FFFFFFFF THEN
-    eps.bEPS_OK := TRUE;
+IF stEps.nFlags = 16#FFFFFFFF THEN
+    stEps.bEPS_OK := TRUE;
 ELSE
-    eps.bEPS_OK := FALSE;
+    stEps.bEPS_OK := FALSE;
 END_IF
 ]]></ST>
       </Implementation>
@@ -44,21 +44,21 @@ END_IF
     <Method Name="setDescription" Id="{84797ad0-c375-4675-8998-ec2e912fbbdd}">
       <Declaration><![CDATA[METHOD setDescription : BOOL
 VAR_INPUT
-    desciption : STRING;
+    sDesciption : STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eps.sFlagDesc := desciption;]]></ST>
+        <ST><![CDATA[stEps.sFlagDesc := sDesciption;]]></ST>
       </Implementation>
     </Method>
     <Method Name="setMessage" Id="{50553b5a-8e8e-441f-8a78-c5cb5c67e718}">
       <Declaration><![CDATA[METHOD setMessage : BOOL
 VAR_INPUT
-    message : STRING;
+    sMessage : STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eps.sMessage := message;]]></ST>
+        <ST><![CDATA[stEps.sMessage := sMessage;]]></ST>
       </Implementation>
     </Method>
   </POU>

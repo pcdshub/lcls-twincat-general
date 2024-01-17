@@ -27,9 +27,9 @@ VAR_INPUT
         field: DESC Descriptive name for the LED
         autosave_pass0: VAL DESC
     '}
-    ledName : STRING;
+    sLedName : STRING;
 
-    iTermBits : UINT;
+    nTermBits : UINT;
 
     {attribute 'pytmc' := '
         pv: ILL:PCT
@@ -45,7 +45,7 @@ VAR_INPUT
     bLedPower AT %Q*: BOOL;
 END_VAR
 VAR
-    iIlluminatorINT AT %Q*: INT;
+    nIlluminatorINT AT %Q*: INT;
     fbSetIllPercent: FB_AnalogOutput;
 END_VAR]]></Declaration>
     <Implementation>
@@ -54,10 +54,10 @@ fbSetIllPercent(
     fReal:=fIlluminatorPercent,
     fSafeMax:=100,
     fSafeMin:=0,
-    iTermBits:=iTermBits,
+    nTermBits:=nTermBits,
     fTermMax:=100,
     fTermMin:=0,
-    iRaw=>iIlluminatorINT);
+    nRaw=>nIlluminatorINT);
 
 IF  fIlluminatorPercent > 0 THEN
     bLedPower := TRUE;
