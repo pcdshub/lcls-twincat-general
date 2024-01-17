@@ -15,9 +15,9 @@ END_VAR
 VAR
     fbGetAdapterIP 	: FB_GetAdaptersInfo := (bExecute := TRUE, sNetID := ''); // Acquire IP of the correct adapter
 
-    iIndex			: UDINT;
+    nIndex			: UDINT;
 
-    tRetry 			: TON;
+    fbRetry 			: TON;
     bReset			: BOOL;
     bInitialized	: BOOL := FALSE;
 
@@ -25,21 +25,21 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF bEnable THEN
-    IF NOT bInitialized OR (tRetry.Q AND NOT bDone) THEN
+    IF NOT bInitialized OR (fbRetry.Q AND NOT bDone) THEN
         bReset			:= TRUE;
         bInitialized	:= TRUE;
         fbGetAdapterIP(bExecute:=FALSE);
     END_IF
 
-    tRetry(IN:=bReset, PT:=tRetryDelay);
+    fbRetry(IN:=bReset, PT:=tRetryDelay);
     bReset := FALSE;
 
     IF NOT bDone THEN
         fbGetAdapterIP(bExecute:=TRUE, bError=>bError);
         IF NOT (fbGetAdapterIP.bBusy or fbGetAdapterIP.bError) THEN
-            FOR iIndex := 0 TO MAX_LOCAL_ADAPTERS DO
-                IF FIND(fbGetAdapterIP.arrAdapters[iIndex].sIpAddr, GVL_Logger.sIpTidbit) <> 0 THEN
-                    sIPAddress := fbGetAdapterIP.arrAdapters[iIndex].sIpAddr;
+            FOR nIndex := 0 TO MAX_LOCAL_ADAPTERS DO
+                IF FIND(fbGetAdapterIP.arrAdapters[nIndex].sIpAddr, GVL_Logger.csIpTidbit) <> 0 THEN
+                    sIPAddress := fbGetAdapterIP.arrAdapters[nIndex].sIpAddr;
                     bDone := TRUE;
                     EXIT;
                 END_IF

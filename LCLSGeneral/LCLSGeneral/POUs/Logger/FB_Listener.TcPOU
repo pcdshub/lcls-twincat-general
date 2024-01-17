@@ -54,9 +54,9 @@ VAR
     '}
     stEventInfo 		:	REFERENCE TO ST_LoggingEventInfo;
 
-    stPendingEvents		:	ARRAY [0..nMaxEvents - 1] OF ST_PendingEvent;
+    astPendingEvents		:	ARRAY [0..cnMaxEvents - 1] OF ST_PendingEvent;
     ipMessageConfig		:	ITcEventFilterConfig;
-    fbSocket			:	POINTER TO FB_ConnectionlessSocket;
+    pfbSocket			:	POINTER TO FB_ConnectionlessSocket;
     bConfigured			:	BOOL	:= FALSE;
 
 
@@ -68,7 +68,7 @@ END_VAR
 
 VAR CONSTANT
     // The maximum number of events allowed *per-cycle*
-    nMaxEvents			:	UINT := 10;
+    cnMaxEvents			:	UINT := 10;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -79,9 +79,9 @@ END_VAR]]></Declaration>
 *)
 METHOD Configure : HRESULT
 VAR_INPUT
-    i_EventClass 	:	GUID;
-    i_MinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;
-    i_fbSocket		:	POINTER TO FB_ConnectionlessSocket;
+    stEventClass 	:	GUID;
+    eMinSeverity	:	TcEventSeverity := TcEventSeverity.Verbose;
+    pfbSocket		:	POINTER TO FB_ConnectionlessSocket;
 END_VAR
 
 VAR_INST
@@ -94,14 +94,14 @@ END_IF
 
 THIS^.Subscribe(ADR(ipMessageConfig), 0);
 bSubscribed 	:= TRUE;
-eMinSeverity 	:= i_MinSeverity;
-fbSocket	  	:= i_fbSocket;
+THIS^.eMinSeverity 	:= eMinSeverity;
+THIS^.pfbSocket	  	:= pfbSocket;
 
 IF (ipMessageConfig = 0) THEN
     Configure 	:= 1;
     bConfigured := FALSE;
 ELSE
-    ipMessageConfig.AddEventClass(i_EventClass, i_MinSeverity);
+    ipMessageConfig.AddEventClass(stEventClass, eMinSeverity);
     Configure 	:= 0;
     bConfigured := TRUE;
 END_IF]]></ST>
@@ -194,13 +194,12 @@ VAR_INST
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-IF nPendingEvents = 0 THEN
+        <ST><![CDATA[IF nPendingEvents = 0 THEN
     RETURN;
 END_IF
 
-FOR nEvent := 0 TO nMaxEvents - 1 DO
-    stPendingEvent REF= stPendingEvents[nEvent];
+FOR nEvent := 0 TO cnMaxEvents - 1 DO
+    stPendingEvent REF= astPendingEvents[nEvent];
     IF NOT stPendingEvent.bInUse THEN
         CONTINUE;
     END_IF
@@ -224,7 +223,7 @@ FOR nEvent := 0 TO nMaxEvents - 1 DO
         fbJsonDataType.AddJsonValueFromSymbol(fbJson, 'ST_LoggingEventInfo', SIZEOF(stEventInfo), ADR(stEventInfo));
         fbJson.CopyDocument(sJsonDoc, SIZEOF(sJsonDoc));
 
-        SendMessage(sMessage:=ADR(sJsonDoc));
+        SendMessage(psMessage:=ADR(sJsonDoc));
     END_IF
 
     // Mark as not in use, and fill in this event in the next StoreEvent call
@@ -238,7 +237,7 @@ END_FOR]]></ST>
     <Method Name="SendMessage" Id="{0ecc6e61-3b01-495c-b716-85e32b493cb3}">
       <Declaration><![CDATA[METHOD SendMessage : HRESULT
 VAR_INPUT
-    sMessage		:	POINTER TO STRING;
+    psMessage		:	POINTER TO STRING;
 END_VAR
 
 VAR
@@ -246,14 +245,14 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[(* For subclasses to override, if necessary *)
-IF sMessage = 0 THEN
+IF psMessage = 0 THEN
     RETURN;
 END_IF
 
 // Optionally log it to Visual Studio's message list
 IF bLogToVisualStudio THEN
      // Keep the message length under 255 (extended string function for LEFT/MID do not exist)
-    STRNCPY(ADR(sLogStr), sMessage, MIN(220, SIZEOF(sLogStr)));
+    STRNCPY(ADR(sLogStr), psMessage, MIN(220, SIZEOF(sLogStr)));
     ADSLOGSTR(
         msgCtrlMask := ADSLOG_MSGTYPE_HINT,
         msgFmtStr   := '[Logger JSON Debug] %s',
@@ -261,10 +260,10 @@ IF bLogToVisualStudio THEN
     );
 END_IF
 
-IF fbSocket <> 0 THEN
+IF THIS^.pfbSocket <> 0 THEN
     // And send it along to logstash
-    F_SendUDPMessage(sMessage:=sMessage, fbSocket:=fbSocket^,
-                     sHost:=GVL_Logger.cLogHost, iPort:=GVL_Logger.iLogPort);
+    F_SendUDPMessage(psMessage:=psMessage, fbSocket:=THIS^.pfbSocket^,
+                     sHost:=GVL_Logger.csLogHost, nPort:=GVL_Logger.cnLogPort);
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -281,7 +280,7 @@ VAR
     nFailures		:	UINT := 0;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF fbEvent.eSeverity < eMinSeverity THEN
+        <ST><![CDATA[IF fbEvent.eSeverity < THIS^.eMinSeverity THEN
     // Ignore all messages below the minimum severity
     RETURN;
 ELSIF NOT __ISVALIDREF(fbEvent) THEN
@@ -289,18 +288,18 @@ ELSIF NOT __ISVALIDREF(fbEvent) THEN
 END_IF
 
 // Find the next slot to use in stPendingEvents
-WHILE stPendingEvents[nEventIdx].bInUse AND nFailures < nMaxEvents DO
+WHILE astPendingEvents[nEventIdx].bInUse AND nFailures < cnMaxEvents DO
     nFailures := nFailures + 1;
-    IF ((nEventIdx := (nEventIdx + 1)) = nMaxEvents) THEN
+    IF ((nEventIdx := (nEventIdx + 1)) = cnMaxEvents) THEN
         nEventIdx := 0;
     END_IF
 END_WHILE
 
-IF (nFailures = nMaxEvents) THEN
+IF (nFailures = cnMaxEvents) THEN
     ADSLOGSTR(
         msgCtrlMask := ADSLOG_MSGTYPE_ERROR,
         msgFmtStr   := 'Logging message buffer full (%s)',
-        strArg		:= UINT_TO_STRING(nMaxEvents),
+        strArg		:= UINT_TO_STRING(cnMaxEvents),
     );
     RETURN;
 END_IF
@@ -308,7 +307,7 @@ END_IF
 nPendingEvents			:=	nPendingEvents + 1;
 nCntMessagesSent 		:=	nCntMessagesSent + 1;
 
-stPendingEvent			REF= stPendingEvents[nEventIdx];
+stPendingEvent			REF= astPendingEvents[nEventIdx];
 stEventInfo 			REF= stPendingEvent.stEventInfo;
 stPendingEvent.bInUse 	:= TRUE;
 

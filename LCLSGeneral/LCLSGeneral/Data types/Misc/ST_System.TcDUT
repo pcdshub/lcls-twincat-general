@@ -6,11 +6,11 @@
 TYPE ST_System :
 STRUCT
 
-    xSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
-    xAtVacuum 	    : BOOL;(* System At Vacuum *)
-    xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
-    xOverrideMode	: BOOL; //This bit is set when using the override features of the system
-    xIOState        : BOOL; (* ECat Bus Health *)
+    bSwAlmRst 		: BOOL;(* Global Alarm Reset - EPICS Command *)
+    bAtVacuum 	    : BOOL;(* System At Vacuum *)
+    bFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
+    bOverrideMode	: BOOL; //This bit is set when using the override features of the system
+    bIOState        : BOOL; (* ECat Bus Health *)
 
 END_STRUCT
 END_TYPE]]></Declaration>

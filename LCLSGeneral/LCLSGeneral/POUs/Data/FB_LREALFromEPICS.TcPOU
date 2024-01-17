@@ -21,23 +21,21 @@ be up-to-date and valid within `tTimeout` seconds.
 *)
 
 FUNCTION_BLOCK FB_LREALFromEPICS
-
 VAR_INPUT
-    iMaximumValidSeverity		: INT := 1;
+    nMaximumValidSeverity		: INT := 1;
 END_VAR
-
 VAR_OUTPUT
     bValid				: BOOL;
     fValue				: LREAL;
 END_VAR
 
 VAR
-    iValueInvalidate	: POINTER TO ULINT;
-    tonValueTimeout		: TON;
-    tonSeverityTimeout	: TON;
+    pnValueInvalidate	: POINTER TO ULINT;
+    fbValueTimeout		: TON;
+    fbSeverityTimeout	: TON;
 
     fLastValidValue 	: LREAL;
-    iLastValidSeverity 	: INT;
+    nLastValidSeverity 	: INT;
 
     {attribute 'pytmc' := '
         pv: EPICSLink
@@ -52,42 +50,42 @@ VAR
         link: *EPICSLink.SEVR
         field: DESC Internal variable used to monitor EPICS PV severity in PLC
     '}
-    iPLCInternalSeverity : INT;
+    nPLCInternalSeverity : INT;
 
 END_VAR
 VAR CONSTANT
     // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
-    tTimeout			: TIME := T#2S;
-    NAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
+    ctTimeout			: TIME := T#2S;
+    cnNAN_VALUE   		: ULINT := 16#7f_ff_ff_ff__ff_ff_ff_ff;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[iValueInvalidate := ADR(fPLCInternalValue);
+      <ST><![CDATA[pnValueInvalidate := ADR(fPLCInternalValue);
 
-IF iPLCInternalSeverity <> -1 THEN
+IF nPLCInternalSeverity <> -1 THEN
     // New severity value
-    iLastValidSeverity := iPLCInternalSeverity;
-    iPLCInternalSeverity := -1;
+    nLastValidSeverity := nPLCInternalSeverity;
+    nPLCInternalSeverity := -1;
 
      // Reset the timer
-    tonSeverityTimeout(IN:=FALSE);
-    tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+    fbSeverityTimeout(IN:=FALSE);
+    fbSeverityTimeout(IN:=TRUE, PT:=ctTimeout);
 END_IF
 
-IF iValueInvalidate^ <> NAN_VALUE THEN
+IF pnValueInvalidate^ <> cnNAN_VALUE THEN
     // New value from EPICS
     fLastValidValue 	:= fPLCInternalValue;
-    iValueInvalidate^	:= NAN_VALUE;
+    pnValueInvalidate^	:= cnNAN_VALUE;
 
     // Reset the timer
-    tonValueTimeout(IN:=FALSE);
-    tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+    fbValueTimeout(IN:=FALSE);
+    fbValueTimeout(IN:=TRUE, PT:=ctTimeout);
 END_IF
 
-tonValueTimeout();
-tonSeverityTimeout();
-bValid := (NOT tonValueTimeout.Q) AND
-          (NOT tonSeverityTimeout.Q) AND
-          (iLastValidSeverity <= iMaximumValidSeverity);
+fbValueTimeout();
+fbSeverityTimeout();
+bValid := (NOT fbValueTimeout.Q) AND
+          (NOT fbSeverityTimeout.Q) AND
+          (nLastValidSeverity <= nMaximumValidSeverity);
 fValue := fLastValidValue;]]></ST>
     </Implementation>
   </POU>

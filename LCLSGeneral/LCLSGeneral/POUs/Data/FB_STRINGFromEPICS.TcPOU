@@ -31,22 +31,19 @@ be up-to-date and valid within `tTimeout` seconds.
 *)
 
 FUNCTION_BLOCK FB_STRINGFromEPICS
-
 VAR_INPUT
-    iMaximumValidSeverity		: INT := 1;
+    nMaximumValidSeverity		: INT := 1;
 END_VAR
-
 VAR_OUTPUT
     bValid				: BOOL;
     sValue				: STRING;
 END_VAR
-
 VAR
-    tonValueTimeout		: TON;
-    tonSeverityTimeout	: TON;
+    fbValueTimeout		: TON;
+    fbSeverityTimeout	: TON;
 
     sLastValidValue 	: STRING;
-    iLastValidSeverity 	: INT;
+    nLastValidSeverity 	: INT;
 
     {attribute 'pytmc' := '
         pv: EPICSLink
@@ -61,42 +58,42 @@ VAR
         link: *EPICSLink.SEVR
         field: DESC Internal variable used to monitor EPICS PV severity in PLC
     '}
-    iPLCInternalSeverity : INT;
+    nPLCInternalSeverity : INT;
 
 END_VAR
 VAR CONSTANT
     // The timeout will trip after `tTimeout` if EPICS doesn't write in that time period:
-    tTimeout			: TIME := T#2S;
+    ctTimeout			: TIME := T#2S;
     // This is an arbitrary extended UUID.  If you want to store this value in your IOC
     // and use it with this function block - well, too bad.
-    sUnsetString   		: STRING := '857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd';
+    csUnsetString   		: STRING := '857be58e-5b82-4731-935f-e0e9cdfe005d-50b69a17-1499-49bc-af7b-084a8b6f63dd';
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF iPLCInternalSeverity <> -1 THEN
+      <ST><![CDATA[IF nPLCInternalSeverity <> -1 THEN
     // New severity value
-    iLastValidSeverity := iPLCInternalSeverity;
-    iPLCInternalSeverity := -1;
+    nLastValidSeverity := nPLCInternalSeverity;
+    nPLCInternalSeverity := -1;
 
      // Reset the timer
-    tonSeverityTimeout(IN:=FALSE);
-    tonSeverityTimeout(IN:=TRUE, PT:=tTimeout);
+    fbSeverityTimeout(IN:=FALSE);
+    fbSeverityTimeout(IN:=TRUE, PT:=ctTimeout);
 END_IF
 
-IF sPLCInternalValue <> sUnsetString THEN
+IF sPLCInternalValue <> csUnsetString THEN
     // New value from EPICS
     sLastValidValue 	:= sPLCInternalValue;
-    sPLCInternalValue	:= sUnsetString;
+    sPLCInternalValue	:= csUnsetString;
 
     // Reset the timer
-    tonValueTimeout(IN:=FALSE);
-    tonValueTimeout(IN:=TRUE, PT:=tTimeout);
+    fbValueTimeout(IN:=FALSE);
+    fbValueTimeout(IN:=TRUE, PT:=ctTimeout);
 END_IF
 
-tonValueTimeout();
-tonSeverityTimeout();
-bValid := (NOT tonValueTimeout.Q) AND
-          (NOT tonSeverityTimeout.Q) AND
-          (iLastValidSeverity <= iMaximumValidSeverity);
+fbValueTimeout();
+fbSeverityTimeout();
+bValid := (NOT fbValueTimeout.Q) AND
+          (NOT fbSeverityTimeout.Q) AND
+          (nLastValidSeverity <= nMaximumValidSeverity);
 sValue := sLastValidValue;]]></ST>
     </Implementation>
   </POU>

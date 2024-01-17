@@ -7,13 +7,13 @@ VAR_INPUT
 END_VAR
 VAR CONSTANT
     // Timer ticks in Windows are 100ns (1e-7 sec)
-    nTicksToSeconds : LREAL := 10_000_000;
+    cfTicksToSeconds : LREAL := 10_000_000;
     // Epoch offset 1601 to 1970
-    nEpochOffset	: LREAL := 11_644_473_600;
+    cfEpochOffset	: LREAL := 11_644_473_600;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_ConvertTicksToUnixTimestamp := ULINT_TO_LREAL(nTimestamp) / nTicksToSeconds - nEpochOffset;]]></ST>
+      <ST><![CDATA[F_ConvertTicksToUnixTimestamp := ULINT_TO_LREAL(nTimestamp) / cfTicksToSeconds - cfEpochOffset;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

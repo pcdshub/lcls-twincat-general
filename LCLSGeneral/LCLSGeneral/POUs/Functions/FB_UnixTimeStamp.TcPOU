@@ -15,11 +15,11 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
     // Number of seconds in the timestamp
-    iSeconds: ULINT;
+    nSeconds: ULINT;
     // Number of milliseconds past the seconds
-    iMilliseconds: ULINT;
+    nMilliseconds: ULINT;
     // Full raw number
-    iFull: ULINT;
+    nFull: ULINT;
     // Full floating point number in units of seconds
     fTime: LREAL;
     // TRUE if the output is okay to use on this cycle. Typically the output is zero when this is FALSE.
@@ -30,7 +30,7 @@ VAR
     fbLocalTime: FB_LocalSystemTime;
     fbGetTimeZone: FB_GetTimeZoneInformation;
     fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
-    fileTime: T_FILETIME;
+    stFileTime: T_FILETIME;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -46,11 +46,11 @@ IF bExecute THEN
     IF bValid THEN
         fbTimeConv(
             in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
-            out => fileTime);
-        iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
-        fTime := ULINT_TO_LREAL(iFull)/1000;
-        iSeconds := iFull/1000;
-        iMilliseconds := iFull MOD 1000;
+            out => stFileTime);
+        nFull := (SHL(DWORD_TO_ULINT(stFileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(stFileTime.dwLowDateTime)) / 10000 - 11644473600000;
+        fTime := ULINT_TO_LREAL(nFull)/1000;
+        nSeconds := nFull/1000;
+        nMilliseconds := nFull MOD 1000;
     END_IF
 END_IF]]></ST>
     </Implementation>

@@ -99,9 +99,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidX.iPLCInternalSeverity), nX_Severity);
-WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidY.iPLCInternalSeverity), nY_Severity);
-WRITE_PROTECTED_INT(ADR(fbMonitor.fbArrayCounter.iPLCInternalSeverity), nCount_Severity);
+        <ST><![CDATA[WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidX.nPLCInternalSeverity), nX_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbCentroidY.nPLCInternalSeverity), nY_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbArrayCounter.nPLCInternalSeverity), nCount_Severity);
 
 WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbCentroidX.fPLCInternalValue), fX);
 WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbCentroidY.fPLCInternalValue), fY);

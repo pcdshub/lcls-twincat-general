@@ -165,9 +165,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WRITE_PROTECTED_INT(ADR(fbMonitor.fbRBVCheck.iPLCInternalSeverity), nRBV_Severity);
-WRITE_PROTECTED_INT(ADR(fbMonitor.fbMotorStatusCheck.iPLCInternalSeverity), nStatus_Severity);
-WRITE_PROTECTED_INT(ADR(fbMonitor.fbMovingCheck.iPLCInternalSeverity), nMoving_Severity);
+        <ST><![CDATA[WRITE_PROTECTED_INT(ADR(fbMonitor.fbRBVCheck.nPLCInternalSeverity), nRBV_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbMotorStatusCheck.nPLCInternalSeverity), nStatus_Severity);
+WRITE_PROTECTED_INT(ADR(fbMonitor.fbMovingCheck.nPLCInternalSeverity), nMoving_Severity);
 
 WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbRBVCheck.fPLCInternalValue), fRBV);
 WRITE_PROTECTED_LREAL(ADR(fbMonitor.fbMotorStatusCheck.fPLCInternalValue), UINT_TO_LREAL(nStatus));

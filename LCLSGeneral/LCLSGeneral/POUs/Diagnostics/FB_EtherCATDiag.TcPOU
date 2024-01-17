@@ -21,48 +21,48 @@ VAR_OUTPUT
     stMasterDevState			: ST_EcMasterDevState; // splitted master device state
     bBusy						: BOOL;			// FB busy
     bError						: BOOL;			// FB with error
-    iErrorID					: UDINT;		// FB error ID
+    nErrorID					: UDINT;		// FB error ID
 END_VAR
 VAR_IN_OUT
-    arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info from configured slaves
-    arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
+    astDiagSlaveInfo 			: ARRAY [0..cnEscMaxPorts] OF ST_SlaveStateInfo;		// read in info from configured slaves
+    astDiagSlaveInfoScanned		: ARRAY [0..cnEscMaxPorts] OF ST_SlaveStateInfoScanned;	// read in info from scanned slaves
 END_VAR
 VAR
-    iState						: E_EcatDiagState;
+    eState						: E_EcatDiagState;
     nMasterDevStatePrev			: WORD;
     bSlaveCountErrorPrev		: BOOL;
     bAllFrameWcStatesOKPrev		: BOOL;
     bDiagReq					: BOOL := TRUE;
-    I							: UDINT;
-    P							: UDINT;
+    nI							: UDINT;
+    nP							: UDINT;
 
-    arrSlaveInfo 				: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfo;
-    rSlaveInfo  :   REFERENCE TO ST_SlaveStateInfo;
+    astSlaveInfo 				: ARRAY [0..cnSlaveAddrArrSize] OF ST_SlaveStateInfo;
+    stSlaveInfo  :   REFERENCE TO ST_SlaveStateInfo;
 
     (* -- Get Slave Addresses *)
     fbGetSlaveAddresses 		: FB_EcGetAllSlaveAddr;
-    arrSlaveAddresses 			: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF UINT;
-    iNumOfSlavesRead			: UINT;
+    anSlaveAddresses 			: ARRAY[0..cnSlaveAddrArrSize] OF UINT;
+    nNumOfSlavesRead			: UINT;
 
     (* -- Get Slave States *)
     fbGetAllSlaveStates			: FB_EcGetAllSlaveStates;
-    arrSlaveStates 				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveState;
+    astSlaveStates 				: ARRAY[0..cnSlaveAddrArrSize] OF ST_EcSlaveState;
 
     (* -- Get Topology Data *)
-    iTopologyData				: UDINT;
+    nTopologyData				: UDINT;
     fbGetTopologyData			: ADSREAD;
-    arrTopologyData				: ARRAY[0..iSLAVEADDR_ARR_SIZE] OF ST_TopologyData;
+    astTopologyData				: ARRAY[0..cnSlaveAddrArrSize] OF ST_TopologyData;
 
     (* -- Check Topology *)
-    aiDiagIndex					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
-    iDiagIndex : UINT;
-    aiDiagPort					: ARRAY [0..ESC_MAX_PORTS] OF UINT;
-    iDiagPort : UINT;
-    iIdx						: DINT;
+    anDiagIndex					: ARRAY [0..cnEscMaxPorts] OF UINT;
+    nDiagIndex : UINT;
+    anDiagPort					: ARRAY [0..cnEscMaxPorts] OF UINT;
+    nDiagPort : UINT;
+    nIdx						: DINT;
 
     (* -- Scan Slaves *)
     fbEcGetScannedSlaves		: FB_EcGetScannedSlaves;
-    arrScannedSlaveInfo			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_EcSlaveScannedData; // what...
+    astScannedSlaveInfo			: ARRAY [0..cnSlaveAddrArrSize] OF ST_EcSlaveScannedData; // what...
     rScannedSlaveInfo   :   REFERENCE TO ST_EcSlaveScannedData;
     nScannedSlaves				: UINT;
 
@@ -72,9 +72,9 @@ VAR
 
     (* -- Get Slave Names *)
     fbGetSlaveName 				: IOF_GetBoxNameByAddr;
-    arrSlaveInfoScanned			: ARRAY [0..iSLAVEADDR_ARR_SIZE] OF ST_SlaveStateInfoScanned; // the F
-    rSlaveInfoScanned   :   REFERENCE TO ST_SlaveStateInfoScanned;
-    strName						: STRING;
+    astSlaveInfoScanned			: ARRAY [0..cnSlaveAddrArrSize] OF ST_SlaveStateInfoScanned; // the F
+    stSlaveInfoScanned   :   REFERENCE TO ST_SlaveStateInfoScanned;
+    sStringName						: STRING;
 
 
 
@@ -83,19 +83,18 @@ VAR
 
     fbJson : FB_JsonSaxWriter;
     fbJsonDataType : FB_JsonReadWriteDataType;
-    rDiagSlaveInfo : REFERENCE TO ST_SlaveStateInfo;
-    tEtherCATOK : F_TRIG;
-    tFrameWcStateError : R_TRIG;
-    tMasterError : R_TRIG;
-    jsonIdx : UINT;
+    stDiagSlaveInfo : REFERENCE TO ST_SlaveStateInfo;
+    fbEtherCATOK : F_TRIG;
+    fbFrameWcStateError : R_TRIG;
+    fbMasterError : R_TRIG;
+    nJsonIdx : UINT;
     {attribute 'analysis' := '-27'}
-    test : T_MaxString;
+    sTest : T_MaxString;
 END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-(* cyclic diag *)
+      <ST><![CDATA[(* cyclic diag *)
 bFrameWcStateError := NOT bAllFrameWcStatesOK;
 
 bSlaveCountError := (nSlaveCount <> nSlaveCountCfg) OR (nSlaveCount = 0);
@@ -115,23 +114,23 @@ IF (nMasterDevState <> nMasterDevStatePrev) THEN
 END_IF
 
 (* acyclic diag *)
-CASE iState OF
+CASE eState OF
 E_EcatDiagState.Idle: (* IDLE *)
     IF bDiagReq THEN				// diag requested
         bDiagReq := FALSE;
 
         IF sMasterNetID <> '' AND sMasterNetID <> '0.0.0.0.0.0' THEN
-            iState := E_EcatDiagState.GetSlaveAddresses;	// execute diag
+            eState := E_EcatDiagState.GetSlaveAddresses;	// execute diag
             bBusy := TRUE;
         ELSE
             bError := TRUE;
-            iErrorID := 7;
+            nErrorID := 7;
         END_IF
 
         bEtherCATOK := FALSE;
     ELSE
         // check for changes in idle
-        IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+        IF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK) AND NOT (astSlaveInfo[anDiagIndex[0]].bDiagData) THEN
             bEtherCATOK := FALSE;
             bDiagReq := TRUE;//new error --> diag requested
         ELSIF (bSlaveCountError AND NOT bSlaveCountErrorPrev) OR (NOT bSlaveCountError AND bSlaveCountErrorPrev) THEN
@@ -145,7 +144,7 @@ E_EcatDiagState.Idle: (* IDLE *)
             bAllFrameWcStatesOKPrev := bAllFrameWcStatesOK;
             bEtherCATOK := FALSE;
             bDiagReq := TRUE;// frame error change detected --> diag required
-        ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR arrSlaveInfo[aiDiagIndex[0]].bDiagData) THEN
+        ELSIF (bSlaveCountError OR bMasterDevStateError OR NOT bAllFrameWcStatesOK OR astSlaveInfo[anDiagIndex[0]].bDiagData) THEN
             bEtherCATOK := FALSE;
         ELSE
             bEtherCATOK := TRUE;
@@ -182,37 +181,37 @@ E_EcatDiagState.LogDiagnostics: (* Log diagnostics *)
     the symbol parser encounters datatypes it can't deal with it nulls
     the whole thing. I'll keep this code commented out until someone figures
     out how to deal with parsing the slave structs into the json payload *)
-    IF jsonIdx < iNumOfSlavesRead THEN // the last entry is always blank
-        jsonIdx := MIN(iSLAVEADDR_ARR_SIZE, jsonIdx);
-        rDiagSlaveInfo REF= arrSlaveInfo[jsonIdx];
+    IF nJsonIdx < nNumOfSlavesRead THEN // the last entry is always blank
+        nJsonIdx := MIN(cnSlaveAddrArrSize, nJsonIdx);
+        stDiagSlaveInfo REF= astSlaveInfo[nJsonIdx];
         DiagnosticJson();
-        fbLogger(sMsg:=CONCAT('Diag Results: ', rDiagSlaveInfo.sName),
+        fbLogger(sMsg:=CONCAT('Diag Results: ', stDiagSlaveInfo.sName),
                 eSevr:=TcEventSeverity.Info);
-        jsonIdx := jsonIdx + 1;
+        nJsonIdx := nJsonIdx + 1;
     ELSE
-        jsonIdx := 0;
-        iState := E_EcatDiagState.Done;
+        nJsonIdx := 0;
+        eState := E_EcatDiagState.Done;
     END_IF
 
 E_EcatDiagState.Done:	(* DONE *)
     bBusy := FALSE;
-    iState := 0;
+    eState := 0;
 
 END_CASE
 
 // Log messages
-tEtherCATOK(CLK:=bEtherCATOK);
-IF tEtherCATOK.Q THEN
+fbEtherCATOK(CLK:=bEtherCATOK);
+IF fbEtherCATOK.Q THEN
     fbLogger(sMsg:='EtherCAT failure, starting diagnostic', eSevr:=TcEventSeverity.Critical, sJson:='');
 END_IF
 
-tFrameWcStateError(CLK:=bFrameWcStateError);
-IF tFrameWcStateError.Q THEN
+fbFrameWcStateError(CLK:=bFrameWcStateError);
+IF fbFrameWcStateError.Q THEN
     fbLogger(sMsg:='Working Counter Frame Error: error in at least one frame', eSevr:=TcEventSeverity.Error, sJson:='');
 END_IF
 
-tMasterError(CLK:=bMasterDevStateError);
-IF tMasterError.Q THEN
+fbMasterError(CLK:=bMasterDevStateError);
+IF fbMasterError.Q THEN
     fbJson.StartObject();
         fbJson.AddKey('ecat_master_diag');
         fbJson.StartObject();
@@ -249,66 +248,66 @@ END_IF
     fbJson.StartObject();
 
         fbJson.AddKey('nECAddr');
-        fbJson.AddUdint(rDiagSlaveInfo.nECAddr);
+        fbJson.AddUdint(stDiagSlaveInfo.nECAddr);
 
         fbJson.AddKey('nIndex');
-        fbJson.AddDint(rDiagSlaveInfo.nIndex);
+        fbJson.AddDint(stDiagSlaveInfo.nIndex);
 
         fbJson.AddKey('sName');
-        fbJson.AddString(rDiagSlaveInfo.sName);
+        fbJson.AddString(stDiagSlaveInfo.sName);
 
         fbJson.AddKey('sType');
-        fbJson.AddString(rDiagSlaveInfo.sType);
+        fbJson.AddString(stDiagSlaveInfo.sType);
 
         fbJson.AddKey('bDiagData');
-        fbJson.AddBool(rDiagSlaveInfo.bDiagData);
+        fbJson.AddBool(stDiagSlaveInfo.bDiagData);
 
         fbJson.AddKey('stPortCRCErrors');
         fbjson.StartObject();
 
             fbJson.AddKey('portA');
-            fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portA);
+            fbJson.AddUdint(stDiagSlaveInfo.stPortCRCErrors.portA);
             fbJson.AddKey('portB');
-            fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portB);
+            fbJson.AddUdint(stDiagSlaveInfo.stPortCRCErrors.portB);
             fbJson.AddKey('portC');
-            fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portC);
+            fbJson.AddUdint(stDiagSlaveInfo.stPortCRCErrors.portC);
             fbJson.AddKey('portD');
-            fbJson.AddUdint(rDiagSlaveInfo.stPortCRCErrors.portD);
+            fbJson.AddUdint(stDiagSlaveInfo.stPortCRCErrors.portD);
 
         fbJson.EndObject();
 
         fbJson.AddKey('nSumCRCErrors');
-        fbjson.AddUdint(rDiagSlaveInfo.nSumCRCErrors);
+        fbjson.AddUdint(stDiagSlaveInfo.nSumCRCErrors);
 
         fbJson.AddKey('stState');
         fbJson.StartObject();
 
             fbJson.AddKey('eEcState ');
-            fbJson.AddUdint(rDiagSlaveInfo.stState.eEcState);
+            fbJson.AddUdint(stDiagSlaveInfo.stState.eEcState);
             fbJson.AddKey('nReserved');
-            fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved);
+            fbJson.AddUdint(stDiagSlaveInfo.stState.nReserved);
             fbJson.AddKey('bError');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bError);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bError);
             fbJson.AddKey('bInvalidVPRS');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bInvalidVPRS);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bInvalidVPRS);
             fbJson.AddKey('nReserved2');
-            fbJson.AddUdint(rDiagSlaveInfo.stState.nReserved2);
+            fbJson.AddUdint(stDiagSlaveInfo.stState.nReserved2);
             fbJson.AddKey('bNoCommToSlave');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bNoCommToSlave);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bNoCommToSlave);
             fbJson.AddKey('bLinkError');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bLinkError);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bLinkError);
             fbJson.AddKey('bMissingLink');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bMissingLink);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bMissingLink);
             fbJson.AddKey('bUnexpectedLink');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bUnexpectedLink);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bUnexpectedLink);
             fbJson.AddKey('bPortA');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bPortA);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bPortA);
             fbJson.AddKey('bPortB');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bPortB);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bPortB);
             fbJson.AddKey('bPortC');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bPortC);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bPortC);
             fbJson.AddKey('bPortD');
-            fbJson.AddBool(rDiagSlaveInfo.stState.bPortD);
+            fbJson.AddBool(stDiagSlaveInfo.stState.bPortD);
 
         fbJson.EndObject();
 
@@ -340,8 +339,8 @@ nMasterDevStatePrev 				:= nMasterDevState;
     <Action Name="M_GetScannedSlaveName" Id="{b8516cb6-a50d-4847-8ef9-760658b0a4c9}">
       <Implementation>
         <ST><![CDATA[
-rSlaveInfoScanned REF= arrSlaveInfoScanned[aiDiagIndex[iIdx]];
-rScannedSlaveInfo REF= arrScannedSlaveInfo[aiDiagIndex[iIdx]];
+stSlaveInfoScanned REF= astSlaveInfoScanned[anDiagIndex[nIdx]];
+rScannedSlaveInfo REF= astScannedSlaveInfo[anDiagIndex[nIdx]];
 
 fbGetSlaveName(
     NETID		:= sIPCNetId,
@@ -349,62 +348,62 @@ fbGetSlaveName(
     BOXADDR		:= rScannedSlaveInfo.nAddr,
     START		:= TRUE,
     TMOUT		:= tTimeout,
-    BOXNAME		=> strName
+    BOXNAME		=> sStringName
 );
 
 IF NOT fbGetSlaveName.BUSY THEN
     fbGetSlaveName(START:= FALSE);
 
     (* add scanned info *)
-    rSlaveInfoScanned.nIndex 	:= iDiagIndex + 1;
+    stSlaveInfoScanned.nIndex 	:= nDiagIndex + 1;
     IF rScannedSlaveInfo.nAddr <> 0 THEN
         IF NOT fbGetSlaveName.ERR THEN
-            rSlaveInfoScanned.sName := strName;
+            stSlaveInfoScanned.sName := sStringName;
         END_IF
     ELSE
-        rSlaveInfoScanned.sType		:= '';
+        stSlaveInfoScanned.sType		:= '';
     END_IF
 
-    IF (iDiagIndex < nScannedSlaves) THEN
-        rSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
+    IF (nDiagIndex < nScannedSlaves) THEN
+        stSlaveInfoScanned.sType		:= F_ConvProductCodeToString(rScannedSlaveInfo.stSlaveIdentity);
     ELSE
-        rSlaveInfoScanned.sType		:= '';
+        stSlaveInfoScanned.sType		:= '';
     END_IF
 
-    rSlaveInfoScanned.nECAddr	:= rScannedSlaveInfo.nAddr;
+    stSlaveInfoScanned.nECAddr	:= rScannedSlaveInfo.nAddr;
 
-    IF rSlaveInfoScanned.sName <> rSlaveInfo.sName THEN
-        rSlaveInfoScanned.bDifferentName := TRUE;
+    IF stSlaveInfoScanned.sName <> stSlaveInfo.sName THEN
+        stSlaveInfoScanned.bDifferentName := TRUE;
     ELSE
-        rSlaveInfoScanned.bDifferentName := FALSE;
+        stSlaveInfoScanned.bDifferentName := FALSE;
     END_IF
 
-    IF rSlaveInfoScanned.nECAddr <> rSlaveInfo.nECAddr THEN
-        rSlaveInfoScanned.bDifferentAddr := TRUE;
+    IF stSlaveInfoScanned.nECAddr <> stSlaveInfo.nECAddr THEN
+        stSlaveInfoScanned.bDifferentAddr := TRUE;
     ELSE
-        rSlaveInfoScanned.bDifferentAddr := FALSE;
+        stSlaveInfoScanned.bDifferentAddr := FALSE;
     END_IF
 
-    IF rSlaveInfoScanned.sType <> rSlaveInfo.sType THEN
-        rSlaveInfoScanned.bDifferentType := TRUE;
+    IF stSlaveInfoScanned.sType <> stSlaveInfo.sType THEN
+        stSlaveInfoScanned.bDifferentType := TRUE;
     ELSE
-        rSlaveInfoScanned.bDifferentType := FALSE;
+        stSlaveInfoScanned.bDifferentType := FALSE;
     END_IF
 
-    IF iIdx < ESC_MAX_PORTS THEN
-        iIdx := iIdx + 1;
-        iState := E_EcatDiagState.GetSlaveIdentity; // loop back
+    IF nIdx < cnEscMaxPorts THEN
+        nIdx := nIdx + 1;
+        eState := E_EcatDiagState.GetSlaveIdentity; // loop back
     ELSE
-        iIdx := 0;
-        iState := E_EcatDiagState.LogDiagnostics;
+        nIdx := 0;
+        eState := E_EcatDiagState.LogDiagnostics;
 
-        FOR I := 0 TO ESC_MAX_PORTS DO
-            IF aiDiagPort[I] <> 0 THEN
-                arrDiagSlaveInfo[I] := arrSlaveInfo[aiDiagIndex[I]];
-                arrDiagSlaveInfoScanned[I] := arrSlaveInfoScanned[aiDiagIndex[I]];
+        FOR nI := 0 TO cnEscMaxPorts DO
+            IF anDiagPort[nI] <> 0 THEN
+                astDiagSlaveInfo[nI] := astSlaveInfo[anDiagIndex[nI]];
+                astDiagSlaveInfoScanned[nI] := astSlaveInfoScanned[anDiagIndex[nI]];
             ELSE
-                MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
-                MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+                MEMSET(ADR(astDiagSlaveInfo[nI]), 0, SIZEOF(astDiagSlaveInfo[nI]));
+                MEMSET(ADR(astDiagSlaveInfoScanned[nI]), 0, SIZEOF(astDiagSlaveInfoScanned[nI]));
             END_IF
         END_FOR
     END_IF
@@ -416,21 +415,21 @@ END_IF
       <Implementation>
         <ST><![CDATA[fbGetSlaveAddresses(
     sNetId		:= sMasterNetID,
-    pAddrBuf	:= ADR(arrSlaveAddresses),
-    cbBufLen	:= SIZEOF(arrSlaveAddresses),
+    pAddrBuf	:= ADR(anSlaveAddresses),
+    cbBufLen	:= SIZEOF(anSlaveAddresses),
     bExecute	:= TRUE,
     tTimeout	:= tTimeout,
-    nSlaves		=> iNumOfSlavesRead
+    nSlaves		=> nNumOfSlavesRead
 );
 
 IF NOT fbGetSlaveAddresses.bBusy THEN
     fbGetSlaveAddresses(bExecute:= FALSE);
     IF NOT fbGetSlaveAddresses.bError THEN
-        FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
-            arrSlaveInfo[I].nECAddr := arrSlaveAddresses[I];
+        FOR nI := 0 TO MIN(nNumOfSlavesRead, cnSlaveAddrArrSize) DO
+            astSlaveInfo[nI].nECAddr := anSlaveAddresses[nI];
         END_FOR
     END_IF
-    iState := GetSlaveStates;
+    eState := GetSlaveStates;
 END_IF
 ]]></ST>
       </Implementation>
@@ -438,14 +437,14 @@ END_IF
     <Action Name="M_GetSlaveIdentity" Id="{6436ec18-e4f4-4415-8713-025490e22c62}">
       <Implementation>
         <ST><![CDATA[
-iDiagIndex := aiDiagIndex[iIdx];
-iDiagPort := aiDiagPort[iIdx];
+nDiagIndex := anDiagIndex[nIdx];
+nDiagPort := anDiagPort[nIdx];
 
-rSlaveInfo REF= arrSlaveInfo[iDiagIndex];
+stSlaveInfo REF= astSlaveInfo[nDiagIndex];
 
 fbGetSlaveIdentity(
     sNetId		:= sMasterNetID,
-    nSlaveAddr	:= rSlaveInfo.nECAddr,
+    nSlaveAddr	:= stSlaveInfo.nECAddr,
     bExecute	:= TRUE,
     tTimeout	:= tTimeout,
     identity	=> stIdentity
@@ -455,12 +454,12 @@ IF NOT fbGetSlaveIdentity.bBusy THEN
     fbGetSlaveIdentity(bExecute:= FALSE);
 
     IF NOT fbGetSlaveIdentity.bError THEN
-        IF aiDiagPort[iIdx] <> 0 THEN
-            rSlaveInfo.nIndex	:= aiDiagIndex[iIdx] + 1;
-            rSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
+        IF anDiagPort[nIdx] <> 0 THEN
+            stSlaveInfo.nIndex	:= anDiagIndex[nIdx] + 1;
+            stSlaveInfo.sType 	:= F_ConvProductCodeToString(stSlaveIdentity := stIdentity);
         END_IF
     END_IF
-    iState := E_EcatDiagState.GetSlaveName;
+    eState := E_EcatDiagState.GetSlaveName;
 END_IF
 ]]></ST>
       </Implementation>
@@ -470,22 +469,22 @@ END_IF
         <ST><![CDATA[fbGetSlaveName(
     NETID		:= sIPCNetId,
     DEVICEID	:= nMasterDevID,
-    BOXADDR		:= rSlaveInfo.nECAddr,
+    BOXADDR		:= stSlaveInfo.nECAddr,
     START		:= TRUE,
     TMOUT		:= tTimeout,
-    BOXNAME		=> strName
+    BOXNAME		=> sStringName
 );
 
 IF NOT fbGetSlaveName.BUSY THEN
     fbGetSlaveName(START:= FALSE);
 
     IF NOT fbGetSlaveName.ERR THEN
-        IF iDiagPort <> 0 THEN
-            rSlaveInfo.sName 	:= strName;
+        IF nDiagPort <> 0 THEN
+            stSlaveInfo.sName 	:= sStringName;
         END_IF
     END_IF
 
-    iState := E_EcatDiagState.GetScannedSlaveName;
+    eState := E_EcatDiagState.GetScannedSlaveName;
 END_IF
 ]]></ST>
       </Implementation>
@@ -494,48 +493,48 @@ END_IF
       <Implementation>
         <ST><![CDATA[fbGetAllSlaveStates(
     sNetId		:= sMasterNetID,
-    pStateBuf	:= ADR(arrSlaveStates),
-    cbBufLen	:= SIZEOF(arrSlaveStates),
+    pStateBuf	:= ADR(astSlaveStates),
+    cbBufLen	:= SIZEOF(astSlaveStates),
     bExecute	:= TRUE,
     tTimeout	:= tTimeout,
-    nSlaves		=> iNumOfSlavesRead
+    nSlaves		=> nNumOfSlavesRead
 );
 
 IF NOT fbGetAllSlaveStates.bBusy THEN
     fbGetAllSlaveStates(bExecute:= FALSE);
 
     IF NOT fbGetAllSlaveStates.bError THEN
-        IF iNumOfSlavesRead = nSlaveCountCfg THEN
-            FOR I := 0 TO ESC_MAX_PORTS DO
-                aiDiagIndex[I] := 0;
+        IF nNumOfSlavesRead = nSlaveCountCfg THEN
+            FOR nI := 0 TO cnEscMaxPorts DO
+                anDiagIndex[nI] := 0;
             END_FOR
 
             (* split slave state and link state *)
-            FOR I := 0 TO MIN(iNumOfSlavesRead, iSLAVEADDR_ARR_SIZE) DO
+            FOR nI := 0 TO MIN(nNumOfSlavesRead, cnSlaveAddrArrSize) DO
                 (* slave state*)
-                arrSlaveInfo[I].stState.eEcState 		:= arrSlaveStates[I].deviceState AND 16#0F;
-                arrSlaveInfo[I].stState.bError 			:= arrSlaveStates[I].deviceState.4;
-                arrSlaveInfo[I].stState.bInvalidVPRS 	:= arrSlaveStates[I].deviceState.5;
+                astSlaveInfo[nI].stState.eEcState 		:= astSlaveStates[nI].deviceState AND 16#0F;
+                astSlaveInfo[nI].stState.bError 			:= astSlaveStates[nI].deviceState.4;
+                astSlaveInfo[nI].stState.bInvalidVPRS 	:= astSlaveStates[nI].deviceState.5;
                 (* link state *)
-                arrSlaveInfo[I].stState.bNoCommToSlave 	:= arrSlaveStates[I].linkState.0;
-                arrSlaveInfo[I].stState.bLinkError 		:= arrSlaveStates[I].linkState.1;
-                arrSlaveInfo[I].stState.bMissingLink 	:= arrSlaveStates[I].linkState.2;
-                arrSlaveInfo[I].stState.bUnexpectedLink := arrSlaveStates[I].linkState.3;
-                arrSlaveInfo[I].stState.bPortA 			:= arrSlaveStates[I].linkState.4;
-                arrSlaveInfo[I].stState.bPortB 			:= arrSlaveStates[I].linkState.5;
-                arrSlaveInfo[I].stState.bPortC 			:= arrSlaveStates[I].linkState.6;
-                arrSlaveInfo[I].stState.bPortD 			:= arrSlaveStates[I].linkState.7;
+                astSlaveInfo[nI].stState.bNoCommToSlave 	:= astSlaveStates[nI].linkState.0;
+                astSlaveInfo[nI].stState.bLinkError 		:= astSlaveStates[nI].linkState.1;
+                astSlaveInfo[nI].stState.bMissingLink 	:= astSlaveStates[nI].linkState.2;
+                astSlaveInfo[nI].stState.bUnexpectedLink := astSlaveStates[nI].linkState.3;
+                astSlaveInfo[nI].stState.bPortA 			:= astSlaveStates[nI].linkState.4;
+                astSlaveInfo[nI].stState.bPortB 			:= astSlaveStates[nI].linkState.5;
+                astSlaveInfo[nI].stState.bPortC 			:= astSlaveStates[nI].linkState.6;
+                astSlaveInfo[nI].stState.bPortD 			:= astSlaveStates[nI].linkState.7;
                 (* DiagData *)
-                arrSlaveInfo[I].bDiagData	:= ((arrSlaveStates[I].deviceState AND 16#F0) <> 0) OR
-                    (((arrSlaveStates[I].deviceState AND 16#0F) > 0) AND ((arrSlaveStates[I].deviceState AND 16#0F) < 8)) OR
-                    (arrSlaveStates[I].linkState <> 0);
+                astSlaveInfo[nI].bDiagData	:= ((astSlaveStates[nI].deviceState AND 16#F0) <> 0) OR
+                    (((astSlaveStates[nI].deviceState AND 16#0F) > 0) AND ((astSlaveStates[nI].deviceState AND 16#0F) < 8)) OR
+                    (astSlaveStates[nI].linkState <> 0);
 
-                IF arrSlaveInfo[I].bDiagData THEN
-                    IF (I=0) THEN
-                        aiDiagIndex[0] := 0;
+                IF astSlaveInfo[nI].bDiagData THEN
+                    IF (nI=0) THEN
+                        anDiagIndex[0] := 0;
                     ELSE
-                        IF (aiDiagIndex[0] = 0) AND NOT arrSlaveInfo[0].bDiagData THEN
-                            aiDiagIndex[0] :=  UDINT_TO_UINT(I);
+                        IF (anDiagIndex[0] = 0) AND NOT astSlaveInfo[0].bDiagData THEN
+                            anDiagIndex[0] :=  UDINT_TO_UINT(nI);
                         END_IF
                     END_IF
                 END_IF
@@ -543,14 +542,14 @@ IF NOT fbGetAllSlaveStates.bBusy THEN
         END_IF
     END_IF
 
-    IF arrSlaveInfo[aiDiagIndex[0]].bDiagData THEN
-        iState := E_EcatDiagState.GetTopoDataLen;
+    IF astSlaveInfo[anDiagIndex[0]].bDiagData THEN
+        eState := E_EcatDiagState.GetTopoDataLen;
     ELSE
-        FOR I := 0 TO ESC_MAX_PORTS DO
-            MEMSET(ADR(arrDiagSlaveInfo[I]), 0, SIZEOF(arrDiagSlaveInfo[I]));
-            MEMSET(ADR(arrDiagSlaveInfoScanned[I]), 0, SIZEOF(arrDiagSlaveInfoScanned[I]));
+        FOR nI := 0 TO cnEscMaxPorts DO
+            MEMSET(ADR(astDiagSlaveInfo[nI]), 0, SIZEOF(astDiagSlaveInfo[nI]));
+            MEMSET(ADR(astDiagSlaveInfoScanned[nI]), 0, SIZEOF(astDiagSlaveInfoScanned[nI]));
         END_FOR
-        iState := E_EcatDiagState.Done;
+        eState := E_EcatDiagState.Done;
     END_IF
 END_IF
 ]]></ST>
@@ -563,8 +562,8 @@ END_IF
     PORT	:= 16#FFFF,
     IDXGRP	:= 16#22,
     IDXOFFS	:= 0,
-    LEN		:= iTopologyData*SIZEOF(arrTopologyData[0]),
-    DESTADDR:= ADR(arrTopologyData),
+    LEN		:= nTopologyData*SIZEOF(astTopologyData[0]),
+    DESTADDR:= ADR(astTopologyData),
     READ	:= TRUE,
     TMOUT	:= tTimeout,
 );
@@ -573,22 +572,22 @@ IF NOT fbGetTopologyData.BUSY THEN
     fbGetTopologyData(READ := FALSE);
 
     IF NOT fbGetTopologyData.ERR THEN
-        aiDiagPort[0] := arrTopologyData[aiDiagIndex[0]].iOwnPhysicalAddr;
-        aiDiagPort[1] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portB;
-        aiDiagPort[2] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portC;
-        aiDiagPort[ESC_MAX_PORTS] := arrTopologyData[aiDiagIndex[0]].stPhysicalAddr.portD;
+        anDiagPort[0] := astTopologyData[anDiagIndex[0]].nOwnPhysicalAddr;
+        anDiagPort[1] := astTopologyData[anDiagIndex[0]].stPhysicalAddr.portB;
+        anDiagPort[2] := astTopologyData[anDiagIndex[0]].stPhysicalAddr.portC;
+        anDiagPort[cnEscMaxPorts] := astTopologyData[anDiagIndex[0]].stPhysicalAddr.portD;
 
         (* clear diag index  *)
-        aiDiagIndex[1] := 0;
-        aiDiagIndex[2] := 0;
-        aiDiagIndex[ESC_MAX_PORTS] := 0;
+        anDiagIndex[1] := 0;
+        anDiagIndex[2] := 0;
+        anDiagIndex[cnEscMaxPorts] := 0;
 
         (* find slaves on PortB-D of first slave with diag *)
-        FOR P := 0 TO ESC_MAX_PORTS DO
-            IF aiDiagPort[P] <> 0 THEN
-            FOR I := 0 TO MIN(iTopologyData-1,iSLAVEADDR_ARR_SIZE) DO
-                IF arrTopologyData[I].iOwnPhysicalAddr = aiDiagPort[P] THEN
-                    aiDiagIndex[P] := UDINT_TO_UINT(I);
+        FOR nP := 0 TO cnEscMaxPorts DO
+            IF anDiagPort[nP] <> 0 THEN
+            FOR nI := 0 TO MIN(nTopologyData-1,cnSlaveAddrArrSize) DO
+                IF astTopologyData[nI].nOwnPhysicalAddr = anDiagPort[nP] THEN
+                    anDiagIndex[nP] := UDINT_TO_UINT(nI);
                     EXIT;
                 END_IF
             END_FOR
@@ -596,8 +595,8 @@ IF NOT fbGetTopologyData.BUSY THEN
         END_FOR
     END_IF
 
-    iIdx := 0;
-    iState := E_EcatDiagState.ScanSlaves;
+    nIdx := 0;
+    eState := E_EcatDiagState.ScanSlaves;
 END_IF
 ]]></ST>
       </Implementation>
@@ -609,8 +608,8 @@ END_IF
     PORT	:= 16#FFFF,
     IDXGRP	:= EC_ADS_IGRP_MASTER_COUNT_SLAVE,
     IDXOFFS	:= EC_ADS_IOFFS_MASTER_COUNT_SLAVE,
-    LEN		:= SIZEOF(iTopologyData),
-    DESTADDR:= ADR(iTopologyData),
+    LEN		:= SIZEOF(nTopologyData),
+    DESTADDR:= ADR(nTopologyData),
     READ	:= TRUE,
     TMOUT	:= tTimeout,
 );
@@ -618,7 +617,7 @@ END_IF
 IF NOT fbGetTopologyData.BUSY THEN
     fbGetTopologyData(READ := FALSE);
 
-    iState := E_EcatDiagState.GetTopoData;
+    eState := E_EcatDiagState.GetTopoData;
 END_IF
 ]]></ST>
       </Implementation>
@@ -628,8 +627,8 @@ END_IF
         <ST><![CDATA[fbEcGetScannedSlaves(
     bExecute				:= TRUE,
     sNetId					:= sMasterNetID,
-    pArrEcScannedSlaveInfo	:= ADR(arrScannedSlaveInfo),
-    cbBufLen				:= SIZEOF(arrScannedSlaveInfo),
+    pArrEcScannedSlaveInfo	:= ADR(astScannedSlaveInfo),
+    cbBufLen				:= SIZEOF(astScannedSlaveInfo),
     tTimeout				:= tTimeout
 );
 
@@ -642,7 +641,7 @@ IF NOT fbEcGetScannedSlaves.bBusy THEN
         nScannedSlaves := fbEcGetScannedSlaves.nSlaves;
     END_IF
 
-    iState := E_EcatDiagState.GetSlaveIdentity;
+    eState := E_EcatDiagState.GetSlaveIdentity;
 
 END_IF
 ]]></ST>

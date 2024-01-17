@@ -13,15 +13,15 @@ VAR_OUTPUT
     stMasterDevState		: ST_EcMasterDevState; // device state split to a structure
     bBusy					: BOOL;				// diagnostic FB is busy
     bError					: BOOL;				// diagnostic FB has an error
-    iErrorID				: UDINT;			// error ID of diagnostic FB
+    nErrorID				: UDINT;			// error ID of diagnostic FB
 END_VAR
 VAR
 
     (* ******************* EtherCAT Frame ***************************** *)
     fbEtherCATFrameDiag		: FB_EtherCATFrameDiag; // frame diagnostic
     {attribute 'TcLinkTo' := 'TIID^Device 1 (EtherCAT)^Inputs^Frm1WcState'}
-    wFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
-    wReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
+    nFrmXWcState AT %I*		: WORD; 			// link to task related ethercat frame state (Frm1WcState)
+    nReqZeroMask			: WORD := 16#FFFF; 	// clear bit to ignore datagram error of Frm1WcState
     bFrameWcStateOK			: BOOL;				// this frame is OK
 
     (* ******************* EtherCAT Diag ***************************** *)
@@ -41,16 +41,15 @@ VAR
     nEcMasterSlaveCountCfg AT %I* 	: UINT;		// link to CfgSlaveCount of EtherCAT Master (InfoData)
 
     (* general variables *)
-    arrDiagSlaveInfo 			: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves
-    arrDiagSlaveInfoScanned		: ARRAY [0..ESC_MAX_PORTS] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves
+    astDiagSlaveInfo 			: ARRAY [0..cnEscMaxPorts] OF ST_SlaveStateInfo;		// read in info of configured EtherCAT slaves
+    astDiagSlaveInfoScanned		: ARRAY [0..cnEscMaxPorts] OF ST_SlaveStateInfoScanned; // read in info of scanned EtherCAT slaves
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-(*************************************** Frame Diag *********************************************)
+      <ST><![CDATA[(*************************************** Frame Diag *********************************************)
 fbEtherCATFrameDiag(
-    wFrmXWcState 	:= wFrmXWcState,
-    wReqZeroMask 	:= wReqZeroMask,
+    nFrmXWcState 	:= nFrmXWcState,
+    nReqZeroMask 	:= nReqZeroMask,
     bFrameWcStateOK	=> bFrameWcStateOK
 );
 bAllFrameWcStatesOK := bFrameWcStateOK;
@@ -67,8 +66,8 @@ fbEtherCATDiag(
     nMasterDevState		:= nEcMasterDevState,
     bAllFrameWcStatesOK	:= bAllFrameWcStatesOK,
     tTimeout			:= T#5s,
-    arrDiagSlaveInfo	:= arrDiagSlaveInfo,
-    arrDiagSlaveInfoScanned	:= arrDiagSlaveInfoScanned,
+    astDiagSlaveInfo	:= astDiagSlaveInfo,
+    astDiagSlaveInfoScanned	:= astDiagSlaveInfoScanned,
     bEtherCATOK			=> bEtherCATOK,
     bFrameWcStateError	=> bFrameWcStateError,
     bSlaveCountError	=> bSlaveCountError,
@@ -76,7 +75,7 @@ fbEtherCATDiag(
     stMasterDevState	=> stMasterDevState,
     bBusy				=> bBusy,
     bError				=> bError,
-    iErrorID			=> iErrorID
+    nErrorID			=> nErrorID
 );
 ]]></ST>
     </Implementation>
