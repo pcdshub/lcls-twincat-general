@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FlutterDetection" Id="{c8cb2075-e5fd-4dea-b15a-15110d76a9c6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FlutterDetection
+VAR_INPUT
+    bVarToMonitor : BOOL;
+    fPastTime : TIME := T#5000ms;
+    nMaxFlipsAllowed : UINT := 10;
+    bReset : BOOL;
+END_VAR
+VAR_OUTPUT
+    bExceededFlipMax : BOOL;
+END_VAR
+VAR
+    bInit : BOOL := FALSE;
+    bLastVarValue : BOOL;
+    nNumFlipped : UINT;
+    tTimer : TON;
+    rtReset : r_trig;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bInit THEN
+    bLastVarValue := bVarToMonitor;
+    nNumFlipped := 0;
+    bExceededFlipMax := FALSE;
+    tTimer(IN:=FALSE);
+    tTimer(IN:=TRUE, PT:=fPastTime);
+    bInit := TRUE;
+END_IF
+
+rtReset(CLK:=bReset);
+
+IF rtReset.Q THEN
+    // re-initialize
+    bInit := FALSE;
+END_IF
+
+bReset R= rtReset.Q;
+tTimer();
+
+IF tTimer.Q THEN
+    IF nNumFlipped > nMaxFlipsAllowed THEN
+        bExceededFlipMax := TRUE;
+        // timer off, no need to count.
+    ELSE
+        nNumFlipped := 0;
+        // reset timer
+        tTimer(IN:=FALSE);
+        tTimer(IN:=TRUE);
+    END_IF
+END_IF
+
+IF bLastVarValue <> bVarToMonitor THEN
+    nNumFlipped := nNumFlipped +1;
+    bLastVarValue := bVarToMonitor;
+END_IF
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
