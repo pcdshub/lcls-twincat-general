@@ -17,7 +17,7 @@
     <CombineIds>false</CombineIds>
     <Company>SLAC</Company>
     <Released>false</Released>
-    <Title>LCLS General</Title>
+    <Title>LCLS General-nrw</Title>
     <Author>Alex Wallace</Author>
     <Description>Generally useful POUs:
 - Logger
@@ -138,6 +138,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\EPS\FB_EPS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\EPS\FB_FlutterDetection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
