@@ -279,7 +279,7 @@
 			</Hides>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" Target64Bit="true" ShowHideConfigurations="#x3c7">
+	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="172.21.148.88.1.1" ShowHideConfigurations="#x3c7">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="1" CycleTime="100000" AmsPort="350" AdtTasks="true">
@@ -292,7 +292,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{E5963CA1-9FB1-F1C1-9B39-6E445844320A}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{285C30B8-D788-2DA5-DAC7-C19AA37AA7C3}">
 					<Name>LCLSGeneral Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
