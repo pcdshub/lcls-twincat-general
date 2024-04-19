@@ -50,10 +50,12 @@ IF tTimer.Q THEN
         tTimer(IN:=TRUE);
     END_IF
 END_IF
-
-IF bLastVarValue <> bVarToMonitor THEN
-    nNumFlipped := nNumFlipped +1;
-    bLastVarValue := bVarToMonitor;
+// stop counting after exceed.
+IF NOT bExceededFlipMax THEN
+    IF bLastVarValue <> bVarToMonitor THEN
+        nNumFlipped := nNumFlipped +1;
+        bLastVarValue := bVarToMonitor;
+    END_IF
 END_IF
 
 ]]></ST>
