@@ -221,6 +221,9 @@
     <Compile Include="POUs\Tests\FB_CircuitBreaker_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Tests\FB_FlutterDetection_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Tests\FB_Test_EpicsCentroidMonitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>

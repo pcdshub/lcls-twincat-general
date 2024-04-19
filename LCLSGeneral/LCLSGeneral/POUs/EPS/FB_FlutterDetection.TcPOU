@@ -5,7 +5,7 @@
 VAR_INPUT
     bVarToMonitor : BOOL;
     fPastTime : TIME := T#5000ms;
-    nMaxFlipsAllowed : UINT := 10;
+    nMaxFlipsAllowed : UDINT := 10;
     bReset : BOOL;
 END_VAR
 VAR_OUTPUT

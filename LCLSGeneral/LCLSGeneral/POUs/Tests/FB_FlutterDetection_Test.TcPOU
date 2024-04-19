@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FlutterDetection_Test" Id="{77b14b7e-0dbe-4c1b-ba30-5a8adcd3aaeb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FlutterDetection_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestFlutterResolution();]]></ST>
+    </Implementation>
+    <Method Name="TestFlutterResolution" Id="{27358001-fc93-4de9-be52-bd99eb25e240}">
+      <Declaration><![CDATA[METHOD TestFlutterResolution
+VAR_INST
+    fbTestTimer : TON := (PT := T#100ms);
+
+    fbFlutterDetExceedResolution : FB_FlutterDetection;
+    fbFlutterDetMaxResolution : FB_FlutterDetection;
+    bVarToMonitor : BOOL := TRUE;
+    nCycleTime : UDINT;
+    nCalcCycleTime : TIME;
+    nNumbCycles : UDINT := 4;
+
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*Test the max flips that can be detected, should be number of cycles - 1*)
+
+TEST('TestFlutterResolution');
+fbTestTimer(IN := TRUE);
+
+nCycleTime := _TaskInfo[GETCURTASKINDEXEX()].CycleTime;
+nCycleTime := nCycleTime / 10000; //convert to ms
+nCalcCycleTime := UDINT_TO_TIME(nCycleTime * 4);
+
+fbFlutterDetExceedResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumbCycles);
+fbFlutterDetMaxResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumbCycles - 1);
+bVarToMonitor := NOT bVarToMonitor;
+
+IF fbTestTimer.Q THEN
+    assertFalse(fbFlutterDetExceedResolution.bExceededFlipMax,'Flutter shouldnt be detected');
+    assertTrue(fbFlutterDetMaxResolution.bExceededFlipMax,'Flutter not detected');
+    TEST_FINISHED();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
