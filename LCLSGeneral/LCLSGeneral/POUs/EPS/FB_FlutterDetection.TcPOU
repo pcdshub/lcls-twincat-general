@@ -6,6 +6,8 @@ VAR_INPUT
     bVarToMonitor : BOOL;
     fPastTime : TIME := T#5000ms;
     nMaxFlipsAllowed : UDINT := 10;
+    // If set to TRUE, reset flutter detection.
+    {attribute 'pytmc' := 'pv: FLUTTER:RESET'}
     bReset : BOOL;
 END_VAR
 VAR_OUTPUT
