@@ -9,7 +9,6 @@ END_VAR
 VAR
     fbFlutterDet : FB_FlutterDetection;
 
-    nCycleCount : UDINT := 0;
     nFirstCycleCount : UDINT;
     nCurrentSystemCycle : UDINT;
     nCurrentLocalCycle : UDINT;
@@ -89,7 +88,7 @@ fbTestTimer(IN := TRUE);
 
 nCycleTime := _TaskInfo[GETCURTASKINDEXEX()].CycleTime;
 nCycleTime := nCycleTime / 10000; //convert to ms
-nCalcCycleTime := UDINT_TO_TIME(nCycleTime * 4);
+nCalcCycleTime := UDINT_TO_TIME(nCycleTime * nNumCycles);
 
 fbFlutterDetExceedResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumCycles);
 fbFlutterDetMaxResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumCycles - 1);

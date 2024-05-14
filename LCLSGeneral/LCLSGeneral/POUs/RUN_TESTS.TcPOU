@@ -12,6 +12,7 @@ VAR
     {attribute 'analysis' := '-33'}
     fbMotorTest : FB_Test_EpicsMotorMonitor;
     // EPS
+    {attribute 'analysis' := '-33'}
     fbFlutterTest : FB_FlutterDetection_Test;
 END_VAR]]></Declaration>
     <Implementation>
