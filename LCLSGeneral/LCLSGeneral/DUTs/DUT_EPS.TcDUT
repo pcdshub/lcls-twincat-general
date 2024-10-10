@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="DUT_EPS" Id="{0134451e-57c2-478a-9365-5d6570cca7b2}">
+    <Declaration><![CDATA[TYPE DUT_EPS :
+STRUCT
+    // Contains EPS flags
+    {attribute 'pytmc' := '
+        pv: nFlags
+        io: i
+        field: DESC Contains EPS flags
+    '}
+    nFlags: UDINT := 16#FFFFFFFF;
+
+    // Desciption of values nFlags contains
+    {attribute 'pytmc' := '
+        pv: sFlagDesc
+        io: i
+        field: DESC semicolon-delimited nFlag variable
+    '}
+    sFlagDesc: STRING;
+
+    // Name to use for log messages.
+    {attribute 'pytmc' := '
+        pv: sMessage
+        io: i
+        field: DESC Message from EPS to usr
+    '}
+    sMessage: STRING;
+
+    // Keep Track if nFlags are all true
+    {attribute 'pytmc' := '
+        pv: bEPS_OK
+        io: i
+        field: DESC check if nFlags are all true
+    '}
+    bEPS_OK : BOOL := TRUE;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

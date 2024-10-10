@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FlutterDetection_Test" Id="{77b14b7e-0dbe-4c1b-ba30-5a8adcd3aaeb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FlutterDetection_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    fbFlutterDet : FB_FlutterDetection;
+
+    nFirstCycleCount : UDINT;
+    nCurrentSystemCycle : UDINT;
+    nCurrentLocalCycle : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestFlutterResolution();
+TestFlutterReset();]]></ST>
+    </Implementation>
+    <Method Name="TestFlutterReset" Id="{7294e427-20c2-4375-8185-70e7fd45ea2a}">
+      <Declaration><![CDATA[METHOD TestFlutterReset
+VAR_INST
+    fbTestTimer : TON := (PT := T#300ms);
+    bInit : BOOL := FALSE;
+    bVarToMonitor : BOOL := TRUE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* after trip, function should latch exceeded flag remains tripped. Finally,
+check that after reset, the coount resets and the exceeded flag
+goes low, then trips again. *)
+TEST('TestFlutterReset');
+IF NOT bInit THEN
+    nFirstCycleCount := _TaskInfo[GETCURTASKINDEXEX()].CycleCount;
+    bInit := TRUE;
+END_IF
+nCurrentSystemCycle := _TaskInfo[GETCURTASKINDEXEX()].CycleCount;
+nCurrentLocalCycle := nCurrentSystemCycle - nFirstCycleCount;
+fbTestTimer(IN := TRUE);
+bVarToMonitor := NOT bVarToMonitor;
+
+fbFlutterDet(bVarToMonitor:=bVarToMonitor ,fPastTime:=T#50ms ,nMaxFlipsAllowed:=4);
+
+CASE nCurrentLocalCycle OF
+10:
+    AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+11:
+    // latched
+    AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+12:
+    // latched
+    AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+    fbFlutterDet(bReset:=TRUE);
+13:
+    // reset
+    AssertFalse(fbFlutterDet.bExceededFlipMax, 'false exceeded');
+25:
+    // lose a few cycles on reset.
+    AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+END_CASE
+
+IF fbTestTimer.Q THEN
+    TEST_FINISHED();
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestFlutterResolution" Id="{27358001-fc93-4de9-be52-bd99eb25e240}">
+      <Declaration><![CDATA[METHOD TestFlutterResolution
+VAR_INST
+    fbTestTimer : TON := (PT := T#200ms);
+
+    fbFlutterDetExceedResolution : FB_FlutterDetection;
+    fbFlutterDetMaxResolution : FB_FlutterDetection;
+    nCycleTime : UDINT;
+    nCalcCycleTime : TIME;
+    nNumCycles : UDINT := 4;
+    bVarToMonitor : BOOL := TRUE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*Test the max flips that can be detected, should be number of cycles - 1*)
+
+TEST('TestFlutterResolution');
+fbTestTimer(IN := TRUE);
+
+nCycleTime := _TaskInfo[GETCURTASKINDEXEX()].CycleTime;
+nCycleTime := nCycleTime / 10000; //convert to ms
+nCalcCycleTime := UDINT_TO_TIME(nCycleTime * nNumCycles);
+
+fbFlutterDetExceedResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumCycles);
+fbFlutterDetMaxResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumCycles - 1);
+bVarToMonitor := NOT bVarToMonitor;
+
+IF fbTestTimer.Q THEN
+    assertFalse(fbFlutterDetExceedResolution.bExceededFlipMax,'Flutter shouldnt be detected');
+    assertTrue(fbFlutterDetMaxResolution.bExceededFlipMax,'Flutter not detected');
+    TEST_FINISHED();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,24 +1,6 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.35">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.35" TcVersionFixed="true">
 	<DataTypes>
-		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-000000000041}" TcBaseType="true" HideSubItems="true" CName="AmsNetId">AMSNETID</Name>
-			<BitSize>48</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
-			<ArrayInfo>
-				<LBound>0</LBound>
-				<Elements>6</Elements>
-			</ArrayInfo>
-			<Format>
-				<Printf>%d.%d.%d.%d.%d.%d</Printf>
-				<Parameter>[0]</Parameter>
-				<Parameter>[1]</Parameter>
-				<Parameter>[2]</Parameter>
-				<Parameter>[3]</Parameter>
-				<Parameter>[4]</Parameter>
-				<Parameter>[5]</Parameter>
-			</Format>
-		</DataType>
 		<DataType>
 			<Name GUID="{A81A482A-E7CE-49D8-A4DD-8280773A6946}" PersistentType="true">E_LogEventType</Name>
 			<BitSize>16</BitSize>
@@ -297,32 +279,22 @@
 			</Hides>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="172.21.148.87.1.1" ShowHideConfigurations="#x6">
+	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="172.21.148.88.1.1" ShowHideConfigurations="#x3c7">
 		<System>
-			<Licenses>
-				<Target>
-					<ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>
-				</Target>
-			</Licenses>
 			<Tasks>
 				<Task Id="3" Priority="1" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>Task 3</Name>
 				</Task>
 			</Tasks>
+			<TypeSystem>
+				<AdditionalTmcFile Name="GlobalEvents" File="GlobalEvents.tmc"/>
+			</TypeSystem>
 		</System>
 		<Plc>
 			<Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{A866C0F9-A66D-1138-0CF3-C445D1FBC457}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{9AFA0A5C-8EE9-5D6C-1A2E-4C2B1D800E41}">
 					<Name>LCLSGeneral Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
-					<Vars VarGrpType="1">
-						<Name>Task_3 Inputs</Name>
-						<Var>
-							<Name>DefaultGlobals.stSys.I_EcatMaster1</Name>
-							<Comment><![CDATA[ AMS Net ID used for FB_EcatDiag, among others ]]></Comment>
-							<Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
-						</Var>
-					</Vars>
 					<Contexts>
 						<Context>
 							<Id NeedCalleeCall="true">0</Id>

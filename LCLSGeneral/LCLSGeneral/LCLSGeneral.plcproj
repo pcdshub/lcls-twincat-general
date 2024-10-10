@@ -24,6 +24,7 @@
 - FB diagnostics
 - EtherCAT diagnostic</Description>
     <ProjectVersion>0.0.0</ProjectVersion>
+    <WriteProductVersion>false</WriteProductVersion>
     <!--    <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>-->
@@ -35,7 +36,6 @@
     <Folder Include="GVLs" />
     <Folder Include="DUTs" />
     <Folder Include="POUs" />
-    <Folder Include="POUs\Data\Tests" />
     <Folder Include="POUs\Diagnostics\DUT" />
     <Folder Include="POUs\Functions" />
     <Folder Include="POUs\Logger" />
@@ -53,7 +53,7 @@
     <Compile Include="Data types\Misc\ST_EcDevice.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data types\Misc\ST_FbDiagnostics.TcDUT">
+    <Compile Include="Data types\Misc\ST_fbDiagnostics.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data types\Misc\ST_System.TcDUT">
@@ -62,16 +62,16 @@
     <Compile Include="DUTs\DUT_EPS.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GVLs\GeneralConstants.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="GVLs\DefaultGlobals.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="GVLs\Global_Variables_EtherCAT.TcGVL">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GeneralConstants.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\Data\FB_BasicStats.TcPOU">
       <SubType>Code</SubType>
@@ -94,16 +94,10 @@
     <Compile Include="POUs\Data\FB_STRINGFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Data\FB_TimeStampBuffer.TcPOU">
+    <Compile Include="POUs\Data\FB_TimestampBuffer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Data\FB_TimeStampBufferGlobal.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Data\Tests\FB_Test_EpicsCentroidMonitor.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Data\Tests\FB_Test_EpicsMotorMonitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\E_EcatDiagState.TcDUT">
@@ -113,9 +107,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\ST_EcMasterDevState.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Diagnostics\DUT\ST_PortAddr.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\ST_SlaveState.TcDUT">
@@ -140,6 +131,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\EPS\FB_EPS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\EPS\FB_FlutterDetection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
@@ -170,9 +164,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_CoE_FastRead.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Hardware\FB_ECATAutoRestart.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
@@ -230,7 +221,13 @@
     <Compile Include="POUs\Tests\FB_CircuitBreaker_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Tests\FB_ECATAutoRestart_Test.TcPOU">
+    <Compile Include="POUs\Tests\FB_FlutterDetection_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Tests\FB_Test_EpicsCentroidMonitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Tests\FB_Test_EpicsMotorMonitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Tests\ResetCircuitBreakerGlobals.TcPOU">

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="F_SendUDPMessage" Id="{6df3303a-af20-4404-b690-e252d379813c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_SendUDPMessage : HRESULT
 VAR_INPUT

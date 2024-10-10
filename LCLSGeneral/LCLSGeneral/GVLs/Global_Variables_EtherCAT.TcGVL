@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <GVL Name="Global_Variables_EtherCAT" Id="{d76f2eaf-f0c3-42c2-8317-22c7ba689cf7}">
-    <Declaration><![CDATA[
+    <Declaration><![CDATA[{attribute 'analysis' := '-33'}
 VAR_GLOBAL CONSTANT
     iSLAVEADDR_ARR_SIZE	: UINT := 256;
     ESC_MAX_PORTS : UINT := 3; // Maximum number of ports (4) on ESC

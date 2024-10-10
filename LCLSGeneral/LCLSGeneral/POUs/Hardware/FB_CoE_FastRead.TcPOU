@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_CoE_FastRead" Id="{9e9a5d86-3802-481f-8280-2e486202f2bf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_CoE_FastRead
 (*

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="ST_System" Id="{46c55fa2-8b62-4ecc-a249-db692ccf428f}">
     <Declaration><![CDATA[//Defacto system structure, must be included in all projects
+{attribute 'analysis' := '-33'}
 TYPE ST_System :
 STRUCT
 
@@ -10,8 +11,6 @@ STRUCT
     xFirstScan	    : BOOL; (* This boolean is true for the first scan, and is false thereafter, use for initialization of stuff *)
     xOverrideMode	: BOOL; //This bit is set when using the override features of the system
     xIOState        : BOOL; (* ECat Bus Health *)
-    {attribute 'naming' := 'omit'}
-    I_EcatMaster1 AT %I* : AMSNETID; (* AMS Net ID used for FB_EcatDiag, among others *)
 
 END_STRUCT
 END_TYPE]]></Declaration>

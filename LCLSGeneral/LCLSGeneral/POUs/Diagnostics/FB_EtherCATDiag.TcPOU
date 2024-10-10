@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_EtherCATDiag" Id="{4742d405-d1cb-49f3-8224-ceacd75d7213}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EtherCATDiag
 VAR_INPUT
@@ -88,6 +88,7 @@ VAR
     tFrameWcStateError : R_TRIG;
     tMasterError : R_TRIG;
     jsonIdx : UINT;
+    {attribute 'analysis' := '-27'}
     test : T_MaxString;
 END_VAR
 
