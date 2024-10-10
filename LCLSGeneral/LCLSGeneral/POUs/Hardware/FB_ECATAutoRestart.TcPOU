@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_ECATAutoRestart" Id="{7eb4a159-5b39-429e-b4d6-be42c06ba58e}" SpecialFunc="None">
     <Declaration><![CDATA[
 FUNCTION_BLOCK FB_ECATAutoRestart
@@ -58,7 +58,8 @@ bError := bStateMError OR fbgetSlaveState.bError;
 nErrorId := fbgetSlaveState.nErrId;]]></ST>
     </Implementation>
     <Method Name="StateMachine" Id="{4f307c1c-6406-4ed4-adea-e4e6e46fd62f}">
-      <Declaration><![CDATA[METHOD StateMachine
+      <Declaration><![CDATA[
+METHOD StateMachine
 VAR_INPUT
     stCurrentState 	: ST_EcSlaveState;
     bSetError		: BOOL;
@@ -74,13 +75,17 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF bEnable THEN
+        <ST><![CDATA[
+IF bEnable THEN
     IF stLastState.deviceState = EC_DEVICE_STATE_OP AND stCurrentState.deviceState <> EC_DEVICE_STATE_OP THEN
         // Transitioned out of OP, logg something;
         fbLogger(sMsg:='Device No longer in OP', eSevr:=TcEventSeverity.Warning);
     END_IF
 
     CASE stCurrentState.deviceState OF
+        EC_DEVICE_STATE_BOOTSTRAP:
+            fbLogger(sMsg:='Trying to move to INIT', eSevr:=TcEventSeverity.Info);
+            nNextState := EC_DEVICE_STATE_INIT;
         EC_DEVICE_STATE_INIT:
             fbLogger(sMsg:='Trying to move to PREOP', eSevr:=TcEventSeverity.Info);
             nNextState := EC_DEVICE_STATE_PREOP;

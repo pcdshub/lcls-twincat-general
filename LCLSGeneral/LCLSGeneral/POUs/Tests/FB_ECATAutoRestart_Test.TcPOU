@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_ECATAutoRestart_Test" Id="{3dfecdc7-d0c7-4db8-97bb-f11223a3cbe7}" SpecialFunc="None">
     <Declaration><![CDATA[
 FUNCTION_BLOCK FB_ECATAutoRestart_Test EXTENDS TcUnit.FB_TestSuite
@@ -11,7 +11,6 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-
 TestBadAddressExpectError();
 TestAnyStateExpectChangeToOpStateInSeq();
 TestNotEnabledExpectNoStateChange();
