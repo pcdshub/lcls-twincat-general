@@ -33,6 +33,7 @@
     <Folder Include="Data types\Misc" />
     <Folder Include="Data types\EPICS" />
     <Folder Include="GVLs" />
+    <Folder Include="DUTs" />
     <Folder Include="POUs" />
     <Folder Include="POUs\Data\Tests" />
     <Folder Include="POUs\Diagnostics\DUT" />
@@ -42,7 +43,8 @@
     <Folder Include="POUs\Data" />
     <Folder Include="POUs\Hardware" />
     <Folder Include="POUs\Diagnostics" />
-    <Folder Include="POUs\Logger\Tests" />
+    <Folder Include="POUs\EPS" />
+    <Folder Include="POUs\Tests" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data types\EPICS\ST_EpicsMotorMSTA.TcDUT">
@@ -55,6 +57,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data types\Misc\ST_System.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\DUT_EPS.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\GeneralConstants.TcGVL">
@@ -134,6 +139,9 @@
     <Compile Include="POUs\Diagnostics\FB_EtherCATFrameDiag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\EPS\FB_EPS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Functions\FB_EcatDiag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -162,6 +170,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_CoE_FastRead.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_ECATAutoRestart.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
@@ -213,13 +224,16 @@
     <Compile Include="POUs\Logger\SYSTEM_TIME_TO_RFC3339.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Logger\Tests\FB_CircuitBreaker_Test.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Logger\Tests\ResetCircuitBreakerGlobals.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\RUN_TESTS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Tests\FB_CircuitBreaker_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Tests\FB_ECATAutoRestart_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Tests\ResetCircuitBreakerGlobals.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Task_3.TcTTO">

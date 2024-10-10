@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_ECATAutoRestart_Test" Id="{3dfecdc7-d0c7-4db8-97bb-f11223a3cbe7}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION_BLOCK FB_ECATAutoRestart_Test EXTENDS TcUnit.FB_TestSuite
+VAR
+    fbECATAutoRestart : FB_ECATAutoRestart;
+    fbTON_TestTimer		: TON;
+    bStartTest			: BOOL := FALSE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+TestBadAddressExpectError();
+TestAnyStateExpectChangeToOpStateInSeq();
+TestNotEnabledExpectNoStateChange();
+Test5RetriesExpectErrorStopTrying();]]></ST>
+    </Implementation>
+    <Method Name="Test5RetriesExpectErrorStopTrying" Id="{b66e006d-7ce0-42e5-9d35-e4a5f864d2fd}">
+      <Declaration><![CDATA[
+METHOD Test5RetriesExpectErrorStopTrying
+VAR_INPUT
+END_VAR
+VAR
+    stCurrentState 	: ST_EcSlaveState;
+    nNextState 		: BYTE;
+    bError			: BOOL;
+    nIndex			: INT := 1;
+
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('Test5RetriesExpectErrorStopTrying');
+stCurrentState.deviceState := EC_DEVICE_STATE_INIT;
+
+
+FOR nIndex := 1 TO 10 DO
+    fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+                                bSetError:= TRUE,
+                                bEnable:= TRUE,
+                                nNextState => nNextState,
+                                bError=> bError,
+                                sErrorMsg =>);
+
+END_FOR
+
+AssertEquals_BOOL(Expected:=TRUE,
+                    Actual:=bError,
+                    Message:='bError was not set after trying to get new position after 10 tries');
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestAnyStateExpectChangeToOpStateInSeq" Id="{fcb64ba6-968c-48ac-bde3-1a76fba37031}">
+      <Declaration><![CDATA[
+METHOD TestAnyStateExpectChangeToOpStateInSeq
+VAR_INPUT
+END_VAR
+VAR
+    stCurrentState 	: ST_EcSlaveState;
+    aExpectedSeq 	: ARRAY [1 .. 4] OF BYTE;
+    nIndex			: INT := 0;
+    nNextState 		: BYTE;
+    bError			: BOOL;
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('TestAnyStateExpectChangeToOpStateInSeq');
+
+aExpectedSeq[1] := EC_DEVICE_STATE_INIT;
+aExpectedSeq[2] := EC_DEVICE_STATE_PREOP;
+aExpectedSeq[3] := EC_DEVICE_STATE_SAFEOP;
+aExpectedSeq[4] := EC_DEVICE_STATE_OP;
+
+// Starting at INIT
+FOR nIndex := 1 TO 3 DO
+    stCurrentState.deviceState := aExpectedSeq[nIndex];
+    fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+                                bSetError:= FALSE,
+                                bEnable:= TRUE,
+                                nNextState => nNextState,
+                                bError=> bError,
+                                sErrorMsg =>);
+
+    AssertEquals_BYTE(Expected:= aExpectedSeq[nIndex + 1],
+                            Actual:= nNextState,
+                            Message:= 'Did NOT Change to Expected State starting from INIT');
+END_FOR
+
+// Starting at PREOP
+FOR nIndex := 2 TO 3 DO
+    stCurrentState.deviceState := aExpectedSeq[nIndex];
+    fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+                                bSetError:= FALSE,
+                                bEnable:= TRUE,
+                                nNextState => nNextState,
+                                bError=> bError,
+                                sErrorMsg =>);
+
+    AssertEquals_BYTE(Expected:= aExpectedSeq[nIndex + 1],
+                            Actual:= nNextState,
+                            Message:= 'Did NOT Change to Expected State starting from PREOP');
+END_FOR
+
+// Starting in SAFEOP
+stCurrentState.deviceState := aExpectedSeq[3];
+fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+                                bSetError:= FALSE,
+                                bEnable:= TRUE,
+                                nNextState => nNextState,
+                                bError=> bError,
+                                sErrorMsg =>);
+
+AssertEquals_BYTE(Expected:= aExpectedSeq[4],
+                            Actual:= nNextState,
+                            Message:= 'Did NOT Change to Expected State Starting from SAFEOP');
+
+// Starting in OP
+stCurrentState.deviceState := aExpectedSeq[4];
+fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+                                bSetError:= FALSE,
+                                bEnable:= TRUE,
+                                nNextState => nNextState,
+                                bError=> bError,
+                                sErrorMsg =>);
+
+AssertEquals_BYTE(Expected:= aExpectedSeq[4],
+                            Actual:= nNextState,
+                            Message:= 'Did NOT Change to Expected State Starting from OP');
+
+
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestBadAddressExpectError" Id="{160b4a58-d304-419d-9ea8-d4ffaa39fa3e}">
+      <Declaration><![CDATA[
+METHOD TestBadAddressExpectError
+VAR_INPUT
+END_VAR
+VAR
+    nIndex				: INT;
+    bError				: BOOL;
+    bErrorId			: UDINT;
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('TestBadAddressExpectError');
+
+fbTON_TestTimer(IN:=bStartTest,PT:=T#5s);
+IF  NOT bStartTest THEN bStartTest := TRUE; END_IF
+
+fbECATAutoRestart(sNetId:='172.21.148.1.1',
+                    nSlaveAddr:=1111,
+                    bEnable:=TRUE,
+                    bError=>bError,
+                    nErrorId=>bErrorId,
+                    bErrorMsg=>);
+
+
+IF fbTON_TestTimer.Q THEN
+
+    AssertEquals_BOOL(Expected:=TRUE,
+        Actual:=bError,
+        Message:= 'Expected bError to be TRUE');
+
+    AssertEquals_UDINT(Expected:= 7,
+        Actual:= bErrorId,
+        Message:= 'Expected ERR_TARGETMACHINENOTFOUND (0x7)');
+
+    TEST_FINISHED();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestNotEnabledExpectNoStateChange" Id="{f686e19f-d49d-4fd6-b668-a90a4b41d91c}">
+      <Declaration><![CDATA[
+METHOD TestNotEnabledExpectNoStateChange
+VAR_INPUT
+END_VAR
+VAR
+    stCurrentState 	: ST_EcSlaveState;
+    nNextState 		: BYTE;
+    bError			: BOOL;
+
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('TestNotEnabledExpectNoStateChange');
+
+stCurrentState.deviceState := EC_DEVICE_STATE_PREOP;
+
+fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+                                bSetError:= FALSE,
+                                bEnable:=FALSE,
+                                nNextState => nNextState,
+                                bError=> bError,
+                                sErrorMsg =>);
+
+
+AssertEquals_BYTE(Expected:=stCurrentState.deviceState,
+                      Actual:=nNextState,
+                    Message:= 'When bEnable is False, nNextState is not the same as the last State');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

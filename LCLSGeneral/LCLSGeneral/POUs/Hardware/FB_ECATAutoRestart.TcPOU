@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_ECATAutoRestart" Id="{7eb4a159-5b39-429e-b4d6-be42c06ba58e}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION_BLOCK FB_ECATAutoRestart
+VAR_INPUT
+    sNetId     : T_AmsNetId;
+    nSlaveAddr : UINT;
+    bEnable 	: BOOL := TRUE;
+END_VAR
+VAR_IN_OUT
+END_VAR
+VAR_OUTPUT
+    bError 		: BOOL;
+    nErrorId	: UDINT;
+    bErrorMsg	: T_MaxString;
+END_VAR
+VAR
+    fbgetSlaveState : FB_EcGetSlaveState;
+    fbsetSlaveState : FB_EcSetSlaveState;
+
+    fbTON			: TON;
+    fbTP			: TP;
+    bStartTON		: BOOL := TRUE;
+    bStopTrying		: BOOL := FALSE;
+    bStateMError		:BOOL;
+
+    stLastState		: ST_EcSlaveState;
+    nErrorCount		: UINT := 0;
+    nErrorMax		: UINT := 5;
+    fbLogger		: FB_LogMessage := (eSubsystem:= E_Subsystem.FIELDBUS);
+
+
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+fbTON(IN:= bStartTON OR NOT fbTON.Q, PT:= T#1s);
+IF bStartTON THEN bStartTON := FALSE; END_IF
+
+fbTP(IN:=fbTON.Q OR bStopTrying OR NOT bEnable, PT:=T#500ms);
+
+fbgetSlaveState(sNetId:= sNetId, nSlaveAddr:= nSlaveAddr,  bExecute:=fbTON.Q);
+
+StateMachine(stCurrentState:= fbgetSlaveState.state,
+            bSetError:= fbgetSlaveState.bError,
+            bEnable:= bEnable,
+            nNextState=> fbsetSlaveState.reqState,
+            bError=> bStateMError,
+            sErrorMsg=> bErrorMsg);
+
+IF fbgetSlaveState.bError THEN
+    fbsetSlaveState(sNetId:=sNetId, nSlaveAddr:=nSlaveAddr, bExecute:=fbTP.Q, tTimeout:=T#5s);
+END_IF
+
+bError := bStateMError OR fbgetSlaveState.bError;
+nErrorId := fbgetSlaveState.nErrId;]]></ST>
+    </Implementation>
+    <Method Name="StateMachine" Id="{4f307c1c-6406-4ed4-adea-e4e6e46fd62f}">
+      <Declaration><![CDATA[METHOD StateMachine
+VAR_INPUT
+    stCurrentState 	: ST_EcSlaveState;
+    bSetError		: BOOL;
+    bEnable			: BOOL;
+END_VAR
+VAR_OUTPUT
+    nNextState		: BYTE;
+    bError			: BOOL;
+    sErrorMsg		: T_MaxString;
+END_VAR
+VAR
+    bErrorOccured : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bEnable THEN
+    IF stLastState.deviceState = EC_DEVICE_STATE_OP AND stCurrentState.deviceState <> EC_DEVICE_STATE_OP THEN
+        // Transitioned out of OP, logg something;
+        fbLogger(sMsg:='Device No longer in OP', eSevr:=TcEventSeverity.Warning);
+    END_IF
+
+    CASE stCurrentState.deviceState OF
+        EC_DEVICE_STATE_INIT:
+            fbLogger(sMsg:='Trying to move to PREOP', eSevr:=TcEventSeverity.Info);
+            nNextState := EC_DEVICE_STATE_PREOP;
+        EC_DEVICE_STATE_PREOP:
+            fbLogger(sMsg:='Trying to move to SAVEOP', eSevr:=TcEventSeverity.Info);
+            nNextState := EC_DEVICE_STATE_SAFEOP;
+        EC_DEVICE_STATE_SAFEOP:
+            fbLogger(sMsg:='Trying to move to OP', eSevr:=TcEventSeverity.Info);
+            nNextState := EC_DEVICE_STATE_OP;
+        EC_DEVICE_STATE_OP:
+            // IN OP STATE ? RESET ERRORS?
+            nNextState := EC_DEVICE_STATE_OP;
+            IF bStopTrying THEN
+                bStopTrying := FALSE;
+                nErrorCount := 0;
+            END_IF
+
+    END_CASE
+
+    // Keeps Track on consecutive Errors ans stop trying if max ammount of tried has been reached.
+    IF bSetError AND (NOT bStopTrying) THEN
+        nErrorCount := nErrorCount + 1;
+        IF (nErrorCount = nErrorMax) THEN
+            bStopTrying := TRUE;
+        END_IF
+    END_IF
+END_IF
+
+IF NOT bEnable THEN
+    nNextState := stCurrentState.deviceState;
+END_IF
+
+
+stLastState := stCurrentState;
+bError := bStopTrying;
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

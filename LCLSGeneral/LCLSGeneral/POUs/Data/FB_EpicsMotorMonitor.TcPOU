@@ -31,7 +31,7 @@
             fbMotorMonitor.bIsMoving;
             fbMotorMonitor.stMSTA.bHomed;
         END_IF
-    
+
     Above, ``MOTOR:PV:NAME`` should refer to an EPICS motor record.
     That is, ``caget MOTOR:PV:NAME.RTYP`` should return "motor".
 

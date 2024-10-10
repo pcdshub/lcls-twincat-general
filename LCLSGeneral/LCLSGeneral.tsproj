@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.30">
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.35">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-000000000041}" TcBaseType="true" HideSubItems="true" CName="AmsNetId">AMSNETID</Name>
@@ -24,27 +24,19 @@
 			<BitSize>16</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
 			<EnumInfo>
-				<Text>
-					<![CDATA[ALARMCLEARED]]>
-				</Text>
+				<Text><![CDATA[ALARMCLEARED]]></Text>
 				<Enum>0</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[ALARMCONFIRMED]]>
-				</Text>
+				<Text><![CDATA[ALARMCONFIRMED]]></Text>
 				<Enum>1</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[ALARMRAISED]]>
-				</Text>
+				<Text><![CDATA[ALARMRAISED]]></Text>
 				<Enum>2</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[MESSAGESENT]]>
-				</Text>
+				<Text><![CDATA[MESSAGESENT]]></Text>
 				<Enum>3</Enum>
 			</EnumInfo>
 			<Properties>
@@ -57,37 +49,27 @@
 			</Properties>
 		</DataType>
 		<DataType>
-			<Name GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}" TcBaseType="true" CName="TcEventSeverity" RemovableEnumPrefix="TCEVENTSEVERITY_">TcEventSeverity</Name>
+			<Name GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}" TcBaseType="true" CName="TcEventSeverity*" RemovableEnumPrefix="TCEVENTSEVERITY_">TcEventSeverity</Name>
 			<BitSize>16</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
 			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Verbose]]>
-				</Text>
+				<Text><![CDATA[TCEVENTSEVERITY_Verbose]]></Text>
 				<Enum>0</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Info]]>
-				</Text>
+				<Text><![CDATA[TCEVENTSEVERITY_Info]]></Text>
 				<Enum>1</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Warning]]>
-				</Text>
+				<Text><![CDATA[TCEVENTSEVERITY_Warning]]></Text>
 				<Enum>2</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Error]]>
-				</Text>
+				<Text><![CDATA[TCEVENTSEVERITY_Error]]></Text>
 				<Enum>3</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[TCEVENTSEVERITY_Critical]]>
-				</Text>
+				<Text><![CDATA[TCEVENTSEVERITY_Critical]]></Text>
 				<Enum>4</Enum>
 			</EnumInfo>
 			<Properties>
@@ -109,19 +91,15 @@
 			<SubItem>
 				<Name>schema</Name>
 				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
-				<Comment>
-					<![CDATA[Message or Alarm{Cleared,Confirmed,Raised} event information
+				<Comment><![CDATA[Message or Alarm{Cleared,Confirmed,Raised} event information
 
         Note that elements here do not follow the usual Hungarian notation / 
         variable-type-prefixing naming convention due to the member names being
-        used directly in the generation of the JSON document.]]>
-				</Comment>
+        used directly in the generation of the JSON document.]]></Comment>
 				<BitSize>648</BitSize>
 				<BitOffs>0</BitOffs>
 				<Default>
-					<String>
-						<![CDATA[twincat-event-0]]>
-					</String>
+					<String><![CDATA[twincat-event-0]]></String>
 				</Default>
 				<Properties>
 					<Property>
@@ -222,10 +200,8 @@
 			<SubItem>
 				<Name>source</Name>
 				<Type GUID="{18071995-0000-0000-0000-0001000000FF}">STRING(255)</Type>
-				<Comment>
-					<![CDATA[This is actually: T_MaxString
- which has been expanded due to requirements for pinning global data types.]]>
-				</Comment>
+				<Comment><![CDATA[This is actually: T_MaxString
+ which has been expanded due to requirements for pinning global data types.]]></Comment>
 				<BitSize>2048</BitSize>
 				<BitOffs>4168</BitOffs>
 				<Properties>
@@ -239,10 +215,8 @@
 			<SubItem>
 				<Name>event_type</Name>
 				<Type GUID="{A81A482A-E7CE-49D8-A4DD-8280773A6946}">E_LogEventType</Type>
-				<Comment>
-					<![CDATA[This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
- which has been expanded due to requirements for pinning global data types.]]>
-				</Comment>
+				<Comment><![CDATA[This is actually: STRING(Tc3_EventLogger.ParameterList.cSourceNameSize - 1)
+ which has been expanded due to requirements for pinning global data types.]]></Comment>
 				<BitSize>16</BitSize>
 				<BitOffs>6224</BitOffs>
 				<Properties>
@@ -277,33 +251,23 @@
 			<BitSize>8</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
 			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_MEMORY_NONE]]>
-				</Text>
+				<Text><![CDATA[EAX5000_P_0275_MEMORY_NONE]]></Text>
 				<Enum>0</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_ENCODER]]>
-				</Text>
+				<Text><![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_ENCODER]]></Text>
 				<Enum>1</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_DRIVE]]>
-				</Text>
+				<Text><![CDATA[EAX5000_P_0275_FEEDBACK1_MEMORY_DRIVE]]></Text>
 				<Enum>2</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_ENCODER]]>
-				</Text>
+				<Text><![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_ENCODER]]></Text>
 				<Enum>8</Enum>
 			</EnumInfo>
 			<EnumInfo>
-				<Text>
-					<![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_DRIVE]]>
-				</Text>
+				<Text><![CDATA[EAX5000_P_0275_FEEDBACK2_MEMORY_DRIVE]]></Text>
 				<Enum>16</Enum>
 			</EnumInfo>
 			<Hides>
@@ -333,7 +297,7 @@
 			</Hides>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="172.21.148.145.1.1" ShowHideConfigurations="#x6">
+	<Project ProjectGUID="{9AC02CD1-4FA4-49DE-BC09-848126C612E3}" TargetNetId="172.21.148.87.1.1" ShowHideConfigurations="#x6">
 		<System>
 			<Licenses>
 				<Target>
@@ -348,19 +312,28 @@
 		</System>
 		<Plc>
 			<Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{A866C0F9-A66D-1138-0CF3-C445D1FBC457}">
 					<Name>LCLSGeneral Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
 						<Name>Task_3 Inputs</Name>
 						<Var>
 							<Name>DefaultGlobals.stSys.I_EcatMaster1</Name>
-							<Comment>
-								<![CDATA[ AMS Net ID used for FB_EcatDiag, among others ]]>
-							</Comment>
+							<Comment><![CDATA[ AMS Net ID used for FB_EcatDiag, among others ]]></Comment>
 							<Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
 						</Var>
 					</Vars>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>Task_3</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>1</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+					</Contexts>
 					<TaskPouOids>
 						<TaskPouOid Prio="1" OTCID="#x08502001"/>
 					</TaskPouOids>
