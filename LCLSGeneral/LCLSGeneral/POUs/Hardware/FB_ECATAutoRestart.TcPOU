@@ -67,9 +67,6 @@ VAR_OUTPUT
     nNextState		: BYTE;
     bError			: BOOL;
 END_VAR
-VAR
-    bErrorOccured : BOOL;
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
