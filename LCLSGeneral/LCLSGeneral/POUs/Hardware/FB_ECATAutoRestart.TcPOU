@@ -13,7 +13,6 @@ END_VAR
 VAR_OUTPUT
     bError 		: BOOL;
     nErrorId	: UDINT;
-    bErrorMsg	: T_MaxString;
 END_VAR
 VAR
     fbgetSlaveState : FB_EcGetSlaveState;
@@ -23,7 +22,7 @@ VAR
     fbTP			: TP;
     bStartTON		: BOOL := TRUE;
     bStopTrying		: BOOL := FALSE;
-    bStateMError		:BOOL;
+    bStateMError	: BOOL;
 
     stLastState		: ST_EcSlaveState;
     nErrorCount		: UINT := 0;
@@ -47,8 +46,7 @@ StateMachine(stCurrentState:= fbgetSlaveState.state,
             bSetError:= fbgetSlaveState.bError,
             bEnable:= bEnable,
             nNextState=> fbsetSlaveState.reqState,
-            bError=> bStateMError,
-            sErrorMsg=> bErrorMsg);
+            bError=> bStateMError);
 
 IF fbgetSlaveState.bError THEN
     fbsetSlaveState(sNetId:=sNetId, nSlaveAddr:=nSlaveAddr, bExecute:=fbTP.Q, tTimeout:=T#5s);
@@ -68,7 +66,6 @@ END_VAR
 VAR_OUTPUT
     nNextState		: BYTE;
     bError			: BOOL;
-    sErrorMsg		: T_MaxString;
 END_VAR
 VAR
     bErrorOccured : BOOL;
