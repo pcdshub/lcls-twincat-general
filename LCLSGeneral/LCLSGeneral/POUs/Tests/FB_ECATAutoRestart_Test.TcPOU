@@ -23,7 +23,7 @@ VAR_INPUT
 END_VAR
 VAR
     stCurrentState 	: ST_EcSlaveState;
-    nNextState 		: BYTE;
+    nNextState 		: WORD;
     bError			: BOOL;
     nIndex			: INT := 1;
 
@@ -37,11 +37,12 @@ stCurrentState.deviceState := EC_DEVICE_STATE_INIT;
 
 
 FOR nIndex := 1 TO 10 DO
-    fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+    fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
                                 bSetError:= TRUE,
+                                bSetBusy:= FALSE,
                                 bEnable:= TRUE,
                                 nNextState => nNextState,
-                                bError=> bError);
+                                bMaxNumTriesReached=> bError);
 
 END_FOR
 
@@ -62,7 +63,7 @@ VAR
     stCurrentState 	: ST_EcSlaveState;
     aExpectedSeq 	: ARRAY [1 .. 4] OF BYTE;
     nIndex			: INT := 0;
-    nNextState 		: BYTE;
+    nNextState 		: WORD;
     bError			: BOOL;
 
 END_VAR
@@ -79,13 +80,14 @@ aExpectedSeq[4] := EC_DEVICE_STATE_OP;
 // Starting at INIT
 FOR nIndex := 1 TO 3 DO
     stCurrentState.deviceState := aExpectedSeq[nIndex];
-    fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+    fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
                                 bSetError:= FALSE,
+                                bSetBusy:= FALSE,
                                 bEnable:= TRUE,
                                 nNextState => nNextState,
                                 bError=> bError);
 
-    AssertEquals_BYTE(Expected:= aExpectedSeq[nIndex + 1],
+    AssertEquals_WORD(Expected:= aExpectedSeq[nIndex + 1],
                             Actual:= nNextState,
                             Message:= 'Did NOT Change to Expected State starting from INIT');
 END_FOR
@@ -93,38 +95,41 @@ END_FOR
 // Starting at PREOP
 FOR nIndex := 2 TO 3 DO
     stCurrentState.deviceState := aExpectedSeq[nIndex];
-    fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+    fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
+                                bSetBusy:= FALSE,
                                 bSetError:= FALSE,
                                 bEnable:= TRUE,
                                 nNextState => nNextState,
                                 bError=> bError);
 
-    AssertEquals_BYTE(Expected:= aExpectedSeq[nIndex + 1],
+    AssertEquals_WORD(Expected:= aExpectedSeq[nIndex + 1],
                             Actual:= nNextState,
                             Message:= 'Did NOT Change to Expected State starting from PREOP');
 END_FOR
 
 // Starting in SAFEOP
 stCurrentState.deviceState := aExpectedSeq[3];
-fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
+                                bSetBusy:= FALSE,
                                 bSetError:= FALSE,
                                 bEnable:= TRUE,
                                 nNextState => nNextState,
                                 bError=> bError);
 
-AssertEquals_BYTE(Expected:= aExpectedSeq[4],
+AssertEquals_WORD(Expected:= aExpectedSeq[4],
                             Actual:= nNextState,
                             Message:= 'Did NOT Change to Expected State Starting from SAFEOP');
 
 // Starting in OP
 stCurrentState.deviceState := aExpectedSeq[4];
-fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
+                                bSetBusy:= FALSE,
                                 bSetError:= FALSE,
                                 bEnable:= TRUE,
                                 nNextState => nNextState,
                                 bError=> bError);
 
-AssertEquals_BYTE(Expected:= aExpectedSeq[4],
+AssertEquals_WORD(Expected:= aExpectedSeq[4],
                             Actual:= nNextState,
                             Message:= 'Did NOT Change to Expected State Starting from OP');
 
@@ -139,7 +144,6 @@ METHOD TestBadAddressExpectError
 VAR_INPUT
 END_VAR
 VAR
-    nIndex				: INT;
     bError				: BOOL;
     bErrorId			: UDINT;
 
@@ -180,7 +184,7 @@ VAR_INPUT
 END_VAR
 VAR
     stCurrentState 	: ST_EcSlaveState;
-    nNextState 		: BYTE;
+    nNextState 		: WORD;
     bError			: BOOL;
 
 
@@ -192,14 +196,15 @@ TEST('TestNotEnabledExpectNoStateChange');
 
 stCurrentState.deviceState := EC_DEVICE_STATE_PREOP;
 
-fbECATAutoRestart.StateMachine(stCurrentState:=stCurrentState,
+fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
+                                bSetBusy:= FALSE,
                                 bSetError:= FALSE,
                                 bEnable:=FALSE,
                                 nNextState => nNextState,
                                 bError=> bError);
 
 
-AssertEquals_BYTE(Expected:=stCurrentState.deviceState,
+AssertEquals_WORD(Expected:=stCurrentState.deviceState,
                       Actual:=nNextState,
                     Message:= 'When bEnable is False, nNextState is not the same as the last State');
 
