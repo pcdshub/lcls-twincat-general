@@ -90,7 +90,7 @@ CASE nStateMachineState OF
             nStateMachineState := 0;
         END_IF
 
-        // Get Updated Temrinal State
+        // Get Updated terminal State
         IF NOT bfbGetBusy THEN
             bfbGetUpdatedState := TRUE;
         ELSE

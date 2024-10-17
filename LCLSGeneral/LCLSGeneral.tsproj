@@ -292,7 +292,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{DF4CAFE9-8807-49B7-953A-22D467A15EF7}" Name="LCLSGeneral" PrjFilePath="LCLSGeneral\LCLSGeneral.plcproj" TmcFilePath="LCLSGeneral\LCLSGeneral.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{F0CD2419-39BB-33A7-CFB7-81FC243B7658}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="LCLSGeneral\LCLSGeneral.tmc" TmcHash="{D2AFE807-DBA8-4AF6-B67B-62C5E9B2686A}">
 					<Name>LCLSGeneral Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

@@ -174,7 +174,7 @@ TEST('TestBadAddressExpectError');
 fbTON_TestTimer(IN:=bStartTest,PT:=T#1s);
 IF  NOT bStartTest THEN bStartTest := TRUE; END_IF
 
-fbECATAutoRestart(sNetId:='172.21.148.1.1',
+fbECATAutoRestart(sNetId:='1.0.0.0.1',
                     nSlaveAddr:=11101,
                     bEnable:=TRUE,
                     bError=>bError,
