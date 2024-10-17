@@ -5,16 +5,20 @@
 FUNCTION_BLOCK FB_ECATAutoRestart_Test EXTENDS TcUnit.FB_TestSuite
 VAR
     fbECATAutoRestart : FB_ECATAutoRestart;
+
     fbTON_TestTimer		: TON;
     bStartTest			: BOOL := FALSE;
+
+
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-TestBadAddressExpectError();
+TestSingleLogPerTransitionExpect4Logs();
 TestAnyStateExpectChangeToOpStateInSeq();
 TestNotEnabledExpectNoStateChange();
-Test5RetriesExpectErrorStopTrying();]]></ST>
+Test5RetriesExpectErrorStopTrying();
+TestBadAddressExpectError();]]></ST>
     </Implementation>
     <Method Name="Test5RetriesExpectErrorStopTrying" Id="{b66e006d-7ce0-42e5-9d35-e4a5f864d2fd}">
       <Declaration><![CDATA[
@@ -22,35 +26,57 @@ METHOD Test5RetriesExpectErrorStopTrying
 VAR_INPUT
 END_VAR
 VAR
-    stCurrentState 	: ST_EcSlaveState;
-    nNextState 		: WORD;
-    bError			: BOOL;
-    nIndex			: INT := 1;
+    nIndex                  : INT;
+    nStateMachineState      : INT;
 
+    // State Machine Control Inputs
+    bEnable                 : BOOL;
+    bfbGetBusy              : BOOL;
+    nCurretState            : WORD;
+    bfbSetBusy              : BOOL;
+    bfbSetError             : BOOL;
+
+    // State Machine Control Outputs
+    bfbGetUpdatedState      : BOOL;
+    bSetNextState           : BOOL;
+    nNextState              : WORD;
+    sLogMessage             : T_MaxString;
+    bLog                    : BOOL;
 
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 TEST('Test5RetriesExpectErrorStopTrying');
-stCurrentState.deviceState := EC_DEVICE_STATE_INIT;
 
+nStateMachineState := 1; // Start Test on Start State
+bEnable := TRUE;
+bfbGetBusy := FALSE;
+nCurretState := EC_DEVICE_STATE_PREOP;
+bfbSetBusy := FALSE;
+bfbSetError := TRUE;
 
-FOR nIndex := 1 TO 10 DO
-    fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
-                                bSetError:= TRUE,
-                                bSetBusy:= FALSE,
-                                bEnable:= TRUE,
-                                nNextState => nNextState,
-                                bMaxNumTriesReached=> bError);
-
+FOR nIndex := 1 TO 20 DO
+    fbECATAutoRestart.StateMachine(bEnable:=bEnable,
+        bfbGetBusy := bfbGetBusy,
+        bfbGetUpdatedState => bfbGetUpdatedState,
+        nCurretState := nCurretState,
+        nNextState => nNextState,
+        sLogMessage=> sLogMessage,
+        bLog=> bLog,
+        bSetNextState=> bSetNextState,
+        bfbSetBusy := bfbSetBusy,
+        bfbSetError := bfbSetError);
 END_FOR
 
+
 AssertEquals_BOOL(Expected:=TRUE,
-                    Actual:=bError,
-                    Message:='bError was not set after trying to get new position after 10 tries');
+                    Actual:= fbECATAutoRestart.bStopTrying,
+                    Message:='bStopTrying was not set after trying to get new position after 20 Cycles');
 
 TEST_FINISHED();
+
+
 ]]></ST>
       </Implementation>
     </Method>
@@ -60,11 +86,29 @@ METHOD TestAnyStateExpectChangeToOpStateInSeq
 VAR_INPUT
 END_VAR
 VAR
-    stCurrentState 	: ST_EcSlaveState;
-    aExpectedSeq 	: ARRAY [1 .. 4] OF BYTE;
-    nIndex			: INT := 0;
-    nNextState 		: WORD;
-    bError			: BOOL;
+
+    // State Machine Control Inputs
+    bEnable                 : BOOL;
+    bfbGetBusy              : BOOL;
+    nCurretState            : WORD;
+    bfbSetBusy              : BOOL;
+    bfbSetError             : BOOL;
+
+    // State Machine Control Outputs
+    bfbGetUpdatedState      : BOOL;
+    bSetNextState           : BOOL;
+    nNextState              : WORD;
+    sLogMessage             : T_MaxString;
+    bLog                    : BOOL;
+    // TestAnyStateChangeOpInSeq Vars
+
+    nIndex          : INT := 1;
+    aPossibleStart : ARRAY [1 .. 4] OF BYTE := [EC_DEVICE_STATE_BOOTSTRAP,
+                                                EC_DEVICE_STATE_INIT,
+                                                EC_DEVICE_STATE_PREOP,
+                                                EC_DEVICE_STATE_SAFEOP];
+    nStartIndex : INT := 0;
+
 
 END_VAR
 ]]></Declaration>
@@ -72,70 +116,45 @@ END_VAR
         <ST><![CDATA[
 TEST('TestAnyStateExpectChangeToOpStateInSeq');
 
-aExpectedSeq[1] := EC_DEVICE_STATE_INIT;
-aExpectedSeq[2] := EC_DEVICE_STATE_PREOP;
-aExpectedSeq[3] := EC_DEVICE_STATE_SAFEOP;
-aExpectedSeq[4] := EC_DEVICE_STATE_OP;
 
-// Starting at INIT
-FOR nIndex := 1 TO 3 DO
-    stCurrentState.deviceState := aExpectedSeq[nIndex];
-    fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
-                                bSetError:= FALSE,
-                                bSetBusy:= FALSE,
-                                bEnable:= TRUE,
-                                nNextState => nNextState,
-                                bError=> bError);
+bEnable := TRUE;
+bfbGetBusy := FALSE;
+bfbSetBusy := FALSE;
+bfbSetError := FALSE;
 
-    AssertEquals_WORD(Expected:= aExpectedSeq[nIndex + 1],
-                            Actual:= nNextState,
-                            Message:= 'Did NOT Change to Expected State starting from INIT');
+
+
+
+FOR nStartIndex := 1 TO 4 DO
+    nCurretState := aPossibleStart[nStartIndex];
+    // Takes 3 cycles for statemachine to update state
+    // 4 - nStartIndex is number of steps needed to return to OP
+    FOR nIndex := 1 TO 3 * 4 - nStartIndex DO
+    fbECATAutoRestart.StateMachine
+            (bEnable:=bEnable,
+            bfbGetBusy := bfbGetBusy,
+            bfbGetUpdatedState => bfbGetUpdatedState,
+            nCurretState := nCurretState,
+            nNextState => nNextState,
+            sLogMessage=> sLogMessage,
+            bLog=> bLog,
+            bSetNextState=> bSetNextState,
+            bfbSetBusy := bfbSetBusy,
+            bfbSetError := bfbSetError);
+
+    IF bSetNextState THEN
+        nCurretState := nNextState;
+    END_IF
+
+    END_FOR
+    AssertEquals_BYTE(Expected:=EC_DEVICE_STATE_OP,
+        Actual:= TO_BYTE(nCurretState),
+        Message:='Test Did not Return to OP');
 END_FOR
 
-// Starting at PREOP
-FOR nIndex := 2 TO 3 DO
-    stCurrentState.deviceState := aExpectedSeq[nIndex];
-    fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
-                                bSetBusy:= FALSE,
-                                bSetError:= FALSE,
-                                bEnable:= TRUE,
-                                nNextState => nNextState,
-                                bError=> bError);
+ TEST_FINISHED();
 
-    AssertEquals_WORD(Expected:= aExpectedSeq[nIndex + 1],
-                            Actual:= nNextState,
-                            Message:= 'Did NOT Change to Expected State starting from PREOP');
-END_FOR
-
-// Starting in SAFEOP
-stCurrentState.deviceState := aExpectedSeq[3];
-fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
-                                bSetBusy:= FALSE,
-                                bSetError:= FALSE,
-                                bEnable:= TRUE,
-                                nNextState => nNextState,
-                                bError=> bError);
-
-AssertEquals_WORD(Expected:= aExpectedSeq[4],
-                            Actual:= nNextState,
-                            Message:= 'Did NOT Change to Expected State Starting from SAFEOP');
-
-// Starting in OP
-stCurrentState.deviceState := aExpectedSeq[4];
-fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
-                                bSetBusy:= FALSE,
-                                bSetError:= FALSE,
-                                bEnable:= TRUE,
-                                nNextState => nNextState,
-                                bError=> bError);
-
-AssertEquals_WORD(Expected:= aExpectedSeq[4],
-                            Actual:= nNextState,
-                            Message:= 'Did NOT Change to Expected State Starting from OP');
-
-
-
-TEST_FINISHED();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="TestBadAddressExpectError" Id="{160b4a58-d304-419d-9ea8-d4ffaa39fa3e}">
@@ -146,18 +165,17 @@ END_VAR
 VAR
     bError				: BOOL;
     bErrorId			: UDINT;
-
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 TEST('TestBadAddressExpectError');
 
-fbTON_TestTimer(IN:=bStartTest,PT:=T#5s);
+fbTON_TestTimer(IN:=bStartTest,PT:=T#1s);
 IF  NOT bStartTest THEN bStartTest := TRUE; END_IF
 
 fbECATAutoRestart(sNetId:='172.21.148.1.1',
-                    nSlaveAddr:=1111,
+                    nSlaveAddr:=11101,
                     bEnable:=TRUE,
                     bError=>bError,
                     nErrorId=>bErrorId);
@@ -174,6 +192,7 @@ IF fbTON_TestTimer.Q THEN
         Message:= 'Expected ERR_TARGETMACHINENOTFOUND (0x7)');
 
     TEST_FINISHED();
+
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -183,10 +202,20 @@ METHOD TestNotEnabledExpectNoStateChange
 VAR_INPUT
 END_VAR
 VAR
-    stCurrentState 	: ST_EcSlaveState;
-    nNextState 		: WORD;
-    bError			: BOOL;
+    nStateMachineStartState      : INT;
+    // State Machine Control Inputs
+    bEnable                 : BOOL;
+    bfbGetBusy              : BOOL;
+    nCurretState            : WORD;
+    bfbSetBusy              : BOOL;
+    bfbSetError             : BOOL;
 
+    // State Machine Control Outputs
+    bfbGetUpdatedState      : BOOL;
+    bSetNextState           : BOOL;
+    nNextState              : WORD;
+    sLogMessage             : T_MaxString;
+    bLog                    : BOOL;
 
 END_VAR
 ]]></Declaration>
@@ -194,21 +223,96 @@ END_VAR
         <ST><![CDATA[
 TEST('TestNotEnabledExpectNoStateChange');
 
-stCurrentState.deviceState := EC_DEVICE_STATE_PREOP;
+nStateMachineStartState := 1;
+bEnable := FALSE;
+bfbGetBusy := FALSE;
+nCurretState := EC_DEVICE_STATE_PREOP;
+bfbSetBusy := FALSE;
+bfbSetError := TRUE;
 
-fbECATAutoRestart.StateMachine(nCurrentState:=stCurrentState.deviceState,
-                                bSetBusy:= FALSE,
-                                bSetError:= FALSE,
-                                bEnable:=FALSE,
-                                nNextState => nNextState,
-                                bError=> bError);
+fbECATAutoRestart.StateMachine(bEnable:=bEnable,
+    bfbGetBusy := bfbGetBusy,
+    bfbGetUpdatedState => bfbGetUpdatedState,
+    nCurretState := nCurretState,
+    nNextState => nNextState,
+    sLogMessage=> sLogMessage,
+    bLog=> bLog,
+    bSetNextState=> bSetNextState,
+    bfbSetBusy := bfbSetBusy,
+    bfbSetError := bfbSetError);
 
 
-AssertEquals_WORD(Expected:=stCurrentState.deviceState,
-                      Actual:=nNextState,
-                    Message:= 'When bEnable is False, nNextState is not the same as the last State');
+AssertEquals_WORD(Expected:= 0,
+                    Actual:= nNextState,
+                    Message:= 'When bEnable is False, nNextState should not return anything');
 
-TEST_FINISHED();]]></ST>
+TEST_FINISHED();
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSingleLogPerTransitionExpect4Logs" Id="{6bff341b-6186-4534-a454-b9503897cacd}">
+      <Declaration><![CDATA[METHOD TestSingleLogPerTransitionExpect4Logs
+VAR_INPUT
+END_VAR
+
+VAR
+        // State Machine Control Inputs
+    bEnable                 : BOOL;
+    bfbGetBusy              : BOOL;
+    nCurretState            : WORD;
+    bfbSetBusy              : BOOL;
+    bfbSetError             : BOOL;
+
+    // State Machine Control Outputs
+    bfbGetUpdatedState      : BOOL;
+    bSetNextState           : BOOL;
+    nNextState              : WORD;
+    sLogMessage             : T_MaxString;
+    bLog                    : BOOL;
+
+    nIndex          : INT := 1;
+    nLogCount       : INT := 0;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('TestSingleLogPerTransitionExpect4Logs');
+
+fbTON_TestTimer(IN:=bStartTest,PT:=T#1s);
+IF  NOT bStartTest THEN bStartTest := TRUE; END_IF
+
+bEnable := TRUE;
+bfbGetBusy := FALSE;
+bfbSetBusy := FALSE;
+bfbSetError := FALSE;
+
+nCurretState := EC_DEVICE_STATE_INIT;
+// Using More cyles then needed
+ FOR nIndex := 1 TO 3 * 4 DO
+    fbECATAutoRestart.StateMachine
+            (bEnable:=bEnable,
+            bfbGetBusy := bfbGetBusy,
+            bfbGetUpdatedState => bfbGetUpdatedState,
+            nCurretState := nCurretState,
+            nNextState => nNextState,
+            sLogMessage=> sLogMessage,
+            bLog=> bLog,
+            bSetNextState=> bSetNextState,
+            bfbSetBusy := bfbSetBusy,
+            bfbSetError := bfbSetError);
+
+    IF bLog THEN
+        nLogCount := nLogCount + 1;
+    END_IF
+END_FOR
+
+AssertEquals_INT(Expected:= 4,
+    Actual:=nLogCount,
+    Message:='More than 4 Logs where Produced');
+
+TEST_FINISHED();
+]]></ST>
       </Implementation>
     </Method>
   </POU>

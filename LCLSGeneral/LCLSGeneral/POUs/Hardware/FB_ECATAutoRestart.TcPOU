@@ -4,9 +4,10 @@
     <Declaration><![CDATA[
 FUNCTION_BLOCK FB_ECATAutoRestart
 VAR_INPUT
-    sNetId     : T_AmsNetId;
-    nSlaveAddr : UINT;
-    bEnable 	: BOOL;
+    sNetId          : T_AmsNetId;
+    nSlaveAddr      : UINT;
+    bEnable 	    : BOOL;
+    nMaxErrorCount  : INT := 5; // Stop Trying to Change state after this many tries
 END_VAR
 VAR_IN_OUT
 END_VAR
@@ -15,116 +16,145 @@ VAR_OUTPUT
     nErrorId	: UDINT;
 END_VAR
 VAR
-    // FB
-    fbgetSlaveState : FB_EcGetSlaveState;
-    fbsetSlaveState : FB_EcSetSlaveState;
-    fbTON			: TON;
-    fbTP			: TP;
-    bStartTON		: BOOL := TRUE;
-    bStateMError	: BOOL;
-    nNextState		: WORD;
+    nStateMachineState      : INT := 1;
+    nErrorCount             : INT := 0;
+    bStopTrying             : BOOL;
 
-    // Used by Statemachine method
-    bStopTrying		: BOOL := FALSE;
-    nErrorCount		: UINT := 0;
-    nErrorMax		: UINT := 5;
-    fbLogger		: FB_LogMessage := (eSubsystem:= E_Subsystem.FIELDBUS);
-
-
-
+    fbgetSlaveState         : FB_EcGetSlaveState;
+    fbsetSlaveState         : FB_EcSetSlaveState;
+    fbLogger		        : FB_LogMessage := (eSubsystem:= E_Subsystem.FIELDBUS);
+    bLog : BOOL;
+    sLogMessage : T_MaxString;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-fbTON(IN:= bStartTON OR NOT fbTON.Q, PT:= T#1s);
-IF bStartTON THEN bStartTON := FALSE; END_IF
-fbgetSlaveState(sNetId:=sNetId, nSlaveAddr:=nSlaveAddr,  bExecute:=fbTON.Q);
+      <ST><![CDATA[StateMachine(bEnable:=bEnable,
+    bfbGetBusy := fbgetSlaveState.bBusy,
+    bfbGetUpdatedState => fbgetSlaveState.bExecute,
+    nCurretState := fbgetSlaveState.state.deviceState,
+    nNextState => fbsetSlaveState.reqState,
+    sLogMessage=> sLogMessage,
+    bLog=> bLog,
+    bSetNextState=> fbsetSlaveState.bExecute,
+    bfbSetBusy := fbsetSlaveState.bBusy,
+    bfbSetError := fbsetSlaveState.bError);
 
-StateMachine(nCurrentState:= fbgetSlaveState.state.deviceState,
-            bEnable:= bEnable,
-            bSetError:= fbsetSlaveState.bError,
-            bSetBusy:= fbsetSlaveState.bBusy,
-            nNextState=> nNextState,
-            bMaxNumTriesReached=> bStateMError,
-            bSetDO=>fbTP.IN);
+fbgetSlaveState(sNetId:= sNetId, nSlaveAddr:= nSlaveAddr);
+fbsetSlaveState(sNetId:=sNetId, nSlaveAddr:=nSlaveAddr, tTimeout:=T#5s);
 
-bError := bStateMError;
-nErrorId := fbgetSlaveState.nErrId;
+IF bLog THEN
+    fbLogger(sMsg:=sLogMessage, eSevr:=TcEventSeverity.Info);
+END_IF
 
-fbTP(PT:=T#10ms);
-fbsetSlaveState(sNetId:=sNetId,
-        nSlaveAddr:=nSlaveAddr,
-        reqState:= nNextState,
-        bExecute:=fbTP.Q);
+bError := fbgetSlaveState.bError OR fbsetSlaveState.bError OR bStopTrying;
 
-
-]]></ST>
+IF fbgetSlaveState.bError THEN
+    nErrorId := fbgetSlaveState.nErrId;
+ELSIF fbsetSlaveState.bError THEN
+    nErrorId := fbsetSlaveState.nErrId;
+END_IF]]></ST>
     </Implementation>
     <Method Name="StateMachine" Id="{4f307c1c-6406-4ed4-adea-e4e6e46fd62f}">
       <Declaration><![CDATA[
 METHOD StateMachine
-
 VAR_INPUT
-    nCurrentState 	: WORD;
-    bEnable			: BOOL;
+    bEnable                 : BOOL;
+    bfbGetBusy              : BOOL;
+    nCurretState            : WORD;
 
-    //Flags from FB_EcSetSlaceState
-    bSetError		: BOOL;
-    bSetBusy		: BOOL;
+    bfbSetBusy              : BOOL;
+    bfbSetError             : BOOL;
 
 END_VAR
 VAR_OUTPUT
-    nNextState					: WORD;
-    bMaxNumTriesReached			: BOOL;
-    bSetDO						: BOOL;
+    bfbGetUpdatedState      : BOOL;
+    bSetNextState           : BOOL;
+    nNextState              : WORD;
+
+    sLogMessage             : T_MaxString;
+    bLog                    : BOOL;
 END_VAR
 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[bSetDO := FALSE;
-
-IF bEnable AND  NOT bSetBusy THEN
-    CASE nCurrentState OF
-        EC_DEVICE_STATE_BOOTSTRAP:
-            fbLogger(sMsg:='Trying to move to INIT', eSevr:=TcEventSeverity.Info);
-            nNextState := EC_DEVICE_STATE_INIT;
-            bSetDO := TRUE;
-        EC_DEVICE_STATE_INIT:
-            fbLogger(sMsg:='Trying to move to PREOP', eSevr:=TcEventSeverity.Info);
-            nNextState := EC_DEVICE_STATE_PREOP;
-            bSetDO := TRUE;
-        EC_DEVICE_STATE_PREOP:
-            fbLogger(sMsg:='Trying to move to SAVEOP', eSevr:=TcEventSeverity.Info);
-            nNextState := EC_DEVICE_STATE_SAFEOP;
-            bSetDO := TRUE;
-        EC_DEVICE_STATE_SAFEOP:
-            fbLogger(sMsg:='Trying to move to OP', eSevr:=TcEventSeverity.Info);
-            nNextState := EC_DEVICE_STATE_OP;
-            bSetDO := TRUE;
-        EC_DEVICE_STATE_OP:
-            // IN OP STATE ? RESET ERRORS?
-            nNextState := EC_DEVICE_STATE_OP;
-            IF bStopTrying THEN
-                bStopTrying := FALSE;
-                nErrorCount := 0;
-            END_IF
-
-    END_CASE
-
-    // Keeps Track on consecutive Errors ans stop trying if max ammount of tried has been reached.
-    IF bSetError AND (NOT bStopTrying) THEN
-        nErrorCount := nErrorCount + 1;
-        IF (nErrorCount = nErrorMax) THEN
-            bStopTrying := TRUE;
+        <ST><![CDATA[
+CASE nStateMachineState OF
+    0 :
+        IF bEnable THEN
+            nStateMachineState := 1;
         END_IF
-    END_IF
-END_IF
 
-IF NOT bEnable THEN
-    nNextState := nCurrentState;
-END_IF
+    1 : // Monitor State
 
-bMaxNumTriesReached := bStopTrying;
+        IF NOT bEnable THEN
+            nStateMachineState := 0;
+        END_IF
+
+        // Get Updated Temrinal State
+        IF NOT bfbGetBusy THEN
+            bfbGetUpdatedState := TRUE;
+        ELSE
+            bfbGetUpdatedState := FALSE;
+        END_IF
+
+        // If not in OP try to Move into Another State
+        IF nCurretState <> EC_DEVICE_STATE_OP AND bEnable AND NOT bStopTrying THEN
+            nStateMachineState := 2;
+        END_IF
+
+        IF nCurretState = EC_DEVICE_STATE_OP THEN
+            // WE ARE IN OP
+            nNextState := nCurretState;
+            nErrorCount := 0;
+            bStopTrying := FALSE;
+            bError := FALSE;
+        END_IF
+
+
+     2 : // FIND NEXT STATE AND SIGNAL TO MOVE
+        CASE nCurretState OF
+            EC_DEVICE_STATE_BOOTSTRAP:
+                nNextState := EC_DEVICE_STATE_INIT;
+                sLogMessage := 'TRYING TO GO FROM BOOTSTRAP TO INIT';
+                bLog := TRUE;
+            EC_DEVICE_STATE_INIT:
+                nNextState := EC_DEVICE_STATE_PREOP;
+                sLogMessage := 'TRYING TO GO FROM INIT TO PREOP';
+                bLog := TRUE;
+            EC_DEVICE_STATE_PREOP:
+                nNextState := EC_DEVICE_STATE_SAFEOP;
+                sLogMessage := 'TRYING TO GO FROM PREOP TO SAFEOP';
+                bLog := TRUE;
+            EC_DEVICE_STATE_SAFEOP:
+                nNextState := EC_DEVICE_STATE_OP;
+                sLogMessage := 'TRYING TO GO FROM SAFEOP TO OP';
+                bLog := TRUE;
+        END_CASE
+
+        nStateMachineState := 3;
+        // Signal to try to move to next State
+        bSetNextState := TRUE;
+
+      3 : // Wait to Finish Trying to Move to Next State
+         IF bfbSetError THEN
+            nErrorCount := nErrorCount + 1;
+            IF nErrorCount = nMaxErrorCount THEN
+                bStopTrying := TRUE;
+            END_IF
+         END_IF
+
+         IF NOT bfbSetBusy THEN
+            bSetNextState := FALSE;
+            nStateMachineState := 1;
+         END_IF
+
+
+END_CASE
+
+
+
+
+
 ]]></ST>
       </Implementation>
     </Method>
