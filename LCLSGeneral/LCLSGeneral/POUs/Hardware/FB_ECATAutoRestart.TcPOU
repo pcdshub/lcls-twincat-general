@@ -28,16 +28,19 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[StateMachine(bEnable:=bEnable,
+      <ST><![CDATA[
+StateMachine(bEnable:=bEnable,
     bfbGetBusy := fbgetSlaveState.bBusy,
     bfbGetUpdatedState => fbgetSlaveState.bExecute,
+    bfbGetError := fbgetSlaveState.bError,
     nCurretState := fbgetSlaveState.state.deviceState,
     nNextState => fbsetSlaveState.reqState,
     sLogMessage=> sLogMessage,
     bLog=> bLog,
     bSetNextState=> fbsetSlaveState.bExecute,
     bfbSetBusy := fbsetSlaveState.bBusy,
-    bfbSetError := fbsetSlaveState.bError);
+    bfbSetError := fbsetSlaveState.bError,
+    bError => bError);
 
 fbgetSlaveState(sNetId:= sNetId, nSlaveAddr:= nSlaveAddr);
 fbsetSlaveState(sNetId:=sNetId, nSlaveAddr:=nSlaveAddr, tTimeout:=T#5s);
@@ -46,21 +49,29 @@ IF bLog THEN
     fbLogger(sMsg:=sLogMessage, eSevr:=TcEventSeverity.Info);
 END_IF
 
-bError := fbgetSlaveState.bError OR fbsetSlaveState.bError OR bStopTrying;
+IF bError OR bStopTrying THEN
+    bError := TRUE;
+    IF fbgetSlaveState.bError OR bStopTrying THEN
+           nErrorId := fbgetSlaveState.nErrId;
+    ELSIF fbsetSlaveState.bError OR bStopTrying THEN
+        nErrorId := fbsetSlaveState.nErrId;
+    END_IF
+ELSE
+    bError := FALSE;
+    nErrorId := 0 ;
+END_IF
 
-IF fbgetSlaveState.bError THEN
-    nErrorId := fbgetSlaveState.nErrId;
-ELSIF fbsetSlaveState.bError THEN
-    nErrorId := fbsetSlaveState.nErrId;
-END_IF]]></ST>
+]]></ST>
     </Implementation>
     <Method Name="StateMachine" Id="{4f307c1c-6406-4ed4-adea-e4e6e46fd62f}">
       <Declaration><![CDATA[
 METHOD StateMachine
 VAR_INPUT
     bEnable                 : BOOL;
-    bfbGetBusy              : BOOL;
     nCurretState            : WORD;
+
+    bfbGetBusy              : BOOL;
+    bfbGetError				: BOOL;
 
     bfbSetBusy              : BOOL;
     bfbSetError             : BOOL;
@@ -73,6 +84,7 @@ VAR_OUTPUT
 
     sLogMessage             : T_MaxString;
     bLog                    : BOOL;
+    bError					: BOOL;
 END_VAR
 
 ]]></Declaration>
@@ -80,6 +92,9 @@ END_VAR
         <ST><![CDATA[
 CASE nStateMachineState OF
     0 :
+        nErrorCount := 0;
+        bStopTrying := FALSE;
+
         IF bEnable THEN
             nStateMachineState := 1;
         END_IF
@@ -97,17 +112,23 @@ CASE nStateMachineState OF
             bfbGetUpdatedState := FALSE;
         END_IF
 
-        // If not in OP try to Move into Another State
-        IF nCurretState <> EC_DEVICE_STATE_OP AND bEnable AND NOT bStopTrying THEN
-            nStateMachineState := 2;
-        END_IF
+        IF bfbGetError THEN
+            bError := TRUE;
+            nStateMachineState := 3;
+        ELSE
+            // Only Try to Update when We have good state reading.
+            // If not in OP try to Move into Another State
+            IF nCurretState <> EC_DEVICE_STATE_OP AND bEnable AND NOT bStopTrying AND NOT bfbGetError THEN
+                nStateMachineState := 2;
+            END_IF
 
-        IF nCurretState = EC_DEVICE_STATE_OP THEN
-            // WE ARE IN OP
-            nNextState := nCurretState;
-            nErrorCount := 0;
-            bStopTrying := FALSE;
-            bError := FALSE;
+            IF nCurretState = EC_DEVICE_STATE_OP AND NOT bfbGetError THEN
+                // WE ARE IN OP
+                nNextState := nCurretState;
+                nErrorCount := 0;
+                bStopTrying := FALSE;
+                bError := FALSE;
+            END_IF
         END_IF
 
 
@@ -136,7 +157,9 @@ CASE nStateMachineState OF
         bSetNextState := TRUE;
 
       3 : // Wait to Finish Trying to Move to Next State
-         IF bfbSetError THEN
+
+         IF bfbSetError OR bfbGetError THEN
+            bError := TRUE;
             nErrorCount := nErrorCount + 1;
             IF nErrorCount = nMaxErrorCount THEN
                 bStopTrying := TRUE;

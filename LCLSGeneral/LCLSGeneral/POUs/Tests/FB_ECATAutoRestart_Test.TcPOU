@@ -32,6 +32,7 @@ VAR
     // State Machine Control Inputs
     bEnable                 : BOOL;
     bfbGetBusy              : BOOL;
+    bfbGetError              : BOOL;
     nCurretState            : WORD;
     bfbSetBusy              : BOOL;
     bfbSetError             : BOOL;
@@ -52,6 +53,7 @@ TEST('Test5RetriesExpectErrorStopTrying');
 nStateMachineState := 1; // Start Test on Start State
 bEnable := TRUE;
 bfbGetBusy := FALSE;
+bfbGetError := FALSE;
 nCurretState := EC_DEVICE_STATE_PREOP;
 bfbSetBusy := FALSE;
 bfbSetError := TRUE;
@@ -59,6 +61,7 @@ bfbSetError := TRUE;
 FOR nIndex := 1 TO 20 DO
     fbECATAutoRestart.StateMachine(bEnable:=bEnable,
         bfbGetBusy := bfbGetBusy,
+        bfbGetError := bfbGetError,
         bfbGetUpdatedState => bfbGetUpdatedState,
         nCurretState := nCurretState,
         nNextState => nNextState,
@@ -73,6 +76,21 @@ END_FOR
 AssertEquals_BOOL(Expected:=TRUE,
                     Actual:= fbECATAutoRestart.bStopTrying,
                     Message:='bStopTrying was not set after trying to get new position after 20 Cycles');
+
+// CLEAR ANY ERRORS AFTER TESTS
+FOR nIndex := 1 TO 3 DO
+    fbECATAutoRestart.StateMachine(bEnable:=FALSE,
+        bfbGetBusy := bfbGetBusy,
+        bfbGetError := bfbGetError,
+        bfbGetUpdatedState => bfbGetUpdatedState,
+        nCurretState := nCurretState,
+        nNextState => nNextState,
+        sLogMessage=> sLogMessage,
+        bLog=> bLog,
+        bSetNextState=> bSetNextState,
+        bfbSetBusy := bfbSetBusy,
+        bfbSetError := bfbSetError);
+END_FOR
 
 TEST_FINISHED();
 
@@ -90,6 +108,7 @@ VAR
     // State Machine Control Inputs
     bEnable                 : BOOL;
     bfbGetBusy              : BOOL;
+    bfbGetError				: BOOL;
     nCurretState            : WORD;
     bfbSetBusy              : BOOL;
     bfbSetError             : BOOL;
@@ -121,6 +140,7 @@ bEnable := TRUE;
 bfbGetBusy := FALSE;
 bfbSetBusy := FALSE;
 bfbSetError := FALSE;
+bfbGetError := FALSE;
 
 
 
@@ -133,6 +153,7 @@ FOR nStartIndex := 1 TO 4 DO
     fbECATAutoRestart.StateMachine
             (bEnable:=bEnable,
             bfbGetBusy := bfbGetBusy,
+            bfbGetError := bfbGetError,
             bfbGetUpdatedState => bfbGetUpdatedState,
             nCurretState := nCurretState,
             nNextState => nNextState,
@@ -145,8 +166,8 @@ FOR nStartIndex := 1 TO 4 DO
     IF bSetNextState THEN
         nCurretState := nNextState;
     END_IF
-
     END_FOR
+
     AssertEquals_BYTE(Expected:=EC_DEVICE_STATE_OP,
         Actual:= TO_BYTE(nCurretState),
         Message:='Test Did not Return to OP');
@@ -165,24 +186,23 @@ END_VAR
 VAR
     bError				: BOOL;
     bErrorId			: UDINT;
+    nIndex				: INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 TEST('TestBadAddressExpectError');
 
-fbTON_TestTimer(IN:=bStartTest,PT:=T#1s);
-IF  NOT bStartTest THEN bStartTest := TRUE; END_IF
+FOR nIndex := 1 TO 6 DO
 
-fbECATAutoRestart(sNetId:='1.0.0.0.1',
+    fbECATAutoRestart(sNetId:='1.0.0.0.1',
                     nSlaveAddr:=11101,
-                    bEnable:=TRUE,
+                    bEnable:= TRUE,
                     bError=>bError,
                     nErrorId=>bErrorId);
 
 
-IF fbTON_TestTimer.Q THEN
-
+    IF bError THEN
     AssertEquals_BOOL(Expected:=TRUE,
         Actual:=bError,
         Message:= 'Expected bError to be TRUE');
@@ -191,9 +211,10 @@ IF fbTON_TestTimer.Q THEN
         Actual:= bErrorId,
         Message:= 'Expected ERR_TARGETMACHINENOTFOUND (0x7)');
 
-    TEST_FINISHED();
+    END_IF
+END_FOR
 
-END_IF]]></ST>
+   TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TestNotEnabledExpectNoStateChange" Id="{f686e19f-d49d-4fd6-b668-a90a4b41d91c}">
@@ -206,6 +227,7 @@ VAR
     // State Machine Control Inputs
     bEnable                 : BOOL;
     bfbGetBusy              : BOOL;
+    bfbGetError				: BOOL;
     nCurretState            : WORD;
     bfbSetBusy              : BOOL;
     bfbSetError             : BOOL;
@@ -229,9 +251,11 @@ bfbGetBusy := FALSE;
 nCurretState := EC_DEVICE_STATE_PREOP;
 bfbSetBusy := FALSE;
 bfbSetError := TRUE;
+bfbGetError := FALSE;
 
 fbECATAutoRestart.StateMachine(bEnable:=bEnable,
     bfbGetBusy := bfbGetBusy,
+    bfbGetError	:= bfbGetError,
     bfbGetUpdatedState => bfbGetUpdatedState,
     nCurretState := nCurretState,
     nNextState => nNextState,
@@ -263,6 +287,7 @@ VAR
     nCurretState            : WORD;
     bfbSetBusy              : BOOL;
     bfbSetError             : BOOL;
+    bfbGetError				: BOOL;
 
     // State Machine Control Outputs
     bfbGetUpdatedState      : BOOL;
@@ -286,6 +311,7 @@ bEnable := TRUE;
 bfbGetBusy := FALSE;
 bfbSetBusy := FALSE;
 bfbSetError := FALSE;
+bfbGetError := FALSE;
 
 nCurretState := EC_DEVICE_STATE_INIT;
 // Using More cyles then needed
@@ -293,6 +319,7 @@ nCurretState := EC_DEVICE_STATE_INIT;
     fbECATAutoRestart.StateMachine
             (bEnable:=bEnable,
             bfbGetBusy := bfbGetBusy,
+            bfbGetError := bfbGetError,
             bfbGetUpdatedState => bfbGetUpdatedState,
             nCurretState := nCurretState,
             nNextState => nNextState,
