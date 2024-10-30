@@ -166,6 +166,9 @@
     <Compile Include="POUs\Hardware\FB_CoE_FastRead.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Hardware\FB_ECATAutoRestart.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -219,6 +222,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Tests\FB_CircuitBreaker_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Tests\FB_ECATAutoRestart_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Tests\FB_FlutterDetection_Test.TcPOU">
