@@ -702,7 +702,7 @@ FB_AnalogInput
     *)
     VAR_INPUT
         // Connect this input to the terminal
-        iRaw AT %I*: INT;
+        iRaw AT %I*: DINT;
         // The number of bits correlated with the terminal's max value. This is not necessarily the resolution parameter.
         iTermBits: UINT;
         // The fReal value correlated with the terminal's max value
@@ -1211,6 +1211,498 @@ FB_DataBuffer
     END_FUNCTION_BLOCK
 
 
+
+
+FB_ECATAutoRestart
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_ECATAutoRestart
+    VAR_INPUT
+        sNetId          : T_AmsNetId;
+        nSlaveAddr      : UINT;
+        bEnable 	    : BOOL;
+        nMaxErrorCount  : INT := 5; // Stop Trying to Change state after this many tries
+    END_VAR
+    VAR_IN_OUT
+    END_VAR
+    VAR_OUTPUT
+        bError 		: BOOL;
+        nErrorId	: UDINT;
+    END_VAR
+    VAR
+        nStateMachineState      : INT := 1;
+        nErrorCount             : INT := 0;
+        bStopTrying             : BOOL;
+
+        fbgetSlaveState         : FB_EcGetSlaveState;
+        fbsetSlaveState         : FB_EcSetSlaveState;
+        fbLogger		        : FB_LogMessage := (eSubsystem:= E_Subsystem.FIELDBUS);
+        bLog : BOOL;
+        sLogMessage : T_MaxString;
+    END_VAR
+    StateMachine(bEnable:=bEnable,
+        bfbGetBusy := fbgetSlaveState.bBusy,
+        bfbGetUpdatedState => fbgetSlaveState.bExecute,
+        bfbGetError := fbgetSlaveState.bError,
+        nCurretState := fbgetSlaveState.state.deviceState,
+        nNextState => fbsetSlaveState.reqState,
+        sLogMessage=> sLogMessage,
+        bLog=> bLog,
+        bSetNextState=> fbsetSlaveState.bExecute,
+        bfbSetBusy := fbsetSlaveState.bBusy,
+        bfbSetError := fbsetSlaveState.bError,
+        bError => bError);
+
+    fbgetSlaveState(sNetId:= sNetId, nSlaveAddr:= nSlaveAddr);
+    fbsetSlaveState(sNetId:=sNetId, nSlaveAddr:=nSlaveAddr, tTimeout:=T#5s);
+
+    IF bLog THEN
+        fbLogger(sMsg:=sLogMessage, eSevr:=TcEventSeverity.Info);
+    END_IF
+
+    IF bError OR bStopTrying THEN
+        bError := TRUE;
+        IF fbgetSlaveState.bError OR bStopTrying THEN
+               nErrorId := fbgetSlaveState.nErrId;
+        ELSIF fbsetSlaveState.bError OR bStopTrying THEN
+            nErrorId := fbsetSlaveState.nErrId;
+        END_IF
+    ELSE
+        bError := FALSE;
+        nErrorId := 0 ;
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+    METHOD StateMachine
+    VAR_INPUT
+        bEnable                 : BOOL;
+        nCurretState            : WORD;
+
+        bfbGetBusy              : BOOL;
+        bfbGetError				: BOOL;
+
+        bfbSetBusy              : BOOL;
+        bfbSetError             : BOOL;
+
+    END_VAR
+    VAR_OUTPUT
+        bfbGetUpdatedState      : BOOL;
+        bSetNextState           : BOOL;
+        nNextState              : WORD;
+
+        sLogMessage             : T_MaxString;
+        bLog                    : BOOL;
+        bError					: BOOL;
+    END_VAR
+    CASE nStateMachineState OF
+        0 :
+            nErrorCount := 0;
+            bStopTrying := FALSE;
+
+            IF bEnable THEN
+                nStateMachineState := 1;
+            END_IF
+
+        1 : // Monitor State
+
+            IF NOT bEnable THEN
+                nStateMachineState := 0;
+            END_IF
+
+            // Get Updated terminal State
+            IF NOT bfbGetBusy THEN
+                bfbGetUpdatedState := TRUE;
+            ELSE
+                bfbGetUpdatedState := FALSE;
+            END_IF
+
+            IF bfbGetError THEN
+                bError := TRUE;
+                nStateMachineState := 3;
+            ELSE
+                // Only Try to Update when We have good state reading.
+                // If not in OP try to Move into Another State
+                IF nCurretState <> EC_DEVICE_STATE_OP AND bEnable AND NOT bStopTrying AND NOT bfbGetError THEN
+                    nStateMachineState := 2;
+                END_IF
+
+                IF nCurretState = EC_DEVICE_STATE_OP AND NOT bfbGetError THEN
+                    // WE ARE IN OP
+                    nNextState := nCurretState;
+                    nErrorCount := 0;
+                    bStopTrying := FALSE;
+                    bError := FALSE;
+                END_IF
+            END_IF
+
+
+         2 : // FIND NEXT STATE AND SIGNAL TO MOVE
+            CASE nCurretState OF
+                EC_DEVICE_STATE_BOOTSTRAP:
+                    nNextState := EC_DEVICE_STATE_INIT;
+                    sLogMessage := 'TRYING TO GO FROM BOOTSTRAP TO INIT';
+                    bLog := TRUE;
+                EC_DEVICE_STATE_INIT:
+                    nNextState := EC_DEVICE_STATE_PREOP;
+                    sLogMessage := 'TRYING TO GO FROM INIT TO PREOP';
+                    bLog := TRUE;
+                EC_DEVICE_STATE_PREOP:
+                    nNextState := EC_DEVICE_STATE_SAFEOP;
+                    sLogMessage := 'TRYING TO GO FROM PREOP TO SAFEOP';
+                    bLog := TRUE;
+                EC_DEVICE_STATE_SAFEOP:
+                    nNextState := EC_DEVICE_STATE_OP;
+                    sLogMessage := 'TRYING TO GO FROM SAFEOP TO OP';
+                    bLog := TRUE;
+            END_CASE
+
+            nStateMachineState := 3;
+            // Signal to try to move to next State
+            bSetNextState := TRUE;
+
+          3 : // Wait to Finish Trying to Move to Next State
+
+             IF bfbSetError OR bfbGetError THEN
+                bError := TRUE;
+                nErrorCount := nErrorCount + 1;
+                IF nErrorCount = nMaxErrorCount THEN
+                    bStopTrying := TRUE;
+                END_IF
+             END_IF
+
+             IF NOT bfbSetBusy THEN
+                bSetNextState := FALSE;
+                nStateMachineState := 1;
+             END_IF
+
+
+    END_CASE
+    END_METHOD
+
+
+Related:
+    * `E_Subsystem`_
+    * `FB_LogMessage`_
+
+
+FB_ECATAutoRestart_Test
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_ECATAutoRestart_Test EXTENDS TcUnit.FB_TestSuite
+    VAR
+        fbECATAutoRestart : FB_ECATAutoRestart;
+
+        fbTON_TestTimer		: TON;
+        bStartTest			: BOOL := FALSE;
+
+
+    END_VAR
+    TestSingleLogPerTransitionExpect4Logs();
+    TestAnyStateExpectChangeToOpStateInSeq();
+    TestNotEnabledExpectNoStateChange();
+    Test5RetriesExpectErrorStopTrying();
+    TestBadAddressExpectError();
+
+    END_FUNCTION_BLOCK
+
+    METHOD Test5RetriesExpectErrorStopTrying
+    VAR_INPUT
+    END_VAR
+    VAR
+        nIndex                  : INT;
+        nStateMachineState      : INT;
+
+        // State Machine Control Inputs
+        bEnable                 : BOOL;
+        bfbGetBusy              : BOOL;
+        bfbGetError              : BOOL;
+        nCurretState            : WORD;
+        bfbSetBusy              : BOOL;
+        bfbSetError             : BOOL;
+
+        // State Machine Control Outputs
+        bfbGetUpdatedState      : BOOL;
+        bSetNextState           : BOOL;
+        nNextState              : WORD;
+        sLogMessage             : T_MaxString;
+        bLog                    : BOOL;
+
+    END_VAR
+    TEST('Test5RetriesExpectErrorStopTrying');
+
+    nStateMachineState := 1; // Start Test on Start State
+    bEnable := TRUE;
+    bfbGetBusy := FALSE;
+    bfbGetError := FALSE;
+    nCurretState := EC_DEVICE_STATE_PREOP;
+    bfbSetBusy := FALSE;
+    bfbSetError := TRUE;
+
+    FOR nIndex := 1 TO 20 DO
+        fbECATAutoRestart.StateMachine(bEnable:=bEnable,
+            bfbGetBusy := bfbGetBusy,
+            bfbGetError := bfbGetError,
+            bfbGetUpdatedState => bfbGetUpdatedState,
+            nCurretState := nCurretState,
+            nNextState => nNextState,
+            sLogMessage=> sLogMessage,
+            bLog=> bLog,
+            bSetNextState=> bSetNextState,
+            bfbSetBusy := bfbSetBusy,
+            bfbSetError := bfbSetError);
+    END_FOR
+
+
+    AssertEquals_BOOL(Expected:=TRUE,
+                        Actual:= fbECATAutoRestart.bStopTrying,
+                        Message:='bStopTrying was not set after trying to get new position after 20 Cycles');
+
+    // CLEAR ANY ERRORS AFTER TESTS
+    FOR nIndex := 1 TO 3 DO
+        fbECATAutoRestart.StateMachine(bEnable:=FALSE,
+            bfbGetBusy := bfbGetBusy,
+            bfbGetError := bfbGetError,
+            bfbGetUpdatedState => bfbGetUpdatedState,
+            nCurretState := nCurretState,
+            nNextState => nNextState,
+            sLogMessage=> sLogMessage,
+            bLog=> bLog,
+            bSetNextState=> bSetNextState,
+            bfbSetBusy := bfbSetBusy,
+            bfbSetError := bfbSetError);
+    END_FOR
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD TestAnyStateExpectChangeToOpStateInSeq
+    VAR_INPUT
+    END_VAR
+    VAR
+
+        // State Machine Control Inputs
+        bEnable                 : BOOL;
+        bfbGetBusy              : BOOL;
+        bfbGetError				: BOOL;
+        nCurretState            : WORD;
+        bfbSetBusy              : BOOL;
+        bfbSetError             : BOOL;
+
+        // State Machine Control Outputs
+        bfbGetUpdatedState      : BOOL;
+        bSetNextState           : BOOL;
+        nNextState              : WORD;
+        sLogMessage             : T_MaxString;
+        bLog                    : BOOL;
+        // TestAnyStateChangeOpInSeq Vars
+
+        nIndex          : INT := 1;
+        aPossibleStart : ARRAY [1 .. 4] OF BYTE := [EC_DEVICE_STATE_BOOTSTRAP,
+                                                    EC_DEVICE_STATE_INIT,
+                                                    EC_DEVICE_STATE_PREOP,
+                                                    EC_DEVICE_STATE_SAFEOP];
+        nStartIndex : INT := 0;
+
+
+    END_VAR
+    TEST('TestAnyStateExpectChangeToOpStateInSeq');
+
+
+    bEnable := TRUE;
+    bfbGetBusy := FALSE;
+    bfbSetBusy := FALSE;
+    bfbSetError := FALSE;
+    bfbGetError := FALSE;
+
+
+
+
+    FOR nStartIndex := 1 TO 4 DO
+        nCurretState := aPossibleStart[nStartIndex];
+        // Takes 3 cycles for statemachine to update state
+        // 4 - nStartIndex is number of steps needed to return to OP
+        FOR nIndex := 1 TO 3 * 4 - nStartIndex DO
+        fbECATAutoRestart.StateMachine
+                (bEnable:=bEnable,
+                bfbGetBusy := bfbGetBusy,
+                bfbGetError := bfbGetError,
+                bfbGetUpdatedState => bfbGetUpdatedState,
+                nCurretState := nCurretState,
+                nNextState => nNextState,
+                sLogMessage=> sLogMessage,
+                bLog=> bLog,
+                bSetNextState=> bSetNextState,
+                bfbSetBusy := bfbSetBusy,
+                bfbSetError := bfbSetError);
+
+        IF bSetNextState THEN
+            nCurretState := nNextState;
+        END_IF
+        END_FOR
+
+        AssertEquals_BYTE(Expected:=EC_DEVICE_STATE_OP,
+            Actual:= TO_BYTE(nCurretState),
+            Message:='Test Did not Return to OP');
+    END_FOR
+
+     TEST_FINISHED();
+    END_METHOD
+
+    METHOD TestBadAddressExpectError
+    VAR_INPUT
+    END_VAR
+    VAR
+        bError				: BOOL;
+        bErrorId			: UDINT;
+        nIndex				: INT;
+    END_VAR
+    TEST('TestBadAddressExpectError');
+
+    FOR nIndex := 1 TO 6 DO
+
+        fbECATAutoRestart(sNetId:='1.0.0.0.1',
+                        nSlaveAddr:=11101,
+                        bEnable:= TRUE,
+                        bError=>bError,
+                        nErrorId=>bErrorId);
+
+
+        IF bError THEN
+        AssertEquals_BOOL(Expected:=TRUE,
+            Actual:=bError,
+            Message:= 'Expected bError to be TRUE');
+
+        AssertEquals_UDINT(Expected:= 7,
+            Actual:= bErrorId,
+            Message:= 'Expected ERR_TARGETMACHINENOTFOUND (0x7)');
+
+        END_IF
+    END_FOR
+
+       TEST_FINISHED();
+    END_METHOD
+
+    METHOD TestNotEnabledExpectNoStateChange
+    VAR_INPUT
+    END_VAR
+    VAR
+        nStateMachineStartState      : INT;
+        // State Machine Control Inputs
+        bEnable                 : BOOL;
+        bfbGetBusy              : BOOL;
+        bfbGetError				: BOOL;
+        nCurretState            : WORD;
+        bfbSetBusy              : BOOL;
+        bfbSetError             : BOOL;
+
+        // State Machine Control Outputs
+        bfbGetUpdatedState      : BOOL;
+        bSetNextState           : BOOL;
+        nNextState              : WORD;
+        sLogMessage             : T_MaxString;
+        bLog                    : BOOL;
+
+    END_VAR
+    TEST('TestNotEnabledExpectNoStateChange');
+
+    nStateMachineStartState := 1;
+    bEnable := FALSE;
+    bfbGetBusy := FALSE;
+    nCurretState := EC_DEVICE_STATE_PREOP;
+    bfbSetBusy := FALSE;
+    bfbSetError := TRUE;
+    bfbGetError := FALSE;
+
+    fbECATAutoRestart.StateMachine(bEnable:=bEnable,
+        bfbGetBusy := bfbGetBusy,
+        bfbGetError	:= bfbGetError,
+        bfbGetUpdatedState => bfbGetUpdatedState,
+        nCurretState := nCurretState,
+        nNextState => nNextState,
+        sLogMessage=> sLogMessage,
+        bLog=> bLog,
+        bSetNextState=> bSetNextState,
+        bfbSetBusy := bfbSetBusy,
+        bfbSetError := bfbSetError);
+
+
+    AssertEquals_WORD(Expected:= 0,
+                        Actual:= nNextState,
+                        Message:= 'When bEnable is False, nNextState should not return anything');
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD TestSingleLogPerTransitionExpect4Logs
+    VAR_INPUT
+    END_VAR
+
+    VAR
+            // State Machine Control Inputs
+        bEnable                 : BOOL;
+        bfbGetBusy              : BOOL;
+        nCurretState            : WORD;
+        bfbSetBusy              : BOOL;
+        bfbSetError             : BOOL;
+        bfbGetError				: BOOL;
+
+        // State Machine Control Outputs
+        bfbGetUpdatedState      : BOOL;
+        bSetNextState           : BOOL;
+        nNextState              : WORD;
+        sLogMessage             : T_MaxString;
+        bLog                    : BOOL;
+
+        nIndex          : INT := 1;
+        nLogCount       : INT := 0;
+    END_VAR
+    TEST('TestSingleLogPerTransitionExpect4Logs');
+
+    fbTON_TestTimer(IN:=bStartTest,PT:=T#1s);
+    IF  NOT bStartTest THEN bStartTest := TRUE; END_IF
+
+    bEnable := TRUE;
+    bfbGetBusy := FALSE;
+    bfbSetBusy := FALSE;
+    bfbSetError := FALSE;
+    bfbGetError := FALSE;
+
+    nCurretState := EC_DEVICE_STATE_INIT;
+    // Using More cyles then needed
+     FOR nIndex := 1 TO 3 * 4 DO
+        fbECATAutoRestart.StateMachine
+                (bEnable:=bEnable,
+                bfbGetBusy := bfbGetBusy,
+                bfbGetError := bfbGetError,
+                bfbGetUpdatedState => bfbGetUpdatedState,
+                nCurretState := nCurretState,
+                nNextState => nNextState,
+                sLogMessage=> sLogMessage,
+                bLog=> bLog,
+                bSetNextState=> bSetNextState,
+                bfbSetBusy := bfbSetBusy,
+                bfbSetError := bfbSetError);
+
+        IF bLog THEN
+            nLogCount := nLogCount + 1;
+        END_IF
+    END_FOR
+
+    AssertEquals_INT(Expected:= 4,
+        Actual:=nLogCount,
+        Message:='More than 4 Logs where Produced');
+
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `FB_ECATAutoRestart`_
 
 
 FB_EcatDiag
@@ -2677,6 +3169,175 @@ FB_EtherCATFrameDiag
     END_FUNCTION_BLOCK
 
 
+
+
+FB_FlutterDetection
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_FlutterDetection
+    VAR_INPUT
+        bVarToMonitor : BOOL;
+        fPastTime : TIME := T#5000ms;
+        nMaxFlipsAllowed : UDINT := 10;
+        // If set to TRUE, reset flutter detection.
+        {attribute 'pytmc' := 'pv: FLUTTER:RESET'}
+        bReset : BOOL;
+    END_VAR
+    VAR_OUTPUT
+        bExceededFlipMax : BOOL;
+    END_VAR
+    VAR
+        bInit : BOOL := FALSE;
+        bLastVarValue : BOOL;
+        nNumFlipped : UINT;
+        tTimer : TON;
+        rtReset : r_trig;
+    END_VAR
+    IF NOT bInit THEN
+        bLastVarValue := bVarToMonitor;
+        nNumFlipped := 0;
+        bExceededFlipMax := FALSE;
+        tTimer(IN:=FALSE);
+        tTimer(IN:=TRUE, PT:=fPastTime);
+        bInit := TRUE;
+    END_IF
+
+    rtReset(CLK:=bReset);
+
+    IF rtReset.Q THEN
+        // re-initialize
+        bInit := FALSE;
+    END_IF
+
+    bReset R= rtReset.Q;
+    tTimer();
+
+    IF tTimer.Q THEN
+        IF nNumFlipped > nMaxFlipsAllowed THEN
+            bExceededFlipMax := TRUE;
+            // timer off, no need to count.
+        ELSE
+            nNumFlipped := 0;
+            // reset timer
+            tTimer(IN:=FALSE);
+            tTimer(IN:=TRUE);
+        END_IF
+    END_IF
+    // stop counting after exceed.
+    IF NOT bExceededFlipMax THEN
+        IF bLastVarValue <> bVarToMonitor THEN
+            nNumFlipped := nNumFlipped +1;
+            bLastVarValue := bVarToMonitor;
+        END_IF
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_FlutterDetection_Test
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_FlutterDetection_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+        fbFlutterDet : FB_FlutterDetection;
+
+        nFirstCycleCount : UDINT;
+        nCurrentSystemCycle : UDINT;
+        nCurrentLocalCycle : UDINT;
+    END_VAR
+    TestFlutterResolution();
+    TestFlutterReset();
+
+    END_FUNCTION_BLOCK
+
+    METHOD TestFlutterReset
+    VAR_INST
+        fbTestTimer : TON := (PT := T#300ms);
+        bInit : BOOL := FALSE;
+        bVarToMonitor : BOOL := TRUE;
+    END_VAR
+    (* after trip, function should latch exceeded flag remains tripped. Finally,
+    check that after reset, the coount resets and the exceeded flag
+    goes low, then trips again. *)
+    TEST('TestFlutterReset');
+    IF NOT bInit THEN
+        nFirstCycleCount := _TaskInfo[GETCURTASKINDEXEX()].CycleCount;
+        bInit := TRUE;
+    END_IF
+    nCurrentSystemCycle := _TaskInfo[GETCURTASKINDEXEX()].CycleCount;
+    nCurrentLocalCycle := nCurrentSystemCycle - nFirstCycleCount;
+    fbTestTimer(IN := TRUE);
+    bVarToMonitor := NOT bVarToMonitor;
+
+    fbFlutterDet(bVarToMonitor:=bVarToMonitor ,fPastTime:=T#50ms ,nMaxFlipsAllowed:=4);
+
+    CASE nCurrentLocalCycle OF
+    10:
+        AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+    11:
+        // latched
+        AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+    12:
+        // latched
+        AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+        fbFlutterDet(bReset:=TRUE);
+    13:
+        // reset
+        AssertFalse(fbFlutterDet.bExceededFlipMax, 'false exceeded');
+    25:
+        // lose a few cycles on reset.
+        AssertTrue(fbFlutterDet.bExceededFlipMax, 'exceeded flag not present');
+    END_CASE
+
+    IF fbTestTimer.Q THEN
+        TEST_FINISHED();
+    END_IF
+    END_METHOD
+
+    METHOD TestFlutterResolution
+    VAR_INST
+        fbTestTimer : TON := (PT := T#200ms);
+
+        fbFlutterDetExceedResolution : FB_FlutterDetection;
+        fbFlutterDetMaxResolution : FB_FlutterDetection;
+        nCycleTime : UDINT;
+        nCalcCycleTime : TIME;
+        nNumCycles : UDINT := 4;
+        bVarToMonitor : BOOL := TRUE;
+    END_VAR
+    (*Test the max flips that can be detected, should be number of cycles - 1*)
+
+    TEST('TestFlutterResolution');
+    fbTestTimer(IN := TRUE);
+
+    nCycleTime := _TaskInfo[GETCURTASKINDEXEX()].CycleTime;
+    nCycleTime := nCycleTime / 10000; //convert to ms
+    nCalcCycleTime := UDINT_TO_TIME(nCycleTime * nNumCycles);
+
+    fbFlutterDetExceedResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumCycles);
+    fbFlutterDetMaxResolution(bVarToMonitor:=bVarToMonitor, fPastTime:=nCalcCycleTime, nMaxFlipsAllowed:=nNumCycles - 1);
+    bVarToMonitor := NOT bVarToMonitor;
+
+    IF fbTestTimer.Q THEN
+        assertFalse(fbFlutterDetExceedResolution.bExceededFlipMax,'Flutter shouldnt be detected');
+        assertTrue(fbFlutterDetMaxResolution.bExceededFlipMax,'Flutter not detected');
+        TEST_FINISHED();
+    END_IF
+    END_METHOD
+
+
+Related:
+    * `FB_FlutterDetection`_
 
 
 FB_GetPLCHostname
@@ -4588,12 +5249,20 @@ RUN_TESTS
 
     PROGRAM RUN_TESTS
     VAR
+        // Logger
         {attribute 'analysis' := '-33'}
         fbCbTest : FB_CircuitBreaker_Test;
         {attribute 'analysis' := '-33'}
+        // Data
         fbCentroidTest : FB_Test_EpicsCentroidMonitor;
         {attribute 'analysis' := '-33'}
         fbMotorTest : FB_Test_EpicsMotorMonitor;
+        // EPS
+        {attribute 'analysis' := '-33'}
+        fbFlutterTest : FB_FlutterDetection_Test;
+        // Hardware
+        {attribute 'analysis' := '-33'}
+        fbECATAutoRestartTest : FB_ECATAutoRestart_Test;
     END_VAR
     TcUnit.RUN();
 
@@ -4602,6 +5271,8 @@ RUN_TESTS
 
 Related:
     * `FB_CircuitBreaker_Test`_
+    * `FB_ECATAutoRestart_Test`_
+    * `FB_FlutterDetection_Test`_
     * `FB_Test_EpicsCentroidMonitor`_
     * `FB_Test_EpicsMotorMonitor`_
 

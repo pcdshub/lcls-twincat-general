@@ -1,22 +1,24 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lcls-twincat-general &mdash; pcdshub/lcls-twincat-general  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/tree.css?v=837a00b9" />
+      <link rel="stylesheet" type="text/css" href="_static/width.css?v=ab210c7a" />
+
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -46,7 +48,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_pragmas.html">Pragmas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">Box Hierarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">EtherCAT Terminals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
 </ul>
@@ -97,7 +99,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_nc.html">NC Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">Box Hierarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_ethercat.html">EtherCAT Terminals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LCLSGeneral_links.html">Links</a></li>
 </ul>
@@ -146,6 +148,8 @@
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-circuitbreaker-test">FB_CircuitBreaker_Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-coe-fastread">FB_CoE_FastRead</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-databuffer">FB_DataBuffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ecatautorestart">FB_ECATAutoRestart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ecatautorestart-test">FB_ECATAutoRestart_Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ecatdiag">FB_EcatDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ecatdiagwrapper">FB_EcatDiagWrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-el6-com">FB_EL6_Com</a></li>
@@ -154,6 +158,8 @@
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-eps">FB_EPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ethercatdiag">FB_EtherCATDiag</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-ethercatframediag">FB_EtherCATFrameDiag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-flutterdetection">FB_FlutterDetection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-flutterdetection-test">FB_FlutterDetection_Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-getplchostname">FB_GetPLCHostname</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-getplcipaddress">FB_GetPLCIPAddress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LCLSGeneral_LCLSGeneral_source.html#fb-index">FB_Index</a></li>
@@ -201,7 +207,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, SLAC National Accelerator Laboratory.</p>
+    <p>&#169; Copyright 2025, SLAC National Accelerator Laboratory.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
