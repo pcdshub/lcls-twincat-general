@@ -30,7 +30,7 @@ VAR
     fbLocalTime: FB_LocalSystemTime;
     fbGetTimeZone: FB_GetTimeZoneInformation;
     fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
-    fileTime: T_FILETIME;
+    stfileTime: T_FILETIME;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -46,13 +46,17 @@ IF bExecute THEN
     IF bValid THEN
         fbTimeConv(
             in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
-            out => fileTime);
-        iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+            out => stfileTime);
+        iFull := (SHL(DWORD_TO_ULINT(stfileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(stfileTime.dwLowDateTime)) / 10000 - 11644473600000;
         fTime := ULINT_TO_LREAL(iFull)/1000;
         iSeconds := iFull/1000;
         iMilliseconds := iFull MOD 1000;
     END_IF
 END_IF]]></ST>
     </Implementation>
+    <LineIds Name="FB_UnixTimeStamp">
+      <LineId Id="39" Count="17" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
