@@ -54,9 +54,5 @@ IF bExecute THEN
     END_IF
 END_IF]]></ST>
     </Implementation>
-    <LineIds Name="FB_UnixTimeStamp">
-      <LineId Id="39" Count="17" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

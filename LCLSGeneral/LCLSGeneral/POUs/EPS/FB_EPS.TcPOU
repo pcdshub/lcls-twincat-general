@@ -26,6 +26,12 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[nMask := SHL(nMask, nBits);
+// Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference
+IF NOT __ISVALIDREF(eps) THEN
+    RETURN;
+END_IF
+
+(* Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before) *)
 nBitValue := SHR((nMask AND eps.nFlags), nBits);
 
 IF (TO_BOOL(nBitValue)) <> bValue THEN
@@ -48,7 +54,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eps.sFlagDesc := desciption;]]></ST>
+        <ST><![CDATA[
+// Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference
+IF NOT __ISVALIDREF(eps) THEN
+    RETURN;
+END_IF
+
+(* Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before) *)
+eps.sFlagDesc := desciption;]]></ST>
       </Implementation>
     </Method>
     <Method Name="setMessage" Id="{50553b5a-8e8e-441f-8a78-c5cb5c67e718}">
@@ -58,7 +71,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eps.sMessage := message;]]></ST>
+        <ST><![CDATA[// Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference
+IF NOT __ISVALIDREF(eps) THEN
+    RETURN;
+END_IF
+// Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before)
+eps.sMessage := message;]]></ST>
       </Implementation>
     </Method>
   </POU>
