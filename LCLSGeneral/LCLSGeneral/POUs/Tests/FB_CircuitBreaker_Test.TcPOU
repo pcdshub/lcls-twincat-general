@@ -120,7 +120,7 @@ END_VAR]]></Declaration>
 in one cycle, leading to a large excess of messages.
 *)
 TEST('LocalFastTrip');
-    FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
+    FOR idx := 0 TO INT_TO_UINT(GVL_LOGGER.nMinTimeViolationAcceptable) + 1 DO
         fbLog.CircuitBreaker();
     END_FOR
 
