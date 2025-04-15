@@ -22,3 +22,4 @@ TrialLicense.tclrs
 
 # In case you vim for some reason
 *.swp
+.vs/*
