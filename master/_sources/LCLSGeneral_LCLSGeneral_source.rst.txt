@@ -1062,7 +1062,7 @@ FB_CircuitBreaker_Test
     in one cycle, leading to a large excess of messages.
     *)
     TEST('LocalFastTrip');
-        FOR idx := 0 TO GVL_LOGGER.nMinTimeViolationAcceptable + 1 DO
+        FOR idx := 0 TO INT_TO_UINT(GVL_LOGGER.nMinTimeViolationAcceptable) + 1 DO
             fbLog.CircuitBreaker();
         END_FOR
 
@@ -2476,6 +2476,12 @@ FB_EPS
         nBitValue : UDINT := 0;
     END_VAR
     nMask := SHL(nMask, nBits);
+    // Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference
+    IF NOT __ISVALIDREF(eps) THEN
+        RETURN;
+    END_IF
+
+    (* Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before) *)
     nBitValue := SHR((nMask AND eps.nFlags), nBits);
 
     IF (TO_BOOL(nBitValue)) <> bValue THEN
@@ -2494,6 +2500,12 @@ FB_EPS
     VAR_INPUT
         desciption : STRING;
     END_VAR
+    // Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference
+    IF NOT __ISVALIDREF(eps) THEN
+        RETURN;
+    END_IF
+
+    (* Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before) *)
     eps.sFlagDesc := desciption;
     END_METHOD
 
@@ -2501,6 +2513,11 @@ FB_EPS
     VAR_INPUT
         message : STRING;
     END_VAR
+    // Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference
+    IF NOT __ISVALIDREF(eps) THEN
+        RETURN;
+    END_IF
+    // Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before)
     eps.sMessage := message;
     END_METHOD
 
@@ -5072,7 +5089,7 @@ FB_UnixTimeStamp
         fbLocalTime: FB_LocalSystemTime;
         fbGetTimeZone: FB_GetTimeZoneInformation;
         fbTimeConv: FB_TzSpecificLocalTimeToFileTime;
-        fileTime: T_FILETIME;
+        stfileTime: T_FILETIME;
     END_VAR
     IF NOT bInit THEN
         bInit := TRUE;
@@ -5086,8 +5103,8 @@ FB_UnixTimeStamp
         IF bValid THEN
             fbTimeConv(
                 in := SYSTEMTIME_TO_FILETIME(fbLocalTime.systemTime),
-                out => fileTime);
-            iFull := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+                out => stfileTime);
+            iFull := (SHL(DWORD_TO_ULINT(stfileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(stfileTime.dwLowDateTime)) / 10000 - 11644473600000;
             fTime := ULINT_TO_LREAL(iFull)/1000;
             iSeconds := iFull/1000;
             iMilliseconds := iFull MOD 1000;

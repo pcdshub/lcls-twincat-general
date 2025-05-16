@@ -1145,7 +1145,7 @@ END_VAR
 <span class="ow">in</span> <span class="n">one</span> <span class="n">cycle</span><span class="p">,</span> <span class="n">leading</span> <span class="n">to</span> <span class="n">a</span> <span class="n">large</span> <span class="n">excess</span> <span class="n">of</span> <span class="n">messages</span><span class="o">.</span>
 <span class="o">*</span><span class="p">)</span>
 <span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;LocalFastTrip&#39;</span><span class="p">);</span>
-    <span class="n">FOR</span> <span class="n">idx</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">GVL_LOGGER</span><span class="o">.</span><span class="n">nMinTimeViolationAcceptable</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">DO</span>
+    <span class="n">FOR</span> <span class="n">idx</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">INT_TO_UINT</span><span class="p">(</span><span class="n">GVL_LOGGER</span><span class="o">.</span><span class="n">nMinTimeViolationAcceptable</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">DO</span>
         <span class="n">fbLog</span><span class="o">.</span><span class="n">CircuitBreaker</span><span class="p">();</span>
     <span class="n">END_FOR</span>
 
@@ -2547,6 +2547,12 @@ END_FUNCTION_BLOCK
     <span class="n">nBitValue</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">nMask</span> <span class="o">:=</span> <span class="n">SHL</span><span class="p">(</span><span class="n">nMask</span><span class="p">,</span> <span class="n">nBits</span><span class="p">);</span>
+<span class="o">//</span> <span class="n">Checking</span> <span class="n">the</span> <span class="n">VAR_IN_OUT</span> <span class="n">reference</span><span class="p">,</span> <span class="n">leave</span> <span class="n">the</span> <span class="n">current</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">case</span> <span class="n">of</span> <span class="n">invalid</span> <span class="n">reference</span>
+<span class="n">IF</span> <span class="n">NOT</span> <span class="n">__ISVALIDREF</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">RETURN</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="p">(</span><span class="o">*</span> <span class="n">Access</span> <span class="n">to</span> <span class="n">VAR_IN_OUT</span> <span class="n">reference</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">was</span> <span class="n">confirmed</span> <span class="k">as</span> <span class="n">valid</span> <span class="n">before</span><span class="p">)</span> <span class="o">*</span><span class="p">)</span>
 <span class="n">nBitValue</span> <span class="o">:=</span> <span class="n">SHR</span><span class="p">((</span><span class="n">nMask</span> <span class="n">AND</span> <span class="n">eps</span><span class="o">.</span><span class="n">nFlags</span><span class="p">),</span> <span class="n">nBits</span><span class="p">);</span>
 
 <span class="n">IF</span> <span class="p">(</span><span class="n">TO_BOOL</span><span class="p">(</span><span class="n">nBitValue</span><span class="p">))</span> <span class="o">&lt;&gt;</span> <span class="n">bValue</span> <span class="n">THEN</span>
@@ -2565,6 +2571,12 @@ END_FUNCTION_BLOCK
 <span class="n">VAR_INPUT</span>
     <span class="n">desciption</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
 <span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Checking</span> <span class="n">the</span> <span class="n">VAR_IN_OUT</span> <span class="n">reference</span><span class="p">,</span> <span class="n">leave</span> <span class="n">the</span> <span class="n">current</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">case</span> <span class="n">of</span> <span class="n">invalid</span> <span class="n">reference</span>
+<span class="n">IF</span> <span class="n">NOT</span> <span class="n">__ISVALIDREF</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">RETURN</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="p">(</span><span class="o">*</span> <span class="n">Access</span> <span class="n">to</span> <span class="n">VAR_IN_OUT</span> <span class="n">reference</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">was</span> <span class="n">confirmed</span> <span class="k">as</span> <span class="n">valid</span> <span class="n">before</span><span class="p">)</span> <span class="o">*</span><span class="p">)</span>
 <span class="n">eps</span><span class="o">.</span><span class="n">sFlagDesc</span> <span class="o">:=</span> <span class="n">desciption</span><span class="p">;</span>
 <span class="n">END_METHOD</span>
 
@@ -2572,6 +2584,11 @@ END_FUNCTION_BLOCK
 <span class="n">VAR_INPUT</span>
     <span class="n">message</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
 <span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Checking</span> <span class="n">the</span> <span class="n">VAR_IN_OUT</span> <span class="n">reference</span><span class="p">,</span> <span class="n">leave</span> <span class="n">the</span> <span class="n">current</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">case</span> <span class="n">of</span> <span class="n">invalid</span> <span class="n">reference</span>
+<span class="n">IF</span> <span class="n">NOT</span> <span class="n">__ISVALIDREF</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">RETURN</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="o">//</span> <span class="n">Access</span> <span class="n">to</span> <span class="n">VAR_IN_OUT</span> <span class="n">reference</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">was</span> <span class="n">confirmed</span> <span class="k">as</span> <span class="n">valid</span> <span class="n">before</span><span class="p">)</span>
 <span class="n">eps</span><span class="o">.</span><span class="n">sMessage</span> <span class="o">:=</span> <span class="n">message</span><span class="p">;</span>
 <span class="n">END_METHOD</span>
 </pre></div>
@@ -5115,7 +5132,7 @@ END_FUNCTION_BLOCK
     <span class="n">fbLocalTime</span><span class="p">:</span> <span class="n">FB_LocalSystemTime</span><span class="p">;</span>
     <span class="n">fbGetTimeZone</span><span class="p">:</span> <span class="n">FB_GetTimeZoneInformation</span><span class="p">;</span>
     <span class="n">fbTimeConv</span><span class="p">:</span> <span class="n">FB_TzSpecificLocalTimeToFileTime</span><span class="p">;</span>
-    <span class="n">fileTime</span><span class="p">:</span> <span class="n">T_FILETIME</span><span class="p">;</span>
+    <span class="n">stfileTime</span><span class="p">:</span> <span class="n">T_FILETIME</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">IF</span> <span class="n">NOT</span> <span class="n">bInit</span> <span class="n">THEN</span>
     <span class="n">bInit</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -5129,8 +5146,8 @@ END_FUNCTION_BLOCK
     <span class="n">IF</span> <span class="n">bValid</span> <span class="n">THEN</span>
         <span class="n">fbTimeConv</span><span class="p">(</span>
             <span class="ow">in</span> <span class="o">:=</span> <span class="n">SYSTEMTIME_TO_FILETIME</span><span class="p">(</span><span class="n">fbLocalTime</span><span class="o">.</span><span class="n">systemTime</span><span class="p">),</span>
-            <span class="n">out</span> <span class="o">=&gt;</span> <span class="n">fileTime</span><span class="p">);</span>
-        <span class="n">iFull</span> <span class="o">:=</span> <span class="p">(</span><span class="n">SHL</span><span class="p">(</span><span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="o">.</span><span class="n">dwHighDateTime</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">fileTime</span><span class="o">.</span><span class="n">dwLowDateTime</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000</span> <span class="o">-</span> <span class="mi">11644473600000</span><span class="p">;</span>
+            <span class="n">out</span> <span class="o">=&gt;</span> <span class="n">stfileTime</span><span class="p">);</span>
+        <span class="n">iFull</span> <span class="o">:=</span> <span class="p">(</span><span class="n">SHL</span><span class="p">(</span><span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">stfileTime</span><span class="o">.</span><span class="n">dwHighDateTime</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">DWORD_TO_ULINT</span><span class="p">(</span><span class="n">stfileTime</span><span class="o">.</span><span class="n">dwLowDateTime</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000</span> <span class="o">-</span> <span class="mi">11644473600000</span><span class="p">;</span>
         <span class="n">fTime</span> <span class="o">:=</span> <span class="n">ULINT_TO_LREAL</span><span class="p">(</span><span class="n">iFull</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
         <span class="n">iSeconds</span> <span class="o">:=</span> <span class="n">iFull</span><span class="o">/</span><span class="mi">1000</span><span class="p">;</span>
         <span class="n">iMilliseconds</span> <span class="o">:=</span> <span class="n">iFull</span> <span class="n">MOD</span> <span class="mi">1000</span><span class="p">;</span>
