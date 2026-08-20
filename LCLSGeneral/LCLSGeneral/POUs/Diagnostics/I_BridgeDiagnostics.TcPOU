@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_BridgeDiagnostics" Id="{9d4e1a72-5b83-4c96-a017-6e2f8b3d5c04}">
+    <Declaration><![CDATA[(* Derived diagnostic status for an EtherCAT bridge terminal (EL6692/EL6695), which
+links two independent EtherCAT masters (e.g. a subsystem PLC and an arbiter PLC).
+LinkStatus gates DataStatus; ConnectionStatus is the two combined. *)
+INTERFACE I_BridgeDiagnostics
+]]></Declaration>
+    <Property Name="LinkStatus" Id="{b6f2c8a1-4d75-4e02-9a83-1c6f0e8b2d47}">
+      <Declaration><![CDATA[(* Whether the bridge is established: local state, far device presence, far-side operational state. *)
+PROPERTY LinkStatus : E_BridgeLinkStatus]]></Declaration>
+      <Get Name="Get" Id="{c1a4d0e6-2f83-4b57-8e0a-3d6c9f1b5a28}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[]]></ST>
+      </Get>
+    </Property>
+    <Property Name="DataStatus" Id="{e8b3f6c2-7a94-4d15-b028-4f7e2d9c6a53}">
+      <Declaration><![CDATA[(* Combines WcStateIn/WcStateOut and the input toggle; only meaningful once LinkStatus = Connected. *)
+PROPERTY DataStatus : E_DataStatus]]></Declaration>
+      <Get Name="Get" Id="{f2c7d9e4-3b06-4a58-9c1d-5e8f3a0b6c74}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[]]></ST>
+      </Get>
+    </Property>
+    <Property Name="ConnectionStatus" Id="{a3d8e5f1-6c29-4b37-8d04-2f9c7e1a5b63}">
+      <Declaration><![CDATA[(* Combined verdict: LinkStatus gates DataStatus. *)
+PROPERTY ConnectionStatus : E_BridgeStatus]]></Declaration>
+      <Get Name="Get" Id="{d4e9f0a2-7b31-4c48-9e15-3a0d8f2c6b74}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[]]></ST>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

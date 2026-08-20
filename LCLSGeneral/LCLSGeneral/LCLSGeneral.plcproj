@@ -131,6 +131,18 @@
     <Compile Include="POUs\Diagnostics\DUT\E_EcCommState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_DataStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_DeviceConnectionStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_BridgeLinkStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\DUT\E_BridgeStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Diagnostics\DUT\ST_EcMasterDevState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -144,6 +156,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\DUT\ST_TopologyData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\I_DeviceDiagnostics.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\I_BridgeDiagnostics.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\FB_DeviceDiagnostics.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Diagnostics\FB_BridgeDiagnostics.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Diagnostics\FB_EcatDiagWrapper.TcPOU">

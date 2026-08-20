@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_DeviceDiagnostics" Id="{1c5e8a37-6d92-4b04-8f17-3a9e0c2b5d64}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Derives LinkStatus/DataStatus/ConnectionStatus for a common EtherCAT slave from its
+State/WcState/InputToggle PDO inputs. Link each raw input to the slave's PDO tree in the
+IO mapping (State under InfoData, WcState/InputToggle under WcState). *)
+FUNCTION_BLOCK FB_DeviceDiagnostics IMPLEMENTS I_DeviceDiagnostics
+VAR_INPUT
+    tStaleTimeout : TIME := T#5S; // max time InputToggle may stay unchanged before DataStatus reports Stale
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := 'pv: LinkStatus
+        io: i
+        field: DESC EtherCAT slave state machine state'}
+    eLinkStatus       : E_EcCommState;
+    {attribute 'pytmc' := 'pv: DataStatus
+        io: i
+        field: DESC WcState/InputToggle combined, valid once LinkStatus = OP'}
+    eDataStatus       : E_DataStatus;
+    {attribute 'pytmc' := 'pv: ConnectionStatus
+        io: i
+        field: DESC Combined device diagnostic verdict'}
+    eConnectionStatus : E_DeviceConnectionStatus;
+END_VAR
+VAR
+    nState AT %I* : WORD;
+    {attribute 'pytmc' := 'pv: WcState
+        io: i
+        field: DESC Working counter state
+        field: ZNAM OK
+        field: ONAM Error'}
+    bWcState AT %I* : BOOL;
+    {attribute 'pytmc' := 'pv: InputToggle
+        io: i'}
+    bInputToggle AT %I* : BOOL;
+
+    rToggleRise : R_TRIG;
+    fToggleFall : F_TRIG;
+    tonStale    : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[eLinkStatus := nState AND 16#000F;
+
+// restart the stale timer on every toggle edge; DataStatus only meaningful once LinkStatus = OP
+rToggleRise(CLK := bInputToggle);
+fToggleFall(CLK := bInputToggle);
+tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
+
+IF eLinkStatus <> E_EcCommState.eEcState_OP THEN
+    eDataStatus := E_DataStatus.Ok; // not meaningful while not operational
+ELSE
+    IF bWcState THEN
+        eDataStatus := E_DataStatus.WcError;
+    ELSIF tonStale.Q THEN
+        eDataStatus := E_DataStatus.Stale;
+    ELSE
+        eDataStatus := E_DataStatus.Ok;
+    END_IF
+END_IF
+
+IF eLinkStatus <> E_EcCommState.eEcState_OP THEN
+    eConnectionStatus := E_DeviceConnectionStatus.NotOperational;
+ELSE
+    CASE eDataStatus OF
+        E_DataStatus.WcError: eConnectionStatus := E_DeviceConnectionStatus.WcError;
+        E_DataStatus.Stale:   eConnectionStatus := E_DeviceConnectionStatus.Stale;
+    ELSE
+        eConnectionStatus := E_DeviceConnectionStatus.Connected;
+    END_CASE
+END_IF
+]]></ST>
+    </Implementation>
+    <Property Name="LinkStatus" Id="{2d6f9b48-7e03-4c15-9028-4b0d1e3c6f75}">
+      <Declaration><![CDATA[PROPERTY LinkStatus : E_EcCommState]]></Declaration>
+      <Get Name="Get" Id="{3e70ac59-8f14-4d26-a139-5c1e2f4d7086}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[LinkStatus := eLinkStatus;]]></ST>
+      </Get>
+    </Property>
+    <Property Name="DataStatus" Id="{4f81bd6a-9025-4e37-b24a-6d2f304e8197}">
+      <Declaration><![CDATA[PROPERTY DataStatus : E_DeviceDataStatus]]></Declaration>
+      <Get Name="Get" Id="{5092ce7b-a136-4f48-c35b-7e304152f2a8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[DataStatus := eDataStatus;]]></ST>
+      </Get>
+    </Property>
+    <Property Name="ConnectionStatus" Id="{61a3df8c-b247-4059-d46c-8f4152630309}">
+      <Declaration><![CDATA[PROPERTY ConnectionStatus : E_DeviceConnectionStatus]]></Declaration>
+      <Get Name="Get" Id="{72b4e09d-c358-4160-e57d-90526374141a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[ConnectionStatus := eConnectionStatus;]]></ST>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>
