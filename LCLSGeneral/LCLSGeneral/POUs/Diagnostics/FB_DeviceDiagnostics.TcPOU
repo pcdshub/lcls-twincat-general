@@ -81,7 +81,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="DataStatus" Id="{4f81bd6a-9025-4e37-b24a-6d2f304e8197}">
-      <Declaration><![CDATA[PROPERTY DataStatus : E_DeviceDataStatus]]></Declaration>
+            <Declaration><![CDATA[PROPERTY DataStatus : E_DataStatus]]></Declaration>
       <Get Name="Get" Id="{5092ce7b-a136-4f48-c35b-7e304152f2a8}">
         <Declaration><![CDATA[VAR
 END_VAR

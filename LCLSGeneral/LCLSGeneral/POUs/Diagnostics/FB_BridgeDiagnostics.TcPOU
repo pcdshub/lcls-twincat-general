@@ -105,7 +105,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="DataStatus" Id="{b6f824d1-0790-45a4-c9b1-d4960718585e}">
-      <Declaration><![CDATA[PROPERTY DataStatus : E_BridgeDataStatus]]></Declaration>
+            <Declaration><![CDATA[PROPERTY DataStatus : E_DataStatus]]></Declaration>
       <Get Name="Get" Id="{c709350e-1801-46b5-d0c2-e5a71829696f}">
         <Declaration><![CDATA[VAR
 END_VAR
