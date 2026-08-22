@@ -77,7 +77,9 @@ END_IF
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-        <ST><![CDATA[LinkStatus := eLinkStatus;]]></ST>
+                <Implementation>
+                    <ST><![CDATA[LinkStatus := eLinkStatus;]]></ST>
+                </Implementation>
       </Get>
     </Property>
     <Property Name="DataStatus" Id="{4f81bd6a-9025-4e37-b24a-6d2f304e8197}">
@@ -86,7 +88,9 @@ END_VAR
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-        <ST><![CDATA[DataStatus := eDataStatus;]]></ST>
+                <Implementation>
+                    <ST><![CDATA[DataStatus := eDataStatus;]]></ST>
+                </Implementation>
       </Get>
     </Property>
     <Property Name="ConnectionStatus" Id="{61a3df8c-b247-4059-d46c-8f4152630309}">
@@ -95,7 +99,9 @@ END_VAR
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-        <ST><![CDATA[ConnectionStatus := eConnectionStatus;]]></ST>
+                <Implementation>
+                    <ST><![CDATA[ConnectionStatus := eConnectionStatus;]]></ST>
+                </Implementation>
       </Get>
     </Property>
   </POU>
