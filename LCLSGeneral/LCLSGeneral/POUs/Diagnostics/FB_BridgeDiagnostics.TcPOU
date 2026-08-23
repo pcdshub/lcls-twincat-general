@@ -3,7 +3,11 @@
   <POU Name="FB_BridgeDiagnostics" Id="{83c5f1ae-d469-4271-f68e-a1637485252b}" SpecialFunc="None">
     <Declaration><![CDATA[(* Derives LinkStatus/DataStatus/ConnectionStatus for an EtherCAT bridge terminal
 (EL6692/EL6695) from its PDO inputs. Link State under InfoData, TxPDOState/TxPDOToggle/
-ExternalDeviceNotConnected under SYNC Inputs, WcStateIn/WcStateOut under WcState. *)
+ExternalDeviceNotConnected under SYNC Inputs. The WcState group shape varies by box/topology:
+some expose a single WcState, others split WcStateIn/WcStateOut. Link only the field(s) your
+box actually has; leave the rest unlinked, they default FALSE. DataStatus only reflects the
+inbound data (bWcState/bWcStateIn); bWcStateOut is exposed for visibility but is our outbound
+write, not the data we're consuming, so it's excluded from that verdict. *)
 FUNCTION_BLOCK FB_BridgeDiagnostics IMPLEMENTS I_BridgeDiagnostics
 VAR_INPUT
     tStaleTimeout : TIME := T#5S; // max time the toggle may stay unchanged before DataStatus reports DataStale
@@ -15,7 +19,7 @@ VAR_OUTPUT
     eLinkStatus       : E_BridgeLinkStatus;
     {attribute 'pytmc' := 'pv: DataStatus
         io: i
-        field: DESC WcState/toggle combined, valid once LinkStatus = Connected'}
+        field: DESC WcState/toggle combined'}
     eDataStatus       : E_DataStatus;
     {attribute 'pytmc' := 'pv: ConnectionStatus
         io: i
@@ -34,6 +38,12 @@ VAR
     {attribute 'pytmc' := 'pv: TxPDOToggle
         io: i'}
     bTxPDOToggle AT %I* : BOOL;
+    {attribute 'pytmc' := 'pv: WcState
+        io: i
+        field: DESC Working counter state, boxes with a single combined WcState
+        field: ZNAM OK
+        field: ONAM Error'}
+    bWcState AT %I* : BOOL;
     {attribute 'pytmc' := 'pv: WcStateIn
         io: i
         field: DESC Working counter state, data received from far side
@@ -64,21 +74,19 @@ ELSE
     eLinkStatus := E_BridgeLinkStatus.Connected;
 END_IF
 
-// restart the stale timer on every toggle edge; DataStatus only meaningful once LinkStatus = Connected
+// restart the stale timer on every toggle edge
 rToggleRise(CLK := bTxPDOToggle);
 fToggleFall(CLK := bTxPDOToggle);
 tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
 
-IF eLinkStatus <> E_BridgeLinkStatus.Connected THEN
-    eDataStatus := E_DataStatus.Ok; // not meaningful until the bridge is established
+// DataStatus is about the inbound data we consume, so only bWcState/bWcStateIn count;
+// bWcStateOut reflects our outbound write and would misreport good inbound data as bad
+IF bWcState OR bWcStateIn THEN
+    eDataStatus := E_DataStatus.WcError;
+ELSIF tonStale.Q THEN
+    eDataStatus := E_DataStatus.Stale;
 ELSE
-    IF bWcStateIn OR bWcStateOut THEN
-        eDataStatus := E_DataStatus.WcError;
-    ELSIF tonStale.Q THEN
-        eDataStatus := E_DataStatus.Stale;
-    ELSE
-        eDataStatus := E_DataStatus.Ok;
-    END_IF
+    eDataStatus := E_DataStatus.Ok;
 END_IF
 
 CASE eLinkStatus OF

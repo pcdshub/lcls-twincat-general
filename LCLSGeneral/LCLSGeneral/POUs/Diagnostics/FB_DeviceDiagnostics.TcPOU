@@ -15,7 +15,7 @@ VAR_OUTPUT
     eLinkStatus       : E_EcCommState;
     {attribute 'pytmc' := 'pv: DataStatus
         io: i
-        field: DESC WcState/InputToggle combined, valid once LinkStatus = OP'}
+        field: DESC WcState/InputToggle combined'}
     eDataStatus       : E_DataStatus;
     {attribute 'pytmc' := 'pv: ConnectionStatus
         io: i
@@ -42,21 +42,17 @@ END_VAR
     <Implementation>
       <ST><![CDATA[eLinkStatus := nState AND 16#000F;
 
-// restart the stale timer on every toggle edge; DataStatus only meaningful once LinkStatus = OP
+// restart the stale timer on every toggle edge
 rToggleRise(CLK := bInputToggle);
 fToggleFall(CLK := bInputToggle);
 tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
 
-IF eLinkStatus <> E_EcCommState.eEcState_OP THEN
-    eDataStatus := E_DataStatus.Ok; // not meaningful while not operational
+IF bWcState THEN
+    eDataStatus := E_DataStatus.WcError;
+ELSIF tonStale.Q THEN
+    eDataStatus := E_DataStatus.Stale;
 ELSE
-    IF bWcState THEN
-        eDataStatus := E_DataStatus.WcError;
-    ELSIF tonStale.Q THEN
-        eDataStatus := E_DataStatus.Stale;
-    ELSE
-        eDataStatus := E_DataStatus.Ok;
-    END_IF
+    eDataStatus := E_DataStatus.Ok;
 END_IF
 
 IF eLinkStatus <> E_EcCommState.eEcState_OP THEN

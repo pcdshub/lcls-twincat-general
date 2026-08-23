@@ -17,7 +17,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="DataStatus" Id="{e8b3f6c2-7a94-4d15-b028-4f7e2d9c6a53}">
-      <Declaration><![CDATA[(* Combines WcStateIn/WcStateOut and the input toggle; only meaningful once LinkStatus = Connected. *)
+      <Declaration><![CDATA[(* Combines WcState (whichever shape the box exposes) and the input toggle. *)
 PROPERTY DataStatus : E_DataStatus]]></Declaration>
       <Get Name="Get" Id="{f2c7d9e4-3b06-4a58-9c1d-5e8f3a0b6c74}">
         <Declaration><![CDATA[VAR
