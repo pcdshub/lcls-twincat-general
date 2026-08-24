@@ -5,9 +5,9 @@
 (EL6692/EL6695) from its PDO inputs. Link State under InfoData, TxPDOState/TxPDOToggle/
 ExternalDeviceNotConnected under SYNC Inputs. The WcState group shape varies by box/topology:
 some expose a single WcState, others split WcStateIn/WcStateOut. Link only the field(s) your
-box actually has; leave the rest unlinked, they default FALSE. DataStatus only reflects the
-inbound data (bWcState/bWcStateIn); bWcStateOut is exposed for visibility but is our outbound
-write, not the data we're consuming, so it's excluded from that verdict. *)
+box actually has; leave the rest unlinked, they default FALSE. DataStatus checks inbound frame
+validity (bWcState/bWcStateIn) and the received TxPDO toggle heartbeat for stale remote data;
+bWcStateOut is exposed for visibility but describes our outbound write, so it is excluded. *)
 FUNCTION_BLOCK FB_BridgeDiagnostics IMPLEMENTS I_BridgeDiagnostics
 VAR_INPUT
     tStaleTimeout : TIME := T#5S; // max time the toggle may stay unchanged before DataStatus reports DataStale
