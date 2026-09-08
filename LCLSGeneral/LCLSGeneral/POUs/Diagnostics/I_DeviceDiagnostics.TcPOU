@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_DeviceDiagnostics" Id="{3a1f8c2d-74e6-4b09-a531-dc8f0e17b245}">
+    <Declaration><![CDATA[(* Derived diagnostic status for a common EtherCAT slave, built from its State/WcState/InputToggle PDO inputs. *)
+INTERFACE I_DeviceDiagnostics
+]]></Declaration>
+    <Property Name="LinkStatus" Id="{b2e74d91-c038-4f6a-85d2-1a9c3f506e78}">
+      <Declaration><![CDATA[(* Slave EtherCAT state machine state, decoded from the raw State PDO input. *)
+PROPERTY LinkStatus : E_EcCommState]]></Declaration>
+      <Get Name="Get" Id="{e5a30b62-1d84-47f3-9c6e-0f82d4a71b39}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[]]></ST>
+      </Get>
+    </Property>
+    <Property Name="DataStatus" Id="{7c9d2e45-83a1-4f07-b6c8-2e014d9a3f51}">
+      <Declaration><![CDATA[(* Combines WcState and InputToggle; only meaningful once LinkStatus = OP. *)
+PROPERTY DataStatus : E_DataStatus]]></Declaration>
+      <Get Name="Get" Id="{a4f6018b-2c53-4e9d-b7a0-3d5c8f160e29}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[]]></ST>
+      </Get>
+    </Property>
+    <Property Name="ConnectionStatus" Id="{d0f8b3a5-6c19-4e72-8d04-3f6a9c1b5e28}">
+      <Declaration><![CDATA[(* Combined verdict: LinkStatus gates DataStatus. *)
+PROPERTY ConnectionStatus : E_DeviceConnectionStatus]]></Declaration>
+      <Get Name="Get" Id="{e1a9c4b6-7d20-4f83-9e15-4a7b0d2c6f39}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <ST><![CDATA[]]></ST>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

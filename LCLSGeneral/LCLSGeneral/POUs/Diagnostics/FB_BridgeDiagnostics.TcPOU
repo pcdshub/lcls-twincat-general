@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_BridgeDiagnostics" Id="{83c5f1ae-d469-4271-f68e-a1637485252b}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Derives LinkStatus/DataStatus/ConnectionStatus for an EtherCAT bridge terminal
+(EL6692/EL6695) from its PDO inputs. Link State under InfoData, TxPDOState/TxPDOToggle/
+ExternalDeviceNotConnected under SYNC Inputs. The WcState group shape varies by box/topology:
+some expose a single WcState, others split WcStateIn/WcStateOut. Link only the field(s) your
+box actually has; leave the rest unlinked, they default FALSE. DataStatus checks inbound frame
+validity (bWcState/bWcStateIn) and the received TxPDO toggle heartbeat for stale remote data;
+bWcStateOut is exposed for visibility but describes our outbound write, so it is excluded. *)
+FUNCTION_BLOCK FB_BridgeDiagnostics IMPLEMENTS I_BridgeDiagnostics
+VAR_INPUT
+    tStaleTimeout : TIME := T#5S; // max time the toggle may stay unchanged before DataStatus reports DataStale
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := 'pv: LinkStatus
+        io: i
+        field: DESC Local/remote operational state and device presence'}
+    eLinkStatus       : E_BridgeLinkStatus;
+    {attribute 'pytmc' := 'pv: DataStatus
+        io: i
+        field: DESC WcState/toggle combined'}
+    eDataStatus       : E_DataStatus;
+    {attribute 'pytmc' := 'pv: ConnectionStatus
+        io: i
+        field: DESC Combined bridge diagnostic verdict'}
+    eConnectionStatus : E_BridgeStatus;
+END_VAR
+VAR
+    nState AT %I* : WORD; // local ESM state
+    {attribute 'pytmc' := 'pv: ExternalDeviceNotConnected
+        io: i'}
+    bExternalDeviceNotConnected AT %I* : BOOL;
+    {attribute 'pytmc' := 'pv: TxPDOState
+        io: i
+        field: DESC 0=far side OP, >0=error'}
+    nTxPDOState AT %I* : WORD;
+    {attribute 'pytmc' := 'pv: TxPDOToggle
+        io: i'}
+    bTxPDOToggle AT %I* : BOOL;
+    {attribute 'pytmc' := 'pv: WcState
+        io: i
+        field: DESC Working counter state, boxes with a single combined WcState
+        field: ZNAM OK
+        field: ONAM Error'}
+    bWcState AT %I* : BOOL;
+    {attribute 'pytmc' := 'pv: WcStateIn
+        io: i
+        field: DESC Working counter state, data received from far side
+        field: ZNAM OK
+        field: ONAM Error'}
+    bWcStateIn AT %I* : BOOL;
+    {attribute 'pytmc' := 'pv: WcStateOut
+        io: i
+        field: DESC Working counter state, data sent to far side
+        field: ZNAM OK
+        field: ONAM Error'}
+    bWcStateOut AT %I* : BOOL;
+
+    rToggleRise : R_TRIG;
+    fToggleFall : F_TRIG;
+    tonStale    : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// LinkStatus: local ESM state, far device presence, far side ESM state, in priority order
+IF (nState AND 16#000F) <> E_EcCommState.eEcState_OP THEN
+    eLinkStatus := E_BridgeLinkStatus.LocalNotOperational;
+ELSIF bExternalDeviceNotConnected THEN
+    eLinkStatus := E_BridgeLinkStatus.ExternalDeviceNotConnected;
+ELSIF nTxPDOState <> 0 THEN
+    eLinkStatus := E_BridgeLinkStatus.RemoteNotOperational;
+ELSE
+    eLinkStatus := E_BridgeLinkStatus.Connected;
+END_IF
+
+// restart the stale timer on every toggle edge
+rToggleRise(CLK := bTxPDOToggle);
+fToggleFall(CLK := bTxPDOToggle);
+tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
+
+// DataStatus is about the inbound data we consume, so only bWcState/bWcStateIn count;
+// bWcStateOut reflects our outbound write and would misreport good inbound data as bad
+IF bWcState OR bWcStateIn THEN
+    eDataStatus := E_DataStatus.WcError;
+ELSIF tonStale.Q THEN
+    eDataStatus := E_DataStatus.Stale;
+ELSE
+    eDataStatus := E_DataStatus.Ok;
+END_IF
+
+CASE eLinkStatus OF
+    E_BridgeLinkStatus.LocalNotOperational:        eConnectionStatus := E_BridgeStatus.LocalNotOperational;
+    E_BridgeLinkStatus.ExternalDeviceNotConnected:  eConnectionStatus := E_BridgeStatus.ExternalDeviceNotConnected;
+    E_BridgeLinkStatus.RemoteNotOperational:        eConnectionStatus := E_BridgeStatus.RemoteNotOperational;
+ELSE
+    CASE eDataStatus OF
+        E_DataStatus.WcError: eConnectionStatus := E_BridgeStatus.LinkError;
+        E_DataStatus.Stale:   eConnectionStatus := E_BridgeStatus.DataStale;
+    ELSE
+        eConnectionStatus := E_BridgeStatus.Connected;
+    END_CASE
+END_CASE
+]]></ST>
+    </Implementation>
+    <Property Name="LinkStatus" Id="{94d602bf-e57a-4382-a79f-b2748596363c}">
+      <Declaration><![CDATA[PROPERTY LinkStatus : E_BridgeLinkStatus]]></Declaration>
+      <Get Name="Get" Id="{a5e713c0-f68b-4493-b8a0-c3859607474d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+                <Implementation>
+                    <ST><![CDATA[LinkStatus := eLinkStatus;]]></ST>
+                </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DataStatus" Id="{b6f824d1-0790-45a4-c9b1-d4960718585e}">
+            <Declaration><![CDATA[PROPERTY DataStatus : E_DataStatus]]></Declaration>
+      <Get Name="Get" Id="{c709350e-1801-46b5-d0c2-e5a71829696f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+                <Implementation>
+                    <ST><![CDATA[DataStatus := eDataStatus;]]></ST>
+                </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ConnectionStatus" Id="{d81a461f-291b-47c6-e1d3-f6b8293a7a70}">
+      <Declaration><![CDATA[PROPERTY ConnectionStatus : E_BridgeStatus]]></Declaration>
+      <Get Name="Get" Id="{e92b572a-3a2c-48d7-f2e4-07c93a4b8b81}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+                <Implementation>
+                    <ST><![CDATA[ConnectionStatus := eConnectionStatus;]]></ST>
+                </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>
