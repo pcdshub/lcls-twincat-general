@@ -18,14 +18,18 @@ VAR
     bCmdReqState : BOOL;
 
     {attribute 'pytmc' := '
-        pv: ReqState
+        pv: eReqState
         io: io
     '}
     eReqState : E_ECAT_STATES;
 
     {attribute 'pytmc' := '
-        pv: DevState
+        pv: eDevState
         io: o
+       	field: INAM 1 "INIT" 2 "PREOP" 3 "BOOTSTRAP" 4 "SAFEOP" 8 "OP" 10 "ERROR"                                                                                                                                                                                                                                                                                      
+       	field: SEVR 1 MAJOR 2 MAJOR 3 MAJOR 4 MAJOR 8 NONE 10 MAJOR                                                                                                                                                                                                                                                                                                   
+       	field: DIF  1                                                                                                                                                                                                                                                                                                                                        
+       	field: UDFS MAJOR 
     '}
 	eDevState : E_ECAT_STATES;
 	
