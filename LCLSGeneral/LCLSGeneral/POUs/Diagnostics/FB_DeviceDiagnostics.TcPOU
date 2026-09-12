@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_DeviceDiagnostics" Id="{1c5e8a37-6d92-4b04-8f17-3a9e0c2b5d64}" SpecialFunc="None">
     <Declaration><![CDATA[(* Derives LinkStatus/DataStatus/ConnectionStatus for a common EtherCAT slave from its
@@ -67,37 +67,37 @@ ELSE
 END_IF
 ]]></ST>
     </Implementation>
-    <Property Name="LinkStatus" Id="{2d6f9b48-7e03-4c15-9028-4b0d1e3c6f75}">
-      <Declaration><![CDATA[PROPERTY LinkStatus : E_EcCommState]]></Declaration>
-      <Get Name="Get" Id="{3e70ac59-8f14-4d26-a139-5c1e2f4d7086}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-                <Implementation>
-                    <ST><![CDATA[LinkStatus := eLinkStatus;]]></ST>
-                </Implementation>
-      </Get>
-    </Property>
-    <Property Name="DataStatus" Id="{4f81bd6a-9025-4e37-b24a-6d2f304e8197}">
-            <Declaration><![CDATA[PROPERTY DataStatus : E_DataStatus]]></Declaration>
-      <Get Name="Get" Id="{5092ce7b-a136-4f48-c35b-7e304152f2a8}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-                <Implementation>
-                    <ST><![CDATA[DataStatus := eDataStatus;]]></ST>
-                </Implementation>
-      </Get>
-    </Property>
     <Property Name="ConnectionStatus" Id="{61a3df8c-b247-4059-d46c-8f4152630309}">
       <Declaration><![CDATA[PROPERTY ConnectionStatus : E_DeviceConnectionStatus]]></Declaration>
       <Get Name="Get" Id="{72b4e09d-c358-4160-e57d-90526374141a}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-                <Implementation>
-                    <ST><![CDATA[ConnectionStatus := eConnectionStatus;]]></ST>
-                </Implementation>
+        <Implementation>
+          <ST><![CDATA[ConnectionStatus := eConnectionStatus;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DataStatus" Id="{4f81bd6a-9025-4e37-b24a-6d2f304e8197}">
+      <Declaration><![CDATA[PROPERTY DataStatus : E_DataStatus]]></Declaration>
+      <Get Name="Get" Id="{5092ce7b-a136-4f48-c35b-7e304152f2a8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DataStatus := eDataStatus;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="LinkStatus" Id="{2d6f9b48-7e03-4c15-9028-4b0d1e3c6f75}">
+      <Declaration><![CDATA[PROPERTY LinkStatus : E_EcCommState]]></Declaration>
+      <Get Name="Get" Id="{3e70ac59-8f14-4d26-a139-5c1e2f4d7086}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LinkStatus := eLinkStatus;]]></ST>
+        </Implementation>
       </Get>
     </Property>
   </POU>

@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <DUT Name="E_DataStatus" Id="{f6da5389-1a68-4890-a1e5-59c706494b9c}">
     <Declaration><![CDATA[(* Frame-level PDO data quality, shared by device and bridge diagnostics; only meaningful once the
 respective LinkStatus reports operational/connected. *)
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
 TYPE E_DataStatus :
 (
     Ok,
