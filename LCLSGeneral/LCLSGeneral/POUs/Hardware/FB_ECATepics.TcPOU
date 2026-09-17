@@ -13,23 +13,23 @@ VAR
 	
 	{attribute 'pytmc' := '
         pv: bCmdReqState
-        io: io
     '}
     bCmdReqState : BOOL;
 
     {attribute 'pytmc' := '
         pv: eReqState
-        io: io
     '}
     eReqState : E_ECAT_STATES;
 
     {attribute 'pytmc' := '
         pv: eDevState
-        io: o
-       	field: INAM 1 "INIT" 2 "PREOP" 3 "BOOTSTRAP" 4 "SAFEOP" 8 "OP" 10 "ERROR"                                                                                                                                                                                                                                                                                      
-       	field: SEVR 1 MAJOR 2 MAJOR 3 MAJOR 4 MAJOR 8 NONE 10 MAJOR                                                                                                                                                                                                                                                                                                   
-       	field: DIF  1                                                                                                                                                                                                                                                                                                                                        
-       	field: UDFS MAJOR 
+        io: o 
+		field: ZRSV MAJOR
+		field: ONSV MAJOR
+		field: TWSV MAJOR
+		field: THSV MAJOR
+		field: FRSV NO_ALARM
+		field: FVSV MAJOR
     '}
 	eDevState : E_ECAT_STATES;
 	
@@ -52,24 +52,31 @@ VAR
 	sDevDesc : STRING;
 	
     fbsetSlaveState         : FB_EcSetSlaveState;
+	fbgetSlaveState			: FB_EcGetSlaveState;
+	fbgetStatusTimer : TON;
 	bInit : BOOL := TRUE;
 	
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF bInit THEN
+      <ST><![CDATA[fbgetStatusTimer(PT:= T#500MS);
+
+IF bInit THEN
 	sDevDesc := sDeviceDesc;
 	bInit := FALSE;
+	fbgetStatusTimer.IN:= TRUE;
 END_IF
-
 
 fbsetSlaveState(sNetId:=sNetId,
 	nSlaveAddr:= nSlaveAddr,
 	bExecute:= bCmdReqState,
 	reqState:= eReqState);
 
+fbgetSlaveState(sNetId:=sNetId,
+	nSlaveAddr:= nSlaveAddr,
+	bExecute:= fbgetStatusTimer.Q);
 
-CASE fbsetSlaveState.currState.deviceState OF
+CASE fbgetSlaveState.state.deviceState OF
     EC_DEVICE_STATE_INIT:
         eDevState := E_ECAT_STATES.INIT;
     EC_DEVICE_STATE_PREOP:
@@ -154,7 +161,13 @@ CASE fbsetSlaveState.nErrId OF
 
 	ELSE
     sErrorMessage := 'Unknown ADS error code.';
-END_CASE]]></ST>
+END_CASE
+
+IF fbgetStatusTimer.Q THEN
+	 fbgetStatusTimer.IN := FALSE; // reset timer
+ELSE
+	fbgetStatusTimer.IN := TRUE; // reset timer
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
