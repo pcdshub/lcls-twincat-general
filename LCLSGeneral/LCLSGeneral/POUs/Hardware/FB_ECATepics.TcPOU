@@ -10,11 +10,11 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	(*
+	
 	{attribute 'pytmc' := '
         pv: bCmdReqState
     '}
-	*)
+	
     bCmdReqState : BOOL;
 
     {attribute 'pytmc' := '
@@ -68,12 +68,6 @@ IF bInit THEN
 	bInit := FALSE;
 	fbgetStatusTimer.IN:= TRUE;
 	ePrevReqState :=  eReqState;
-END_IF
-
-// Changing Request state, requests new state.
-IF eReqState <> ePrevReqState THEN
-	ePrevReqState := eReqState;
-	bCmdReqState := TRUE;
 END_IF
 
 fbsetSlaveState(sNetId:=sNetId,
