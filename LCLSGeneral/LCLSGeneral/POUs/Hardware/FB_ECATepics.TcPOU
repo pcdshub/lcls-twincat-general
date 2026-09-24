@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ECATepics" Id="{38ed9c12-1d10-4e74-8cdb-42be0630d47c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ECATepics
+VAR_INPUT
+    sNetId          : T_AmsNetId;
+    nSlaveAddr      : UINT;
+    sDeviceDesc		: T_MaxString := 'TERM #';
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+    {attribute 'pytmc' := '
+        pv: bCmdReqState
+    '}
+
+    bCmdReqState : BOOL;
+
+    {attribute 'pytmc' := '
+        pv: eReqState
+    '}
+    eReqState : E_ECAT_STATES;
+    ePrevReqState : E_ECAT_STATES;
+
+    {attribute 'pytmc' := '
+        pv: eDevState
+        io: o
+        field: ZRSV MAJOR
+        field: ONSV MAJOR
+        field: TWSV MAJOR
+        field: THSV MAJOR
+        field: FRSV NO_ALARM
+        field: FVSV MAJOR
+    '}
+    eDevState : E_ECAT_STATES;
+
+    {attribute 'pytmc' := '
+        pv: bError
+        io: o
+    '}
+    bDevError : BOOL;
+
+    {attribute 'pytmc' := '
+        pv: sErrorMessage
+        io: o
+    '}
+    sErrorMessage : STRING;
+
+    {attribute 'pytmc' := '
+        pv: sDESC
+        io: io
+    '}
+    sDevDesc : STRING;
+
+    fbsetSlaveState         : FB_EcSetSlaveState;
+    fbgetSlaveState			: FB_EcGetSlaveState;
+    fbgetStatusTimer : TON;
+    bInit : BOOL := TRUE;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbgetStatusTimer(PT:= T#500MS);
+
+IF bInit THEN
+    sDevDesc := sDeviceDesc;
+    bInit := FALSE;
+    fbgetStatusTimer.IN:= TRUE;
+    ePrevReqState :=  eReqState;
+END_IF
+
+fbsetSlaveState(sNetId:=sNetId,
+    nSlaveAddr:= nSlaveAddr,
+    bExecute:= bCmdReqState,
+    reqState:= eReqState);
+
+fbgetSlaveState(sNetId:=sNetId,
+    nSlaveAddr:= nSlaveAddr,
+    bExecute:= fbgetStatusTimer.Q);
+
+CASE fbgetSlaveState.state.deviceState OF
+    EC_DEVICE_STATE_INIT:
+        eDevState := E_ECAT_STATES.INIT;
+    EC_DEVICE_STATE_PREOP:
+        eDevState := E_ECAT_STATES.PREOP;
+    EC_DEVICE_STATE_BOOTSTRAP:
+        eDevState := E_ECAT_STATES.BOOTSTRAP;
+    EC_DEVICE_STATE_SAFEOP:
+        eDevState := E_ECAT_STATES.SAFEOP;
+    EC_DEVICE_STATE_OP:
+        eDevState := E_ECAT_STATES.OP;
+    EC_DEVICE_STATE_ERROR:
+        eDevState := E_ECAT_STATES.ERROR;
+END_CASE
+
+bDevError := fbsetSlaveState.bError;
+
+IF bCmdReqState AND (bDevError OR (NOT fbsetSlaveState.bBusy)) THEN
+    bCmdReqState := FALSE;
+END_IF
+
+CASE fbsetSlaveState.nErrId OF
+    0: sErrorMessage := '';
+    // --- Device errors (0x700 - 0x739) ---
+    1792: sErrorMessage := 'ADSERR_DEVICE_ERROR - General device error.';
+    1793: sErrorMessage := 'ADSERR_DEVICE_SRVNOTSUPP - Service is not supported by the server.';
+    1794: sErrorMessage := 'ADSERR_DEVICE_INVALIDGRP - Invalid index group.';
+    1795: sErrorMessage := 'ADSERR_DEVICE_INVALIDOFFSET - Invalid index offset.';
+    1796: sErrorMessage := 'ADSERR_DEVICE_INVALIDACCESS - Reading or writing not permitted. ';
+    1797: sErrorMessage := 'ADSERR_DEVICE_INVALIDSIZE - Parameter size not correct.';
+    1798: sErrorMessage := 'ADSERR_DEVICE_INVALIDDATA - Invalid data values.';
+    1799: sErrorMessage := 'ADSERR_DEVICE_NOTREADY - Device is not ready to operate.';
+    1800: sErrorMessage := 'ADSERR_DEVICE_BUSY - Device is busy.';
+    1801: sErrorMessage := 'ADSERR_DEVICE_INVALIDCONTEXT - Invalid operating system context.';
+    1802: sErrorMessage := 'ADSERR_DEVICE_NOMEMORY - Insufficient memory.';
+    1803: sErrorMessage := 'ADSERR_DEVICE_INVALIDPARM - Invalid parameter values.';
+    1804: sErrorMessage := 'ADSERR_DEVICE_NOTFOUND - Not found (files, ...).';
+    1805: sErrorMessage := 'ADSERR_DEVICE_SYNTAX - Syntax error in file or command.';
+    1806: sErrorMessage := 'ADSERR_DEVICE_INCOMPATIBLE - Objects do not match.';
+    1807: sErrorMessage := 'ADSERR_DEVICE_EXISTS - Object already exists.';
+    1808: sErrorMessage := 'ADSERR_DEVICE_SYMBOLNOTFOUND - Symbol not found.';
+    1809: sErrorMessage := 'ADSERR_DEVICE_SYMBOLVERSIONINVALID - Invalid symbol version. This can occur due to an online change. Create a new handle.';
+    1810: sErrorMessage := 'ADSERR_DEVICE_INVALIDSTATE - Device (server) is in invalid state.';
+    1811: sErrorMessage := 'ADSERR_DEVICE_TRANSMODENOTSUPP - AdsTransMode not supported.';
+    1812: sErrorMessage := 'ADSERR_DEVICE_NOTIFYHNDINVALID - Notification handle is invalid.';
+    1813: sErrorMessage := 'ADSERR_DEVICE_CLIENTUNKNOWN - Notification client not registered.';
+    1814: sErrorMessage := 'ADSERR_DEVICE_NOMOREHDLS - No further handle available.';
+    1815: sErrorMessage := 'ADSERR_DEVICE_INVALIDWATCHSIZE - Notification size too large.';
+    1816: sErrorMessage := 'ADSERR_DEVICE_NOTINIT - Device not initialized.';
+    1817: sErrorMessage := 'ADSERR_DEVICE_TIMEOUT - Device has a timeout.';
+    1818: sErrorMessage := 'ADSERR_DEVICE_NOINTERFACE - Interface query failed.';
+    1819: sErrorMessage := 'ADSERR_DEVICE_INVALIDINTERFACE - Wrong interface requested.';
+    1820: sErrorMessage := 'ADSERR_DEVICE_INVALIDCLSID - Class ID is invalid.';
+    1821: sErrorMessage := 'ADSERR_DEVICE_INVALIDOBJID - Object ID is invalid.';
+    1822: sErrorMessage := 'ADSERR_DEVICE_PENDING - Request pending.';
+    1823: sErrorMessage := 'ADSERR_DEVICE_ABORTED - Request is aborted.';
+    1824: sErrorMessage := 'ADSERR_DEVICE_WARNING - Signal warning.';
+    1825: sErrorMessage := 'ADSERR_DEVICE_INVALIDARRAYIDX - Invalid array index.';
+    1826: sErrorMessage := 'ADSERR_DEVICE_SYMBOLNOTACTIVE - Symbol not active.';
+    1827: sErrorMessage := 'ADSERR_DEVICE_ACCESSDENIED - Access denied.';
+    1828: sErrorMessage := 'ADSERR_DEVICE_LICENSENOTFOUND - Missing license.';
+    1829: sErrorMessage := 'ADSERR_DEVICE_LICENSEEXPIRED - License expired.';
+    1830: sErrorMessage := 'ADSERR_DEVICE_LICENSEEXCEEDED - License exceeded.';
+    1831: sErrorMessage := 'ADSERR_DEVICE_LICENSEINVALID - Invalid license.';
+    1832: sErrorMessage := 'ADSERR_DEVICE_LICENSESYSTEMID - License problem: System ID is invalid.';
+    1833: sErrorMessage := 'ADSERR_DEVICE_LICENSENOTIMELIMIT - License not limited in time.';
+    1834: sErrorMessage := 'ADSERR_DEVICE_LICENSEFUTUREISSUE - Licensing problem: time in the future.';
+    1835: sErrorMessage := 'ADSERR_DEVICE_LICENSETIMETOLONG - License period too long.';
+    1836: sErrorMessage := 'ADSERR_DEVICE_EXCEPTION - Exception at system startup.';
+    1837: sErrorMessage := 'ADSERR_DEVICE_LICENSEDUPLICATED - License file read twice.';
+    1838: sErrorMessage := 'ADSERR_DEVICE_SIGNATUREINVALID - Invalid signature.';
+    1839: sErrorMessage := 'ADSERR_DEVICE_CERTIFICATEINVALID - Invalid certificate.';
+    1840: sErrorMessage := 'ADSERR_DEVICE_LICENSEOEMNOTFOUND - Public key not known from OEM.';
+    1841: sErrorMessage := 'ADSERR_DEVICE_LICENSERESTRICTED - License not valid for this system ID.';
+    1842: sErrorMessage := 'ADSERR_DEVICE_LICENSEDEMODENIED - Demo license prohibited.';
+    1843: sErrorMessage := 'ADSERR_DEVICE_INVALIDFNCID - Invalid function ID.';
+    1844: sErrorMessage := 'ADSERR_DEVICE_OUTOFRANGE - Outside the valid range.';
+    1845: sErrorMessage := 'ADSERR_DEVICE_INVALIDALIGNMENT - Invalid alignment.';
+    1846: sErrorMessage := 'ADSERR_DEVICE_LICENSEPLATFORM - Invalid platform level.';
+    1847: sErrorMessage := 'ADSERR_DEVICE_FORWARD_PL - Context - forward to passive level.';
+    1848: sErrorMessage := 'ADSERR_DEVICE_FORWARD_DL - Context - forward to dispatch level.';
+    1849: sErrorMessage := 'ADSERR_DEVICE_FORWARD_RT - Context - forward to real-time.';
+
+    ELSE
+    sErrorMessage := 'Unknown ADS error code.';
+END_CASE
+
+IF fbgetStatusTimer.Q THEN
+     fbgetStatusTimer.IN := FALSE; // reset timer
+ELSE
+    fbgetStatusTimer.IN := TRUE; // reset timer
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_ECAT_STATES" Id="{4f5566dd-e078-4cc5-ac0f-e59cae010023}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_ECAT_STATES :
+(
+    INIT := EC_DEVICE_STATE_INIT,
+    PREOP := EC_DEVICE_STATE_PREOP,
+    BOOTSTRAP := EC_DEVICE_STATE_BOOTSTRAP,
+    SAFEOP := EC_DEVICE_STATE_SAFEOP,
+    OP := EC_DEVICE_STATE_OP,
+    ERROR := EC_DEVICE_STATE_ERROR
+) WORD;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

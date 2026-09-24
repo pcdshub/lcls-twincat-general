@@ -7,7 +7,7 @@
     <ProjectGuid>{df4cafe9-8807-49b7-953a-22d467a15ef7}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <Name>LCLSGeneral</Name>
-    <ProgramVersion>3.1.4026.13</ProgramVersion>
+    <ProgramVersion>3.1.4026.17</ProgramVersion>
     <Application>{dc806919-0852-4bc3-9434-5335d475103a}</Application>
     <TypeSystem>{0ad52733-0eb7-4f3f-8494-7709b83d1e1c}</TypeSystem>
     <Implicit_Task_Info>{21ec1930-5bab-4aa3-b9af-a2b0b7032c05}</Implicit_Task_Info>
@@ -85,6 +85,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\DUT_EPS.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\E_ECAT_STATES.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\DefaultGlobals.TcGVL">
@@ -216,6 +219,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_ECATAutoRestart.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Hardware\FB_ECATepics.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Hardware\FB_EL6_Com.TcPOU">
